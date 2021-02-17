@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.inhelp"
+        minSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+        resConfigs "en", "xxhdpi"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+
+        debug {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles 'proguard-rules.pro', getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':crop')
+    implementation project(':panorama')
+    implementation project(':grid')
+    implementation project(':mvp')
+    implementation project(':navigator')
+    implementation project(':text_style')
+    implementation project(':tags')
+    implementation project(':gallery')
+    implementation project(':color')
+
+    implementation 'com.sagar:dslpermission:2.0.0'
+    implementation 'com.github.madrapps:pikolo:2.0.1'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+    //noinspection GradleCompatible
+    implementation 'androidx.appcompat:appcompat:1.3.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0-alpha2'
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'org.koin:koin-android:2.0.1'
+    implementation 'com.karumi:dexter:4.2.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+}

@@ -1,0 +1,4 @@
+<resources>
+    <string name="fragment_title_text_style">Enter your text:</string>
+    <string name="fragment_text_copied">Text Copied</string>
+</resources>

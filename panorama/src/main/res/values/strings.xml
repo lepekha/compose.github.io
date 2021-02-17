@@ -1,0 +1,4 @@
+<resources>
+    <string name="fragment_title_panorama">Make panorama:</string>
+    <string name="fragment_title_panorama_save">Save images:</string>
+</resources>

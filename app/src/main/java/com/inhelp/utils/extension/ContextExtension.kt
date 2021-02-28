@@ -29,7 +29,7 @@ var Context.clipboard: String
     set(value) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("InHelp", value)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
     }
 
 fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let {

@@ -19,10 +19,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:tabGravity="start"
         app:tabIndicator="@null"
-        app:tabIndicatorColor="#FFFFFFFF"
+        app:tabIndicatorColor="@color/colorAccent"
         app:tabMode="scrollable"
         app:tabRippleColor="@null"
-        app:tabSelectedTextColor="#DAFFFFFF"
+        app:tabSelectedTextColor="@color/colorAccent"
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="#51FFFFFF" />
 

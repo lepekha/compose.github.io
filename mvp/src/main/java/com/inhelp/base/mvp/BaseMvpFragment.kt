@@ -12,6 +12,7 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attachView(view = this as V)
+        setVisibleBack(true)
     }
 
     override fun showError(error: String?) {
@@ -41,6 +42,10 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
 
     override fun setTitle(title: String) {
         (activity as BaseMvpActivity<*, *>).setTitle(title)
+    }
+
+    override fun setVisibleBack(isVisible: Boolean) {
+        (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
     }
 
     override fun onDestroy() {

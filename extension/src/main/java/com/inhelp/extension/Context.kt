@@ -119,6 +119,21 @@ fun Context.vibrate(milliseconds: Long = 500){
     }
 }
 
+enum class EVibrate(internal val long: Long){
+    BUTTON(long = 10L)
+}
+
+@Suppress("DEPRECATION")
+fun Context.vibrate(type: EVibrate){
+    val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrator.vibrate(VibrationEffect.createOneShot(type.long, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        vibrator.vibrate(type.long)
+    }
+}
+
 fun Context.createInstagramIntent(uri: Uri) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "image/*"

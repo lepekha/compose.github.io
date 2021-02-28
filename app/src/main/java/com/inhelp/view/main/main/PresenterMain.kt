@@ -1,23 +1,25 @@
 package com.inhelp.view.main.main
 
 import android.content.Context
-import com.inhelp.core.models.data.Menu
 import android.provider.MediaStore
 import android.provider.MediaStore.MediaColumns
 import android.database.Cursor
 import android.net.Uri
+import androidx.fragment.app.FragmentManager
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
+import com.inhelp.core.models.data.MenuObjects
 
 
-class PresenterMain: BaseMvpPresenterImpl<ViewMain>() {
+class PresenterMain(private val menu: MenuObjects): BaseMvpPresenterImpl<ViewMain>() {
 
-    val menuList = Menu.getMenuList()
     val photoList = mutableListOf<String>()
 
     override fun attachView(view: ViewMain) {
         super.attachView(view)
 //        photoList.addAll(getImagesPath(view.getCurrentContext()))
     }
+
+    fun getOrCreateMenu(fm: FragmentManager?) = menu.getOrCreateMenu(fm)
 
     fun pressSave() {
     }

@@ -5,14 +5,14 @@
 
     <string name="new_message_notification_title_template">New message: %1$s</string>
 
-    <string name="menu_text_style">Text style</string>
+    <string name="menu_text_style">🆃🅴🆇🆃\n🆂🆃🆈🅻🅴</string>
     <string name="menu_save_photo">Save photo</string>
     <string name="menu_repost_photo">Repost photo</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_crop">No Crop</string>
     <string name="menu_panorama">Panorama</string>
     <string name="menu_grid">Grid</string>
-    <string name="menu_tags">Top hashtegs</string>
+    <string name="menu_tags">#Top\n#hashtegs</string>
 
     <!-- TODO: remove this placeholder text -->
     <string name="new_message_notification_placeholder_text_template">You said %1$s and lorem ipsum

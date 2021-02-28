@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.inhelp"
         minSdkVersion 21
@@ -18,8 +18,8 @@ android {
     buildTypes {
 
         debug {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -39,7 +39,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':crop')
+    implementation project(':instagram_crop')
     implementation project(':panorama')
     implementation project(':grid')
     implementation project(':mvp')
@@ -48,6 +48,8 @@ dependencies {
     implementation project(':tags')
     implementation project(':gallery')
     implementation project(':color')
+    implementation project(':extension')
+    implementation project(':crop')
 
     implementation 'com.sagar:dslpermission:2.0.0'
     implementation 'com.github.madrapps:pikolo:2.0.1'
@@ -60,7 +62,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'org.koin:koin-android:2.0.1'
+    implementation "org.koin:koin-android:$koin_version"
+
     implementation 'com.karumi:dexter:4.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'org.jsoup:jsoup:1.11.3'

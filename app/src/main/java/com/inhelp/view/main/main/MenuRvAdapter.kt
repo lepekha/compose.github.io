@@ -1,38 +1,64 @@
+/*
+ * Copyright TraderEvolution Global LTD. В© 2017-2021. All rights reserved.
+ */
+
 package com.inhelp.view.main.main
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.inhelp.R
-import com.inhelp.core.models.data.Menu
-import kotlinx.android.synthetic.main.element_menu.view.*
+import com.inhelp.base.mvp.adapters.ViewTypeDelegateAdapter
+import com.inhelp.core.models.data.DynamicMenu
+import com.inhelp.view.main.main.menuDelegates.LongDelegateAdapter
+import com.inhelp.view.main.main.menuDelegates.MediumDelegateAdapter
+import com.inhelp.view.main.main.menuDelegates.ShortDelegateAdapter
+import com.inhelp.view.main.main.menuDelegates.TextDelegateAdapter
 
+class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-class MenuRvAdapter(private val menuList: MutableList<Menu>, val clickListener: (menuItem: Menu) -> Unit = {},val clickView: (view: View) -> Unit = {} ) : RecyclerView.Adapter<ViewHolder>() {
-
-    override fun getItemCount(): Int {
-        return menuList.size
+    companion object {
+        const val VIEW_TYPE_SHORT = 0
+        const val VIEW_TYPE_MEDIUM = 1
+        const val VIEW_TYPE_LONG = 2
+        const val VIEW_TYPE_TEXT = 3
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_menu, parent, false))
+    private var mDelegateAdapters = SparseArrayCompat<ViewTypeDelegateAdapter>()
+
+    init {
+        mDelegateAdapters.put(VIEW_TYPE_SHORT, ShortDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_MEDIUM, MediumDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_LONG, LongDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_TEXT, TextDelegateAdapter())
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.txtTitle.setText(menuList[position].titleResId)
-        holder.imgIcon.setImageResource(menuList[position].iconResId)
-//        holder.container.setBackgroundResource(menuList[position].backgroundResId)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+            mDelegateAdapters.get(viewType)!!.onCreateViewHolder(parent)
 
-        holder.container.setOnClickListener {
-            clickView(it)
-            clickListener(menuList[position])
+    override fun getItemCount(): Int = items.size
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        mDelegateAdapters.get(getItemViewType(position))?.onBindViewHolder(holder, items[position])
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isNotEmpty()) {
+            mDelegateAdapters.get(getItemViewType(position))?.onBindViewHolder(holder, items[position], payloads)
+        } else {
+            onBindViewHolder(holder, position)
         }
     }
-}
 
-class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val container = view.container
-    val txtTitle = view.txtTitle
-    val imgIcon = view.imgIcon
+    override fun getItemViewType(position: Int) = when (items[position]) {
+        is DynamicMenu.Short -> VIEW_TYPE_SHORT
+        is DynamicMenu.Medium -> VIEW_TYPE_MEDIUM
+        is DynamicMenu.Long -> VIEW_TYPE_LONG
+        is DynamicMenu.Text -> VIEW_TYPE_TEXT
+        else -> -1
+    }
+
+    override fun getItemId(position: Int): Long {
+        return items[position].hashCode().toLong()
+    }
 }

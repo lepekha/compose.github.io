@@ -61,7 +61,6 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.fragment_title_gallery))
-//        checkPermission()
 
         PermissionManager.requestPermissions(
                 this,
@@ -101,26 +100,6 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
     override fun passData(value: String) {
         this.targetFragment?.arguments = Bundle().apply {
             this.putString(ARGUMENT_ONE_URI, value)
-        }
-    }
-
-    private fun checkPermission(){
-        if (ContextCompat.checkSelfPermission(getCurrentContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(getCurrentContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getCurrentActivity(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(getCurrentActivity(),
-                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            } else {
-                ActivityCompat.requestPermissions(getCurrentActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
-                        REQUEST_PERMISSIONS)
-                ActivityCompat.requestPermissions(getCurrentActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
-                        REQUEST_PERMISSIONS)
-            }
-        } else {
-            presenter.getAllShownImagesPath(getCurrentActivity())
-            initList()
         }
     }
 

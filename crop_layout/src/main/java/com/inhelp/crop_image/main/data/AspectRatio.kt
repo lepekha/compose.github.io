@@ -1,3 +1,9 @@
 package com.inhelp.crop_image.main.data
 
-data class AspectRatio(val first: Int, val second: Int)
+sealed class Ratio {
+    object Custom : Ratio()
+    object OriginRatio : Ratio()
+    data class AspectRatio(val first: Int, val second: Int): Ratio()
+}
+
+

@@ -14,8 +14,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:tint="@color/grid_menu_unselect"
-        android:tintMode="multiply"
+        android:backgroundTintMode="add"
+        app:tint="@color/grid_menu_unselect"
+        app:tintMode="multiply"
         app:srcCompat="@drawable/ic_grid_1_2" />
 
     <TextView

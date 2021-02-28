@@ -2,11 +2,14 @@ package com.inhelp.crop_image.main
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.graphics.RectF
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import com.inhelp.extension.vibrate
 
@@ -23,28 +26,40 @@ class OverlayLayer @JvmOverloads constructor(
     val overlays = mutableListOf<Overlay>()
 
     fun onTouch(e: MotionEvent){
-        if(e.action == MotionEvent.ACTION_DOWN){
             overlays.forEach { overlay ->
-                overlay.onTouchDown(e.x, e.y)
+                overlay.onTouch(e)
+            }
+    }
+
+    fun onDoubleTap(e: MotionEvent): Boolean{
+        overlays.forEach { overlay ->
+            if(!overlay.onDoubleTap(e.x, e.y)){
+                return false
             }
         }
+        return true
+    }
 
-        if(e.action == MotionEvent.ACTION_UP){
-            overlays.forEach { overlay ->
-                overlay.onTouchUp(e.x, e.y)
-            }
+    fun onScaleBegin(x: Float, y: Float){
+        overlays.forEach { overlay ->
+            overlay.onScaleBegin(x, y)
         }
+    }
 
-        if(e.action == MotionEvent.ACTION_MOVE){
-            overlays.forEach { overlay ->
-                overlay.onTouchMove(e.x, e.y)
-            }
+    fun onScale(scaleFactor: Float){
+        overlays.forEach { overlay ->
+            overlay.onScale(scaleFactor)
         }
     }
 
     override fun onDraw(canvas: Canvas) {
+        val systemG = mutableListOf<Rect>()
         overlays.forEach { overlay ->
             overlay.onDraw(canvas = canvas)
+            systemG.addAll(overlay.gestureExclusion)
+        }
+        if (Build.VERSION.SDK_INT >= 29){
+            systemGestureExclusionRects = systemG
         }
     }
 }

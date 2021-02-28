@@ -12,9 +12,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayout
@@ -57,6 +56,10 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
             imgView.makeCrop()
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(imgView) { v, insets ->
+            insets.inset(0,0,0,0)
+        }
+
         btnGallery.setOnClickListener {
             ColorFragment.newInstance(color = Color.WHITE, targetFragment = this).show(requireFragmentManager(), "ColorFragment")
         }
@@ -70,11 +73,13 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
             })
         }
 
+
+
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                imgView.createCropOverlay(aspectRatio = EGrid.values()[tab.position].aspectRatio, isShowGrid = true)
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(ContextCompat.getColor(getCurrentContext(), R.color.grid_menu_select), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(ContextCompat.getColor(getCurrentContext(), R.color.grid_menu_select))
+                imgView.createCropOverlay(ratio = EGrid.values()[tab.position].ratio, isShowGrid = true)
+                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(ContextCompat.getColor(getCurrentContext(), R.color.colorAccent), PorterDuff.Mode.MULTIPLY)
+                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(ContextCompat.getColor(getCurrentContext(), R.color.colorAccent))
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {

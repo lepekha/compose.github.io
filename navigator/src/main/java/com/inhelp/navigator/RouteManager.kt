@@ -4,6 +4,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.inhelp.navigator.R
+import com.inhelp.navigator.SharedElement
 
 
 fun Fragment.hideKeyboard() {
@@ -75,8 +76,12 @@ fun <T> Fragment.getListenerFromActivity(listenerClazz: Class<T>): T? {
     return getListener(listenerClazz, activity)
 }
 
-fun FragmentManager.replace(fragment: Fragment, containerId: Int = R.id.id_fragment_container, addToBackStack: Boolean = false) {
+fun FragmentManager.replace(fragment: Fragment, containerId: Int = R.id.id_fragment_container, addToBackStack: Boolean = false, reordering: Boolean = false, vararg sharedElements: SharedElement) {
     val transaction = this.beginTransaction()
+    sharedElements.iterator().forEach {
+        transaction.addSharedElement(it.view, it.id)
+    }
+    transaction.setReorderingAllowed(reordering)
     transaction.replace(containerId, fragment, fragment.javaClass.simpleName)
     if (addToBackStack) {
         transaction.addToBackStack(fragment.javaClass.simpleName)

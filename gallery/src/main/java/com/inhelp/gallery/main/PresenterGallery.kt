@@ -9,6 +9,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
+import kotlinx.coroutines.*
 import java.io.File
 import java.net.URI
 
@@ -20,7 +21,7 @@ class PresenterGallery(val context: Context) : BaseMvpPresenterImpl<ViewGallery>
         super.attachView(view)
     }
 
-    fun getAllShownImagesPath(activity: Activity){
+    fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
         val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val imageFolders = mutableMapOf<String, ImageFolder>()
         val projection = arrayOf(MediaStore.Images.Thumbnails._ID, MediaStore.Images.Thumbnails.DATA)
@@ -52,7 +53,10 @@ class PresenterGallery(val context: Context) : BaseMvpPresenterImpl<ViewGallery>
         folders.add(allFolder)
         folders.sortBy { it.name }
 
-        view?.setVisibleTabs(isVisible = folders.size > 2)
+        withContext(Dispatchers.Main){
+            view?.setVisibleTabs(isVisible = folders.size > 2)
+            view?.updateAllList()
+        }
     }
 
     fun pressImage(uri: Uri){

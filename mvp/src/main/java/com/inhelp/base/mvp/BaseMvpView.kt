@@ -19,6 +19,8 @@ interface BaseMvpView {
 
     fun setTitle(title: String)
 
+    fun setVisibleBack(isVisible: Boolean)
+
     fun backPress() : Boolean
 
     fun backToMain()

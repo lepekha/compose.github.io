@@ -22,7 +22,6 @@ import com.inhelp.panorama.data.EPanorama
 import com.inhelp.panorama.view.save.PanoramaSaveFragment
 import kotlinx.android.synthetic.main.fragment_panorama.*
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 import replace
 
@@ -57,7 +56,7 @@ class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), Pan
         }
 
         btnNext.setOnClickListener {
-            imgView.makeCrop(sliceByAspectRatio = true)
+            imgView.makeCrop()
         }
 
         btnGallery.setOnClickListener {
@@ -80,8 +79,8 @@ class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), Pan
 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                imgView.createCropOverlay(aspectRatio = EPanorama.values()[tab.position].aspectRatio, isShowGrid = true)
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(ContextCompat.getColor(getCurrentContext(), R.color.panorama_menu_select), PorterDuff.Mode.MULTIPLY)
+                imgView.createCropOverlay(ratio = EPanorama.values()[tab.position].ratio, isShowGrid = true)
+                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(ContextCompat.getColor(getCurrentContext(), R.color.colorAccent), PorterDuff.Mode.MULTIPLY)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {

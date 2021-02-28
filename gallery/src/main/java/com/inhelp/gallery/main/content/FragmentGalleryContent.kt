@@ -40,7 +40,7 @@ class FragmentGalleryContent : BaseMvpFragment<ViewGalleryContent, PresenterGall
 
     private fun initList(){
         list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
-        list.adapter = GalleryRvAdapter(presenter.images, getCurrentActivity().windowManager){
+        list.adapter = GalleryRvAdapter(presenter.images){
             presenter.pressImage(uri = it)
         }
     }

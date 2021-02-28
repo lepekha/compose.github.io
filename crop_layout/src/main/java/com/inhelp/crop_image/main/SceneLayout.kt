@@ -2,23 +2,18 @@ package com.inhelp.crop_image.main
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Rect
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.annotation.IntDef
-import androidx.annotation.MainThread
-import androidx.core.view.drawToBitmap
 import androidx.core.view.setMargins
-import com.inhelp.crop_image.main.data.AspectRatio
+import com.inhelp.crop_image.main.data.Ratio
 import com.inhelp.extension.dp
 import kotlin.concurrent.thread
 
@@ -53,7 +48,30 @@ class SceneLayout @JvmOverloads constructor(
         addView(overlayLayout)
     }
 
+    private val gestureListener by lazy { GestureDetector(context,  object : GestureDetector.SimpleOnGestureListener(){
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            overlayLayout.onDoubleTap(e)
+            return true
+        }
+    })
+    }
+
+    private val scaleGestureDetector by lazy { ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener(){
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            overlayLayout.onScale(detector.scaleFactor)
+            return true
+        }
+
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+            overlayLayout.onScaleBegin(x = detector.focusX, y = detector.focusY)
+            return super.onScaleBegin(detector)
+        }
+    })
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        gestureListener.onTouchEvent(event)
+        scaleGestureDetector.onTouchEvent(event)
         overlayLayout.onTouch(event)
         overlayLayout.invalidate()
         return true
@@ -63,20 +81,24 @@ class SceneLayout @JvmOverloads constructor(
 
     }
 
-    fun createCropOverlay(aspectRatio: AspectRatio?, isShowGrid: Boolean = false){
+    fun createCropOverlay(ratio: Ratio, isShowGrid: Boolean = false){
+        val lastRect = overlayLayout.overlays.filterIsInstance<RectangleCropOverlay>().firstOrNull()?.getCropRect()
         overlayLayout.overlays.clear()
-        overlayLayout.overlays.add(RectangleCropOverlay(context = context, aspectRatio = aspectRatio, isShowGrid = isShowGrid).apply {
+        overlayLayout.overlays.add(RectangleCropOverlay(context = context, ratio = ratio, isSliceByGrid = isShowGrid, oldRect = lastRect).apply {
             this.init(frame = cropImageView)
+            this.onAnimate = {
+                overlayLayout.invalidate()
+            }
         })
         overlayLayout.invalidate()
     }
 
-    fun makeCrop(sliceByAspectRatio: Boolean = false){
+    fun makeCrop(){
         val mainHandler = Handler(Looper.getMainLooper())
         val source = image ?: return
         thread {
                     val crop = overlayLayout.overlays.filterIsInstance<RectangleCropOverlay>().firstOrNull() ?: return@thread
-                    val cropsPercent = crop.getCrops(sliceByAspectRatio = sliceByAspectRatio, originHeight = image?.height?.toFloat() ?: 0f, originWidth = image?.width?.toFloat() ?: 0f)
+                    val cropsPercent = crop.getCrops(originHeight = image?.height?.toFloat() ?: 0f, originWidth = image?.width?.toFloat() ?: 0f)
 
                     val bms = cropsPercent.map { cropPosition ->  Bitmap.createBitmap(source, cropPosition.left.toInt(), cropPosition.top.toInt(), (cropPosition.right - cropPosition.left).toInt(), (cropPosition.bottom - cropPosition.top).toInt()) }
                     mainHandler.post {
@@ -97,17 +119,5 @@ class SceneLayout @JvmOverloads constructor(
   fun addListener(listener: Listener) {
       listeners.add(listener)
   }
-
-    companion object {
-
-        @Retention(AnnotationRetention.SOURCE)
-        @IntDef(OVERLAY_SHAPE_NONE, OVERLAY_SHAPE_RECTANGLE, OVERLAY_SHAPE_CIRCLE, OVERLAY_SHAPE_CUSTOM)
-        annotation class OverlayShape
-
-        private const val OVERLAY_SHAPE_NONE = 0
-        private const val OVERLAY_SHAPE_RECTANGLE = 1
-        private const val OVERLAY_SHAPE_CIRCLE = 2
-        private const val OVERLAY_SHAPE_CUSTOM = 3
-    }
 
 }

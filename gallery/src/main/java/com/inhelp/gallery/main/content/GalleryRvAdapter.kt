@@ -14,7 +14,7 @@ import com.inhelp.gallery.R
 import kotlinx.android.synthetic.main.element_images.view.*
 
 
-class GalleryRvAdapter(val images: MutableList<Uri>, val onImagePress: (value: Uri) -> Unit) : RecyclerView.Adapter<ViewHolder>() {
+class GalleryRvAdapter(val images: MutableList<Uri>, val onImagePress: (value: Uri) -> Unit) : RecyclerView.Adapter<GalleryRvAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return images.size
@@ -32,8 +32,8 @@ class GalleryRvAdapter(val images: MutableList<Uri>, val onImagePress: (value: U
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(holder.imgView.context).load(images[position]).centerInside().thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(holder.imgView)
     }
-}
 
-class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val imgView: ImageView = view.imgView
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imgView: ImageView = view.imgView
+    }
 }

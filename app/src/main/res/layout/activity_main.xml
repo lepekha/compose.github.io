@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
+    android:background="?attr/color_primary"
     android:fitsSystemWindows="true">
 
     <TextView
@@ -14,12 +14,12 @@
         android:layout_height="0dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:textColor="#FFFFFF"
+        android:textColor="?attr/color_primaryText"
         android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_goneMarginStart="32dp"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="32dp"
         tools:text="Make your choiсe:" />
 
     <FrameLayout

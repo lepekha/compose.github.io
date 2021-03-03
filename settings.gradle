@@ -1,3 +1,4 @@
+include ':theme'
 include ':color'
 include ':grid'
 include ':panorama'

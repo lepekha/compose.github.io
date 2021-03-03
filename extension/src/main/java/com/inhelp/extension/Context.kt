@@ -160,7 +160,7 @@ fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "") {
     val file = File(myDir, fname)
     if (file.exists()) file.delete()
     FileOutputStream(file).use { out ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
     }
     MediaScannerConnection.scanFile(this, arrayOf(file.absolutePath), arrayOf("image/jpg"), null)
 }

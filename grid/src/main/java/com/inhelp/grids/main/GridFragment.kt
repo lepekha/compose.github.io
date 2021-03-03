@@ -1,27 +1,25 @@
 package com.inhelp.grids.main
 
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.tabs.TabLayout
 import com.inhelp.base.mvp.BaseMvpFragment
-import com.inhelp.color.ColorFragment
+import com.inhelp.extension.dp
 import com.inhelp.gallery.main.FragmentGallery
 import com.inhelp.grids.R
-import com.inhelp.grids.data.EGrid
+import com.inhelp.grids.data.FilterType
+import com.inhelp.grids.data.GPUImageFilterTools
+import jp.co.cyberagent.android.gpuimage.GPUImage
+import jp.co.cyberagent.android.gpuimage.filter.GPUImageSepiaToneFilter
 import kotlinx.android.synthetic.main.fragment_grid.*
 import org.koin.android.ext.android.inject
 import replace
@@ -34,6 +32,10 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
             return GridFragment()
         }
     }
+
+    private val gpuImage by lazy { GPUImage(this.getCurrentContext()).apply {
+        this.setGLSurfaceView(imgView)
+    } }
 
     override val presenter: GridPresenter by inject()
 
@@ -53,56 +55,58 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
         }
 
         btnNext.setOnClickListener {
-            imgView.makeCrop()
+            presenter.pressSave(bitmap = gpuImage.bitmapWithFilterApplied)
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(imgView) { v, insets ->
-            insets.inset(0,0,0,0)
-        }
+
 
         btnGallery.setOnClickListener {
-            ColorFragment.newInstance(color = Color.WHITE, targetFragment = this).show(requireFragmentManager(), "ColorFragment")
-        }
-
-        EGrid.values().forEach {
-            tab_layout.addTab(tab_layout.newTab().apply {
-                this.customView = layoutInflater.inflate(R.layout.element_grid_menu, null).apply {
-                    this.findViewById<ImageView>(R.id.icon).setImageResource(it.iconResId)
-                    this.findViewById<TextView>(R.id.txtTitle).setText(it.title)
-                }
-            })
+//            ColorFragment.newInstance(color = Color.WHITE, targetFragment = this).show(requireFragmentManager(), "ColorFragment")
         }
 
 
+    }
 
-        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                imgView.createCropOverlay(ratio = EGrid.values()[tab.position].ratio, isShowGrid = true)
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(ContextCompat.getColor(getCurrentContext(), R.color.colorAccent), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(ContextCompat.getColor(getCurrentContext(), R.color.colorAccent))
-            }
+    private fun initList(image: Bitmap){
+        list.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.VERTICAL, false)
+        list.adapter = FilterPreviewRvAdapter(context = getCurrentContext(), image = image, filters = FilterType.values().toMutableList()){
+            gpuImage.setFilter(GPUImageFilterTools.createFilterForType(context = getCurrentContext(), it))
+            gpuImage.requestRender()
+        }.apply {
+        }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(ContextCompat.getColor(getCurrentContext(), R.color.grid_menu_unselect), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(ContextCompat.getColor(getCurrentContext(), R.color.grid_menu_unselect))
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-            }
-        })
+        list.setHasFixedSize(true)
     }
 
     override fun setImage(uri: Uri){
+        val imageUri = Uri.parse(arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
         Glide
                 .with(imgView.context)
                 .asBitmap()
-                .load(Uri.parse(arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI)))
+                .load(imageUri)
+                .fitCenter()
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        imgView.setBitmap(resource)
-                        imgView.post {
-                            tab_layout.getTabAt(2)?.select()
-                        }
+                        Glide.with(getCurrentContext())
+                                .asBitmap()
+                                .load(resource)
+                                .override(150.dp.toInt())
+                                .centerInside()
+                                .into(object : CustomTarget<Bitmap>() {
+                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                        initList(image = resource)
+                                    }
+
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+                                    }
+                                })
+
+
+
+
+
+//                        gpuImage.setImage(resource) // this loads image on the current thread, should be run in a thread
+//                        gpuImage.setFilter(GPUImageSepiaToneFilter())
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {

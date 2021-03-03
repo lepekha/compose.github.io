@@ -50,6 +50,7 @@ dependencies {
     implementation project(':color')
     implementation project(':extension')
     implementation project(':crop')
+    implementation project(':theme')
 
     implementation 'com.sagar:dslpermission:2.0.0'
     implementation 'com.github.madrapps:pikolo:2.0.1'

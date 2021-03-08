@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_night_primary">#1f2125</color>
+    <color name="color_night_1">#000000</color>
+    <color name="color_night_2">#171717</color>
+    <color name="color_night_3">#4CAF50</color>
+    <color name="color_night_4">#FFFFFF</color>
+    <color name="color_night_5">#484848</color>
+    <color name="color_night_primary">#FF1F2125</color>
     <color name="color_night_primaryLight">#484848</color>
-    <color name="color_night_primaryDark">#000000</color>
+    <color name="color_night_primaryDark">#ffffff</color>
+    <color name="color_night_primaryInvert">#ffffff</color>
     <color name="color_night_secondary">#4CAF50</color>
     <color name="color_night_secondaryLight">#61DD66</color>
     <color name="color_night_secondaryDark">#357838</color>
     <color name="color_night_primaryText">#ffffff</color>
-    <color name="color_night_secondaryText">#000000</color>
+    <color name="color_night_secondaryText">#494949</color>
 
     <color name="color_light_primary">#fafafa</color>
     <color name="color_light_primaryLight">#ffffff</color>
-    <color name="color_light_primaryDark">#c7c7c7</color>
+    <color name="color_light_primaryDark">#2E2E2E</color>
+    <color name="color_light_primaryInvert">#2E2E2E</color>
     <color name="color_light_secondary">#2979ff</color>
     <color name="color_light_secondaryLight">#75a7ff</color>
     <color name="color_light_secondaryDark">#004ecb</color>
-    <color name="color_light_primaryText">#000000</color>
-    <color name="color_light_secondaryText">#000000</color>
+    <color name="color_light_primaryText">#2E2E2E</color>
+    <color name="color_light_secondaryText">#C6C6C6</color>
 </resources>

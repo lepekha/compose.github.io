@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import data.Menu
 
 abstract class BaseMvpActivity<in V : BaseMvpView, out T : BaseMvpPresenter<V>> : AppCompatActivity(), BaseMvpView {
 
@@ -24,7 +25,6 @@ abstract class BaseMvpActivity<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         Toast.makeText(this, stringResId, Toast.LENGTH_LONG).show()
     }
 
-
     override fun showAlert(srtResId: Int) {
         //TODO alert
     }
@@ -33,10 +33,11 @@ abstract class BaseMvpActivity<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         //TODO alert
     }
 
-
     override fun getCurrentActivity(): androidx.fragment.app.FragmentActivity {
         return this
     }
+
+    abstract fun setupBottomMenu(menu: MutableList<Menu>)
 
     override fun onDestroy() {
         super.onDestroy()

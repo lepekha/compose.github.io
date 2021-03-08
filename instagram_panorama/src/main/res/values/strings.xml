@@ -1,0 +1,5 @@
+<resources>
+    <string name="fragment_title_crop">Crop your image:</string>
+    <string name="fragment_title_panorama_save">Save images:</string>
+
+</resources>

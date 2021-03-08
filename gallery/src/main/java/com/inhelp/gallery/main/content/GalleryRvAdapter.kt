@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.inhelp.extension.EVibrate
-import com.inhelp.extension.dp
 import com.inhelp.extension.vibrate
 import com.inhelp.gallery.R
-import kotlinx.android.synthetic.main.element_images.view.*
+import kotlinx.android.synthetic.main.element_gallery_images.view.*
 
 
 class GalleryRvAdapter(val images: MutableList<Uri>, val onImagePress: (value: Uri) -> Unit) : RecyclerView.Adapter<GalleryRvAdapter.ViewHolder>() {
@@ -21,7 +20,7 @@ class GalleryRvAdapter(val images: MutableList<Uri>, val onImagePress: (value: U
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_images, parent, false)).apply {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_gallery_images, parent, false)).apply {
             this.imgView.setOnClickListener {
                 this.imgView.context.vibrate(type = EVibrate.BUTTON)
                 onImagePress(images[adapterPosition])

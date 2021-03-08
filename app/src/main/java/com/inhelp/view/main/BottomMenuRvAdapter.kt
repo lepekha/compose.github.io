@@ -1,0 +1,35 @@
+package com.inhelp.view.main
+
+import android.view.*
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
+import com.inhelp.R
+import data.BottomMenu
+import data.Menu
+import kotlinx.android.synthetic.main.element_bottom_menu_icon.view.*
+
+
+class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<BottomMenuRvAdapter.ViewHolder>() {
+
+    override fun getItemCount(): Int {
+        return menu.size
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_bottom_menu_icon, parent, false)).apply {
+            this.btnMenu.setOnClickListener {
+                (menu[adapterPosition] as? BottomMenu)?.onPress?.invoke()
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = menu[position] as BottomMenu
+        holder.btnMenu.isClickable = item.isEnabled
+        holder.btnMenu.setImageResource(item.iconResId)
+    }
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val btnMenu: ImageView = view.btnMenu
+    }
+}

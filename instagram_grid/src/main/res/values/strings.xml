@@ -1,0 +1,4 @@
+<resources>
+    <string name="fragment_instagram_grid_title">Share images:</string>
+    <string name="fragment_instagram_grid_help">Tap each pic to fallowing order to share it to Instagram</string>
+</resources>

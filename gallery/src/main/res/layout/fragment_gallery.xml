@@ -8,34 +8,36 @@
     android:layout_height="match_parent"
     tools:background="#F52E2E2E">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabBackground="@drawable/gallery_tab_background"
+        app:tabGravity="start"
+        app:tabIndicator="@null"
+        app:tabIndicatorColor="#FFFFFFFF"
+        app:tabMode="scrollable"
+        app:tabRippleColor="@null"
+        app:tabSelectedTextColor="?attr/color_4"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="?attr/color_5" />
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabGravity="start"
-            app:tabIndicator="@null"
-            app:tabIndicatorColor="#FFFFFFFF"
-            app:tabMode="scrollable"
-            app:tabRippleColor="@null"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextAppearance="@style/TabLayoutTextStyle"
-            app:tabTextColor="#51FFFFFF" />
-</androidx.viewpager.widget.ViewPager>
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout"></androidx.viewpager.widget.ViewPager>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,10 +3,10 @@ package com.inhelp.core.models.data
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.inhelp.R
+import com.inhelp.instagram.grid.view.main.GridFragment
 import com.inhelp.instagram.view.main.MainFragment
-import com.inhelp.grids.main.GridFragment
-import com.inhelp.panorama.view.main.PanoramaFragment
-import com.inhelp.tags.main.FragmentTags
+import com.inhelp.instagram.panorama.view.main.PanoramaFragment
+import com.inhelp.dialogs.main.FragmentTags
 import com.inhelp.text_style.main.TextStyleFragment
 import replace
 import java.lang.ref.WeakReference
@@ -24,7 +24,6 @@ class MenuObjects(context: Context) {
         DynamicMenu.Medium(
                 id = R.id.id_menu_no_crop,
                 titleResId = R.string.menu_crop,
-                backgroundColorId = R.color.menu_background,
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = MainFragment.newInstance(), addToBackStack = true)
                 },
@@ -36,7 +35,6 @@ class MenuObjects(context: Context) {
         DynamicMenu.Medium(
                 id = R.id.id_menu_grid,
                 titleResId = R.string.menu_grid,
-                backgroundColorId = R.color.menu_background,
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = GridFragment.newInstance(), addToBackStack = true)
                 },
@@ -48,7 +46,6 @@ class MenuObjects(context: Context) {
         DynamicMenu.Long(
                 id = R.id.id_menu_panorama,
                 titleResId = R.string.menu_panorama,
-                backgroundColorId = R.color.menu_background,
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = PanoramaFragment.newInstance(), addToBackStack = true)
                 },
@@ -60,7 +57,6 @@ class MenuObjects(context: Context) {
         DynamicMenu.Text(
                 id = R.id.id_menu_text_style,
                 titleResId = R.string.menu_text_style,
-                backgroundColorId = R.color.menu_background,
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = TextStyleFragment.newInstance(), addToBackStack = true)
                 },
@@ -71,7 +67,6 @@ class MenuObjects(context: Context) {
         DynamicMenu.Text(
                 id = R.id.id_menu_tags,
                 titleResId = R.string.menu_tags,
-                backgroundColorId = R.color.menu_background,
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = FragmentTags.newInstance(), addToBackStack = true)
                 },

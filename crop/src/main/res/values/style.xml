@@ -12,11 +12,8 @@
     </declare-styleable>
 
     <style name="sliderMode">
-        <item name="sbSelectedTextColor">@color/main_background</item>
-        <item name="sbUnselectedTextColor">@color/crop_menu_unselect</item>
+        <item name="sbSelectedTextColor">?attr/color_primary</item>
         <item name="android:padding">0dp</item>
-        <item name="android:background">@drawable/tab_menu_round</item>
-        <item name="sbActiveTabDrawable">@drawable/tab_menu_selected_round</item>
         <item name="sbTextSize">16sp</item>
     </style>
 

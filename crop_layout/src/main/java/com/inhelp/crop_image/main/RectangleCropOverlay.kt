@@ -186,7 +186,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
                 moveFullRect(e)
                 when(ratio){
                     is Ratio.Custom -> {
-                        movePointByAspectRatio(e)
+                        movePointByCustom(e)
                     }
                     is Ratio.OriginRatio,
                     is Ratio.AspectRatio -> {

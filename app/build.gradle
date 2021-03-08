@@ -39,9 +39,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':instagram_crop')
-    implementation project(':panorama')
-    implementation project(':grid')
+    implementation project(':instagram_no_crop')
+    implementation project(':instagram_panorama')
+    implementation project(':instagram_grid')
     implementation project(':mvp')
     implementation project(':navigator')
     implementation project(':text_style')
@@ -49,8 +49,8 @@ dependencies {
     implementation project(':gallery')
     implementation project(':color')
     implementation project(':extension')
-    implementation project(':crop')
     implementation project(':theme')
+    implementation project(':dialogs')
 
     implementation 'com.sagar:dslpermission:2.0.0'
     implementation 'com.github.madrapps:pikolo:2.0.1'

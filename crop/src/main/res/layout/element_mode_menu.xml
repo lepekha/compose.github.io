@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAllCaps="true"
-        android:textColor="@color/crop_menu_unselect"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:text="TextView" />

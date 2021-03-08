@@ -3,6 +3,7 @@ package com.inhelp.base.mvp
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import data.Menu
 
 abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> : androidx.fragment.app.DialogFragment(), BaseMvpView {
 
@@ -12,6 +13,7 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attachView(view = this as V)
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(createBottomMenu())
         setVisibleBack(true)
     }
 
@@ -55,6 +57,10 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
 
     override fun backPress(): Boolean {
         return false
+    }
+
+    override fun updateBottomMenu() {
+        (activity as BaseMvpActivity<*, *>).updateBottomMenu()
     }
 
     override fun backToMain() {

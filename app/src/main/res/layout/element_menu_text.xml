@@ -32,7 +32,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:textAllCaps="true"
-            android:textColor="#AD000000"
+            android:textColor="?attr/color_primaryText"
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="normal"

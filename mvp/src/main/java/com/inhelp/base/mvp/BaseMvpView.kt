@@ -2,6 +2,7 @@ package com.inhelp.base.mvp
 
 import android.content.Context
 import androidx.annotation.StringRes
+import data.Menu
 
 interface BaseMvpView {
 
@@ -22,6 +23,10 @@ interface BaseMvpView {
     fun setVisibleBack(isVisible: Boolean)
 
     fun backPress() : Boolean
+
+    fun createBottomMenu(): MutableList<Menu> = mutableListOf()
+
+    fun updateBottomMenu()
 
     fun backToMain()
 }

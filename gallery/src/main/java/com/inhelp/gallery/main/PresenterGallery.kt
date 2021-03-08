@@ -44,6 +44,8 @@ class PresenterGallery(val context: Context) : BaseMvpPresenterImpl<ViewGallery>
 
         folders.clear()
         folders.addAll(imageFolders.values)
+        imageFolders.values.onEach { it.images.reverse() }
+
         val allFolder = ImageFolder().apply {
             this.name = "All"
             imageFolders.values.forEach {

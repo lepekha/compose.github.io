@@ -1,19 +1,14 @@
 package com.inhelp.gallery.main
 
 import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.PermissionManager
-import com.eazypermissions.dsl.extension.requestPermissions
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.gallery.R
 import kotlinx.android.synthetic.main.fragment_gallery.*
@@ -47,10 +42,6 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     private fun initList() {
         list.post {
             list.offscreenPageLimit = 1
@@ -61,6 +52,8 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.fragment_title_gallery))
+
+        tab_layout.setupWithViewPager(list)
 
         PermissionManager.requestPermissions(
                 this,

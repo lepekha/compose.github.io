@@ -37,7 +37,6 @@ class TextDelegateAdapter : ViewTypeDelegateAdapter {
         lateinit var innerItem: DynamicMenu.Text
         val root = itemView.root
         val txtTitle = itemView.txtTitle
-        val cardView = itemView.cardView
 
         fun bind(item: DynamicMenu.Text) {
             innerItem = item

@@ -1,36 +1,38 @@
 package com.inhelp.core.models.data
 
-import android.graphics.Bitmap
-
-
 sealed class DynamicMenu {
     abstract val id: Int
     abstract val titleResId: Int
-    abstract val onPress: () -> Unit
 
     class Text(
             override val id: Int,
             override val titleResId: Int,
-            override val onPress: () -> Unit,
+            val onPress: () -> Unit,
+    ) : DynamicMenu()
+
+    class List(
+            override val id: Int,
+            override val titleResId: Int,
+            val innerMenu: MutableList<DynamicMenu>
     ) : DynamicMenu()
 
     class Short(
             override val id: Int,
             override val titleResId: Int,
-            override val onPress: () -> Unit,
+            val onPress: () -> Unit,
             val backgroundImageId: Int
     ) : DynamicMenu()
 
     class Medium(override val id: Int,
                  override val titleResId: Int,
-                 override val onPress: () -> Unit,
+                 val onPress: () -> Unit,
                  val backgroundImageId: Int
     ): DynamicMenu()
 
     class Long(
             override val id: Int,
             override val titleResId: Int,
-            override val onPress: () -> Unit,
+            val onPress: () -> Unit,
             val backgroundImageId: Int
     ): DynamicMenu()
 }

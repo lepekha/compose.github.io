@@ -19,7 +19,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginStart="32dp"
+        app:layout_goneMarginStart="16dp"
         tools:text="Make your choiсe:" />
 
     <FrameLayout

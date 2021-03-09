@@ -10,5 +10,7 @@
     <item name="id_menu_no_crop" type="id"/>
     <item name="id_menu_panorama" type="id"/>
     <item name="id_menu_grid" type="id"/>
+    <item name="id_menu_instagram" type="id"/>
+    <item name="id_menu_other" type="id"/>
 
 </resources>

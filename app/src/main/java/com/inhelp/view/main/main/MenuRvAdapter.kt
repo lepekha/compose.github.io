@@ -10,10 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.inhelp.R
 import com.inhelp.base.mvp.adapters.ViewTypeDelegateAdapter
 import com.inhelp.core.models.data.DynamicMenu
-import com.inhelp.view.main.main.menuDelegates.LongDelegateAdapter
-import com.inhelp.view.main.main.menuDelegates.MediumDelegateAdapter
-import com.inhelp.view.main.main.menuDelegates.ShortDelegateAdapter
-import com.inhelp.view.main.main.menuDelegates.TextDelegateAdapter
+import com.inhelp.view.main.main.menuDelegates.*
 
 class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -22,6 +19,7 @@ class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter
         const val VIEW_TYPE_MEDIUM = 1
         const val VIEW_TYPE_LONG = 2
         const val VIEW_TYPE_TEXT = 3
+        const val VIEW_TYPE_LIST = 4
     }
 
     private var mDelegateAdapters = SparseArrayCompat<ViewTypeDelegateAdapter>()
@@ -31,6 +29,7 @@ class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter
         mDelegateAdapters.put(VIEW_TYPE_MEDIUM, MediumDelegateAdapter())
         mDelegateAdapters.put(VIEW_TYPE_LONG, LongDelegateAdapter())
         mDelegateAdapters.put(VIEW_TYPE_TEXT, TextDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_LIST, ListDelegateAdapter())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
@@ -55,6 +54,7 @@ class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter
         is DynamicMenu.Medium -> VIEW_TYPE_MEDIUM
         is DynamicMenu.Long -> VIEW_TYPE_LONG
         is DynamicMenu.Text -> VIEW_TYPE_TEXT
+        is DynamicMenu.List -> VIEW_TYPE_LIST
         else -> -1
     }
 

@@ -17,7 +17,7 @@ class MenuObjects(context: Context) {
 
     fun getOrCreateMenu(fm: FragmentManager?): List<DynamicMenu> {
         fragmentManager = fragmentManager ?: WeakReference(fm) ?: return listOf()
-        return listOf(TEXT_STYLE, GRID, NO_CROP, TAGS, PANORAMA)
+        return listOf(INSTAGRAM, OTHER)
     }
 
     private val NO_CROP by lazy {
@@ -43,7 +43,7 @@ class MenuObjects(context: Context) {
     }
 
     private val PANORAMA by lazy {
-        DynamicMenu.Long(
+        DynamicMenu.Medium(
                 id = R.id.id_menu_panorama,
                 titleResId = R.string.menu_panorama,
                 onPress = {
@@ -52,6 +52,23 @@ class MenuObjects(context: Context) {
                 backgroundImageId = R.drawable.menu_22
         )
     }
+
+    private val INSTAGRAM by lazy {
+        DynamicMenu.List(
+                id = R.id.id_menu_instagram,
+                titleResId = R.string.menu_instagram,
+                innerMenu = mutableListOf(NO_CROP, GRID, PANORAMA)
+        )
+    }
+
+    private val OTHER by lazy {
+        DynamicMenu.List(
+                id = R.id.id_menu_other,
+                titleResId = R.string.menu_other,
+                innerMenu = mutableListOf(TEXT_STYLE, TAGS, TEXT_STYLE)
+        )
+    }
+
 
     private val TEXT_STYLE by lazy {
         DynamicMenu.Text(

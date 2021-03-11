@@ -1,4 +1,4 @@
-package com.inhelp.instagram
+package com.inhelp.crop
 
 import org.junit.Test
 

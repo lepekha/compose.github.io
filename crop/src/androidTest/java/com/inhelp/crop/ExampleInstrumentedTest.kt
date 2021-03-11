@@ -1,4 +1,4 @@
-package com.inhelp.instagram
+package com.inhelp.crop
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

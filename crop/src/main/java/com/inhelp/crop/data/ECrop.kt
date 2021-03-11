@@ -1,11 +1,11 @@
-package com.inhelp.instagram.data
+package com.inhelp.crop.data
 
-import com.inhelp.instagram.R
+import com.inhelp.crop.R
 import com.inhelp.crop_image.main.data.Ratio
 
 enum class ECrop(val titleResId: Int, val iconResId: Int, val ratio: Ratio) {
-    CUSTOM(titleResId= R.string.fragment_crop_aspect_ratio_origin, iconResId = R.drawable.ic_crop_original, ratio = Ratio.Custom),
     ORIGINAL(titleResId= R.string.fragment_crop_aspect_ratio_origin, iconResId = R.drawable.ic_crop_original, ratio = Ratio.OriginRatio),
+    FREE(titleResId= R.string.fragment_crop_aspect_ratio_free, iconResId = R.drawable.ic_crop_free, ratio = Ratio.Custom),
     ONE_TO_ONE(titleResId= R.string.fragment_crop_aspect_ratio_1_1, iconResId = R.drawable.ic_crop_1_1, ratio = Ratio.AspectRatio(1, 1)),
     FOUR_FIVE(titleResId= R.string.fragment_crop_aspect_ratio_4_5, iconResId = R.drawable.ic_crop_4_5, ratio = Ratio.AspectRatio(4, 5)),
     FOUR_TO_THREE(titleResId= R.string.fragment_crop_aspect_ratio_4_3, iconResId = R.drawable.ic_crop_4_3, ratio = Ratio.AspectRatio(4, 3)),

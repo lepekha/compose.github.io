@@ -275,30 +275,34 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
 
     private fun movePointByCustom(e: MotionEvent) {
         val frame = frame ?: return
-        val diffX = touchPoint.x - e.x
-        val diffY = touchPoint.y - e.y
+        val x = when{
+            (e.x < frame.left) -> frame.left
+            (e.x > frame.right) -> frame.right
+            else -> e.x.toInt()
+        }
+        val y = when{
+            (e.y < frame.top) -> frame.top
+            (e.y > frame.bottom) -> frame.bottom
+            else -> e.y.toInt()
+        }
 
         if ((0..3).contains(pointNumber) && action == ECropAction.MOVE_POINT) {
             val rect = Rect(moveRect)
 
             if (pointNumber == 0) {
-                rect.set(moveRect.left - diffX.toInt(), moveRect.top - diffY.toInt(), moveRect.right, moveRect.bottom)
+                rect.set(x, y, moveRect.right, moveRect.bottom)
             }
 
             if (pointNumber == 1) {
-                rect.set(moveRect.left, moveRect.top - diffY.toInt(), moveRect.right - diffX.toInt(), moveRect.bottom)
+                rect.set(moveRect.left, y, x, moveRect.bottom)
             }
 
             if (pointNumber == 2) {
-                rect.set(moveRect.left, moveRect.top, moveRect.right - diffX.toInt(), moveRect.bottom - diffY.toInt())
+                rect.set(moveRect.left, moveRect.top, x, y)
             }
 
             if (pointNumber == 3) {
-                rect.set(moveRect.left - diffX.toInt(), moveRect.top, moveRect.right, moveRect.bottom - diffY.toInt())
-            }
-
-            if ((rect.left < frame.left) or (rect.right > frame.right) or (rect.top < frame.top) or (rect.bottom > frame.bottom)) {
-                return
+                rect.set(x, moveRect.top, moveRect.right, y)
             }
 
             if (rect.height() < RectangleCropOverlay.MIN_CROP_SIZE || rect.width() < RectangleCropOverlay.MIN_CROP_SIZE) {
@@ -380,8 +384,6 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         }
         return true
     }
-
-
 
     override fun onScale(scaleFactor: Float) {
         val frame = this.frame ?: return

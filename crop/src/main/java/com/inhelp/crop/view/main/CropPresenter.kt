@@ -6,6 +6,7 @@ import android.net.Uri
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import com.inhelp.crop.data.*
 import com.inhelp.dialogs.main.DialogManager
+import com.inhelp.extension.createTempUri
 import com.inhelp.extension.saveBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,9 +16,15 @@ import kotlinx.coroutines.withContext
 
 class CropPresenter(val context: Context): BaseMvpPresenterImpl<CropView>() {
 
+    internal enum class EShareType {
+        SAVE, SHARE;
+    }
+
     private var currentUri: Uri? = null
 
-    private var eNoCrop = ECrop.ONE_TO_ONE
+    private var eCrop = ECrop.FREE
+
+    private var eShareType = EShareType.SHARE
 
     fun onLoad(uriString: String?){
         val currentUri = this.currentUri
@@ -42,19 +49,37 @@ class CropPresenter(val context: Context): BaseMvpPresenterImpl<CropView>() {
     }
 
     fun onResourceLoad() {
-        view?.setSelectedTab(position = eNoCrop.ordinal)
+        view?.setSelectedTab(position = eCrop.ordinal)
     }
 
     fun onTabSelect(position: Int) {
-        eNoCrop = ECrop.values()[position]
-        view?.createCropOverlay(eNoCrop.ratio, isGrid = false)
+        eCrop = ECrop.values()[position]
+        view?.createCropOverlay(eCrop.ratio, isGrid = false)
     }
 
-    fun pressSave(bitmaps: List<Bitmap>) = CoroutineScope(Dispatchers.Main).launch {
+    fun pressSave() {
+        eShareType = EShareType.SAVE
+    }
+
+    fun pressShare() {
+        eShareType = EShareType.SHARE
+    }
+
+    fun onCropReady(bitmaps: List<Bitmap>) = CoroutineScope(Dispatchers.Main).launch {
+        val bitmap = bitmaps.firstOrNull() ?: return@launch
         val dialog = DialogManager.createLoad{}
-        withContext(Dispatchers.IO) {
-            bitmaps.firstOrNull()?.let { context.saveBitmap(it) }
+        when(eShareType){
+            EShareType.SHARE ->{
+                val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
+                view?.createShareIntent(uri)
+                dialog.closeDialog()
+            }
+            EShareType.SAVE ->{
+                withContext(Dispatchers.IO) {
+                    context.saveBitmap(bitmap)
+                }
+                dialog.closeDialog()
+            }
         }
-        dialog.closeDialog()
     }
 }

@@ -9,9 +9,11 @@
     <string name="menu_save_photo">Save photo</string>
     <string name="menu_repost_photo">Repost photo</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_crop">No Crop</string>
+    <string name="menu_no_crop">No Crop</string>
+    <string name="menu_crop">Crop</string>
     <string name="menu_panorama">Panorama</string>
     <string name="menu_instagram">Instagram</string>
+    <string name="menu_image">Image</string>
     <string name="menu_other">Other</string>
     <string name="menu_grid">Grid</string>
     <string name="menu_tags">#Top\n#hashtegs</string>

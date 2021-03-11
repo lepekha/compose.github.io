@@ -23,6 +23,7 @@ import com.inhelp.extension.getColorFromAttr
 import com.inhelp.gallery.main.FragmentGallery
 import com.inhelp.crop.R
 import com.inhelp.crop.di.Scope
+import com.inhelp.extension.createImageIntent
 import data.BottomMenu
 import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_no_crop.*
@@ -46,12 +47,14 @@ class CropFragment : BaseMvpFragment<CropView, CropPresenter>(), CropView {
 
     private val btnShare by lazy {
         BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_share) {
+            presenter.pressShare()
             imgView.makeCrop()
         }
     }
 
     private val btnDownload by lazy {
         BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_download) {
+            presenter.pressSave()
             imgView.makeCrop()
         }
     }
@@ -82,7 +85,7 @@ class CropFragment : BaseMvpFragment<CropView, CropPresenter>(), CropView {
 
         imgView.addListener(object : SceneLayout.CropListener {
             override fun onCrop(bitmaps: List<Bitmap>) {
-                presenter.pressSave(bitmaps)
+                presenter.onCropReady(bitmaps)
             }
         })
 
@@ -101,6 +104,10 @@ class CropFragment : BaseMvpFragment<CropView, CropPresenter>(), CropView {
             override fun onTabReselected(tab: TabLayout.Tab) {
             }
         })
+    }
+
+    override fun createShareIntent(uri: Uri) {
+        getCurrentActivity().createImageIntent(uri)
     }
 
     override fun createCropOverlay(ratio: Ratio, isGrid: Boolean) {

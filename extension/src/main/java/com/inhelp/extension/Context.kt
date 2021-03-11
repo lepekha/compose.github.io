@@ -120,7 +120,8 @@ fun Context.vibrate(milliseconds: Long = 500){
 }
 
 enum class EVibrate(internal val long: Long){
-    BUTTON(long = 10L)
+    BUTTON(long = 10L),
+    BUTTON_LONG(long = 30L)
 }
 
 @Suppress("DEPRECATION")

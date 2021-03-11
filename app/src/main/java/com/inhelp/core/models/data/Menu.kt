@@ -3,6 +3,7 @@ package com.inhelp.core.models.data
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.inhelp.R
+import com.inhelp.crop.view.main.CropFragment
 import com.inhelp.instagram.grid.view.main.GridFragment
 import com.inhelp.instagram.view.main.MainFragment
 import com.inhelp.instagram.panorama.view.main.PanoramaFragment
@@ -17,13 +18,13 @@ class MenuObjects(context: Context) {
 
     fun getOrCreateMenu(fm: FragmentManager?): List<DynamicMenu> {
         fragmentManager = fragmentManager ?: WeakReference(fm) ?: return listOf()
-        return listOf(INSTAGRAM, OTHER)
+        return listOf(IMAGE, INSTAGRAM, OTHER)
     }
 
     private val NO_CROP by lazy {
         DynamicMenu.Medium(
                 id = R.id.id_menu_no_crop,
-                titleResId = R.string.menu_crop,
+                titleResId = R.string.menu_no_crop,
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = MainFragment.newInstance(), addToBackStack = true)
                 },
@@ -50,6 +51,25 @@ class MenuObjects(context: Context) {
                     fragmentManager?.get()?.replace(fragment = PanoramaFragment.newInstance(), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.menu_22
+        )
+    }
+
+    private val CROP by lazy {
+        DynamicMenu.Medium(
+                id = R.id.id_menu_crop,
+                titleResId = R.string.menu_crop,
+                onPress = {
+                    fragmentManager?.get()?.replace(fragment = CropFragment.newInstance(), addToBackStack = true)
+                },
+                backgroundImageId = R.drawable.menu_4
+        )
+    }
+
+    private val IMAGE by lazy {
+        DynamicMenu.List(
+                id = R.id.id_menu_image,
+                titleResId = R.string.menu_image,
+                innerMenu = mutableListOf(CROP)
         )
     }
 

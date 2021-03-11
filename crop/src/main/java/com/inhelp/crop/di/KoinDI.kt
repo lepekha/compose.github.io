@@ -6,7 +6,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent.getKoin
 
-object Scope{
+internal object Scope{
     val CROP
         get() = getKoin().getOrCreateScope(
                 "CROP", named("CROP"))

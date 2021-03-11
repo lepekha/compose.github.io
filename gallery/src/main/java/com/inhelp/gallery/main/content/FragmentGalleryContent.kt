@@ -40,9 +40,13 @@ class FragmentGalleryContent : BaseMvpFragment<ViewGalleryContent, PresenterGall
 
     private fun initList(){
         list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
-        list.adapter = GalleryRvAdapter(presenter.images){
-            presenter.pressImage(uri = it)
-        }
+        list.adapter = GalleryRvAdapter(
+                presenter.images,
+                onPress = {
+                    presenter.pressImage(uri = it)
+                },
+                onLongPress = {}
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

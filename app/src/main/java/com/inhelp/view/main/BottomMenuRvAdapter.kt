@@ -19,8 +19,8 @@ class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<Bo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_bottom_menu_icon, parent, false)).apply {
+            this.btnMenu.setVibrate(type = EVibrate.BUTTON)
             this.btnMenu.setOnClickListener {
-                this.btnMenu.setVibrate(type = EVibrate.BUTTON)
                 (menu[adapterPosition] as? BottomMenu)?.onPress?.invoke()
             }
         }

@@ -2,11 +2,13 @@ package com.inhelp.view.main.main.menuDelegates
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.inhelp.R
 import com.inhelp.base.mvp.adapters.ViewTypeDelegateAdapter
 import com.inhelp.core.models.data.DynamicMenu
 import com.inhelp.extension.EVibrate
+import com.inhelp.extension.getColorFromAttr
 import com.inhelp.extension.setVibrate
 import kotlinx.android.synthetic.main.element_menu_text.view.*
 
@@ -40,7 +42,7 @@ class TextDelegateAdapter : ViewTypeDelegateAdapter {
 
         fun bind(item: DynamicMenu.Text) {
             innerItem = item
-
+            root.setCardBackgroundColor(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_5), 125))
             txtTitle.setText(item.titleResId)
         }
     }

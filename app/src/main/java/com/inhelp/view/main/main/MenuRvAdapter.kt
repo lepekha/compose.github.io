@@ -20,6 +20,8 @@ class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter
         const val VIEW_TYPE_LONG = 2
         const val VIEW_TYPE_TEXT = 3
         const val VIEW_TYPE_LIST = 4
+        const val VIEW_TYPE_ICON = 5
+        const val VIEW_TYPE_GRID = 6
     }
 
     private var mDelegateAdapters = SparseArrayCompat<ViewTypeDelegateAdapter>()
@@ -30,6 +32,8 @@ class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter
         mDelegateAdapters.put(VIEW_TYPE_LONG, LongDelegateAdapter())
         mDelegateAdapters.put(VIEW_TYPE_TEXT, TextDelegateAdapter())
         mDelegateAdapters.put(VIEW_TYPE_LIST, ListDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_ICON, IconDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_GRID, GridDelegateAdapter())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
@@ -55,6 +59,8 @@ class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter
         is DynamicMenu.Long -> VIEW_TYPE_LONG
         is DynamicMenu.Text -> VIEW_TYPE_TEXT
         is DynamicMenu.List -> VIEW_TYPE_LIST
+        is DynamicMenu.Icon -> VIEW_TYPE_ICON
+        is DynamicMenu.Grid -> VIEW_TYPE_GRID
         else -> -1
     }
 

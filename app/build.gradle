@@ -43,6 +43,7 @@ dependencies {
     implementation project(':instagram_no_crop')
     implementation project(':instagram_panorama')
     implementation project(':instagram_grid')
+    implementation project(':instagram_planer')
     implementation project(':mvp')
     implementation project(':navigator')
     implementation project(':text_style')
@@ -52,6 +53,8 @@ dependencies {
     implementation project(':extension')
     implementation project(':theme')
     implementation project(':dialogs')
+    implementation project(':rotate')
+    implementation project(':file_storage')
 
     implementation 'com.sagar:dslpermission:2.0.0'
     implementation 'com.github.madrapps:pikolo:2.0.1'

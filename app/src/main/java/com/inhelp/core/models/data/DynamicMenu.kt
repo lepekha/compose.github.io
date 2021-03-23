@@ -10,7 +10,20 @@ sealed class DynamicMenu {
             val onPress: () -> Unit,
     ) : DynamicMenu()
 
+    class Icon(
+            override val id: Int,
+            override val titleResId: Int,
+            val iconResId: Int,
+            val onPress: () -> Unit,
+    ) : DynamicMenu()
+
     class List(
+            override val id: Int,
+            override val titleResId: Int,
+            val innerMenu: MutableList<DynamicMenu>
+    ) : DynamicMenu()
+
+    class Grid(
             override val id: Int,
             override val titleResId: Int,
             val innerMenu: MutableList<DynamicMenu>

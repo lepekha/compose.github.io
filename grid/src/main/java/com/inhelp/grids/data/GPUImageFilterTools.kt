@@ -288,7 +288,9 @@ object GPUImageFilterTools {
             FilterType.HALFTONE -> GPUImageHalftoneFilter()
             FilterType.BILATERAL_BLUR -> GPUImageBilateralBlurFilter()
             FilterType.ZOOM_BLUR -> GPUImageZoomBlurFilter()
-            FilterType.TRANSFORM2D -> GPUImageTransformFilter()
+            FilterType.TRANSFORM2D -> GPUImageTransformFilter().apply {
+                this.transform3D
+            }
             FilterType.SOLARIZE -> GPUImageSolarizeFilter()
             FilterType.VIBRANCE -> GPUImageVibranceFilter()
         }

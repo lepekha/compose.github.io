@@ -8,6 +8,7 @@
     <item name="id_menu_tags" type="id"/>
     <item name="id_menu_text_style" type="id"/>
     <item name="id_menu_no_crop" type="id"/>
+    <item name="id_menu_planer" type="id"/>
     <item name="id_menu_panorama" type="id"/>
     <item name="id_menu_crop" type="id"/>
     <item name="id_menu_grid" type="id"/>

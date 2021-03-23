@@ -9,13 +9,15 @@
     android:maxHeight="250dp"
     tools:background="?attr/color_1">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/root"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="4dp"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="5dp"
+        app:strokeColor="?attr/color_5"
+        app:strokeWidth="1dp"
         app:layout_constraintBottom_toTopOf="@+id/txtTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +32,7 @@
             app:srcCompat="@drawable/menu_1" />
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/txtTitle"

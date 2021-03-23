@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="150dp"
     android:layout_height="80dp"
     android:layout_margin="8dp"
+    app:strokeColor="?attr/color_5"
+    app:strokeWidth="1dp"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="5dp">
 
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:textAllCaps="true"
-            android:textColor="?attr/color_primaryText"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="normal"
-            android:visibility="visible"
-            tools:text="SAVE PHOTOS" />
-    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textAllCaps="true"
+        android:textColor="?attr/color_primaryText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:visibility="visible"
+        tools:text="SAVE PHOTOS" />
+</com.google.android.material.card.MaterialCardView>
 

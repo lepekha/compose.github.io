@@ -2,6 +2,7 @@ package com.inhelp.instagram.grid.view.save
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.core.graphics.scale
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import com.inhelp.dialogs.main.DialogManager
 import com.inhelp.extension.createInstagramIntent
@@ -35,7 +36,7 @@ class GridSavePresenter(val context: Context, val transferObject: TransferObject
     }
 
     fun pressImage(position: Int) = CoroutineScope(Main).launch {
-        gridImages.getOrNull(gridImages.size - position + 1)?.let { bitmap ->
+        gridImages.getOrNull(gridImages.size - position + 1)?.scale(512, 512, false)?.let { bitmap ->
             val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
             view?.createInstagramIntent(uri = uri)
         }

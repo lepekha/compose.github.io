@@ -2,6 +2,7 @@
 <resources>
     <attr name="color_1" format="color"/>
     <attr name="color_2" format="color"/>
+    <attr name="color_3__0_1" format="color"/>
     <attr name="color_3" format="color"/>
     <attr name="color_4" format="color"/>
     <attr name="color_5" format="color"/>

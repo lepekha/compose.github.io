@@ -20,17 +20,27 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
 //        }
 //    }
 
-    fun onLoad(uriString: String?){
-        when{
-            (uriString != null) -> {
-                val uri = Uri.parse(uriString)
-                images.add(0, uri)
-                FileStorage.copyFileToDir(file = File(getPath(uri)), dirName = "planer/ruslan", fileName = images.size.toString())
-            }
-        }
+    fun onLoad(){
         val images = FileStorage.readFilesFromDir(dirName = "planer/ruslan")
         this.images.addAll(images)
         view?.updateList()
+    }
+
+    fun onChangeImagePosition(oldPosition: Int, newPosition: Int){
+        val oldImage = this.images[oldPosition]
+        val newImage = this.images[newPosition]
+        this.images[oldPosition] = newImage
+        this.images[newPosition] = oldImage
+        view?.changeImageInList(position = oldPosition)
+        view?.changeImageInList(position = newPosition)
+    }
+
+    fun onAddImages(imageUris: List<Uri>){
+        imageUris.forEach {
+            images.add(0, it)
+            FileStorage.copyFileToDir(file = File(getPath(it)), dirName = "planer/ruslan", fileName = images.size.toString())
+        }
+        view?.addImageToList(count = imageUris.size)
     }
 
     fun getPath(uri: Uri): String {

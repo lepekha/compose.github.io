@@ -27,18 +27,18 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
     private var flipYScale: Float = 1f
     private var rotateAngel: Float = 0f
 
-    fun onLoad(uriString: String?){
+    fun onLoad(uri: List<Uri>){
+        val outUri = uri.firstOrNull()
         val currentUri = this.currentUri
         when{
-            (uriString != null) -> {
-                this.currentUri = Uri.parse(uriString)
-                view?.setImage(Uri.parse(uriString))
+            (outUri != null) -> {
+                this.currentUri = outUri
+                view?.setImage(outUri)
             }
             (currentUri != null) -> {
                 view?.setImage(currentUri)
             }
             else -> {
-                view?.backToMain()
                 return
             }
         }

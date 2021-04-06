@@ -68,21 +68,3 @@ class ColorFragment: BottomSheetDialogFragment() {
         })
     }
 }
-
-
-
-
-//    companion object {
-//        fun newInstance(): ColorFragment {
-//            return ColorFragment()
-//        }
-//    }
-//
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        return inflater.inflate(R.layout.fragment_color, container, false)
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//    }
-//}

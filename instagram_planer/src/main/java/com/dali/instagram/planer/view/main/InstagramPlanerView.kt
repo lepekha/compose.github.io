@@ -6,4 +6,6 @@ import com.inhelp.base.mvp.BaseMvpView
 
 interface InstagramPlanerView : BaseMvpView {
     fun updateList()
+    fun changeImageInList(position: Int)
+    fun addImageToList(count: Int)
 }

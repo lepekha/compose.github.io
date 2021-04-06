@@ -1,9 +1,15 @@
 package com.inhelp.gallery.main
 
+import android.net.Uri
 import com.inhelp.base.mvp.BaseMvpView
+import com.inhelp.base.mvp.bottomSheetFragment.BaseMvpDialogView
 
-interface ViewGallery : BaseMvpView {
+interface ViewGallery : BaseMvpDialogView {
     fun updateAllList()
     fun setVisibleTabs(isVisible: Boolean)
-    fun passData(value: String)
+    fun setVisibleButtons(isVisible: Boolean)
+    fun setCount(value: String)
+    fun clearSelect()
+    fun backPress()
+    fun passData(values: List<Uri>)
 }

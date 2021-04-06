@@ -29,6 +29,7 @@ import data.BottomMenu
 import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_panorama.*
 import replace
+import showFragment
 
 
 class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), PanoramaView {

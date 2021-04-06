@@ -1,32 +1,44 @@
 package com.inhelp.gallery.main
 
 import android.Manifest
+import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.PermissionManager
-import com.inhelp.base.mvp.BaseMvpFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.inhelp.base.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
+import com.inhelp.extension.animateScale
+import com.inhelp.extension.playAnimation
 import com.inhelp.gallery.R
+import com.inhelp.gallery.main.content.FragmentGalleryContent
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
 
-class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGallery {
+class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery>(), ViewGallery {
 
     companion object {
-        private const val REQUEST_PERMISSIONS = 101
-        const val ARGUMENT_ONE_URI = "ARGUMENT_ONE_URI"
-        const val ARGUMENT_OPEN_GALLARY = "ARGUMENT_OPEN_GALLARY"
 
-        fun newInstance(targetFragment: Fragment): FragmentGallery {
-            return FragmentGallery().apply {
-                this.setTargetFragment(targetFragment, 0)
+        const val REQUEST_KEY = "REQUEST_KEY_GALLERY"
+
+        const val BUNDLE_KEY_IMAGES = "BUNDLE_KEY_IMAGES"
+        const val BUNDLE_KEY_MULTI_SELECT = "BUNDLE_KEY_MULTI_SELECT"
+
+        fun show(fm: FragmentManager, isMultiSelect: Boolean = false) {
+            val fragment = FragmentGallery().apply {
+                this.arguments = bundleOf(BUNDLE_KEY_MULTI_SELECT to isMultiSelect)
             }
+            fragment.show(fm, fragment.tag)
         }
     }
 
@@ -42,6 +54,10 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
 
+    override fun backPress() {
+        dismiss()
+    }
+
     private fun initList() {
         list.post {
             list.offscreenPageLimit = 1
@@ -49,11 +65,30 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.fragment_title_gallery))
+
+        dialog?.setOnShowListener { dialog ->
+            val bottomSheetInternal = (dialog as BottomSheetDialog).findViewById<View>(R.id.design_bottom_sheet)
+            bottomSheetInternal?.minimumHeight= Resources.getSystem().displayMetrics.heightPixels
+        }
 
         tab_layout.setupWithViewPager(list)
+
+        presenter.onCreate(isMultiSelect = arguments?.getBoolean(BUNDLE_KEY_MULTI_SELECT) ?: false)
+
+        btnClearAll.setOnClickListener {
+            presenter.pressClear()
+        }
+
+        btnAddImages.setOnClickListener {
+            presenter.addImage()
+        }
 
         PermissionManager.requestPermissions(
                 this,
@@ -68,10 +103,10 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
                         initList()
                     }
                     is PermissionResult.PermissionDenied -> {
-                        backToMain()
+                        dismiss()
                     }
                     is PermissionResult.PermissionDeniedPermanently -> {
-                        backToMain()
+                        dismiss()
                     }
                     is PermissionResult.ShowRational -> {
                         //If user denied permission frequently then she/he is not clear about why you are asking this permission.
@@ -80,20 +115,37 @@ class FragmentGallery : BaseMvpFragment<ViewGallery, PresenterGallery>(), ViewGa
                 }
             }
         }
+    }
 
-        this.targetFragment?.arguments = Bundle().apply {
-            this.putBoolean(ARGUMENT_OPEN_GALLARY, true)
-        }
+    override fun clearSelect(){
+        (adapter.instantiateItem(list, list.currentItem) as? FragmentGalleryContent)?.clearSelectSelect()
     }
 
     override fun setVisibleTabs(isVisible: Boolean) {
         tab_layout.isVisible = isVisible
     }
 
-    override fun passData(value: String) {
-        this.targetFragment?.arguments = Bundle().apply {
-            this.putString(ARGUMENT_ONE_URI, value)
+    override fun setVisibleButtons(isVisible: Boolean) {
+        list.isPagingEnabled = !isVisible
+        if(buttonContainer.isVisible != isVisible){
+            if(isVisible){
+                btnAddImages.scaleX = 0f
+                btnAddImages.scaleY = 0f
+                buttonContainer.isVisible = isVisible
+               btnAddImages.animateScale(toScale = 1f, )
+            }else{
+                buttonContainer.isVisible = isVisible
+            }
         }
+    }
+
+    override fun setCount(value: String) {
+        txtCount.text = value
+        txtCount.playAnimation(R.anim.bounce_animation, duration = 1000)
+    }
+
+    override fun passData(values: List<Uri>) {
+        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to values))
     }
 
     override fun onDestroy() {

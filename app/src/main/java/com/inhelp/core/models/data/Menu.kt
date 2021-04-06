@@ -6,9 +6,6 @@ import com.dali.instagram.planer.view.main.InstagramPlanerFragment
 import com.dali.rotate.view.main.ImageRotateFragment
 import com.inhelp.R
 import com.inhelp.crop.view.main.CropFragment
-import com.inhelp.instagram.grid.view.main.GridFragment
-import com.inhelp.instagram.view.main.MainFragment
-import com.inhelp.instagram.panorama.view.main.PanoramaFragment
 import com.inhelp.dialogs.main.FragmentTags
 import com.inhelp.text_style.main.TextStyleFragment
 import replace
@@ -20,7 +17,8 @@ class MenuObjects(context: Context) {
 
     fun getOrCreateMenu(fm: FragmentManager?): List<DynamicMenu> {
         fragmentManager = fragmentManager ?: WeakReference(fm) ?: return listOf()
-        return listOf(IMAGE, INSTAGRAM, OTHER)
+        return listOf(IMAGE, INSTAGRAM, OTHER
+        )
     }
 
     private val INSTAGRAM_PLANER by lazy {
@@ -39,7 +37,7 @@ class MenuObjects(context: Context) {
                 id = R.id.id_menu_no_crop,
                 titleResId = R.string.menu_no_crop,
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = MainFragment.newInstance(), addToBackStack = true)
+//                    fragmentManager?.get()?.replace(fragment = MainFragment.newInstance(), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.menu_12
         )
@@ -50,7 +48,7 @@ class MenuObjects(context: Context) {
                 id = R.id.id_menu_grid,
                 titleResId = R.string.menu_grid,
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = GridFragment.newInstance(), addToBackStack = true)
+//                    fragmentManager?.get()?.replace(fragment = GridFragment.newInstance(), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.menu_5
         )
@@ -61,7 +59,7 @@ class MenuObjects(context: Context) {
                 id = R.id.id_menu_panorama,
                 titleResId = R.string.menu_panorama,
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = PanoramaFragment.newInstance(), addToBackStack = true)
+//                    fragmentManager?.get()?.replace(fragment = PanoramaFragment.newInstance(), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.menu_22
         )
@@ -191,7 +189,8 @@ class MenuObjects(context: Context) {
                         IMAGE_HDR,
                         IMAGE_ISO,
                         IMAGE_TILT_SHIFT,
-                        IMAGE_VINTAGE)
+                        IMAGE_VINTAGE
+                )
         )
     }
 

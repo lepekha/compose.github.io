@@ -48,11 +48,11 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.fragment_title_grid))
 
-        if (arguments == null) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
-        } else {
-            presenter.onLoad(arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
-        }
+//        if (arguments == null) {
+//            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
+//        } else {
+//            presenter.onLoad(arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
+//        }
 
         btnNext.setOnClickListener {
             presenter.pressSave(bitmap = gpuImage.bitmapWithFilterApplied)
@@ -79,27 +79,27 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
     }
 
     override fun setImage(uri: Uri){
-        val imageUri = Uri.parse(arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
-        Glide
-                .with(imgView.context)
-                .asBitmap()
-                .load(imageUri)
-                .fitCenter()
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        Glide.with(getCurrentContext())
-                                .asBitmap()
-                                .load(resource)
-                                .override(150.dp.toInt())
-                                .centerInside()
-                                .into(object : CustomTarget<Bitmap>() {
-                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                        initList(image = resource)
-                                    }
-
-                                    override fun onLoadCleared(placeholder: Drawable?) {
-                                    }
-                                })
+//        val imageUri = Uri.parse(arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
+//        Glide
+//                .with(imgView.context)
+//                .asBitmap()
+//                .load(imageUri)
+//                .fitCenter()
+//                .into(object : CustomTarget<Bitmap>() {
+//                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                        Glide.with(getCurrentContext())
+//                                .asBitmap()
+//                                .load(resource)
+//                                .override(150.dp.toInt())
+//                                .centerInside()
+//                                .into(object : CustomTarget<Bitmap>() {
+//                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                                        initList(image = resource)
+//                                    }
+//
+//                                    override fun onLoadCleared(placeholder: Drawable?) {
+//                                    }
+//                                })
 
 
 
@@ -107,10 +107,10 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
 
 //                        gpuImage.setImage(resource) // this loads image on the current thread, should be run in a thread
 //                        gpuImage.setFilter(GPUImageSepiaToneFilter())
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                    }
-                })
+//                    }
+//
+//                    override fun onLoadCleared(placeholder: Drawable?) {
+//                    }
+//                })
     }
 }

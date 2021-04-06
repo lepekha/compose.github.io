@@ -3,6 +3,7 @@
     <style name="Theme.InHelp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="color_1">@color/color_night_1</item>
         <item name="color_2">@color/color_night_2</item>
+        <item name="color_3__0_1">@color/color_night_3__0_1</item>
         <item name="color_3">@color/color_night_3</item>
         <item name="color_4">@color/color_night_4</item>
         <item name="color_5">@color/color_night_5</item>
@@ -17,6 +18,18 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/color_primary</item>
         <item name="android:navigationBarColor">?attr/color_primary</item>
+        <item name="editTextStyle">@style/EditTextDefault</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="EditTextDefault" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/selector_input_text</item>
+        <item name="android:textColor">?attr/color_4</item>
+        <item name="android:textColorHint">?attr/color_5</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
 </resources>

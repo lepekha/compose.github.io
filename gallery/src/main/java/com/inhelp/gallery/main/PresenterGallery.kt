@@ -9,16 +9,30 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
+import com.inhelp.base.mvp.bottomSheetFragment.BaseMvpDialogPresenterImpl
 import kotlinx.coroutines.*
 import java.io.File
 import java.net.URI
 
-class PresenterGallery(val context: Context) : BaseMvpPresenterImpl<ViewGallery>() {
+class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGallery>() {
 
     val folders = mutableListOf<ImageFolder>()
+    val selectedImages = mutableListOf<Uri>()
+    private var _multiSelect = false
+    var isMultiSelect: Boolean = false
+        set(value) {
+            field = value && _multiSelect
+            view?.setVisibleButtons(field)
+            view?.setVisibleTabs(!field && (folders.size > 2))
+        }
+        get() = field && _multiSelect
 
-    override fun attachView(view: ViewGallery) {
-        super.attachView(view)
+    fun onCreate(isMultiSelect: Boolean){
+        _multiSelect = isMultiSelect
+    }
+
+    fun updateCounter(){
+        view?.setCount(value = (selectedImages.size).toString())
     }
 
     fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
@@ -61,9 +75,15 @@ class PresenterGallery(val context: Context) : BaseMvpPresenterImpl<ViewGallery>
         }
     }
 
-    fun pressImage(uri: Uri){
-        view?.passData(uri.toString())
-        onBackPress()
+    fun pressClear(){
+        selectedImages.clear()
+        isMultiSelect = false
+        view?.clearSelect()
+    }
+
+    fun addImage(){
+        view?.passData(selectedImages.toList())
+        view?.backPress()
     }
 }
 

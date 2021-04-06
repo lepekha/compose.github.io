@@ -26,12 +26,13 @@ class CropPresenter(val context: Context): BaseMvpPresenterImpl<CropView>() {
 
     private var eShareType = EShareType.SHARE
 
-    fun onLoad(uriString: String?){
+    fun onLoad(uri: List<Uri>){
+        val outUri = uri.firstOrNull()
         val currentUri = this.currentUri
         when{
-            (uriString != null) -> {
-                this.currentUri = Uri.parse(uriString)
-                view?.setImage(Uri.parse(uriString))
+            (outUri != null) -> {
+                this.currentUri = outUri
+                view?.setImage(outUri)
             }
             (currentUri != null) -> {
                 view?.setImage(currentUri)

@@ -7,13 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inhelp.base.mvp.BaseMvpFragment
+import com.inhelp.base.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
+import com.inhelp.extension.updateVisibleItem
 import com.inhelp.gallery.R
 import kotlinx.android.synthetic.main.fragment_gallery_content.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
 
-class FragmentGalleryContent : BaseMvpFragment<ViewGalleryContent, PresenterGalleryContent>(), ViewGalleryContent {
+class FragmentGalleryContent : BaseMvpBottomSheetFragment<ViewGalleryContent, PresenterGalleryContent>(), ViewGalleryContent {
 
     companion object {
 
@@ -42,17 +44,26 @@ class FragmentGalleryContent : BaseMvpFragment<ViewGalleryContent, PresenterGall
         list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
         list.adapter = GalleryRvAdapter(
                 presenter.images,
-                onPress = {
-                    presenter.pressImage(uri = it)
+                presenter.selectedImages,
+                onPress = { uri, isLongPress ->
+                    presenter.pressImage(uri = uri, isMultiSelect = isLongPress)
                 },
-                onLongPress = {}
+                onUpdateBadge = {
+                    list?.updateVisibleItem(GalleryRvAdapter.CHANGE_BADGE)
+                }
         )
+    }
+
+    fun clearSelectSelect(){
+        list?.updateVisibleItem(GalleryRvAdapter.CHANGE_CLEAR_SELECT)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.init(position = this.arguments?.getInt(FOLDER_POSITION) ?: 0)
-        initList()
+        list.post {
+            initList()
+        }
     }
 
 }

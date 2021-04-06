@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.CustomTarget
@@ -61,7 +62,7 @@ class CropFragment : BaseMvpFragment<CropView, CropPresenter>(), CropView {
 
     private val btnGallery by lazy {
         BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_gallery) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
+            FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
         }
     }
 
@@ -77,10 +78,8 @@ class CropFragment : BaseMvpFragment<CropView, CropPresenter>(), CropView {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.fragment_crop_title))
 
-        if (arguments == null) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
-        } else {
-            presenter.onLoad(uriString = arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
+        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+            presenter.onLoad((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
         imgView.addListener(object : SceneLayout.CropListener {
@@ -131,7 +130,7 @@ class CropFragment : BaseMvpFragment<CropView, CropPresenter>(), CropView {
                 .with(imgView.context)
                 .asBitmap()
                 .format(DecodeFormat.PREFER_RGB_565)
-                .load(uri)
+                .load(Uri.parse(uri.toString()))
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         imgView.setBitmap(resource)

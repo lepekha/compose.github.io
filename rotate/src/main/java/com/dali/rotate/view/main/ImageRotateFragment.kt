@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.CustomTarget
@@ -59,7 +60,7 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
 
     private val btnGallery by lazy {
         BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_gallery) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
+            FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
         }
     }
 
@@ -75,11 +76,11 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.fragment_image_rotate_title))
 
-        if (arguments == null) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
-        } else {
-            presenter.onLoad(uriString = arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
+        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+            presenter.onLoad((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
+
+        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
 
         btnFlip.setVibrate(EVibrate.BUTTON)
         btnFlip.setOnClickListener {

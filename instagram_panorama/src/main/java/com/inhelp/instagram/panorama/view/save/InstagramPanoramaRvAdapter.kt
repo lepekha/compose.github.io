@@ -22,8 +22,6 @@ internal class PanoramaRvAdapter(private val images: MutableList<Bitmap>) : Recy
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(holder.imgView.context).load(images[position]).centerInside().thumbnail(0.1f).into(holder.imgView)
     }
-
-
 }
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

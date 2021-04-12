@@ -7,6 +7,7 @@ import com.dali.rotate.view.main.ImageRotateFragment
 import com.inhelp.R
 import com.inhelp.crop.view.main.CropFragment
 import com.inhelp.dialogs.main.FragmentTags
+import com.inhelp.instagram.panorama.view.main.InstagramPanoramaFragment
 import com.inhelp.text_style.main.TextStyleFragment
 import replace
 import java.lang.ref.WeakReference
@@ -59,7 +60,7 @@ class MenuObjects(context: Context) {
                 id = R.id.id_menu_panorama,
                 titleResId = R.string.menu_panorama,
                 onPress = {
-//                    fragmentManager?.get()?.replace(fragment = PanoramaFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = InstagramPanoramaFragment.newInstance(), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.menu_22
         )

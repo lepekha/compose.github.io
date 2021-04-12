@@ -42,7 +42,7 @@ class TextDelegateAdapter : ViewTypeDelegateAdapter {
 
         fun bind(item: DynamicMenu.Text) {
             innerItem = item
-            root.setCardBackgroundColor(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_5), 125))
+            root.setCardBackgroundColor(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_2), 125))
             txtTitle.setText(item.titleResId)
         }
     }

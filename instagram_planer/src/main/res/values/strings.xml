@@ -1,4 +1,4 @@
 <resources>
-    <string name="fragment_instagram_grid_title">Share images:</string>
-    <string name="fragment_instagram_grid_help">Tap each pic to fallowing order to share it to Instagram</string>
+    <string name="module_instagram_palaner_title">Plan your wall:</string>
+    <string name="module_instagram_palaner_wall_name">Enter wall name</string>
 </resources>

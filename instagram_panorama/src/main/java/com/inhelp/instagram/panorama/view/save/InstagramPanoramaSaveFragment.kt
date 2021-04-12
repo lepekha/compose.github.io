@@ -1,6 +1,5 @@
 package com.inhelp.instagram.panorama.view.save
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.extension.dp
-import com.inhelp.gallery.main.FragmentGallery
 import com.inhelp.instagram.R
 import com.inhelp.instagram.panorama.di.Scope
 import data.BottomMenu
@@ -18,18 +16,17 @@ import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_panorama_save.*
 
 
-class PanoramaSaveFragment : BaseMvpFragment<PanoramaSaveView, PanoramaSavePresenter>(), PanoramaSaveView {
+class InstagramPanoramaSaveFragment : BaseMvpFragment<InstagramPanoramaSaveView, InstagramPanoramaSavePresenter>(), InstagramPanoramaSaveView {
 
     companion object {
-        fun newInstance(): PanoramaSaveFragment {
-            return PanoramaSaveFragment()
+        fun newInstance(): InstagramPanoramaSaveFragment {
+            return InstagramPanoramaSaveFragment()
         }
     }
 
-    override val presenter: PanoramaSavePresenter by lazy {
+    override val presenter: InstagramPanoramaSavePresenter by lazy {
         Scope.INSTAGRAM.get()
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_instagram_panorama_save, container, false)
@@ -70,7 +67,7 @@ class PanoramaSaveFragment : BaseMvpFragment<PanoramaSaveView, PanoramaSavePrese
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.fragment_title_panorama_save))
+        setTitle(getCurrentContext().getString(R.string.module_instagram_panorama_save_images))
 
         initPanoramaPreview()
 
@@ -79,12 +76,6 @@ class PanoramaSaveFragment : BaseMvpFragment<PanoramaSaveView, PanoramaSavePrese
     override fun backPress(): Boolean {
         backToMain()
         return true
-    }
-
-    override fun setDownloadDone() {
-        btnSave.isEnabled = false
-        btnSave.iconResId = R.drawable.ic_download_done
-        updateBottomMenu()
     }
 
     override fun onDestroy() {

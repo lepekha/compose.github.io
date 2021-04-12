@@ -11,8 +11,21 @@ import java.io.File
 
 class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<InstagramPlanerView>() {
 
+    companion object {
+        private const val DIR_ROOT = "instagram_planer"
+    }
 
     val images = mutableListOf<Uri>()
+
+    var folders = mutableListOf<String>()
+    var currentFolder = ""
+        set(value) {
+            field = value
+            view?.setWallName(value = "@$field")
+        }
+    
+    val userFolder: String
+        get() = "$DIR_ROOT/$currentFolder"
 
 //    private suspend fun loadImage() = withContext(Dispatchers.IO) {
 //        transferObject.images.reversed().forEachIndexed { index, bitmap ->
@@ -21,9 +34,54 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
 //    }
 
     fun onLoad(){
-        val images = FileStorage.readFilesFromDir(dirName = "planer/ruslan")
-        this.images.addAll(images)
+        folders = FileStorage.readFilesNameFromDir(dirName = DIR_ROOT)
+        if(folders.isEmpty()){
+            view?.createDialogInputName()
+        }else{
+            currentFolder = folders.first()
+            val images = FileStorage.readFilesFromDir(dirName = userFolder)
+            this.images.addAll(images)
+        }
         view?.updateList()
+    }
+
+    fun onInputName(value: String?){
+        when{
+            value != null -> {
+                currentFolder = value
+                FileStorage.makeDir(dirName = userFolder)
+                folders.add(currentFolder)
+                this.images.clear()
+                view?.updateList()
+            }
+            folders.isEmpty() -> {
+                view?.backPress()
+            }
+        }
+    }
+
+    fun pressListAccount(position: Int){
+        folders.getOrNull(position)?.let { newFolder ->
+            if(currentFolder != newFolder){
+                currentFolder = newFolder
+                this.images.clear()
+                val images = FileStorage.readFilesFromDir(dirName = userFolder)
+                this.images.addAll(images)
+                view?.updateList()
+            }
+        }
+    }
+
+    fun onAccountClearConfirm(value: Boolean){
+        if(value){
+            this.images.clear()
+            view?.updateList()
+            FileStorage.clearDir(dirName = userFolder)
+        }
+    }
+
+    fun pressMoreAccount(){
+        view?.createDialogList(list = folders, select = currentFolder)
     }
 
     fun onChangeImagePosition(oldPosition: Int, newPosition: Int){
@@ -38,7 +96,7 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
     fun onAddImages(imageUris: List<Uri>){
         imageUris.forEach {
             images.add(0, it)
-            FileStorage.copyFileToDir(file = File(getPath(it)), dirName = "planer/ruslan", fileName = images.size.toString())
+            FileStorage.copyFileToDir(file = File(getPath(it)), dirName = userFolder, fileName = images.size.toString())
         }
         view?.addImageToList(count = imageUris.size)
     }

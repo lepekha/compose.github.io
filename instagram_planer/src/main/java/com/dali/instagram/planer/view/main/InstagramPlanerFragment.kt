@@ -9,15 +9,17 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dali.instagram.planer.R
 import com.dali.instagram.planer.di.Scope
+import com.inhelp.base.mvp.BaseMvpActivity
 import com.inhelp.base.mvp.BaseMvpFragment
-import com.inhelp.dialogs.main.input.DialogInput
-import com.inhelp.extension.createInstagramIntent
+import com.inhelp.dialogs.main.dialogs.DialogAlert
+import com.inhelp.dialogs.main.dialogs.DialogChip
+import com.inhelp.dialogs.main.dialogs.DialogConfirmation
+import com.inhelp.dialogs.main.dialogs.DialogInput
 import com.inhelp.extension.scrollTo
 import com.inhelp.gallery.main.FragmentGallery
 import data.BottomMenu
 import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_planer.*
-import replace
 
 
 class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPlanerPresenter>(), InstagramPlanerView {
@@ -43,9 +45,40 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
             FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true)
         }
 
-        return mutableListOf<Menu>().apply {
-            this.add(btnGallery)
+        val btnAccountSetting = BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_account_setting) {
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(createAccountMenu())
         }
+
+        return mutableListOf(btnAccountSetting, btnGallery)
+    }
+
+    private fun createAccountMenu(): MutableList<Menu> {
+        val btnBack = BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_back) {
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(createBottomMenu())
+        }.apply {
+            this.iconTintRes = R.attr.color_6
+        }
+
+        val btnAccountAdd = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_add) {
+            createDialogInputName()
+        }
+
+        val btnAccountRemove = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_remove) {
+            DialogAlert.show(fm = childFragmentManager, message = "Грейс — успешный терапевт из Нью-Йорка, у неё все хорошо: любящий муж, прекрасный сын, богатая жизнь. Скоро у Грейс выйдет первая книга.")
+        }
+
+        val btnAccountChange = BottomMenu(iconResId = R.drawable.ic_instagram_planer_switch_account) {
+            DialogAlert.show(fm = childFragmentManager, message = "Грейс — успешный терапевт из Нью-Йорка, у неё все хорошо: любящий муж, прекрасный сын, богатая жизнь. Скоро у Грейс выйдет первая книга.")
+        }
+
+        val btnAccountClear = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_clear) {
+            val request = DialogConfirmation.show(fm = getCurrentActivity().supportFragmentManager, message = "Грейс — успешный терапевт из Нью-Йорка, у неё все хорошо: любящий муж, прекрасный сын, богатая жизнь. Скоро у Грейс выйдет первая книга.")
+            setFragmentResultListener(request) { _, bundle ->
+                presenter.onAccountClearConfirm(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER))
+            }
+        }
+
+        return mutableListOf(btnBack, btnAccountChange, btnAccountAdd, btnAccountRemove, btnAccountClear)
     }
 
     private fun initGridPreview() {
@@ -58,6 +91,10 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
                 onChange = { oldPosition, newPosition ->
                     presenter.onChangeImagePosition(oldPosition, newPosition)
                 })
+    }
+
+    override fun setWallName(value: String) {
+        txtAccount.text = value
     }
 
     override fun updateList() {
@@ -75,14 +112,16 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.fragment_instagram_grid_title))
-        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
-            presenter.onAddImages((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
-        }
+        setTitle(getCurrentContext().getString(R.string.module_instagram_palaner_title))
+
         initGridPreview()
 
-        btnAccAdd.setOnClickListener {
-            DialogInput.show(fm = childFragmentManager, message = "Name")
+        btnMoreAccount.setOnClickListener {
+            presenter.pressMoreAccount()
+        }
+
+        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+            presenter.onAddImages((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
         presenter.onLoad()
@@ -91,6 +130,20 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
 //    override fun createInstagramIntent(uri: Uri) {
 //        getCurrentActivity().createInstagramIntent(uri)
 //    }
+
+    override fun createDialogInputName(){
+        val request = DialogInput.show(fm = getCurrentActivity().supportFragmentManager, message = getCurrentActivity().getString(R.string.module_instagram_palaner_wall_name))
+        setFragmentResultListener(request) { _, bundle ->
+            presenter.onInputName(bundle.getString(DialogInput.BUNDLE_KEY_INPUT_MESSAGE))
+        }
+    }
+
+    override fun createDialogList(list: List<String>, select: String){
+        val request = DialogChip.show(fm = getCurrentActivity().supportFragmentManager, list = list, selected = select)
+        setFragmentResultListener(request) { _, bundle ->
+            presenter.pressListAccount(bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION))
+        }
+    }
 
     override fun backPress(): Boolean {
         backToMain()

@@ -81,6 +81,13 @@ fun FragmentManager.replace(fragment: Fragment, containerId: Int = R.id.id_fragm
     sharedElements.iterator().forEach {
         transaction.addSharedElement(it.view, it.id)
     }
+    transaction.setCustomAnimations(
+            com.inhelp.theme.R.anim.fragment_enter,
+            com.inhelp.theme.R.anim.fragment_exit,
+            com.inhelp.theme.R.anim.fragment_enter,
+            com.inhelp.theme.R.anim.fragment_exit
+    )
+
     transaction.setReorderingAllowed(reordering)
     transaction.replace(containerId, fragment, fragment.javaClass.simpleName)
     if (addToBackStack) {

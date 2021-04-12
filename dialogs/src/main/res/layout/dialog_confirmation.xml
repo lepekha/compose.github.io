@@ -9,31 +9,28 @@
     app:layout_anchorGravity="center"
     tools:background="#201F1F">
 
-    <EditText
-        android:id="@+id/editText"
-        style="@style/EditTextDefault"
+    <TextView
+        android:id="@+id/txtMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:ems="10"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine"
-        android:lines="1"
+        android:textColor="?attr/color_5"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintWidth_percent="0.8"
+        tools:text="Mu text" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDone"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="?attr/color_5"
         android:insetLeft="0dp"
@@ -49,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnCancel"
-        app:layout_constraintTop_toBottomOf="@id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/txtMessage"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent="0.3"
         app:strokeColor="?attr/color_5"
@@ -79,6 +76,5 @@
         app:layout_constraintWidth_percent="0.3"
         app:strokeColor="?attr/color_5"
         app:strokeWidth="1dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="fragment_title_crop">Crop your image:</string>
-    <string name="fragment_title_panorama_save">Save images:</string>
+    <string name="module_instagram_panorama_title">Create panorama:</string>
+    <string name="module_instagram_panorama_save_images">Save images:</string>
 
 </resources>

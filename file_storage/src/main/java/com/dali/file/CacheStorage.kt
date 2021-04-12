@@ -76,7 +76,7 @@ object FileStorage {
         File(dirPath).deleteRecursively()
     }
 
-    private fun makeDir(dirName: String?): String {
+    fun makeDir(dirName: String?): String {
         dirName ?: return dir
         val appDir = File(dir + File.separator + dirName)
         if (!appDir.exists() && !appDir.isDirectory) {

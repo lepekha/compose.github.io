@@ -7,7 +7,7 @@ import com.inhelp.instagram.panorama.data.EPanorama
 import com.inhelp.instagram.panorama.data.TransferObject
 
 
-class PanoramaPresenter(val transferObject: TransferObject): BaseMvpPresenterImpl<PanoramaView>() {
+class InstagramPanoramaPresenter(val transferObject: TransferObject): BaseMvpPresenterImpl<InstagramPanoramaView>() {
 
     private var currentUri: Uri? = null
 
@@ -17,14 +17,11 @@ class PanoramaPresenter(val transferObject: TransferObject): BaseMvpPresenterImp
         view?.navigateToPanoramaSave()
     }
 
-    fun onLoad(uriString: String?){
-        val currentUri = this.currentUri
+    fun onAddImage(uris: List<Uri>){
+        val currentUri = uris.firstOrNull()
         when{
-            (uriString != null) -> {
-                this.currentUri = Uri.parse(uriString)
-                view?.setImage(Uri.parse(uriString))
-            }
             (currentUri != null) -> {
+                this.currentUri = currentUri
                 view?.setImage(currentUri)
             }
             else -> {
@@ -33,6 +30,16 @@ class PanoramaPresenter(val transferObject: TransferObject): BaseMvpPresenterImp
             }
         }
         initMode()
+    }
+
+    fun onCreate(){
+        val currentUri = this.currentUri
+        if(currentUri != null) {
+            view?.setImage(currentUri)
+            initMode()
+        }else{
+            view?.openGallery()
+        }
     }
 
     private fun initMode(){

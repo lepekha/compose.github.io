@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.CustomTarget
@@ -24,23 +25,22 @@ import com.inhelp.extension.getColorFromAttr
 import com.inhelp.gallery.main.FragmentGallery
 import com.inhelp.instagram.panorama.data.EPanorama
 import com.inhelp.instagram.panorama.di.Scope
-import com.inhelp.instagram.panorama.view.save.PanoramaSaveFragment
+import com.inhelp.instagram.panorama.view.save.InstagramPanoramaSaveFragment
 import data.BottomMenu
 import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_panorama.*
 import replace
-import showFragment
 
 
-class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), PanoramaView {
+class InstagramPanoramaFragment : BaseMvpFragment<InstagramPanoramaView, InstagramPanoramaPresenter>(), InstagramPanoramaView {
 
     companion object {
-        fun newInstance(): PanoramaFragment {
-            return PanoramaFragment()
+        fun newInstance(): InstagramPanoramaFragment {
+            return InstagramPanoramaFragment()
         }
     }
 
-    override val presenter: PanoramaPresenter by lazy { Scope.INSTAGRAM.get() }
+    override val presenter: InstagramPanoramaPresenter by lazy { Scope.INSTAGRAM.get() }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,7 +55,7 @@ class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), Pan
 
     private val btnGallery by lazy {
         BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_gallery) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
+            openGallery()
         }
     }
 
@@ -68,12 +68,10 @@ class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), Pan
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.fragment_title_crop))
+        setTitle(getCurrentContext().getString(R.string.module_instagram_panorama_title))
 
-        if (arguments == null) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
-        } else {
-            presenter.onLoad(uriString = arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
+        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+            presenter.onAddImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
         imgView.addListener(object : SceneLayout.CropListener {
@@ -85,18 +83,24 @@ class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), Pan
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 presenter.onTabSelect(tab.position)
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
+                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_5), PorterDuff.Mode.MULTIPLY)
+                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_5))
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_5), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_5))
+                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
+                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
             }
         })
+
+        presenter.onCreate()
+    }
+
+    override fun openGallery() {
+        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
     }
 
     override fun createCropOverlay(ratio: Ratio, isGrid: Boolean){
@@ -139,7 +143,7 @@ class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), Pan
     }
 
     override fun navigateToPanoramaSave(){
-        getCurrentActivity().supportFragmentManager.replace(fragment = PanoramaSaveFragment.newInstance(), addToBackStack = true)
+        getCurrentActivity().supportFragmentManager.replace(fragment = InstagramPanoramaSaveFragment.newInstance(), addToBackStack = false)
     }
 
     override fun onDestroy() {

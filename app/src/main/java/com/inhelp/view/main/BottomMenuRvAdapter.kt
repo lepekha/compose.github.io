@@ -5,6 +5,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.inhelp.R
 import com.inhelp.extension.EVibrate
+import com.inhelp.extension.getColorFromAttr
 import com.inhelp.extension.setVibrate
 import data.BottomMenu
 import data.Menu
@@ -30,6 +31,9 @@ class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<Bo
         val item = menu[position] as BottomMenu
         holder.btnMenu.isClickable = item.isEnabled
         holder.btnMenu.setImageResource(item.iconResId)
+        val iconTintRes = item.iconTintRes ?: R.attr.color_1
+        holder.btnMenu.setImageResource(item.iconResId)
+        holder.btnMenu.setColorFilter(holder.btnMenu.context.getColorFromAttr(iconTintRes))
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

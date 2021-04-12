@@ -15,8 +15,8 @@
         android:layout_height="34dp"
         android:layout_gravity="center"
         android:tintMode="multiply"
-        android:tint="?attr/color_5"
-        app:srcCompat="@drawable/ic_crop_16_9" />
+        android:tint="?attr/color_3"
+        app:srcCompat="@drawable/ic_panorama_2" />
 
     <TextView
         android:id="@+id/txtTitle"

@@ -2,10 +2,10 @@
 <resources>
     <attr name="color_1" format="color"/>
     <attr name="color_2" format="color"/>
-    <attr name="color_3__0_1" format="color"/>
     <attr name="color_3" format="color"/>
     <attr name="color_4" format="color"/>
     <attr name="color_5" format="color"/>
+    <attr name="color_6" format="color"/>
     <attr name="color_primary" format="color"/>
     <attr name="color_primaryLight" format="color"/>
     <attr name="color_primaryDark" format="color"/>

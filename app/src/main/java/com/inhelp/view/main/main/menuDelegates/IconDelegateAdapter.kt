@@ -44,7 +44,7 @@ class IconDelegateAdapter : ViewTypeDelegateAdapter {
         fun bind(item: DynamicMenu.Icon) {
             innerItem = item
             icon.setImageResource(item.iconResId)
-            root.setCardBackgroundColor(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_5), 125))
+            root.setCardBackgroundColor(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_2), 125))
         }
     }
 }

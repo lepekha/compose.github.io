@@ -55,47 +55,58 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="12dp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnAddImages"
-                android:layout_width="48dp"
+                android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_margin="8dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:scaleX="0"
                 android:scaleY="0"
-                app:cardCornerRadius="48dp"
+                app:cardCornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="?attr/color_3"
                 app:strokeWidth="1dp">
 
-                <ImageView
-                    android:id="@+id/imgIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="2dp"
-                    android:foregroundGravity="center"
-                    android:tint="?attr/color_3"
-                    app:srcCompat="@drawable/module_gallery_ic_add" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end">
+
+                    <ImageView
+                        android:id="@+id/imgIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:foregroundGravity="center"
+                        android:tint="?attr/color_3"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/module_gallery_ic_add" />
+
+                    <TextView
+                        android:id="@+id/txtCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:textColor="?attr/color_4"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imgIcon"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/txtCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="?attr/color_4"
-                android:textSize="22sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnClearAll"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/btnClearAll"

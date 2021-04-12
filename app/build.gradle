@@ -41,7 +41,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':crop')
 //    implementation project(':instagram_no_crop')
-//    implementation project(':instagram_panorama')
+    implementation project(':instagram_panorama')
 //    implementation project(':instagram_grid')
     implementation project(':instagram_planer')
     implementation project(':mvp')

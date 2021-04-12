@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_night_1">#000000</color>
-    <color name="color_night_2">#171717</color>
-    <color name="color_night_3">#4CAF50</color>
-    <color name="color_night_3__0_1">#2D4CAF50</color>
-    <color name="color_night_4">#FFFFFF</color>
-    <color name="color_night_5">#484848</color>
+    <color name="color_night_2">#232323</color>
+    <color name="color_night_3">#454545</color>
+    <color name="color_night_4">#535353</color>
+    <color name="color_night_5">#FFFFFF</color>
+    <color name="color_night_6">#2196F3</color>
     <color name="color_night_primary">#FF1F2125</color>
     <color name="color_night_primaryLight">#484848</color>
     <color name="color_night_primaryDark">#ffffff</color>

@@ -6,8 +6,15 @@ import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.view.marginBottom
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 @SuppressLint("ClickableViewAccessibility")
 fun View.setVibrate(type: EVibrate) {
     this.setOnTouchListener { _, event ->
-        if(event.action == MotionEvent.ACTION_DOWN){
+        if (event.action == MotionEvent.ACTION_DOWN) {
             this.context.vibrate(type = type)
         }
         false
@@ -71,19 +78,40 @@ fun RecyclerView.scrollTo(position: Int) {
     layoutManager?.startSmoothScroll(smoothScroller)
 }
 
-fun View.animateScale(toScale: Float, onStart: (() -> Unit)? = null, onEnd: (() -> Unit)? = null){
-        val scaleDownX = ObjectAnimator.ofFloat(this, "scaleX", toScale)
-        val scaleDownY = ObjectAnimator.ofFloat(this, "scaleY", toScale)
-        scaleDownX.duration = 200
-        scaleDownY.duration = 200
+fun View.animateScale(toScale: Float, onStart: (() -> Unit)? = null, onEnd: (() -> Unit)? = null) {
+    val scaleDownX = ObjectAnimator.ofFloat(this, "scaleX", toScale)
+    val scaleDownY = ObjectAnimator.ofFloat(this, "scaleY", toScale)
+    scaleDownX.duration = 200
+    scaleDownY.duration = 200
 
-        AnimatorSet().apply {
-            this.play(scaleDownX).with(scaleDownY)
-            this.doOnStart {
-                onStart?.invoke()
-            }
-            this.doOnEnd {
-                onEnd?.invoke()
-            }
-        }.start()
+    AnimatorSet().apply {
+        this.play(scaleDownX).with(scaleDownY)
+        this.doOnStart {
+            onStart?.invoke()
+        }
+        this.doOnEnd {
+            onEnd?.invoke()
+        }
+    }.start()
+}
+
+fun View.animateMargin(top: Float? = null, bottom: Float? = null, start: Float? = null, end: Float? = null, duration: Long = 300) {
+    val params = layoutParams as ConstraintLayout.LayoutParams
+    val marginTop = params.topMargin
+    val marginBottom = params.bottomMargin
+    val marginStart = params.marginStart
+    val marginEnd = params.marginEnd
+
+    val anim = object : Animation() {
+        override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
+            start?.let { params.marginStart = marginStart + (it * interpolatedTime).toInt() }
+            top?.let { params.topMargin = marginTop + (it * interpolatedTime).toInt() }
+            end?.let { params.marginEnd = marginEnd + (it * interpolatedTime).toInt() }
+            bottom?.let { params.bottomMargin = marginBottom + (it * interpolatedTime).toInt() }
+            this@animateMargin.layoutParams = params
+        }
+    }.apply {
+        this.duration = duration
+    }
+    this.startAnimation(anim)
 }

@@ -3,10 +3,10 @@
     <style name="Theme.InHelp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="color_1">@color/color_night_1</item>
         <item name="color_2">@color/color_night_2</item>
-        <item name="color_3__0_1">@color/color_night_3__0_1</item>
         <item name="color_3">@color/color_night_3</item>
         <item name="color_4">@color/color_night_4</item>
         <item name="color_5">@color/color_night_5</item>
+        <item name="color_6">@color/color_night_6</item>
         <item name="color_primary">@color/color_light_primary</item>
         <item name="color_primaryLight">@color/color_light_primaryLight</item>
         <item name="color_primaryDark">@color/color_light_primaryDark</item>
@@ -24,8 +24,8 @@
 
     <style name="EditTextDefault" parent="android:Widget.EditText">
         <item name="android:background">@drawable/selector_input_text</item>
-        <item name="android:textColor">?attr/color_4</item>
-        <item name="android:textColorHint">?attr/color_5</item>
+        <item name="android:textColor">?attr/color_5</item>
+        <item name="android:textColorHint">?attr/color_2</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingEnd">10dp</item>

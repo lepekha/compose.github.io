@@ -40,12 +40,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view"
             app:tabGravity="start"
-            app:tabIndicatorColor="?attr/color_3"
+            app:tabIndicatorColor="?attr/color_5"
             app:tabMode="scrollable"
             app:tabRippleColor="@null"
-            app:tabSelectedTextColor="?attr/color_3"
+            app:tabSelectedTextColor="?attr/color_5"
             app:tabTextAppearance="@style/TabLayoutTextStyle"
-            app:tabTextColor="?attr/color_5" />
+            app:tabTextColor="?attr/color_4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttonContainer"
@@ -64,14 +64,16 @@
                 android:id="@+id/btnAddImages"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginEnd="8dp"
+                android:foreground="?attr/color_5"
                 android:scaleX="0"
                 android:scaleY="0"
-                app:cardCornerRadius="10dp"
+                app:cardBackgroundColor="?attr/color_5"
+                app:cardCornerRadius="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="?attr/color_3"
+                app:strokeColor="?attr/color_5"
                 app:strokeWidth="1dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -86,11 +88,11 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="8dp"
                         android:foregroundGravity="center"
-                        android:tint="?attr/color_3"
+                        android:tint="?attr/color_2"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/module_gallery_ic_add" />
+                        app:srcCompat="@drawable/ic_done" />
 
                     <TextView
                         android:id="@+id/txtCount"
@@ -98,8 +100,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="24dp"
-                        android:textColor="?attr/color_4"
+                        android:textColor="?attr/color_2"
                         android:textSize="22sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/imgIcon"
                         app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +117,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center|end"
                 android:background="?android:attr/selectableItemBackground"
-                android:tint="?attr/color_3"
+                android:tint="?attr/color_5"
                 android:tintMode="multiply"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

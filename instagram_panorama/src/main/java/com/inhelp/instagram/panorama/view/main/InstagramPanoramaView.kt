@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import com.inhelp.base.mvp.BaseMvpView
 import com.inhelp.crop_image.main.data.Ratio
+import com.inhelp.instagram.panorama.data.EPanorama
+import kotlinx.coroutines.Job
 
 
 interface InstagramPanoramaView : BaseMvpView {
@@ -11,6 +13,6 @@ interface InstagramPanoramaView : BaseMvpView {
     fun openGallery()
     fun setImage(uri: Uri)
     fun initPanorama()
-    fun setSelectedTab(position: Int)
+    fun setSelectedTab(value: EPanorama)
     fun createCropOverlay(ratio: Ratio, isGrid: Boolean)
 }

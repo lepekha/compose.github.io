@@ -3,11 +3,13 @@ package com.inhelp.extension
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.graphics.Matrix
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
@@ -115,3 +117,38 @@ fun View.animateMargin(top: Float? = null, bottom: Float? = null, start: Float? 
     }
     this.startAnimation(anim)
 }
+
+fun ImageView.bitmapPosition(): IntArray {
+        val ret = IntArray(4)
+        if (this.drawable == null) return ret
+
+        // Get image dimensions
+        // Get image matrix values and place them in an array
+        val f = FloatArray(9)
+        this.imageMatrix.getValues(f)
+
+        // Extract the scale values using the constants (if aspect ratio maintained, scaleX == scaleY)
+        val scaleX = f[Matrix.MSCALE_X]
+        val scaleY = f[Matrix.MSCALE_Y]
+
+        // Get the drawable (could also get the bitmap behind the drawable and getWidth/getHeight)
+        val d = this.drawable
+        val origW = d.intrinsicWidth
+        val origH = d.intrinsicHeight
+
+        // Calculate the actual dimensions
+        val actW = Math.round(origW * scaleX)
+        val actH = Math.round(origH * scaleY)
+        ret[2] = actW
+        ret[3] = actH
+
+        // Get image position
+        // We assume that the image is centered into ImageView
+        val imgViewW = this.width
+        val imgViewH = this.height
+        val top = (imgViewH - actH) / 2
+        val left = (imgViewW - actW) / 2
+        ret[0] = left
+        ret[1] = top
+        return ret
+    }

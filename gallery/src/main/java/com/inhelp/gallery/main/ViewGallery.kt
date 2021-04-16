@@ -11,5 +11,4 @@ interface ViewGallery : BaseMvpDialogView {
     fun setCount(value: String)
     fun clearSelect()
     fun backPress()
-    fun passData(values: List<Uri>)
 }

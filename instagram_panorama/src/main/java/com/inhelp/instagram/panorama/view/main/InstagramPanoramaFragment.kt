@@ -2,7 +2,6 @@ package com.inhelp.instagram.panorama.view.main
 
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayout
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.instagram.R
@@ -115,31 +110,18 @@ class InstagramPanoramaFragment : BaseMvpFragment<InstagramPanoramaView, Instagr
                     this.findViewById<ImageView>(R.id.icon).setImageResource(it.iconResId)
                     this.findViewById<TextView>(R.id.txtTitle).isVisible = false
                 }
-            })
+            }, false)
         }
     }
 
     override fun setImage(uri: Uri){
-        Glide
-                .with(imgView.context)
-                .asBitmap()
-                .format(DecodeFormat.PREFER_RGB_565)
-                .load(uri)
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        imgView.setBitmap(resource)
-                        imgView.post {
-                            presenter.onResourceLoad()
-                        }
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                    }
-                })
+        imgView.setImage(uri){
+            presenter.onResourceLoad()
+        }
     }
 
-    override fun setSelectedTab(position: Int) {
-        tab_layout.getTabAt(position)?.select()
+    override fun setSelectedTab(value: EPanorama) {
+        tab_layout.getTabAt(value.ordinal)?.select()
     }
 
     override fun navigateToPanoramaSave(){

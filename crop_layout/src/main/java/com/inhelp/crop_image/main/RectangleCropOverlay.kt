@@ -6,10 +6,13 @@ import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toRect
 import androidx.core.graphics.toRectF
 import com.inhelp.crop_image.R
 import com.inhelp.crop_image.main.data.*
+import com.inhelp.extension.bitmapPosition
 import com.inhelp.extension.dp
 import com.inhelp.extension.vibrate
 
@@ -61,7 +64,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
 
     private val backgroundRect = Rect()
 
-    override fun init(frame: View) {
+    override fun init(frame: Rect) {
         this.frame = frame
         oldRect?.takeIf { !isAnimate }?.let {
             startRectAnimation(oldRect = it)
@@ -72,12 +75,12 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
 
         when(ratio){
             is Ratio.AspectRatio -> {
-                val centerX = frame.left + (frame.width / 2)
-                val centerY = frame.top + (frame.height / 2)
+                val centerX = frame.left + (frame.width() / 2)
+                val centerY = frame.top + (frame.height() / 2)
 
-                var onePart = frame.width / ratio.first
-                if((onePart * ratio.second) > frame.height){
-                    onePart = frame.height / ratio.second
+                var onePart = frame.width() / ratio.first
+                if((onePart * ratio.second) > frame.height()){
+                    onePart = frame.height() / ratio.second
                 }
 
                 cropRect.set(

@@ -43,6 +43,7 @@ class FragmentGalleryContent : BaseMvpBottomSheetFragment<ViewGalleryContent, Pr
     private fun initList(){
         list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
         list.adapter = GalleryRvAdapter(
+                requireContext(),
                 presenter.images,
                 presenter.selectedImages,
                 onPress = { uri, isLongPress ->

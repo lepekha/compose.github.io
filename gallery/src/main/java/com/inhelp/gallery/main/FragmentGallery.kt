@@ -1,18 +1,22 @@
 package com.inhelp.gallery.main
 
 import android.Manifest
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.PermissionManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.inhelp.base.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
@@ -50,6 +54,8 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
     private val adapter by lazy { GalleryContentRvAdapter(this.childFragmentManager, presenter.folders) }
 
+//    private val bottomSheetListener =
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
@@ -69,6 +75,27 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         super.onCreate(savedInstanceState)
         setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
     }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = object : BottomSheetDialog(requireContext(), theme) {}
+
+        dialog.setOnShowListener {
+            val bottomSheet = dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            if (bottomSheet != null) {
+                val behavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(bottomSheet)
+                bottomSheet.minimumHeight= Resources.getSystem().displayMetrics.heightPixels
+                behavior.isDraggable = false
+            }
+        }
+
+        return dialog
+    }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -132,7 +159,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 btnAddImages.scaleX = 0f
                 btnAddImages.scaleY = 0f
                 buttonContainer.isVisible = isVisible
-               btnAddImages.animateScale(toScale = 1f, )
+                btnAddImages.animateScale(toScale = 1f)
             }else{
                 buttonContainer.isVisible = isVisible
             }
@@ -144,12 +171,9 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         txtCount.playAnimation(R.anim.bounce_animation, duration = 1000)
     }
 
-    override fun passData(values: List<Uri>) {
-        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to values))
-    }
-
     override fun onDestroy() {
         super.onDestroy()
+        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to presenter.selectedImages))
         getKoin().getScope("gallery").close()
     }
 

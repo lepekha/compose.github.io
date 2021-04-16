@@ -11,6 +11,8 @@ class InstagramPanoramaPresenter(val transferObject: TransferObject): BaseMvpPre
 
     private var currentUri: Uri? = null
 
+    private var ePanorama = EPanorama.THREE
+
     fun pressCrop(bitmaps: List<Bitmap>){
         transferObject.images.clear()
         transferObject.images.addAll(bitmaps)
@@ -18,7 +20,7 @@ class InstagramPanoramaPresenter(val transferObject: TransferObject): BaseMvpPre
     }
 
     fun onAddImage(uris: List<Uri>){
-        val currentUri = uris.firstOrNull()
+        val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
             (currentUri != null) -> {
                 this.currentUri = currentUri
@@ -47,11 +49,12 @@ class InstagramPanoramaPresenter(val transferObject: TransferObject): BaseMvpPre
     }
 
     fun onResourceLoad() {
-        view?.setSelectedTab(position = 1)
+        view?.setSelectedTab(value = ePanorama)
     }
 
     fun onTabSelect(position: Int) {
-        view?.createCropOverlay(EPanorama.values()[position].ratio, isGrid = true)
+        ePanorama = EPanorama.values()[position]
+        view?.createCropOverlay(ePanorama.ratio, isGrid = true)
     }
 
 }

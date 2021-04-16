@@ -82,7 +82,6 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
     }
 
     fun addImage(){
-        view?.passData(selectedImages.toList())
         view?.backPress()
     }
 }

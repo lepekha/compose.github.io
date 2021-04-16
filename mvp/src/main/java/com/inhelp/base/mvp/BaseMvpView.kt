@@ -10,13 +10,7 @@ interface BaseMvpView {
 
     fun getCurrentActivity(): androidx.fragment.app.FragmentActivity
 
-    fun showError(error: String?)
-
-    fun showError(@StringRes stringResId: Int)
-
     fun showAlert(@StringRes srtResId: Int)
-
-    fun showAlert(message: String)
 
     fun setTitle(title: String)
 

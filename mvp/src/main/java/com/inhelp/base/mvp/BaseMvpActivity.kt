@@ -17,19 +17,7 @@ abstract class BaseMvpActivity<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
 
     override fun getCurrentContext(): Context = this
 
-    override fun showError(error: String?) {
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-    }
-
-    override fun showError(stringResId: Int) {
-        Toast.makeText(this, stringResId, Toast.LENGTH_LONG).show()
-    }
-
     override fun showAlert(srtResId: Int) {
-        //TODO alert
-    }
-
-    override fun showAlert(message: String) {
         //TODO alert
     }
 

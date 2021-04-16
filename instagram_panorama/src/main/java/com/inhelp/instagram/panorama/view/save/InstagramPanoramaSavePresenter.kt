@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import com.inhelp.dialogs.main.DialogManager
 import com.inhelp.extension.saveBitmap
+import com.inhelp.instagram.R
 import com.inhelp.instagram.panorama.data.TransferObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,7 @@ class InstagramPanoramaSavePresenter(val context: Context, val transferObject: T
     fun pressSave() = CoroutineScope(Main).launch {
         val dialog = DialogManager.createLoad{}
         loadImage()
+        view?.showAlert(R.string.module_instagram_panorama_ready)
         dialog.closeDialog()
     }
 

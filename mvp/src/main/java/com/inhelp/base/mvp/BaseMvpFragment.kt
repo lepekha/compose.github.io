@@ -17,20 +17,8 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         setVisibleBack(true)
     }
 
-    override fun showError(error: String?) {
-        (activity as BaseMvpActivity<*, *>).showError(error)
-    }
-
-    override fun showError(stringResId: Int) {
-        (activity as BaseMvpActivity<*, *>).showError(stringResId)
-    }
-
     override fun showAlert(srtResId: Int) {
         (activity as BaseMvpActivity<*, *>).showAlert(srtResId)
-    }
-
-    override fun showAlert(message: String) {
-        (activity as BaseMvpActivity<*, *>).showAlert(message)
     }
 
     override fun getCurrentContext(): Context {

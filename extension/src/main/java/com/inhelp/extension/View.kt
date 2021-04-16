@@ -1,5 +1,6 @@
 package com.inhelp.extension
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -97,7 +98,7 @@ fun View.animateScale(toScale: Float, onStart: (() -> Unit)? = null, onEnd: (() 
     }.start()
 }
 
-fun View.animateMargin(top: Float? = null, bottom: Float? = null, start: Float? = null, end: Float? = null, duration: Long = 300) {
+fun View.animateMargin(top: Float? = null, bottom: Float? = null, start: Float? = null, end: Float? = null, duration: Long = 300, onStart: (() -> Unit)? = null, onEnd: (() -> Unit)? = null) {
     val params = layoutParams as ConstraintLayout.LayoutParams
     val marginTop = params.topMargin
     val marginBottom = params.bottomMargin
@@ -115,6 +116,18 @@ fun View.animateMargin(top: Float? = null, bottom: Float? = null, start: Float? 
     }.apply {
         this.duration = duration
     }
+    anim.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationRepeat(animation: Animation?) {}
+
+        override fun onAnimationEnd(animation: Animation?) {
+            onEnd?.invoke()
+        }
+
+        override fun onAnimationStart(animation: Animation?) {
+            onStart?.invoke()
+        }
+    })
+
     this.startAnimation(anim)
 }
 

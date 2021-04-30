@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.core.net.toFile
 import com.dali.file.FileStorage
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import java.io.File
@@ -16,6 +17,7 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
     }
 
     val images = mutableListOf<Uri>()
+    var imagePressPosition: Int = -1
 
     var folders = mutableListOf<String>()
     var currentFolder = ""
@@ -42,6 +44,7 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
     }
 
     fun onLoad(){
+        this.images.clear()
         folders = FileStorage.readFilesNameFromDir(dirName = DIR_ROOT)
         if(folders.isEmpty()){
             view?.createDialogInputName()
@@ -92,6 +95,18 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
         }
     }
 
+    fun deleteImage(){
+        this.images.removeAt(imagePressPosition).let {
+            FileStorage.removeFile(file = File(getPath(it)))
+        }
+    }
+
+    fun changeImage(uri: Uri){
+        this.images.getOrNull(imagePressPosition)?.toFile()?.let {
+            File(getPath(uri)).copyTo(target = it, overwrite = true)
+        }
+    }
+
     fun onRemoveAccount(value: Boolean){
         if(value){
             FileStorage.removeFile(fileName = currentFolder, dirName = DIR_ROOT)
@@ -101,6 +116,11 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
 
     fun pressMoreAccount(){
         view?.createDialogList(list = folders, select = currentFolder)
+    }
+
+    fun pressImage(position: Int){
+        imagePressPosition = position
+        view?.goToImage(uri = this.images[position])
     }
 
     fun onChangeImagePosition(oldPosition: Int, newPosition: Int){
@@ -131,10 +151,4 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
         return s
     }
 
-//    fun pressImage(position: Int) = CoroutineScope(Main).launch {
-//        gridImages.getOrNull(gridImages.size - position + 1)?.scale(512, 512, false)?.let { bitmap ->
-//            val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
-//            view?.createInstagramIntent(uri = uri)
-//        }
-//    }
 }

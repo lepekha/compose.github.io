@@ -22,9 +22,9 @@ interface BaseMvpView {
 
     fun updateBottomMenu()
 
-    fun bottomSheetCreate()
-
-    fun bottomSheetDestroy()
+//    fun bottomSheetCreate()
+//
+//    fun bottomSheetDestroy()
 
     fun backToMain()
 }

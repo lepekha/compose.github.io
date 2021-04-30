@@ -1,4 +1,5 @@
 package com.dali.instagram.planer.di
+import com.dali.instagram.planer.view.image.InstagramPlanerImagePresenter
 import com.dali.instagram.planer.view.main.InstagramPlanerPresenter
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -15,5 +16,6 @@ val instagramPlanerModule = module {
 
     scope(named("INSTAGRAM")) {
         scoped { InstagramPlanerPresenter(context = androidContext()) }
+        scoped { InstagramPlanerImagePresenter(context = androidContext(), presenter = get()) }
     }
 }

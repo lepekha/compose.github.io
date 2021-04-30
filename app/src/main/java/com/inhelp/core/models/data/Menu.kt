@@ -178,20 +178,12 @@ class MenuObjects(context: Context) {
     }
 
     private val IMAGE by lazy {
-        DynamicMenu.Grid(
+        DynamicMenu.List(
                 id = R.id.id_menu_image,
                 titleResId = R.string.menu_image,
                 innerMenu = mutableListOf(
                         IMAGE_CROP,
-                        IMAGE_ROTATE,
-                        IMAGE_BLUR_CIRCULAR,
-                        IMAGE_EXPOSURE,
-                        IMAGE_FLARE,
-                        IMAGE_GRAIN,
-                        IMAGE_HDR,
-                        IMAGE_ISO,
-                        IMAGE_TILT_SHIFT,
-                        IMAGE_VINTAGE
+                        IMAGE_ROTATE
                 )
         )
     }

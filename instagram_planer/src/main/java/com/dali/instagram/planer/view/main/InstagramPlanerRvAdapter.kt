@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -43,6 +44,9 @@ class InstagramPlanerRvAdapter(val images: MutableList<Uri>, val onPress: (posit
                 }
             }
 
+            this.imgView.setOnClickListener {
+                onPress(adapterPosition)
+            }
 
             this.imgView.setOnDragListener { _, dragEvent ->
                 when (dragEvent.action) {
@@ -68,7 +72,7 @@ class InstagramPlanerRvAdapter(val images: MutableList<Uri>, val onPress: (posit
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(holder.imgView.context).load(images[position]).centerInside().thumbnail(0.1f).into(holder.imgView)
+        Glide.with(holder.imgView.context).load(images[position]).centerInside().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).thumbnail(0.1f).into(holder.imgView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
@@ -78,7 +82,7 @@ class InstagramPlanerRvAdapter(val images: MutableList<Uri>, val onPress: (posit
                     holder.imgView.animateScale(
                             toScale = 0f,
                             onEnd = {
-                                Glide.with(holder.imgView.context).load(images[position]).centerInside().thumbnail(0.1f).into(holder.imgView)
+                                Glide.with(holder.imgView.context).load(images[position]).centerInside().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).thumbnail(0.1f).into(holder.imgView)
                                 holder.imgView.animateScale(toScale = 1f)
                             })
                 }

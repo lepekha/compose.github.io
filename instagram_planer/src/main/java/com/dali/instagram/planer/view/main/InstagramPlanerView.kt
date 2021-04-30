@@ -15,4 +15,5 @@ interface InstagramPlanerView : BaseMvpView {
     fun setWallName(value: String)
     fun changeImageInList(position: Int)
     fun addImageToList(count: Int)
+    fun goToImage(uri: Uri)
 }

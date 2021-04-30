@@ -10,6 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dali.instagram.planer.R
 import com.dali.instagram.planer.di.Scope
+import com.dali.instagram.planer.view.image.InstagramPlanerImageFragment
 import com.inhelp.base.mvp.BaseMvpActivity
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.dialogs.main.dialogs.DialogAlert
@@ -22,6 +23,7 @@ import com.inhelp.gallery.main.FragmentGallery
 import data.BottomMenu
 import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_planer.*
+import replace
 
 
 class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPlanerPresenter>(), InstagramPlanerView {
@@ -64,7 +66,7 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
     }
 
     override fun createBottomMenu(): MutableList<Menu> {
-        return mutableListOf(btnGallery, btnAccountAdd, btnAccountRemove, btnAccountClear).filter { it.isVisible }.toMutableList()
+        return mutableListOf(btnGallery, btnAccountAdd, btnAccountRemove, btnAccountClear)
     }
 
     private fun initGridPreview() {
@@ -72,7 +74,7 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
         gridList.adapter = InstagramPlanerRvAdapter(
                 images = presenter.images,
                 onPress = {
-//                    presenter.pressImage(it)
+                    presenter.pressImage(it)
                 },
                 onChange = { oldPosition, newPosition ->
                     presenter.onChangeImagePosition(oldPosition, newPosition)
@@ -152,6 +154,10 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
         setFragmentResultListener(request) { _, bundle ->
             presenter.pressListAccount(bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION))
         }
+    }
+
+    override fun goToImage(uri: Uri) {
+        getCurrentActivity().supportFragmentManager.replace(fragment = InstagramPlanerImageFragment.newInstance(uri = uri), addToBackStack = true)
     }
 
     override fun backPress(): Boolean {

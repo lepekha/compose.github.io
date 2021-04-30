@@ -30,6 +30,13 @@ object FileStorage {
         }
     }
 
+    fun writeToFile(file: File, targetFile: File) {
+        try {
+            targetFile.writeText(text = file.readText(Charsets.UTF_8), charset = Charsets.UTF_8)
+        } catch (e: IOException) {
+        }
+    }
+
     fun readFromFile(fileName: String, dirName: String? = null): String {
         try {
             val dirPath = makeDir(dirName)
@@ -61,6 +68,12 @@ object FileStorage {
         val outputFile = File(dirPath, fileName)
         if (outputFile.exists()) {
             outputFile.delete()
+        }
+    }
+
+    fun removeFile(file: File) {
+        if (file.exists()) {
+            file.delete()
         }
     }
 

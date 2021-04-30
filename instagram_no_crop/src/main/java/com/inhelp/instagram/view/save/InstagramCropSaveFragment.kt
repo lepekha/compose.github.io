@@ -1,31 +1,34 @@
 package com.inhelp.instagram.view.save
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.color.ColorFragment
+import com.inhelp.extension.*
 import com.inhelp.instagram.R
-import com.inhelp.extension.createImageIntent
-import com.inhelp.extension.createInstagramIntent
 import com.inhelp.instagram.di.Scope
 import data.BottomMenu
 import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_no_crop_share.*
-import kotlinx.coroutines.*
+import kotlinx.android.synthetic.main.fragment_instagram_no_crop_share.imgView
 
 
-class NoCropSaveFragment : BaseMvpFragment<NoCropSaveView, NoCropSavePresenter>(), NoCropSaveView, ColorFragment.ColorListener {
+class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, InstagramCropSavePresenter>(), InstagramCropSaveView, ColorFragment.ColorListener {
 
     companion object {
-        fun newInstance() = NoCropSaveFragment()
+        fun newInstance() = InstagramCropSaveFragment()
     }
 
-    override val presenter: NoCropSavePresenter by lazy {
+    override val presenter: InstagramCropSavePresenter by lazy {
         Scope.INSTAGRAM.get()
     }
 
@@ -61,7 +64,19 @@ class NoCropSaveFragment : BaseMvpFragment<NoCropSaveView, NoCropSavePresenter>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.fragment_title_crop_share))
+        setTitle(getCurrentContext().getString(R.string.fragment_title_no_crop_save_images))
+
+        btnBlur.setVibrate(EVibrate.BUTTON)
+        btnBlur.setOnClickListener {
+            btnColorFill.setColorFilter(requireContext().getColorFromAttr(R.attr.color_3))
+            btnBlur.setColorFilter(requireContext().getColorFromAttr(R.attr.color_5))
+            presenter.pressBlur()
+        }
+
+        btnColorFill.setVibrate(EVibrate.BUTTON)
+        btnColorFill.setOnClickListener {
+            ColorFragment.newInstance(color = Color.WHITE, targetFragment = this).show(requireFragmentManager(), "ColorFragment")
+        }
 
         presenter.onLoadImage()
     }
@@ -70,14 +85,9 @@ class NoCropSaveFragment : BaseMvpFragment<NoCropSaveView, NoCropSavePresenter>(
         Glide
                 .with(imgView.context)
                 .load(bitmap)
-                .thumbnail(0.3f)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .thumbnail(0.1f)
                 .into(imgView)
-    }
-
-    override fun setDownloadDone() {
-        btnDownload.iconResId = R.drawable.ic_download_done
-        btnDownload.isEnabled = false
-        updateBottomMenu()
     }
 
     override fun createShareIntent(uri: Uri) {
@@ -86,6 +96,21 @@ class NoCropSaveFragment : BaseMvpFragment<NoCropSaveView, NoCropSavePresenter>(
 
     override fun createInstagramIntent(uri: Uri) {
         getCurrentActivity().createInstagramIntent(uri)
+    }
+
+    override fun setImageBackground(bitmap: Bitmap) {
+        imgView.background = bitmap.toDrawable(getCurrentContext().resources)
+    }
+
+    override fun onColorPick(color: Int) {
+        presenter.onColorPick(color = color)
+        btnColorFill.setColorFilter(requireContext().getColorFromAttr(R.attr.color_5))
+        btnBlur.setColorFilter(requireContext().getColorFromAttr(R.attr.color_3))
+    }
+
+    override fun setVisibleEdit(isVisible: Boolean) {
+        btnBlur.isVisible = isVisible
+        btnColorFill.isVisible = isVisible
     }
 
     override fun onDestroy() {

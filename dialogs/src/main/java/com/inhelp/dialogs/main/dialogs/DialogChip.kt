@@ -58,17 +58,7 @@ class DialogChip : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        bottomSheetDialog.setCancelable(false)
-        bottomSheetDialog.setCanceledOnTouchOutside(false)
-        bottomSheetDialog.setOnShowListener {
-            val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            if (bottomSheet != null) {
-                val behavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(bottomSheet)
-                behavior.isDraggable = false
-            }
-        }
-        return bottomSheetDialog
+        return super.onCreateDialog(savedInstanceState) as BottomSheetDialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,15 +69,15 @@ class DialogChip : BottomSheetDialogFragment() {
         arguments?.getStringArrayList(BUNDLE_KEY_LIST)?.forEachIndexed { index, it ->
             val chip = Chip(context).apply {
                 this.text = it
-                this.chipBackgroundColor = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_5))
+                this.chipBackgroundColor = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_2))
                 this.isCheckable = true
                 this.id = index
                 this.isChipIconVisible = selected == it
                 this.isCheckedIconVisible = false
                 this.isClickable = true
                 this.chipIcon = ContextCompat.getDrawable(view.context, R.drawable.ic_done)
-                this.chipIconTint = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_2))
-                this.setTextColor(view.context.getColorFromAttr(R.attr.color_2))
+                this.chipIconTint = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_5))
+                this.setTextColor(view.context.getColorFromAttr(R.attr.color_5))
                 this.setTextSize(TypedValue.COMPLEX_UNIT_PX, 18.sp)
             }
 

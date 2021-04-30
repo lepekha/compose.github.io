@@ -1,7 +1,9 @@
 <resources>
-    <string name="fragment_title_crop">Crop your image:</string>
+    <string name="fragment_title_crop">Create no crop image:</string>
     <string name="fragment_title_crop_edit">Edit your image:</string>
     <string name="fragment_title_crop_share">Share your image:</string>
+    <string name="fragment_title_no_crop_save_images">Save images:</string>
+    <string name="fragment_no_crop_save_ready">Image saved</string>
 
     <string name="fragment_crop_aspect_ratio_origin">ORIGINAL</string>
     <string name="fragment_crop_aspect_ratio_free">FREE</string>

@@ -4,18 +4,18 @@ import android.graphics.Bitmap
 import android.net.Uri
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import com.inhelp.instagram.panorama.data.EPanorama
-import com.inhelp.instagram.panorama.data.TransferObject
 
 
-class InstagramPanoramaPresenter(val transferObject: TransferObject): BaseMvpPresenterImpl<InstagramPanoramaView>() {
+class InstagramPanoramaPresenter: BaseMvpPresenterImpl<InstagramPanoramaView>() {
 
     private var currentUri: Uri? = null
+    internal var images = mutableListOf<Bitmap>()
 
     private var ePanorama = EPanorama.THREE
 
     fun pressCrop(bitmaps: List<Bitmap>){
-        transferObject.images.clear()
-        transferObject.images.addAll(bitmaps)
+        images.clear()
+        images.addAll(bitmaps)
         view?.navigateToPanoramaSave()
     }
 

@@ -15,15 +15,15 @@ import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_grid_save.*
 
 
-class GridSaveFragment : BaseMvpFragment<GridSaveView, GridSavePresenter>(), GridSaveView {
+class InstagramGridSaveFragment : BaseMvpFragment<InstagramGridSaveView, InstagramGridSavePresenter>(), InstagramGridSaveView {
 
     companion object {
-        fun newInstance(): GridSaveFragment {
-            return GridSaveFragment()
+        fun newInstance(): InstagramGridSaveFragment {
+            return InstagramGridSaveFragment()
         }
     }
 
-    override val presenter: GridSavePresenter by lazy {
+    override val presenter: InstagramGridSavePresenter by lazy {
         Scope.INSTAGRAM.get()
     }
 
@@ -55,15 +55,9 @@ class GridSaveFragment : BaseMvpFragment<GridSaveView, GridSavePresenter>(), Gri
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.fragment_instagram_grid_title))
-
+        setTitle(getCurrentContext().getString(R.string.module_instagram_grid_save_images))
+        presenter.onCreate()
         initGridPreview()
-    }
-
-    override fun setDownloadDone() {
-        btnDownload.iconResId = R.drawable.ic_download_done
-        btnDownload.isEnabled = false
-        updateBottomMenu()
     }
 
     override fun createInstagramIntent(uri: Uri) {

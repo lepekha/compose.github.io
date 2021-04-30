@@ -5,10 +5,10 @@ import android.graphics.Bitmap
 import androidx.core.graphics.scale
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import com.inhelp.dialogs.main.DialogManager
-import com.inhelp.extension.createInstagramIntent
 import com.inhelp.extension.createTempUri
 import com.inhelp.extension.saveBitmap
-import com.inhelp.instagram.grid.data.TransferObject
+import com.inhelp.instagram.R
+import com.inhelp.instagram.grid.view.main.InstagramGridPresenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
@@ -16,27 +16,31 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class GridSavePresenter(val context: Context, val transferObject: TransferObject): BaseMvpPresenterImpl<GridSaveView>() {
+class InstagramGridSavePresenter(val context: Context, val presenter: InstagramGridPresenter): BaseMvpPresenterImpl<InstagramGridSaveView>() {
 
 
-    val gridImages: MutableList<Bitmap>
-        get() = transferObject.images
+    val gridImages = mutableListOf<Bitmap>()
+
+    fun onCreate(){
+        gridImages.clear()
+        gridImages.addAll(presenter.images)
+    }
 
     fun pressSave() = CoroutineScope(Main).launch {
         val dialog = DialogManager.createLoad{}
         loadImage()
-        view?.setDownloadDone()
+        view?.showAlert(R.string.module_instagram_grid_ready)
         dialog.closeDialog()
     }
 
     private suspend fun loadImage() = withContext(Dispatchers.IO) {
-        transferObject.images.reversed().forEachIndexed { index, bitmap ->
+        gridImages.reversed().forEachIndexed { index, bitmap ->
             context.saveBitmap(bitmap, "${index}_")
         }
     }
 
     fun pressImage(position: Int) = CoroutineScope(Main).launch {
-        gridImages.getOrNull(gridImages.size - position + 1)?.scale(512, 512, false)?.let { bitmap ->
+        gridImages.reversed().getOrNull(position)?.scale(512, 512, false)?.let { bitmap ->
             val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
             view?.createInstagramIntent(uri = uri)
         }

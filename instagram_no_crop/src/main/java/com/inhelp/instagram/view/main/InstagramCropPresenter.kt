@@ -6,30 +6,23 @@ import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import com.inhelp.instagram.data.*
 
 
-class MainPresenter(val transferObject: TransferObject): BaseMvpPresenterImpl<MainView>() {
+class InstagramCropPresenter: BaseMvpPresenterImpl<InstagramCropView>() {
 
     private var currentUri: Uri? = null
-
-    private var eNoCrop = ENoCrop.ONE_TO_ONE
+    internal val images = mutableListOf<Bitmap>()
+    var eNoCrop = ENoCrop.ONE_TO_ONE
 
     fun pressCrop(bitmaps: List<Bitmap>){
-        transferObject.images.clear()
-        transferObject.images.addAll(bitmaps)
-        if(eNoCrop == ENoCrop.ONE_TO_ONE){
-            view?.navigateToCropSave()
-        }else{
-            view?.navigateToCropEdit()
-        }
+        images.clear()
+        images.addAll(bitmaps)
+        view?.navigateToCropSave()
     }
 
-    fun onLoad(uriString: String?){
-        val currentUri = this.currentUri
+    fun onAddImage(uris: List<Uri>){
+        val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
-            (uriString != null) -> {
-                this.currentUri = Uri.parse(uriString)
-                view?.setImage(Uri.parse(uriString))
-            }
             (currentUri != null) -> {
+                this.currentUri = currentUri
                 view?.setImage(currentUri)
             }
             else -> {
@@ -38,6 +31,16 @@ class MainPresenter(val transferObject: TransferObject): BaseMvpPresenterImpl<Ma
             }
         }
         initMode()
+    }
+
+    fun onCreate(){
+        val currentUri = this.currentUri
+        if(currentUri != null) {
+            view?.setImage(currentUri)
+            initMode()
+        }else{
+            view?.openGallery()
+        }
     }
 
     private fun initMode(){

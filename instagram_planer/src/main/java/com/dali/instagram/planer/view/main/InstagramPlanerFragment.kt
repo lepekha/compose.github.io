@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dali.instagram.planer.R
@@ -16,6 +17,7 @@ import com.inhelp.dialogs.main.dialogs.DialogChip
 import com.inhelp.dialogs.main.dialogs.DialogConfirmation
 import com.inhelp.dialogs.main.dialogs.DialogInput
 import com.inhelp.extension.scrollTo
+import com.inhelp.extension.setDrawableRight
 import com.inhelp.gallery.main.FragmentGallery
 import data.BottomMenu
 import data.Menu
@@ -39,46 +41,30 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
         return inflater.inflate(R.layout.fragment_instagram_planer, container, false)
     }
 
-    override fun createBottomMenu(): MutableList<Menu> {
-
-        val btnGallery = BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_gallery) {
-            FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true)
-        }
-
-        val btnAccountSetting = BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_account_setting) {
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(createAccountMenu())
-        }
-
-        return mutableListOf(btnAccountSetting, btnGallery)
+    private val btnGallery = BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_gallery) {
+        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true)
     }
 
-    private fun createAccountMenu(): MutableList<Menu> {
-        val btnBack = BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_back) {
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(createBottomMenu())
-        }.apply {
-            this.iconTintRes = R.attr.color_6
-        }
+    private val btnAccountAdd = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_add) {
+        createDialogInputName()
+    }
 
-        val btnAccountAdd = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_add) {
-            createDialogInputName()
+    private val btnAccountRemove = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_remove) {
+        val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = "Remove current account?")
+        setFragmentResultListener(request) { _, bundle ->
+            presenter.onRemoveAccount(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER))
         }
+    }
 
-        val btnAccountRemove = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_remove) {
-            DialogAlert.show(fm = childFragmentManager, message = "Грейс — успешный терапевт из Нью-Йорка, у неё все хорошо: любящий муж, прекрасный сын, богатая жизнь. Скоро у Грейс выйдет первая книга.")
+    private val btnAccountClear = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_clear) {
+        val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = "Clear current account?")
+        setFragmentResultListener(request) { _, bundle ->
+            presenter.onAccountClearConfirm(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER))
         }
+    }
 
-        val btnAccountChange = BottomMenu(iconResId = R.drawable.ic_instagram_planer_switch_account) {
-            DialogAlert.show(fm = childFragmentManager, message = "Грейс — успешный терапевт из Нью-Йорка, у неё все хорошо: любящий муж, прекрасный сын, богатая жизнь. Скоро у Грейс выйдет первая книга.")
-        }
-
-        val btnAccountClear = BottomMenu(iconResId = R.drawable.ic_instagram_planer_person_clear) {
-            val request = DialogConfirmation.show(fm = getCurrentActivity().supportFragmentManager, message = "Грейс — успешный терапевт из Нью-Йорка, у неё все хорошо: любящий муж, прекрасный сын, богатая жизнь. Скоро у Грейс выйдет первая книга.")
-            setFragmentResultListener(request) { _, bundle ->
-                presenter.onAccountClearConfirm(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER))
-            }
-        }
-
-        return mutableListOf(btnBack, btnAccountChange, btnAccountAdd, btnAccountRemove, btnAccountClear)
+    override fun createBottomMenu(): MutableList<Menu> {
+        return mutableListOf(btnGallery, btnAccountAdd, btnAccountRemove, btnAccountClear).filter { it.isVisible }.toMutableList()
     }
 
     private fun initGridPreview() {
@@ -95,6 +81,29 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
 
     override fun setWallName(value: String) {
         txtAccount.text = value
+    }
+
+    override fun setVisiblePlaceholder(isVisible: Boolean) {
+        imgPlaceholder.isVisible = isVisible
+    }
+
+    override fun setVisibleClearAll(isVisible: Boolean) {
+        btnAccountClear.isVisible = isVisible
+        createBottomMenu()
+    }
+
+    override fun setVisibleRemoveAcc(isVisible: Boolean) {
+        btnAccountRemove.isVisible = isVisible
+    }
+
+    override fun setVisibleAccountMoreIcon(isVisible: Boolean) {
+        if(isVisible){
+            txtAccount.setDrawableRight(R.drawable.ic_expand_more)
+            txtAccount.isClickable = true
+        }else{
+            txtAccount.setDrawableRight(0)
+            txtAccount.isClickable = false
+        }
     }
 
     override fun updateList() {
@@ -116,7 +125,7 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
 
         initGridPreview()
 
-        btnMoreAccount.setOnClickListener {
+        txtAccount.setOnClickListener {
             presenter.pressMoreAccount()
         }
 

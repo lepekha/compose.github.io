@@ -18,6 +18,7 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
 
     val folders = mutableListOf<ImageFolder>()
     val selectedImages = mutableListOf<Uri>()
+    var doneImages = mutableListOf<Uri>()
     private var _multiSelect = false
     var isMultiSelect: Boolean = false
         set(value) {
@@ -82,6 +83,7 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
     }
 
     fun addImage(){
+        doneImages = selectedImages
         view?.backPress()
     }
 }

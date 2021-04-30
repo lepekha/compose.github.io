@@ -30,7 +30,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:gravity="start"
-        android:text="@string/fragment_instagram_grid_help"
+        android:text="@string/module_instagram_grid_help"
         android:textColor="?attr/color_5"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

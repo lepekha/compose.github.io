@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
@@ -13,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.inhelp.dialogs.R
+import com.inhelp.extension.getColorFromAttr
 import kotlinx.android.synthetic.main.dialog_input.*
 
 
@@ -46,32 +48,13 @@ class DialogInput : BottomSheetDialogFragment() {
         setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = object : BottomSheetDialog(requireContext(), theme){
-            override fun onBackPressed() {
-                setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf())
-                super.onBackPressed()
-            }
-
-        }
-
-        dialog.setCancelable(false)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setOnShowListener {
-            val bottomSheet = dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            if (bottomSheet != null) {
-                val behavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(bottomSheet)
-                behavior.isDraggable = false
-            }
-        }
-
-        return dialog
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         editText.hint = arguments?.getString(BUNDLE_KEY_HINT) ?: ""
+
+        editText.setHintTextColor(ColorUtils.setAlphaComponent(requireContext().getColorFromAttr(R.attr.color_5), 125))
+        editText.setTextColor(ColorUtils.setAlphaComponent(requireContext().getColorFromAttr(R.attr.color_5), 200))
 
         btnCancel.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf())
@@ -82,5 +65,10 @@ class DialogInput : BottomSheetDialogFragment() {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to editText.text.toString()))
             dismiss()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf())
     }
 }

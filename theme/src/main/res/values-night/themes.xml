@@ -7,14 +7,6 @@
         <item name="color_4">@color/color_night_4</item>
         <item name="color_5">@color/color_night_5</item>
         <item name="color_6">@color/color_night_6</item>
-        <item name="color_primary">@color/color_night_primary</item>
-        <item name="color_primaryLight">@color/color_night_primaryLight</item>
-        <item name="color_primaryDark">@color/color_night_primaryDark</item>
-        <item name="color_secondary">@color/color_night_secondary</item>
-        <item name="color_secondaryLight">@color/color_night_secondaryLight</item>
-        <item name="color_secondaryDark">@color/color_night_secondaryDark</item>
-        <item name="color_primaryText">@color/color_night_primaryText</item>
-        <item name="color_secondaryText">@color/color_night_secondaryText</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/color_1</item>
         <item name="android:navigationBarColor">?attr/color_1</item>

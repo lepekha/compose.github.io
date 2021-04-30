@@ -7,7 +7,18 @@
     android:background="@drawable/background_bottom_sheet"
     android:foregroundGravity="center"
     app:layout_anchorGravity="center"
-    tools:background="#201F1F">
+    tools:background="#FFFFFF">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="40dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="10dp"
+        android:alpha="0.2"
+        android:background="@drawable/ic_bottom_sheet_swipe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtMessage"
@@ -17,7 +28,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:ems="10"
-        android:textColor="?attr/color_5"
+        android:textColor="?attr/color_3"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,29 +38,18 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDone"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/CustomBottomSheetButton"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="30dp"
-        android:backgroundTint="?attr/color_5"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        app:cornerRadius="5dp"
         app:icon="@drawable/ic_done"
-        app:iconGravity="textStart"
-        app:iconSize="36dp"
-        app:iconTint="?attr/color_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtMessage"
         app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.4"
-        app:strokeColor="?attr/color_5"
-        app:strokeWidth="1dp" />
+        app:layout_constraintWidth_percent="0.4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

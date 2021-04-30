@@ -1,6 +1,5 @@
 package com.inhelp.instagram.panorama.di
 
-import com.inhelp.instagram.panorama.data.TransferObject
 import com.inhelp.instagram.panorama.view.main.InstagramPanoramaPresenter
 import com.inhelp.instagram.panorama.view.save.InstagramPanoramaSavePresenter
 import org.koin.android.ext.koin.androidContext
@@ -15,10 +14,8 @@ object Scope{
 }
 
 val instagamPanoramaModule = module {
-
     scope(named("INSTAGRAM")) {
-        scoped { TransferObject() }
-        scoped { InstagramPanoramaSavePresenter(context = androidContext(), transferObject = get()) }
-        scoped { InstagramPanoramaPresenter(transferObject = get()) }
+        scoped { InstagramPanoramaSavePresenter(context = androidContext(), prevPresenter = get()) }
+        scoped { InstagramPanoramaPresenter() }
     }
 }

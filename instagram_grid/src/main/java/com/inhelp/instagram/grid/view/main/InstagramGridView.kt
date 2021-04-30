@@ -5,10 +5,11 @@ import com.inhelp.base.mvp.BaseMvpView
 import com.inhelp.crop_image.main.data.Ratio
 
 
-interface GridView : BaseMvpView {
+interface InstagramGridView : BaseMvpView {
     fun navigateToGridSave()
     fun setImage(uri: Uri)
     fun initGrid()
+    fun openGallery()
     fun setSelectedTab(position: Int)
     fun createCropOverlay(ratio: Ratio, isGrid: Boolean)
 }

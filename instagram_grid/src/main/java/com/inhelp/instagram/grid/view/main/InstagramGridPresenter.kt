@@ -6,26 +6,24 @@ import com.inhelp.base.mvp.BaseMvpPresenterImpl
 import com.inhelp.instagram.grid.data.*
 
 
-class GridPresenter(val transferObject: TransferObject): BaseMvpPresenterImpl<GridView>() {
+class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
 
     private var currentUri: Uri? = null
+    internal val images = mutableListOf<Bitmap>()
 
     private var eGrid = EGrid.THREE_THREE
 
     fun pressCrop(bitmaps: List<Bitmap>){
-        transferObject.images.clear()
-        transferObject.images.addAll(bitmaps)
+        images.clear()
+        images.addAll(bitmaps)
         view?.navigateToGridSave()
     }
 
-    fun onLoad(uriString: String?){
-        val currentUri = this.currentUri
+    fun onAddImage(uris: List<Uri>){
+        val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
-            (uriString != null) -> {
-                this.currentUri = Uri.parse(uriString)
-                view?.setImage(Uri.parse(uriString))
-            }
             (currentUri != null) -> {
+                this.currentUri = currentUri
                 view?.setImage(currentUri)
             }
             else -> {
@@ -34,6 +32,16 @@ class GridPresenter(val transferObject: TransferObject): BaseMvpPresenterImpl<Gr
             }
         }
         initMode()
+    }
+
+    fun onCreate() {
+        val currentUri = this.currentUri
+        if(currentUri != null) {
+            view?.setImage(currentUri)
+            initMode()
+        }else{
+            view?.openGallery()
+        }
     }
 
     private fun initMode(){

@@ -4,7 +4,6 @@ import android.net.Uri
 import com.inhelp.base.mvp.BaseMvpView
 
 
-interface GridSaveView : BaseMvpView {
+interface InstagramGridSaveView : BaseMvpView {
     fun createInstagramIntent(uri: Uri)
-    fun setDownloadDone()
 }

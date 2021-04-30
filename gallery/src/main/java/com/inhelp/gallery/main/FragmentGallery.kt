@@ -19,8 +19,10 @@ import com.eazypermissions.dsl.PermissionManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.inhelp.base.mvp.BaseMvpActivity
 import com.inhelp.base.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
 import com.inhelp.extension.animateScale
+import com.inhelp.extension.getColorFromAttr
 import com.inhelp.extension.playAnimation
 import com.inhelp.gallery.R
 import com.inhelp.gallery.main.content.FragmentGalleryContent
@@ -54,8 +56,6 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
     private val adapter by lazy { GalleryContentRvAdapter(this.childFragmentManager, presenter.folders) }
 
-//    private val bottomSheetListener =
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
@@ -74,10 +74,6 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -173,7 +169,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
     override fun onDestroy() {
         super.onDestroy()
-        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to presenter.selectedImages))
+        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to presenter.doneImages))
         getKoin().getScope("gallery").close()
     }
 

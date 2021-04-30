@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="id_mode_no_crop" type="id"/>
-    <item name="id_mode_grid" type="id"/>
-    <item name="id_mode_panorama" type="id"/>
+
 </resources>

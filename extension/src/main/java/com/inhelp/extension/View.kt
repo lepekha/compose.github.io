@@ -24,11 +24,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 @SuppressLint("ClickableViewAccessibility")
 fun View.setVibrate(type: EVibrate) {
-    this.setOnTouchListener { _, event ->
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            this.context.vibrate(type = type)
+    if(type == EVibrate.NONE){
+        this.setOnTouchListener(null)
+    }else{
+        this.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                this.context.vibrate(type = type)
+            }
+            false
         }
-        false
     }
 }
 

@@ -68,9 +68,8 @@ class InstagramPanoramaSaveFragment : BaseMvpFragment<InstagramPanoramaSaveView,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_instagram_panorama_save_images))
-
+        presenter.onCreate()
         initPanoramaPreview()
-
     }
 
     override fun backPress(): Boolean {

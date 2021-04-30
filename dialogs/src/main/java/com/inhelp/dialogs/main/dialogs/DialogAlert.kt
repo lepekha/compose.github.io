@@ -45,17 +45,7 @@ class DialogAlert : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        bottomSheetDialog.setCancelable(false)
-        bottomSheetDialog.setCanceledOnTouchOutside(false)
-        bottomSheetDialog.setOnShowListener {
-            val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            if (bottomSheet != null) {
-                val behavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(bottomSheet)
-                behavior.isDraggable = false
-            }
-        }
-        return bottomSheetDialog
+        return super.onCreateDialog(savedInstanceState) as BottomSheetDialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

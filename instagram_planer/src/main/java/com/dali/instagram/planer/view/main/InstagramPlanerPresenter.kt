@@ -33,6 +33,14 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
 //        }
 //    }
 
+    private fun checkVisibleView(){
+        view?.setVisiblePlaceholder(isVisible = this.images.isEmpty())
+        view?.setVisibleClearAll(isVisible = this.images.isNotEmpty())
+        view?.setVisibleRemoveAcc(isVisible = folders.size > 1)
+        view?.setVisibleAccountMoreIcon(isVisible = folders.size > 1)
+        view?.updateBottomMenu()
+    }
+
     fun onLoad(){
         folders = FileStorage.readFilesNameFromDir(dirName = DIR_ROOT)
         if(folders.isEmpty()){
@@ -43,16 +51,18 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
             this.images.addAll(images)
         }
         view?.updateList()
+        checkVisibleView()
     }
 
     fun onInputName(value: String?){
         when{
-            value != null -> {
-                currentFolder = value
+            !value.isNullOrEmpty() && value.isNotBlank() -> {
+                currentFolder = value.trim()
                 FileStorage.makeDir(dirName = userFolder)
                 folders.add(currentFolder)
                 this.images.clear()
                 view?.updateList()
+                checkVisibleView()
             }
             folders.isEmpty() -> {
                 view?.backPress()
@@ -68,6 +78,7 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
                 val images = FileStorage.readFilesFromDir(dirName = userFolder)
                 this.images.addAll(images)
                 view?.updateList()
+                checkVisibleView()
             }
         }
     }
@@ -76,7 +87,15 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
         if(value){
             this.images.clear()
             view?.updateList()
+            checkVisibleView()
             FileStorage.clearDir(dirName = userFolder)
+        }
+    }
+
+    fun onRemoveAccount(value: Boolean){
+        if(value){
+            FileStorage.removeFile(fileName = currentFolder, dirName = DIR_ROOT)
+            onLoad()
         }
     }
 
@@ -99,6 +118,7 @@ class InstagramPlanerPresenter(val context: Context): BaseMvpPresenterImpl<Insta
             FileStorage.copyFileToDir(file = File(getPath(it)), dirName = userFolder, fileName = images.size.toString())
         }
         view?.addImageToList(count = imageUris.size)
+        checkVisibleView()
     }
 
     fun getPath(uri: Uri): String {

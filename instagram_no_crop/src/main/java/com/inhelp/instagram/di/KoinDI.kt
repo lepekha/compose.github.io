@@ -1,9 +1,7 @@
 package com.inhelp.instagram.di
 
-import com.inhelp.instagram.data.TransferObject
-import com.inhelp.instagram.view.edit.NoCropEditPresenter
-import com.inhelp.instagram.view.main.MainPresenter
-import com.inhelp.instagram.view.save.NoCropSavePresenter
+import com.inhelp.instagram.view.main.InstagramCropPresenter
+import com.inhelp.instagram.view.save.InstagramCropSavePresenter
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -15,12 +13,10 @@ object Scope{
                 "INSTAGRAM", named("INSTAGRAM"))
 }
 
-val noCropModule = module {
+val instagramCropModule = module {
 
     scope(named("INSTAGRAM")) {
-        scoped { TransferObject() }
-        scoped { MainPresenter(transferObject = get()) }
-        scoped { NoCropEditPresenter(context = androidContext(), transferObject = get()) }
-        scoped { NoCropSavePresenter(context = androidContext(), transferObject = get()) }
+        scoped { InstagramCropPresenter() }
+        scoped { InstagramCropSavePresenter(context = androidContext(), presenter = get()) }
     }
 }

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.CustomTarget
@@ -17,29 +18,28 @@ import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayout
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.instagram.data.ENoCrop
-import com.inhelp.instagram.view.edit.NoCropEditFragment
 import com.inhelp.crop_image.main.SceneLayout
 import com.inhelp.crop_image.main.data.Ratio
 import com.inhelp.extension.getColorFromAttr
 import com.inhelp.gallery.main.FragmentGallery
 import com.inhelp.instagram.R
 import com.inhelp.instagram.di.Scope
-import com.inhelp.instagram.view.save.NoCropSaveFragment
+import com.inhelp.instagram.view.save.InstagramCropSaveFragment
 import data.BottomMenu
 import data.Menu
 import kotlinx.android.synthetic.main.fragment_instagram_no_crop.*
 import replace
 
 
-class MainFragment : BaseMvpFragment<MainView, MainPresenter>(), MainView {
+class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPresenter>(), InstagramCropView {
 
     companion object {
-        fun newInstance(): MainFragment {
-            return MainFragment()
+        fun newInstance(): InstagramCropFragment {
+            return InstagramCropFragment()
         }
     }
 
-    override val presenter: MainPresenter by lazy { Scope.INSTAGRAM.get() }
+    override val presenter: InstagramCropPresenter by lazy { Scope.INSTAGRAM.get() }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,7 +52,7 @@ class MainFragment : BaseMvpFragment<MainView, MainPresenter>(), MainView {
         }
 
         val btnGallery = BottomMenu(iconResId = com.inhelp.theme.R.drawable.ic_gallery){
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
+            openGallery()
         }
 
         return mutableListOf<Menu>().apply {
@@ -65,10 +65,8 @@ class MainFragment : BaseMvpFragment<MainView, MainPresenter>(), MainView {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.fragment_title_crop))
 
-        if (arguments == null) {
-            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
-        } else {
-            presenter.onLoad(uriString = arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
+        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+            presenter.onAddImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
         imgView.addListener(object : SceneLayout.CropListener {
@@ -80,19 +78,20 @@ class MainFragment : BaseMvpFragment<MainView, MainPresenter>(), MainView {
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 presenter.onTabSelect(tab.position)
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
+                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_5), PorterDuff.Mode.MULTIPLY)
+                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_5))
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_5), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_5))
+                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
+                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
             }
         })
 
+        presenter.onCreate()
     }
 
     override fun createCropOverlay(ratio: Ratio, isGrid: Boolean){
@@ -107,39 +106,26 @@ class MainFragment : BaseMvpFragment<MainView, MainPresenter>(), MainView {
                     this.findViewById<ImageView>(R.id.icon).setImageResource(it.iconResId)
                     this.findViewById<TextView>(R.id.txtTitle).setText(it.titleResId)
                 }
-            })
+            }, false)
         }
     }
 
-    override fun setImage(uri: Uri){
-        Glide
-                .with(imgView.context)
-                .asBitmap()
-                .format(DecodeFormat.PREFER_RGB_565)
-                .load(uri)
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        imgView.setBitmap(resource)
-                        imgView.post {
-                            presenter.onResourceLoad()
-                        }
-                    }
+    override fun openGallery() {
+        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
+    }
 
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                    }
-                })
+    override fun setImage(uri: Uri){
+        imgView.setImage(uri){
+            presenter.onResourceLoad()
+        }
     }
 
     override fun setSelectedTab(position: Int) {
         tab_layout.getTabAt(position)?.select()
     }
 
-    override fun navigateToCropEdit(){
-        getCurrentActivity().supportFragmentManager.replace(fragment = NoCropEditFragment.newInstance(), addToBackStack = true)
-    }
-
     override fun navigateToCropSave(){
-        getCurrentActivity().supportFragmentManager.replace(fragment = NoCropSaveFragment.newInstance(), addToBackStack = true)
+        getCurrentActivity().supportFragmentManager.replace(fragment = InstagramCropSaveFragment.newInstance(), addToBackStack = true)
     }
 
     override fun onDestroy() {

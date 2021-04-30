@@ -1,8 +1,7 @@
 package com.inhelp.instagram.grid.di
 
-import com.inhelp.instagram.grid.data.TransferObject
-import com.inhelp.instagram.grid.view.save.GridSavePresenter
-import com.inhelp.instagram.grid.view.main.GridPresenter
+import com.inhelp.instagram.grid.view.save.InstagramGridSavePresenter
+import com.inhelp.instagram.grid.view.main.InstagramGridPresenter
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -14,11 +13,10 @@ object Scope{
                 "INSTAGRAM", named("INSTAGRAM"))
 }
 
-val gridModule = module {
+val instagramGridModule = module {
 
     scope(named("INSTAGRAM")) {
-        scoped { TransferObject() }
-        scoped { GridSavePresenter(context = androidContext(), transferObject = get()) }
-        scoped { GridPresenter(transferObject = get()) }
+        scoped { InstagramGridSavePresenter(context = androidContext(), presenter = get()) }
+        scoped { InstagramGridPresenter() }
     }
 }

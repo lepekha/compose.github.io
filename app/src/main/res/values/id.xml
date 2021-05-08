@@ -11,6 +11,7 @@
     <item name="id_menu_planer" type="id"/>
     <item name="id_menu_panorama" type="id"/>
     <item name="id_menu_crop" type="id"/>
+    <item name="id_menu_compress" type="id"/>
     <item name="id_menu_grid" type="id"/>
     <item name="id_menu_instagram" type="id"/>
     <item name="id_menu_image" type="id"/>

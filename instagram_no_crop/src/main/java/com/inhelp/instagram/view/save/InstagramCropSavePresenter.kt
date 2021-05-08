@@ -4,12 +4,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.scale
 import com.inhelp.base.mvp.BaseMvpPresenterImpl
-import com.inhelp.color.util.Util
 import com.inhelp.dialogs.main.DialogManager
-import com.inhelp.instagram.data.TransferObject
+import com.inhelp.extension.blur
 import com.inhelp.extension.createTempUri
+import com.inhelp.extension.mergeWith
 import com.inhelp.extension.saveBitmap
 import com.inhelp.instagram.R
 import com.inhelp.instagram.data.ENoCrop
@@ -33,11 +32,11 @@ class InstagramCropSavePresenter(val context: Context, val presenter: InstagramC
             presenter.images.clear()
             view?.setImageBitmap(bitmap = this)
             IMAGE_SIZE = max(this.width, this.height)
-            background = Util.blur(context, this.copy(Bitmap.Config.ARGB_8888, false)).apply {
+            background = this.copy(Bitmap.Config.ARGB_8888, false).blur(context).apply {
                 view?.setImageBackground(this)
             }
 
-            view?.setVisibleEdit(isVisible = this.width != this.height)
+            view?.setVisibleEdit(isVisible = presenter.eNoCrop != ENoCrop.ONE_TO_ONE)
         }
     }
 
@@ -74,7 +73,7 @@ class InstagramCropSavePresenter(val context: Context, val presenter: InstagramC
 
     fun pressBlur() {
         val img = this.image ?: return
-        background = Util.blur(context, img.copy(Bitmap.Config.ARGB_8888, false)).apply {
+        background = img.copy(Bitmap.Config.ARGB_8888, false).blur(context).apply {
             view?.setImageBackground(this)
         }
     }
@@ -83,7 +82,7 @@ class InstagramCropSavePresenter(val context: Context, val presenter: InstagramC
         val background = this.background ?: return null
         val image = this.image ?: return null
         val scaledBackground = Bitmap.createScaledBitmap(background.copy(Bitmap.Config.RGB_565, false), IMAGE_SIZE, IMAGE_SIZE, false)
-        return Util.merge(scaledBackground, image)
+        return scaledBackground.mergeWith(image)
     }
 
 }

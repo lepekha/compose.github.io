@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,9 @@ import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.instagram.R
 import com.inhelp.crop_image.main.SceneLayout
 import com.inhelp.crop_image.main.data.Ratio
+import com.inhelp.extension.EVibrate
 import com.inhelp.extension.getColorFromAttr
+import com.inhelp.extension.setVibrate
 import com.inhelp.gallery.main.FragmentGallery
 import com.inhelp.instagram.grid.data.EGrid
 import com.inhelp.instagram.grid.di.Scope
@@ -102,8 +105,9 @@ class InstagramGridFragment : BaseMvpFragment<InstagramGridView, InstagramGridPr
         EGrid.values().forEach {
             tab_layout.addTab(tab_layout.newTab().apply {
                 this.customView = layoutInflater.inflate(R.layout.element_instagram_grid_menu, null).apply {
+                    this.setVibrate(EVibrate.BUTTON)
                     this.findViewById<ImageView>(R.id.icon).setImageResource(it.iconResId)
-                    this.findViewById<TextView>(R.id.txtTitle).setText(it.title)
+                    this.findViewById<TextView>(R.id.txtTitle).text = it.title
                 }
             }, false)
         }

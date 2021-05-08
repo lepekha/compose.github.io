@@ -11,7 +11,7 @@ class InstagramPanoramaPresenter: BaseMvpPresenterImpl<InstagramPanoramaView>() 
     private var currentUri: Uri? = null
     internal var images = mutableListOf<Bitmap>()
 
-    private var ePanorama = EPanorama.THREE
+    private var ePanorama = EPanorama.TWO
 
     fun pressCrop(bitmaps: List<Bitmap>){
         images.clear()
@@ -31,25 +31,21 @@ class InstagramPanoramaPresenter: BaseMvpPresenterImpl<InstagramPanoramaView>() 
                 return
             }
         }
-        initMode()
     }
 
     fun onCreate(){
+        view?.initPanorama()
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)
-            initMode()
         }else{
             view?.openGallery()
         }
     }
 
-    private fun initMode(){
-        view?.initPanorama()
-    }
-
     fun onResourceLoad() {
         view?.setSelectedTab(value = ePanorama)
+        view?.createCropOverlay(ePanorama.ratio, isGrid = true)
     }
 
     fun onTabSelect(position: Int) {

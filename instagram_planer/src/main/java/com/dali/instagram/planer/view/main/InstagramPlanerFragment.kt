@@ -135,6 +135,7 @@ class InstagramPlanerFragment : BaseMvpFragment<InstagramPlanerView, InstagramPl
             presenter.onAddImages((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
+//        presenter.loadUsers()
         presenter.onLoad()
     }
 

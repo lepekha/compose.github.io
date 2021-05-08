@@ -8,12 +8,14 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.toRect
 import androidx.core.graphics.toRectF
 import com.inhelp.crop_image.R
 import com.inhelp.crop_image.main.data.*
 import com.inhelp.extension.bitmapPosition
 import com.inhelp.extension.dp
+import com.inhelp.extension.getColorFromAttr
 import com.inhelp.extension.vibrate
 
 class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid: Boolean = false, val oldRect: Rect? = null) : Overlay(context) {
@@ -26,20 +28,12 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
 
     private var isAnimate = false
 
-    private val borderColor by lazy {
-        ContextCompat.getColor(context, R.color.crop_border)
-    }
-
-    private val pointInnerColor by lazy {
-        ContextCompat.getColor(context, R.color.crop_touch_point)
-    }
-
-    private val colorActive by lazy {
-        ContextCompat.getColor(context, R.color.crop_touch_active)
+    private val gridColor by lazy {
+        Color.WHITE
     }
 
     private val backgroundColor by lazy {
-        ContextCompat.getColor(context, R.color.crop_background)
+        ColorUtils.setAlphaComponent(Color.BLACK, 100)
     }
 
     private val backgroundPaint = Paint().apply {
@@ -48,14 +42,14 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
     }
 
     private val borderPaint = Paint().apply {
-        this.color = borderColor
+        this.color = gridColor
         this.strokeWidth = 1.dp
         this.isAntiAlias = true
         this.style = Paint.Style.STROKE
     }
 
     private val pointInnerPaint = Paint().apply {
-        this.color = pointInnerColor
+        this.color = gridColor
         this.isAntiAlias = true
         this.strokeWidth = 1.dp
         this.style = Paint.Style.FILL
@@ -105,12 +99,6 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         region.set(backgroundRect)
         region.op(cropRect, op)
 
-        borderPaint.color = if(!moveRect.isEmpty && (action == ECropAction.MOVE_RECT || action == ECropAction.SCALE_RECT)){
-            colorActive
-        }else{
-            borderColor
-        }
-
         canvas.drawPath(region.boundaryPath, backgroundPaint)
         canvas.drawRect(cropRect, borderPaint)
 
@@ -139,15 +127,9 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
                 Point(cropRect.right, cropRect.top),
                 Point(cropRect.right, cropRect.bottom),
                 Point(cropRect.left, cropRect.bottom),
-        ).forEachIndexed { index, point ->
-            pointInnerPaint.color = if (pointNumber == index) {
-                colorActive
-            } else {
-                pointInnerColor
-            }
+        ).forEachIndexed { _, point ->
             val radius = 50.dp
-            canvas.drawCircle(point.x.toFloat(), point.y.toFloat(), 12.dp, pointInnerPaint)
-            canvas.drawCircle(point.x.toFloat(), point.y.toFloat(), 12.dp, borderPaint)
+            canvas.drawCircle(point.x.toFloat(), point.y.toFloat(), 10.dp, pointInnerPaint)
             gestureExclusion.add(Rect(point.x - radius.toInt() / 2, point.y - radius.toInt() / 2, point.x + radius.toInt() / 2, point.y + radius.toInt() / 2))
         }
     }

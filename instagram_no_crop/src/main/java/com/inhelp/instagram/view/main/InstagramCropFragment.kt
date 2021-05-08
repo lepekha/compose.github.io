@@ -2,7 +2,6 @@ package com.inhelp.instagram.view.main
 
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,16 +10,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayout
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.instagram.data.ENoCrop
 import com.inhelp.crop_image.main.SceneLayout
 import com.inhelp.crop_image.main.data.Ratio
+import com.inhelp.extension.EVibrate
 import com.inhelp.extension.getColorFromAttr
+import com.inhelp.extension.setVibrate
 import com.inhelp.gallery.main.FragmentGallery
 import com.inhelp.instagram.R
 import com.inhelp.instagram.di.Scope
@@ -103,8 +100,11 @@ class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPr
         ENoCrop.values().forEach {
             tab_layout.addTab(tab_layout.newTab().apply {
                 this.customView = layoutInflater.inflate(R.layout.element_instagram_no_crop_menu, null).apply {
+                    this.setVibrate(EVibrate.BUTTON)
                     this.findViewById<ImageView>(R.id.icon).setImageResource(it.iconResId)
                     this.findViewById<TextView>(R.id.txtTitle).setText(it.titleResId)
+                    this.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
+                    this.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
                 }
             }, false)
         }

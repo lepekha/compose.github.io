@@ -69,15 +69,15 @@ class DialogChip : BottomSheetDialogFragment() {
         arguments?.getStringArrayList(BUNDLE_KEY_LIST)?.forEachIndexed { index, it ->
             val chip = Chip(context).apply {
                 this.text = it
-                this.chipBackgroundColor = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_2))
+                this.chipBackgroundColor = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_12))
                 this.isCheckable = true
                 this.id = index
                 this.isChipIconVisible = selected == it
                 this.isCheckedIconVisible = false
                 this.isClickable = true
                 this.chipIcon = ContextCompat.getDrawable(view.context, R.drawable.ic_done)
-                this.chipIconTint = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_5))
-                this.setTextColor(view.context.getColorFromAttr(R.attr.color_5))
+                this.chipIconTint = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_10))
+                this.setTextColor(view.context.getColorFromAttr(R.attr.color_10))
                 this.setTextSize(TypedValue.COMPLEX_UNIT_PX, 18.sp)
             }
 

@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.inhelp.view.customView.Image
+    <ua.com.compose.view.customView.Image
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:background="#ccc"

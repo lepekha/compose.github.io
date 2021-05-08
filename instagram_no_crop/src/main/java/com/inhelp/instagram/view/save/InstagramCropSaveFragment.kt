@@ -9,10 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.inhelp.base.mvp.BaseMvpFragment
 import com.inhelp.color.ColorFragment
+import com.inhelp.dialogs.main.dialogs.DialogColor
+import com.inhelp.dialogs.main.dialogs.DialogConfirmation
 import com.inhelp.extension.*
 import com.inhelp.instagram.R
 import com.inhelp.instagram.di.Scope
@@ -22,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_instagram_no_crop_share.*
 import kotlinx.android.synthetic.main.fragment_instagram_no_crop_share.imgView
 
 
-class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, InstagramCropSavePresenter>(), InstagramCropSaveView, ColorFragment.ColorListener {
+class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, InstagramCropSavePresenter>(), InstagramCropSaveView {
 
     companion object {
         fun newInstance() = InstagramCropSaveFragment()
@@ -75,7 +78,12 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
 
         btnColorFill.setVibrate(EVibrate.BUTTON)
         btnColorFill.setOnClickListener {
-            ColorFragment.newInstance(color = Color.WHITE, targetFragment = this).show(requireFragmentManager(), "ColorFragment")
+            val request = DialogColor.show(fm = getCurrentActivity().supportFragmentManager, color = Color.RED)
+            setFragmentResultListener(request) { _, bundle ->
+                presenter.onColorPick(color = bundle.getInt(DialogColor.BUNDLE_KEY_ANSWER_COLOR))
+                btnColorFill.setColorFilter(requireContext().getColorFromAttr(R.attr.color_5))
+                btnBlur.setColorFilter(requireContext().getColorFromAttr(R.attr.color_3))
+            }
         }
 
         presenter.onLoadImage()
@@ -100,12 +108,6 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
 
     override fun setImageBackground(bitmap: Bitmap) {
         imgView.background = bitmap.toDrawable(getCurrentContext().resources)
-    }
-
-    override fun onColorPick(color: Int) {
-        presenter.onColorPick(color = color)
-        btnColorFill.setColorFilter(requireContext().getColorFromAttr(R.attr.color_5))
-        btnBlur.setColorFilter(requireContext().getColorFromAttr(R.attr.color_3))
     }
 
     override fun setVisibleEdit(isVisible: Boolean) {

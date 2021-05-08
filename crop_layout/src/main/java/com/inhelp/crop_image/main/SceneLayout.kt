@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Log
 import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MotionEvent
@@ -131,7 +132,7 @@ class SceneLayout @JvmOverloads constructor(
         overlayLayout.overlays.clear()
         overlayLayout.invalidate()
 
-        Glide.with(context.applicationContext).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).thumbnail(0.1f).listener(
+        Glide.with(context.applicationContext).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).thumbnail(0.1f).listener(
                 object : RequestListener<Drawable>{
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                         return true
@@ -139,7 +140,7 @@ class SceneLayout @JvmOverloads constructor(
 
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                         cropImageView.setImageDrawable(resource)
-                        cropImageView.takeIf { !isFirstResource }?.post {
+                        cropImageView.takeIf { isFirstResource }?.post {
                             onFinish()
                         }
 
@@ -152,6 +153,7 @@ class SceneLayout @JvmOverloads constructor(
                 .asBitmap()
                 .load(uri)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(object: CustomTarget<Bitmap>() {
                     override fun onLoadCleared(placeholder: Drawable?) {}
 

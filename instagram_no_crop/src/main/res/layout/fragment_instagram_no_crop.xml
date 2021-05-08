@@ -42,12 +42,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:tabGravity="center"
             app:tabIndicator="@null"
-            app:tabIndicatorColor="#FFFFFFFF"
-            app:tabMode="scrollable"
+            app:tabMode="fixed"
             app:tabRippleColor="@null"
-            app:tabSelectedTextColor="#DAFFFFFF"
-            app:tabTextAppearance="@style/TabLayoutTextStyle"
-            app:tabTextColor="#51FFFFFF" />
+            app:tabTextAppearance="@style/TabLayoutTextStyle" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textColor="?attr/color_5"
-        android:textSize="28sp"
+        android:textSize="26sp"
         android:textStyle="bold"
         tools:text="Instagram" />
 

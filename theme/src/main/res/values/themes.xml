@@ -7,12 +7,24 @@
         <item name="color_4">@color/color_night_4</item>
         <item name="color_5">@color/color_night_5</item>
         <item name="color_6">@color/color_night_6</item>
+        <item name="color_10">@color/color_night_10</item>
+        <item name="color_11">@color/color_night_11</item>
+        <item name="color_12">@color/color_night_12</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/color_1</item>
         <item name="android:navigationBarColor">?attr/color_primary</item>
         <item name="editTextStyle">@style/EditTextDefault</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="EditTextBottomSheet" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/selector_input_text</item>
+        <item name="android:textColor">?attr/color_5</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
     </style>
 
     <style name="EditTextDefault" parent="android:Widget.EditText">

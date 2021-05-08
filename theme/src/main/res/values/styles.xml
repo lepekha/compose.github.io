@@ -21,12 +21,12 @@
         <item name="android:insetTop">0dp</item>
         <item name="android:insetRight">0dp</item>
         <item name="android:insetBottom">0dp</item>
-        <item name="android:backgroundTint">?attr/color_2</item>
+        <item name="android:backgroundTint">?attr/color_12</item>
         <item name="cornerRadius">5dp</item>
         <item name="iconSize">36dp</item>
         <item name="iconGravity">textStart</item>
-        <item name="iconTint">?attr/color_5</item>
-        <item name="strokeColor">?attr/color_2</item>
+        <item name="iconTint">?attr/color_10</item>
+        <item name="strokeColor">?attr/color_12</item>
         <item name="strokeWidth">1dp</item>
     </style>
 

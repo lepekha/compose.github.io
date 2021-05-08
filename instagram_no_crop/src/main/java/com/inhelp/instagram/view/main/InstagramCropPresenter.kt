@@ -30,25 +30,21 @@ class InstagramCropPresenter: BaseMvpPresenterImpl<InstagramCropView>() {
                 return
             }
         }
-        initMode()
     }
 
     fun onCreate(){
+        view?.initNoCrop()
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)
-            initMode()
         }else{
             view?.openGallery()
         }
     }
 
-    private fun initMode(){
-        view?.initNoCrop()
-    }
-
     fun onResourceLoad() {
         view?.setSelectedTab(position = eNoCrop.ordinal)
+        view?.createCropOverlay(eNoCrop.ratio, isGrid = false)
     }
 
     fun onTabSelect(position: Int) {

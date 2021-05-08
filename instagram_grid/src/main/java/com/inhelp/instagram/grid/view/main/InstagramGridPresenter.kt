@@ -31,25 +31,21 @@ class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
                 return
             }
         }
-        initMode()
     }
 
     fun onCreate() {
+        view?.initGrid()
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)
-            initMode()
         }else{
             view?.openGallery()
         }
     }
 
-    private fun initMode(){
-        view?.initGrid()
-    }
-
     fun onResourceLoad() {
         view?.setSelectedTab(position = eGrid.ordinal)
+        view?.createCropOverlay(eGrid.ratio, isGrid = true)
     }
 
     fun onTabSelect(position: Int) {

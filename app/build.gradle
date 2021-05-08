@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.inhelp"
+        applicationId "ua.com.compose"
         minSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -39,21 +39,21 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':crop')
+    implementation project(':image_crop')
     implementation project(':instagram_no_crop')
     implementation project(':instagram_panorama')
     implementation project(':instagram_grid')
     implementation project(':instagram_planer')
     implementation project(':mvp')
     implementation project(':navigator')
-    implementation project(':text_style')
-    implementation project(':tags')
+    implementation project(':other_text_style')
+    implementation project(':other_tags')
     implementation project(':gallery')
     implementation project(':color')
     implementation project(':extension')
     implementation project(':theme')
     implementation project(':dialogs')
-    implementation project(':rotate')
+    implementation project(':image_rotate')
     implementation project(':file_storage')
 
     implementation("io.coil-kt:coil:1.1.1")

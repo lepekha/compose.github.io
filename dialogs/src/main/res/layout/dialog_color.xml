@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:pikolo="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_bottom_sheet">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="40dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_bottom_sheet_swipe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.madrapps.pikolo.HSLColorPicker
+        android:id="@+id/colorPicker"
+        android:layout_width="0dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:nestedScrollingEnabled="true"
+        android:padding="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnDone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        pikolo:arc_length="120"
+        pikolo:arc_width="10dp"
+        pikolo:hue_arc_length="360"
+        pikolo:hue_radius_offset="10dp"
+        pikolo:lightness_arc_length="300"
+        pikolo:lightness_radius_offset="50dp"
+        pikolo:lightness_start_angle="120"
+        pikolo:saturation_arc_length="1"
+        pikolo:saturation_arc_width="0dp"
+        pikolo:saturation_indicator_radius="0dp"
+        pikolo:saturation_indicator_stroke_width="0dp"
+        pikolo:saturation_radius_offset="0dp"
+        pikolo:saturation_start_angle="0"
+        pikolo:saturation_stroke_width="0dp"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/imgExample"
+        android:layout_width="135dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="135dp"
+        app:layout_constraintBottom_toBottomOf="@+id/colorPicker"
+        app:layout_constraintEnd_toEndOf="@+id/colorPicker"
+        app:layout_constraintStart_toStartOf="@+id/colorPicker"
+        app:layout_constraintTop_toTopOf="@+id/colorPicker"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDone"
+        style="@style/CustomBottomSheetButton"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="30dp"
+        app:icon="@drawable/ic_done"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnCancel"
+        app:layout_constraintTop_toBottomOf="@+id/txtMessage"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.3" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCancel"
+        style="@style/CustomBottomSheetButton"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:icon="@drawable/ic_close"
+        app:layout_constraintBottom_toBottomOf="@+id/btnDone"
+        app:layout_constraintEnd_toStartOf="@+id/btnDone"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnDone"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

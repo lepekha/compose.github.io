@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.inhelp.base.mvp.BaseMvpFragment
-import com.inhelp.extension.dp
+import ua.com.compose.mvp.BaseMvpFragment
+import ua.com.compose.extension.dp
 import com.inhelp.panorama.R
 import kotlinx.android.synthetic.main.fragment_panorama_save.*
 import org.koin.android.ext.android.getKoin

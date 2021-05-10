@@ -73,3 +73,7 @@
 -dontwarn sun.misc.SignalHandler
 -dontwarn java.lang.instrument.Instrumentation
 -dontwarn sun.misc.Signal
+
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class *
+-dontwarn androidx.room.paging.**

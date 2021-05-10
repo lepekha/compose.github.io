@@ -36,7 +36,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menu_1" />
+                app:srcCompat="@drawable/ic_menu_grid" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="BottomMenu" parent="Theme.InHelp">
+    <style name="BottomMenu" parent="Theme.Compose">
         <item name="android:background">@drawable/background_bottom_menu</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">60dp</item>
+    </style>
+
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
@@ -14,6 +20,13 @@
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
         <item name="behavior_peekHeight">500dp</item>
+    </style>
+
+    <style name="CustomSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressTint">?attr/color_5</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
+        <item name="android:secondaryProgressTint">?attr/color_3</item>
+        <item name="android:thumbTint">?attr/color_5</item>
     </style>
 
     <style name="CustomBottomSheetButton" parent="Widget.MaterialComponents.Button.OutlinedButton">

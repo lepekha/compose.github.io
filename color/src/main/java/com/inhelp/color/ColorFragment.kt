@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
-import getListener
+import ua.com.compose.navigator.getListener
 import kotlinx.android.synthetic.main.fragment_color.*
 
 

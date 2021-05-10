@@ -1,6 +1,6 @@
 package com.inhelp.grids.data
 
-import com.inhelp.crop_image.main.data.Ratio
+import ua.com.compose.image_maker.data.Ratio
 import com.inhelp.grids.R
 
 enum class EGrid(val title: String, val iconResId: Int, val ratio: Ratio) {

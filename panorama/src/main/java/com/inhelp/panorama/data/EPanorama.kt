@@ -1,6 +1,6 @@
 package com.inhelp.panorama.data
 
-import com.inhelp.crop_image.main.data.Ratio
+import ua.com.compose.image_maker.data.Ratio
 import com.inhelp.panorama.R
 
 enum class EPanorama(val iconResId: Int, val ratio: Ratio) {

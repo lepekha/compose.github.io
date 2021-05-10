@@ -8,7 +8,7 @@ import ua.com.compose.R
 import kotlinx.android.synthetic.main.fragment_main.*
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.inhelp.base.mvp.BaseMvpFragment
+import ua.com.compose.mvp.BaseMvpFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 

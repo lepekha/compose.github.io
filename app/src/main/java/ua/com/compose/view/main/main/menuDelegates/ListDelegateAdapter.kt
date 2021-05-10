@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import ua.com.compose.R
-import com.inhelp.base.mvp.adapters.ViewTypeDelegateAdapter
+import ua.com.compose.mvp.adapters.ViewTypeDelegateAdapter
 import ua.com.compose.core.models.data.DynamicMenu
 import ua.com.compose.view.main.main.MenuRvAdapter
 import kotlinx.android.synthetic.main.element_menu_list.view.*

@@ -340,7 +340,7 @@ public class Matrix4x4
 
   /**
    * Transform a set of 3D coordinates using this 4x4 matrix.
-   * The result of the operation is put back in the original array.
+   * The result of the operation is put ua.com.compose.navigator.back in the original array.
    *
   public void transformPoints (double[] points)
   {
@@ -367,7 +367,7 @@ public class Matrix4x4
   
   /**
    * Transform a set of 2D (x,y) coordinates using this 4x4 matrix.
-   * The result of the operation is put back in the original array
+   * The result of the operation is put ua.com.compose.navigator.back in the original array
    * rounded to the nearest integer.
    * 
    * @param points  Points to transform [x0,y0,x1,y1,...].
@@ -390,7 +390,7 @@ public class Matrix4x4
   
   /**
    * Transform a set of 3D coordinates using this 4x4 matrix.
-   * The result of the operation is put back in the original array.
+   * The result of the operation is put ua.com.compose.navigator.back in the original array.
    * 
    * @param points  Points to transform [x0,y0,z0,x1,y1,z1,...].
    */
@@ -419,7 +419,7 @@ public class Matrix4x4
   
   /**
    * Transform a set of 2D (x,y) coordinates using this 4x4 matrix.
-   * The result of the operation is put back in the original array
+   * The result of the operation is put ua.com.compose.navigator.back in the original array
    * rounded to the nearest integer.
    * 
    * @param points  Points to transform [x0,y0,x1,y1,...].
@@ -881,7 +881,7 @@ public class Matrix4x4
     y[3] /= length;
     z[3] /= length;
 
-    // Translate back to new origin                                
+    // Translate ua.com.compose.navigator.back to new origin                                
     translate (-x[0], -y[0], -z[0]);
 
     // Multiply with inverse of definition of new coordinate system

@@ -1,7 +1,6 @@
 package com.inhelp.grids.main
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,20 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
-import com.inhelp.base.mvp.BaseMvpFragment
-import com.inhelp.extension.dp
-import com.inhelp.gallery.main.FragmentGallery
+import ua.com.compose.mvp.BaseMvpFragment
 import com.inhelp.grids.R
 import com.inhelp.grids.data.FilterType
 import com.inhelp.grids.data.GPUImageFilterTools
 import jp.co.cyberagent.android.gpuimage.GPUImage
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageSepiaToneFilter
 import kotlinx.android.synthetic.main.fragment_grid.*
 import org.koin.android.ext.android.inject
-import replace
 
 
 class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
@@ -49,7 +41,7 @@ class GridFragment : BaseMvpFragment<GridView, GridPresenter>(), GridView {
         setTitle(getCurrentContext().getString(R.string.fragment_title_grid))
 
 //        if (arguments == null) {
-//            getCurrentActivity().supportFragmentManager.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
+//            getCurrentActivity().supportFragmentManager.ua.com.compose.navigator.replace(fragment = FragmentGallery.newInstance(targetFragment = this), addToBackStack = true)
 //        } else {
 //            presenter.onLoad(arguments?.getString(FragmentGallery.ARGUMENT_ONE_URI))
 //        }

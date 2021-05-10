@@ -11,12 +11,8 @@
 <!--        <item name="android:navigationBarColor">@color/main_background</item>-->
 <!--    </style>-->
 
-    <style name="SplashTheme" parent="Theme.InHelp">
+    <style name="SplashTheme" parent="Theme.Compose">
         <item name="android:windowBackground">@drawable/splash_screen</item>
-    </style>
-
-    <style name="NewTheme.ButtonSaveVideo" parent="Theme.InHelp">
-        <item name="android:background">@drawable/btn_menu_repost_round</item>
     </style>
 
     <style name="Tegs.EditText" parent="Theme.AppCompat.Light.DarkActionBar">

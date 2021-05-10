@@ -6,7 +6,7 @@ import android.provider.MediaStore.MediaColumns
 import android.database.Cursor
 import android.net.Uri
 import androidx.fragment.app.FragmentManager
-import com.inhelp.base.mvp.BaseMvpPresenterImpl
+import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.core.models.data.MenuObjects
 
 
@@ -43,8 +43,8 @@ class PresenterMain(private val menu: MenuObjects): BaseMvpPresenterImpl<ViewMai
 //        if (cursor.moveToFirst()) {
 //            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
 //            do {
-//                val data = cursor.getString(dataColumn)
-//                result.add(data)
+//                val ua.com.compose.mvp.data = cursor.getString(dataColumn)
+//                result.add(ua.com.compose.mvp.data)
 //            } while (cursor.moveToNext())
 //        }
 //        cursor.close()

@@ -4,10 +4,10 @@
     <item
         android:drawable="?attr/color_1"/>
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_logo"/>
-    </item>
+<!--    <item>-->
+<!--        <bitmap-->
+<!--            android:gravity="center"-->
+<!--            android:src="@mipmap/ic_launcher"/>-->
+<!--    </item>-->
 
 </layer-list>

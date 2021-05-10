@@ -14,16 +14,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayout
-import com.inhelp.base.mvp.BaseMvpFragment
-import com.inhelp.crop_image.main.SceneLayout
-import com.inhelp.gallery.main.FragmentGallery
+import ua.com.compose.mvp.BaseMvpFragment
+import ua.com.compose.image_maker.SceneLayout
+import ua.com.compose.gallery.main.FragmentGallery
 import com.inhelp.panorama.R
 import com.inhelp.panorama.data.EPanorama
 import com.inhelp.panorama.view.save.PanoramaSaveFragment
 import kotlinx.android.synthetic.main.fragment_panorama.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
-import replace
+import ua.com.compose.navigator.replace
 
 
 class PanoramaFragment : BaseMvpFragment<PanoramaView, PanoramaPresenter>(), PanoramaView {

@@ -4,11 +4,11 @@ import android.view.*
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.R
-import com.inhelp.extension.EVibrate
-import com.inhelp.extension.getColorFromAttr
-import com.inhelp.extension.setVibrate
-import data.BottomMenu
-import data.Menu
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.getColorFromAttr
+import ua.com.compose.extension.setVibrate
+import ua.com.compose.mvp.data.BottomMenu
+import ua.com.compose.mvp.data.Menu
 import kotlinx.android.synthetic.main.element_bottom_menu_icon.view.*
 
 

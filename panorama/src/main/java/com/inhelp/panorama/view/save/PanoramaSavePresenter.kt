@@ -2,9 +2,8 @@ package com.inhelp.panorama.view.save
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
-import com.inhelp.base.mvp.BaseMvpPresenterImpl
-import com.inhelp.extension.saveBitmap
+import ua.com.compose.mvp.BaseMvpPresenterImpl
+import ua.com.compose.extension.saveBitmap
 import com.inhelp.panorama.data.TransferObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

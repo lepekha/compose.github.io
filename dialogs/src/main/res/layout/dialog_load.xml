@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/dialog_background"
+    android:background="@drawable/module_dialog_background"
     android:foregroundGravity="center"
     app:layout_anchorGravity="center">
 
@@ -13,5 +13,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="20dp"
-        app:srcCompat="@drawable/animate_sync" />
+        app:srcCompat="@drawable/module_dialog_animate_sync" />
 </FrameLayout>

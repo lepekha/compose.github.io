@@ -54,6 +54,7 @@ dependencies {
     implementation project(':theme')
     implementation project(':dialogs')
     implementation project(':image_rotate')
+    implementation project(':image_compress')
     implementation project(':file_storage')
 
     implementation("io.coil-kt:coil:1.1.1")

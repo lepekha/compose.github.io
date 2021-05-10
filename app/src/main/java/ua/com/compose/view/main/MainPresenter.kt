@@ -1,6 +1,6 @@
 package ua.com.compose.view.main
 
-import com.inhelp.base.mvp.BaseMvpPresenterImpl
+import ua.com.compose.mvp.BaseMvpPresenterImpl
 
 
 class MainPresenter constructor() : BaseMvpPresenterImpl<MainView>() {

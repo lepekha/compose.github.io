@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.inhelp.extension.EVibrate
-import com.inhelp.extension.vibrate
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.vibrate
 import com.inhelp.grids.R
 import com.inhelp.grids.data.FilterType
 import com.inhelp.grids.data.GPUImageFilterTools

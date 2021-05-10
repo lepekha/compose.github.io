@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import ua.com.compose.R
-import com.inhelp.base.mvp.adapters.ViewTypeDelegateAdapter
+import ua.com.compose.mvp.adapters.ViewTypeDelegateAdapter
 import ua.com.compose.core.models.data.DynamicMenu
-import com.inhelp.extension.EVibrate
-import com.inhelp.extension.setVibrate
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.setVibrate
 import kotlinx.android.synthetic.main.element_menu_long.view.*
 
 class LongDelegateAdapter : ViewTypeDelegateAdapter {

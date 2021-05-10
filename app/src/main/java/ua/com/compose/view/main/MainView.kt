@@ -1,6 +1,6 @@
 package ua.com.compose.view.main
 
-import com.inhelp.base.mvp.BaseMvpView
+import ua.com.compose.mvp.BaseMvpView
 
 
 interface MainView : BaseMvpView {

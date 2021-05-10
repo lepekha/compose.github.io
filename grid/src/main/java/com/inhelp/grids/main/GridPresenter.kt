@@ -3,8 +3,8 @@ package com.inhelp.grids.main
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import com.inhelp.base.mvp.BaseMvpPresenterImpl
-import com.inhelp.extension.saveBitmap
+import ua.com.compose.mvp.BaseMvpPresenterImpl
+import ua.com.compose.extension.saveBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

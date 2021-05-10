@@ -2,16 +2,17 @@ package ua.com.compose.core.models.data
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.dali.instagram.planer.view.main.InstagramPlanerFragment
-import com.dali.rotate.view.main.ImageRotateFragment
-import com.inhelp.crop.view.main.ImageCropFragment
-import com.inhelp.dialogs.main.FragmentTags
-import com.inhelp.instagram.grid.view.main.InstagramGridFragment
-import com.inhelp.instagram.panorama.view.main.InstagramPanoramaFragment
-import com.inhelp.instagram.view.main.InstagramCropFragment
-import com.inhelp.text_style.main.TextStyleFragment
-import replace
+import ua.com.compose.instagram_planer.view.main.InstagramPlanerFragment
+import ua.com.compose.image_crop.main.ImageCropFragment
+import ua.com.compose.instagram_grid.view.main.InstagramGridFragment
+import ua.com.compose.instagram_panorama.view.main.InstagramPanoramaFragment
+import ua.com.compose.instagram_no_crop.view.main.InstagramCropFragment
+import ua.com.compose.other_text_style.main.TextStyleFragment
+import ua.com.compose.navigator.replace
 import ua.com.compose.R
+import ua.com.compose.image_compress.main.ImageCompressFragment
+import ua.com.compose.image_rotate.main.ImageRotateFragment
+import ua.com.compose.other_tags.main.FragmentTags
 import java.lang.ref.WeakReference
 
 class MenuObjects(context: Context) {
@@ -95,7 +96,7 @@ class MenuObjects(context: Context) {
                 titleResId = -1,
                 iconResId = R.drawable.ic_compress,
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = ImageCompressFragment.newInstance(), addToBackStack = true)
                 },
         )
     }

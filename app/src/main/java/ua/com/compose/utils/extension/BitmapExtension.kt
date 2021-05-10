@@ -9,7 +9,7 @@ import java.io.FileOutputStream
 fun Bitmap.saveToSD() {
     val millis = System.currentTimeMillis()
     val path = Environment.getExternalStorageDirectory().toString()
-    FileOutputStream(File(path, "InHelp_$millis.jpg")).use { out ->
+    FileOutputStream(File(path, "compose_$millis.jpg")).use { out ->
         this.compress(Bitmap.CompressFormat.JPEG, 100, out)
     }
 }

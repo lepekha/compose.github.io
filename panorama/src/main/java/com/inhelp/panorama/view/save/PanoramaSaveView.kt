@@ -1,7 +1,7 @@
 package com.inhelp.panorama.view.save
 
 import android.net.Uri
-import com.inhelp.base.mvp.BaseMvpView
+import ua.com.compose.mvp.BaseMvpView
 
 
 interface PanoramaSaveView : BaseMvpView {

@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:visibility="visible"
-            app:srcCompat="@drawable/menu_1" />
+            app:srcCompat="@drawable/ic_menu_grid" />
 
 
     </com.google.android.material.card.MaterialCardView>

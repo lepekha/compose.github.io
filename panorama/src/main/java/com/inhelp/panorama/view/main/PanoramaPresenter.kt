@@ -2,7 +2,7 @@ package com.inhelp.panorama.view.main
 
 import android.graphics.Bitmap
 import android.net.Uri
-import com.inhelp.base.mvp.BaseMvpPresenterImpl
+import ua.com.compose.mvp.BaseMvpPresenterImpl
 import com.inhelp.panorama.data.TransferObject
 
 

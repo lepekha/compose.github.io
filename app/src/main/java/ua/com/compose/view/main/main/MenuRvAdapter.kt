@@ -7,7 +7,7 @@ package ua.com.compose.view.main.main
 import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.inhelp.base.mvp.adapters.ViewTypeDelegateAdapter
+import ua.com.compose.mvp.adapters.ViewTypeDelegateAdapter
 import ua.com.compose.core.models.data.DynamicMenu
 import ua.com.compose.view.main.main.menuDelegates.*
 

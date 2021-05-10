@@ -26,7 +26,7 @@
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="#51FFFFFF" />
 
-    <com.inhelp.crop_image.main.SceneLayout
+    <ua.com.compose.image_maker.SceneLayout
         android:id="@+id/imgView"
         android:layout_width="0dp"
         android:layout_height="0dp"

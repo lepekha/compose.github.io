@@ -2,29 +2,45 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>One HTML Page Challenge</title>
+        <title>Compose mobile application</title>
 
-        <!-- Icons -->
 
         <!-- Favicon -->
         <!-- <link rel="shortcut icon" href="./meta/favicon.ico" /> -->
         
         <style>
-        
+        @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-            body {
-                background: #000000;
-            }
+        #id_logo{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20vh;
+            width: 15vw;
+            min-width: 180px;
+        }
+
+        #id_app_name{
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 1000;
+            font-size: 5em;
+            margin-top: 5vh;
+            width: 100%;
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        body {
+             background: #000000;
+        }
 
         </style>
     </head>
     <body>
-        <div class="container">
-                        <p>
-                            The goal is to create anything you want within 1 single html file. Practice your skills with no assistance from libraries, no separation of files, and no assistance of a modern framework.
-                            <b>How creative can you be with such restrictions?</b>
-                        </p>
+        <div id="id_container">
+            <img id="id_logo" src="logo.svg" alt="Logo">
+            <p id="id_app_name">Compose</p>
         </div>
-        <br />
     </body>
 </html>

@@ -1,8 +1,11 @@
 package ua.com.compose.view.main
 
+import android.content.res.ColorStateList
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import ua.com.compose.R
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.getColorFromAttr
@@ -30,13 +33,14 @@ class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<Bo
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = menu[position] as BottomMenu
         holder.btnMenu.isClickable = item.isEnabled
-        holder.btnMenu.setImageResource(item.iconResId)
+        holder.btnIcon.setImageResource(item.iconResId)
         val iconTintRes = item.iconTintRes ?: R.attr.color_1
-        holder.btnMenu.setImageResource(item.iconResId)
-        holder.btnMenu.setColorFilter(holder.btnMenu.context.getColorFromAttr(iconTintRes))
+        holder.btnIcon.setImageResource(item.iconResId)
+        holder.btnIcon.setColorFilter(holder.btnMenu.context.getColorFromAttr(iconTintRes))
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val btnMenu: ImageView = view.btnMenu
+        val btnMenu: FrameLayout = view.btnMenu
+        val btnIcon: ImageView = view.btnIcon
     }
 }

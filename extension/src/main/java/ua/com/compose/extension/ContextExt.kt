@@ -153,7 +153,7 @@ fun Context.createImageIntent(uri: Uri) {
     startActivity(Intent.createChooser(share, "Share to"))
 }
 
-fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "") {
+fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "", quality: Int = 90, sizePercent: Int = 100) {
     val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
     val myDir = File("$root/Compose")
     myDir.mkdirs()
@@ -162,21 +162,21 @@ fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "") {
     val file = File(myDir, fname)
     if (file.exists()) file.delete()
     FileOutputStream(file).use { out ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
+        Bitmap.createScaledBitmap(bitmap, (bitmap.width * sizePercent) / 100, (bitmap.height * sizePercent) / 100, false).compress(Bitmap.CompressFormat.JPEG, quality, out)
     }
     MediaScannerConnection.scanFile(this, arrayOf(file.absolutePath), arrayOf("image/jpg"), null)
 }
 
 
-fun Context.createTempUri(bitmap: Bitmap): Uri {
+fun Context.createTempUri(bitmap: Bitmap, quality: Int = 90, sizePercent: Int = 100, name: String = "compose_instagram"): Uri {
     val root = this.cacheDir.path
     val myDir = File("$root/temp")
     myDir.mkdirs()
-    val fname = "compose_instagram.jpg"
+    val fname = "$name.jpg"
     val file = File(myDir, fname)
     if (file.exists()) file.delete()
     FileOutputStream(file).use { out ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+        Bitmap.createScaledBitmap(bitmap, (bitmap.width * sizePercent) / 100, (bitmap.height * sizePercent) / 100, false).compress(Bitmap.CompressFormat.JPEG, quality, out)
     }
     return Uri.fromFile(file)
 }

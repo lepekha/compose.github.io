@@ -1,4 +1,4 @@
 <resources>
-    <string name="module_image_rotate_fragment_image_rotate_title">Rotate your image:</string>
+    <string name="module_image_rotate_fragment_image_rotate_title">Rotate</string>
     <string name="module_image_rotate_fragment_image_crop_save_ready">Image saved</string>
 </resources>

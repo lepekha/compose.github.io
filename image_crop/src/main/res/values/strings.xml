@@ -1,5 +1,5 @@
 <resources>
-    <string name="module_image_crop_fragment_image_crop_title">Crop your image:</string>
+    <string name="module_image_crop_fragment_image_crop_title">Crop</string>
     <string name="module_image_crop_fragment_image_crop_save_ready">Image saved</string>
 
     <string name="module_image_crop_fragment_crop_aspect_ratio_origin">ORIGINAL</string>

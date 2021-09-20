@@ -1,5 +1,5 @@
 <resources>
-    <string name="module_image_compress_title">Compress your image:</string>
+    <string name="module_image_compress_title">Compress</string>
     <string name="module_image_compress_size">Size:</string>
     <string name="module_image_compress_quality">Quality:</string>
     <string name="module_image_compress_save_ready">Image saved</string>

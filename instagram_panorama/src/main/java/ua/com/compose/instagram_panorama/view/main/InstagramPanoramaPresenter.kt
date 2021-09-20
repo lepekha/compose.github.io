@@ -33,8 +33,9 @@ class InstagramPanoramaPresenter: BaseMvpPresenterImpl<InstagramPanoramaView>() 
         }
     }
 
-    fun onCreate(){
+    fun onCreate(uri: Uri?){
         view?.initPanorama()
+        this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)

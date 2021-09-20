@@ -2,6 +2,7 @@ package ua.com.compose.file_storage
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import java.io.File
 import java.io.IOException
 import java.net.URLEncoder
@@ -77,11 +78,12 @@ object FileStorage {
         }
     }
 
-    fun copyFileToDir(file: File, dirName: String, fileName: String){
+    fun copyFileToDir(file: File, dirName: String, fileName: String): Uri {
         val dirPath = makeDir(dirName)
         val outputFile = File(dirPath, fileName)
         removeFile(fileName = fileName, dirName = dirName)
         file.copyTo(outputFile)
+        return Uri.fromFile(outputFile)
     }
 
     fun clearDir(dirName: String) {

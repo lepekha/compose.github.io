@@ -9,10 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.RecyclerView
-import coil.imageLoader
-import coil.request.CachePolicy
-import coil.request.ImageRequest
-import coil.size.Scale
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.module_gallery_element_gallery_images.view.*
@@ -111,27 +107,6 @@ class GalleryRvAdapter(val context: Context, val images: MutableList<Uri>, val s
 //            crossfade(true)
 //            scale(Scale.FIT)
 //        }
-    }
-
-    private fun loadImage(imageView: ImageView, position: Int) = CoroutineScope(Dispatchers.Main).launch {
-        val request = ImageRequest.Builder(imageView.context)
-                .data(images[position])
-                .allowRgb565(true)
-                .scale(Scale.FIT)
-                .size(50.dp.toInt())
-                .memoryCachePolicy(CachePolicy.DISABLED)
-                .diskCachePolicy(CachePolicy.ENABLED)
-//                .placeholderMemoryCacheKey(images[position].toString())
-                .target(
-                        onSuccess = {
-                            imageView.setImageDrawable(it)
-                        }
-                )
-                .build()
-
-        withContext(Dispatchers.IO) {
-            imageView.context.imageLoader.execute(request)
-        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {

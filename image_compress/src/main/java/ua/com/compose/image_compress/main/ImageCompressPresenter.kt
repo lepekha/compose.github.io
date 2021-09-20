@@ -1,32 +1,27 @@
 package ua.com.compose.image_compress.main
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
+import android.graphics.*
 import android.net.Uri
 import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.dialog.DialogManager
 import ua.com.compose.extension.createTempUri
-import ua.com.compose.extension.saveBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ua.com.compose.image_compress.R
+import ua.com.compose.mvp.BaseMvpActivity
+import ua.com.compose.mvp.BaseMvpView
 import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
-import java.io.OutputStream
+import kotlin.math.max
 
 
 class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCompressView>() {
 
-    companion object {
-        private const val ROTATE_ANGEL = 90f
-    }
 
     private var currentUri: Uri? = null
     private var image: Bitmap? = null
+    private var sampleImage: Bitmap? = null
 
     private var quality: Int = 100
     private var size: Int = 100
@@ -45,7 +40,8 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
         }
     }
 
-    fun onCreate(){
+    fun onCreate(uri: Uri?){
+        this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)
@@ -54,9 +50,22 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
         }
     }
 
-    fun onQualityChange(progress: Int){
+    fun onQualityChange(progress: Int) = CoroutineScope(Dispatchers.Main).launch {
         quality = progress
-        view?.setNewProp(quality = quality, size = size)
+        this@ImageCompressPresenter.sampleImage?.let { sample ->
+            withContext(Dispatchers.IO) { createBitmap(sample) }?.let {
+                view?.setImage(it)
+            }
+        }
+    }
+
+    fun onSizeChange(progress: Int) = CoroutineScope(Dispatchers.Main).launch {
+        size = max(progress, 1)
+        this@ImageCompressPresenter.sampleImage?.copy(Bitmap.Config.ARGB_8888, false)?.let { sample ->
+            withContext(Dispatchers.IO) { createBitmap(sample) }?.let {
+                view?.setImage(it)
+            }
+        }
     }
 
     fun pressImageDown(){
@@ -69,39 +78,30 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
         onQualityChange(progress = quality)
     }
 
-    fun onSizeChange(progress: Int){
-        size = progress
-    }
-
-    fun pressSave() = CoroutineScope(Dispatchers.Main).launch {
+    fun pressDone() = CoroutineScope(Dispatchers.Main).launch {
         val dialog = DialogManager.createLoad{}
         withContext(Dispatchers.IO) {
-            createBitmap()?.let { context.saveBitmap(it) }
-        }
-        view?.showAlert(R.string.module_image_compress_save_ready)
-        dialog.closeDialog()
-    }
-
-    private fun createBitmap(): Bitmap? {
-        image?.let {
-            ByteArrayOutputStream().use { out ->
-                it.compress(Bitmap.CompressFormat.JPEG, quality, out)
-                return BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size())
+            this@ImageCompressPresenter.image?.let { bitmap ->
+                context.createTempUri(bitmap = bitmap, quality = quality, sizePercent = size, name = System.currentTimeMillis().toString())
             }
-
-//            return  Bitmap.createBitmap(it, 0, 0, it.width, it.height, true)
+        }?.let { uri ->
+            view?.saveToResult(uri)
         }
-        return null
+        dialog.closeDialog()
+        (view?.getCurrentActivity() as BaseMvpView)?.backPress()
     }
 
-    fun pressShare() = CoroutineScope(Dispatchers.Main).launch {
-        createBitmap()?.let { bitmap ->
-            val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
-            view?.createShareIntent(uri)
+    @Synchronized
+    private fun createBitmap(image: Bitmap): Bitmap? {
+        ByteArrayOutputStream().use { out ->
+            val btm = Bitmap.createScaledBitmap(image, (image.width * size) / 100, (image.height * size) / 100, true)
+            btm.compress(Bitmap.CompressFormat.JPEG, quality, out)
+            return BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size())
         }
     }
 
-    fun onResourceLoad(image: Bitmap){
+    fun onResourceLoad(image: Bitmap, sampleImage: Bitmap){
         this.image = image
+        this.sampleImage = sampleImage
     }
 }

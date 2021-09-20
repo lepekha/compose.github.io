@@ -10,6 +10,9 @@ class User {
     @ColumnInfo(name = "id")
     var id: Long = 0
 
+    @ColumnInfo(name = "currentUser")
+    var currentUser: Boolean = true
+
     @ColumnInfo(name = "name")
     var name: String = ""
 }

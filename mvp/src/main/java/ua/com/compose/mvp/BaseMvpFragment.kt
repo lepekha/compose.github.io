@@ -1,10 +1,12 @@
 package ua.com.compose.mvp
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatDialogFragment
 
-abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> : androidx.fragment.app.DialogFragment(), BaseMvpView {
+abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> : AppCompatDialogFragment(), BaseMvpView {
 
     protected abstract val presenter: T
     private var view: BaseMvpActivity<BaseMvpView, BaseMvpPresenterImpl<BaseMvpView>>? = null
@@ -29,8 +31,8 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         return (activity as BaseMvpActivity<*, *>).getCurrentActivity()
     }
 
-    override fun setTitle(title: String) {
-        (activity as BaseMvpActivity<*, *>).setTitle(title)
+    override fun setTitle(title: String, startDrawable: Drawable?) {
+        (activity as BaseMvpActivity<*, *>).setTitle(title, startDrawable)
     }
 
     override fun setVisibleBack(isVisible: Boolean) {

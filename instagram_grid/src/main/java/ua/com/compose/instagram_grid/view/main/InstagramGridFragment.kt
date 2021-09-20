@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.module_instagram_grid_fragment_instagram_grid.*
@@ -31,8 +32,15 @@ import ua.com.compose.instagram_grid.R
 class InstagramGridFragment : BaseMvpFragment<InstagramGridView, InstagramGridPresenter>(), InstagramGridView {
 
     companion object {
-        fun newInstance(): InstagramGridFragment {
-            return InstagramGridFragment()
+
+        private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
+
+        fun newInstance(uri: Uri?): InstagramGridFragment {
+            return InstagramGridFragment().apply {
+                arguments = bundleOf(
+                    BUNDLE_KEY_IMAGE_URI to uri
+                )
+            }
         }
     }
 
@@ -88,7 +96,9 @@ class InstagramGridFragment : BaseMvpFragment<InstagramGridView, InstagramGridPr
             }
         })
 
-        presenter.onCreate()
+        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
+
+        presenter.onCreate(uri = inputUri)
     }
 
     override fun openGallery() {

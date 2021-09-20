@@ -9,6 +9,5 @@ interface ImageCompressView : BaseMvpView {
     fun setImage(uri: Uri)
     fun setImage(bmp: Bitmap)
     fun openGallery()
-    fun setNewProp(quality: Int, size: Int)
-    fun createShareIntent(uri: Uri)
+    fun saveToResult(uri: Uri)
 }

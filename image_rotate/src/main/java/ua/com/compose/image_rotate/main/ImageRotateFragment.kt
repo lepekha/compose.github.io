@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -28,13 +30,21 @@ import ua.com.compose.mvp.data.Menu
 import kotlinx.android.synthetic.main.module_image_rotate_fragment_rotate_main.*
 import ua.com.compose.extension.setVibrate
 import ua.com.compose.image_rotate.R
+import ua.com.compose.mvp.BaseMvpView
 
 
 class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresenter>(), ImageRotateView {
 
     companion object {
-        fun newInstance(): ImageRotateFragment {
-            return ImageRotateFragment()
+        const val REQUEST_KEY = "REQUEST_KEY_IMAGE"
+        private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
+
+        fun newInstance(uri: Uri?): ImageRotateFragment {
+            return ImageRotateFragment().apply {
+                arguments = bundleOf(
+                    BUNDLE_KEY_IMAGE_URI to uri
+                )
+            }
         }
     }
 
@@ -45,15 +55,9 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
         return inflater.inflate(R.layout.module_image_rotate_fragment_rotate_main, container, false)
     }
 
-    private val btnShare by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_share) {
-            presenter.pressShare()
-        }
-    }
-
-    private val btnDownload by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_download) {
-            presenter.pressSave()
+    private val btnDone by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_done) {
+            presenter.pressDone()
         }
     }
 
@@ -66,9 +70,13 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
             this.add(btnGallery)
-            this.add(btnShare)
-            this.add(btnDownload)
+            this.add(btnDone)
         }
+    }
+
+    override fun saveToResult(uri: Uri) {
+        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGE_URI to uri))
+        (requireActivity() as BaseMvpView).backPress()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,7 +102,9 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
             presenter.pressRotateRight()
         }
 
-        presenter.onCreate()
+        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
+
+        presenter.onCreate(uri = inputUri)
     }
 
     override fun openGallery() {
@@ -114,10 +124,6 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
     override fun setRotateToImage(angel: Float) {
         val animateRotation: ObjectAnimator = ObjectAnimator.ofFloat(imgView, "rotation", imgView.rotation, angel).setDuration(200)
         animateRotation.start()
-    }
-
-    override fun createShareIntent(uri: Uri) {
-        getCurrentActivity().createImageIntent(uri)
     }
 
     override fun setImage(uri: Uri) {

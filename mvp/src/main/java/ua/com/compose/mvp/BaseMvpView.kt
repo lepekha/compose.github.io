@@ -1,6 +1,8 @@
 package ua.com.compose.mvp
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import ua.com.compose.mvp.data.Menu
 
@@ -12,7 +14,7 @@ interface BaseMvpView {
 
     fun showAlert(@StringRes srtResId: Int)
 
-    fun setTitle(title: String)
+    fun setTitle(title: String, startDrawable: Drawable? = null)
 
     fun setVisibleBack(isVisible: Boolean)
 
@@ -21,10 +23,6 @@ interface BaseMvpView {
     fun createBottomMenu(): MutableList<Menu> = mutableListOf()
 
     fun updateBottomMenu()
-
-//    fun bottomSheetCreate()
-//
-//    fun bottomSheetDestroy()
 
     fun backToMain()
 }

@@ -10,6 +10,7 @@
     <attr name="color_10" format="color"/>
     <attr name="color_11" format="color"/>
     <attr name="color_12" format="color"/>
+    <attr name="color_13" format="color"/>
     <attr name="color_primary" format="color"/>
     <attr name="color_primaryLight" format="color"/>
     <attr name="color_primaryDark" format="color"/>

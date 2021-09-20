@@ -26,7 +26,6 @@ class PresenterGalleryContent(val context: Context, val presenterGallery: Presen
         }else{
             selectedImages.add(uri)
         }
-        presenterGallery.updateCounter()
 
         if(!presenterGallery.isMultiSelect && selectedImages.isNotEmpty()){
             presenterGallery.addImage()

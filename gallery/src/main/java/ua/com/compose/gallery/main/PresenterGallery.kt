@@ -26,10 +26,6 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
         _multiSelect = isMultiSelect
     }
 
-    fun updateCounter(){
-        view?.setCount(value = (selectedImages.size).toString())
-    }
-
     fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
         val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val imageFolders = mutableMapOf<String, ImageFolder>()

@@ -2,6 +2,8 @@ package ua.com.compose.extension
 
 import android.content.res.Resources
 import android.util.TypedValue
+import java.math.RoundingMode
+import java.util.*
 
 val Int.dp: Float
     get() {
@@ -12,3 +14,7 @@ val Int.sp: Float
     get() {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics)
     }
+
+fun Int.toPercentString(): String {
+    return "$this%"
+}

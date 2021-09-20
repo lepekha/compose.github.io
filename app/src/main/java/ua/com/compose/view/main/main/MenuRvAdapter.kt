@@ -11,7 +11,7 @@ import ua.com.compose.mvp.adapters.ViewTypeDelegateAdapter
 import ua.com.compose.core.models.data.DynamicMenu
 import ua.com.compose.view.main.main.menuDelegates.*
 
-class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MenuRvAdapter(private val items: List<DynamicMenu>, private val onPress: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val VIEW_TYPE_SHORT = 0
@@ -27,12 +27,12 @@ class MenuRvAdapter(private val items: List<DynamicMenu>) : RecyclerView.Adapter
 
     init {
         mDelegateAdapters.put(VIEW_TYPE_SHORT, ShortDelegateAdapter())
-        mDelegateAdapters.put(VIEW_TYPE_MEDIUM, MediumDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_MEDIUM, MediumDelegateAdapter(onPress = onPress))
         mDelegateAdapters.put(VIEW_TYPE_LONG, LongDelegateAdapter())
         mDelegateAdapters.put(VIEW_TYPE_TEXT, TextDelegateAdapter())
-        mDelegateAdapters.put(VIEW_TYPE_LIST, ListDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_LIST, ListDelegateAdapter(onPress = onPress))
         mDelegateAdapters.put(VIEW_TYPE_ICON, IconDelegateAdapter())
-        mDelegateAdapters.put(VIEW_TYPE_GRID, GridDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_GRID, GridDelegateAdapter(onPress = onPress))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

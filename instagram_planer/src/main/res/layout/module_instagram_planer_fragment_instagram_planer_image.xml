@@ -12,35 +12,23 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:transitionName="item_image"
-        app:layout_constraintBottom_toTopOf="@+id/btnShare"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:scaleX="1"
+        app:layout_constraintBottom_toTopOf="@+id/btnInstagram"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
 
     <ImageButton
         android:id="@+id/btnDownload"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:tint="?attr/color_5"
-        app:layout_constraintBottom_toBottomOf="@+id/btnShare"
-        app:layout_constraintEnd_toStartOf="@+id/btnShare"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnShare"
-        app:srcCompat="@drawable/ic_download" />
-
-    <ImageButton
-        android:id="@+id/btnShare"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="24dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:scaleType="fitCenter"
@@ -48,22 +36,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnInstagram"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnDownload"
-        app:srcCompat="@drawable/ic_share" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_download" />
 
     <ImageButton
         android:id="@+id/btnInstagram"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_marginBottom="24dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:scaleType="fitCenter"
         android:tint="?attr/color_5"
-        app:layout_constraintBottom_toBottomOf="@+id/btnShare"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnShare"
-        app:layout_constraintTop_toTopOf="@+id/btnShare"
+        app:layout_constraintStart_toEndOf="@+id/btnDownload"
         app:srcCompat="@drawable/ic_instagram" />
 
 

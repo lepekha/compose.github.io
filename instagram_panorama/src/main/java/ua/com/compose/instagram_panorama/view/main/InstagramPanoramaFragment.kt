@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.tabs.TabLayout
@@ -32,8 +33,15 @@ import ua.com.compose.instagram_panorama.R
 class InstagramPanoramaFragment : BaseMvpFragment<InstagramPanoramaView, InstagramPanoramaPresenter>(), InstagramPanoramaView {
 
     companion object {
-        fun newInstance(): InstagramPanoramaFragment {
-            return InstagramPanoramaFragment()
+
+        private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
+
+        fun newInstance(uri: Uri?): InstagramPanoramaFragment {
+            return InstagramPanoramaFragment().apply {
+                arguments = bundleOf(
+                    BUNDLE_KEY_IMAGE_URI to uri
+                )
+            }
         }
     }
 
@@ -93,7 +101,9 @@ class InstagramPanoramaFragment : BaseMvpFragment<InstagramPanoramaView, Instagr
             }
         })
 
-        presenter.onCreate()
+        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
+
+        presenter.onCreate(uri = inputUri)
     }
 
     override fun openGallery() {

@@ -7,7 +7,7 @@ import ua.com.compose.mvp.BaseMvpView
 interface ImageRotateView : BaseMvpView {
     fun setImage(uri: Uri)
     fun openGallery()
-    fun createShareIntent(uri: Uri)
+    fun saveToResult(uri: Uri)
     fun setFlipXToImage(scale: Float)
     fun setFlipYToImage(scale: Float)
     fun setRotateToImage(angel: Float)

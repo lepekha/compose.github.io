@@ -8,8 +8,8 @@ import ua.com.compose.image_maker.data.Ratio
 interface ImageCropView : BaseMvpView {
     fun setImage(uri: Uri)
     fun initCrop()
+    fun saveToResult(uri: Uri)
     fun openGallery()
-    fun createShareIntent(uri: Uri)
     fun setSelectedTab(position: Int)
     fun createCropOverlay(ratio: Ratio, isGrid: Boolean)
 }

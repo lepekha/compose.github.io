@@ -11,13 +11,14 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
 import kotlinx.android.synthetic.main.element_menu_medium.view.*
 
-class MediumDelegateAdapter : ViewTypeDelegateAdapter {
+class MediumDelegateAdapter(val onPress: () -> Unit): ViewTypeDelegateAdapter {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return ViewHolder(parent).apply {
             this.root.setOnClickListener {
                 innerItem.onPress()
+                onPress()
             }
             this.root.setVibrate(type = EVibrate.BUTTON)
         }

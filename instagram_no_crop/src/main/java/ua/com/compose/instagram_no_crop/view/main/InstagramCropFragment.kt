@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.module_instagram_no_crop_fragment_instagram_no_crop.*
@@ -31,8 +32,15 @@ import ua.com.compose.instagram_no_crop.R
 class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPresenter>(), InstagramCropView {
 
     companion object {
-        fun newInstance(): InstagramCropFragment {
-            return InstagramCropFragment()
+
+        private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
+
+        fun newInstance(uri: Uri?): InstagramCropFragment {
+            return InstagramCropFragment().apply {
+                arguments = bundleOf(
+                        BUNDLE_KEY_IMAGE_URI to uri
+                )
+            }
         }
     }
 
@@ -88,7 +96,9 @@ class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPr
             }
         })
 
-        presenter.onCreate()
+        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
+
+        presenter.onCreate(uri = inputUri)
     }
 
     override fun createCropOverlay(ratio: Ratio, isGrid: Boolean){

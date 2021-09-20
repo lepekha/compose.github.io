@@ -1,0 +1,49 @@
+package ua.com.compose.mvp
+
+import android.content.Context
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatDialogFragment
+
+abstract class BaseMvvmFragment: AppCompatDialogFragment(), BaseMvpView {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(createBottomMenu())
+        setVisibleBack(true)
+    }
+
+    override fun showAlert(srtResId: Int) {
+        (activity as BaseMvpActivity<*, *>).showAlert(srtResId)
+    }
+
+    override fun getCurrentContext(): Context {
+        return (activity as BaseMvpActivity<*, *>).getCurrentContext()
+    }
+
+
+    override fun getCurrentActivity(): androidx.fragment.app.FragmentActivity {
+        return (activity as BaseMvpActivity<*, *>).getCurrentActivity()
+    }
+
+    override fun setTitle(title: String, startDrawable: Drawable?) {
+        (activity as BaseMvpActivity<*, *>).setTitle(title, startDrawable)
+    }
+
+    override fun setVisibleBack(isVisible: Boolean) {
+        (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
+    }
+
+    override fun backPress(): Boolean {
+        return false
+    }
+
+    override fun updateBottomMenu() {
+        (activity as BaseMvpActivity<*, *>).updateBottomMenu()
+    }
+
+    override fun backToMain() {
+        (activity as BaseMvpActivity<*, *>).backToMain()
+    }
+}

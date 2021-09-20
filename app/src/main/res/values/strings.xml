@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Compose</string>
 
-    <string name="fragment_title_menu">Make your choiсe:</string>
+    <string name="fragment_title_menu">ompose</string>
+    <string name="module_main_app_info">Made by Lepekha Ruslan\nver.: 1.0</string>
+    <string name="module_main_insert_help">Press on the menu item for use image</string>
 
     <string name="new_message_notification_title_template">New message: %1$s</string>
 

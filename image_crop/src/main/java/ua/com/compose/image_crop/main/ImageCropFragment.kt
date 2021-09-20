@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.tabs.TabLayout
 import ua.com.compose.mvp.BaseMvpFragment
@@ -25,13 +27,21 @@ import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import kotlinx.android.synthetic.main.module_image_crop_fragment_image_crop.*
 import ua.com.compose.image_crop.R
+import ua.com.compose.mvp.BaseMvpView
 
 
 class ImageCropFragment : BaseMvpFragment<ImageCropView, ImageCropPresenter>(), ImageCropView {
 
     companion object {
-        fun newInstance(): ImageCropFragment {
-            return ImageCropFragment()
+        const val REQUEST_KEY = "REQUEST_KEY_IMAGE"
+        private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
+
+        fun newInstance(uri: Uri?): ImageCropFragment {
+            return ImageCropFragment().apply {
+                arguments = bundleOf(
+                    BUNDLE_KEY_IMAGE_URI to uri
+                )
+            }
         }
     }
 
@@ -42,16 +52,8 @@ class ImageCropFragment : BaseMvpFragment<ImageCropView, ImageCropPresenter>(), 
         return inflater.inflate(R.layout.module_image_crop_fragment_image_crop, container, false)
     }
 
-    private val btnShare by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_share) {
-            presenter.pressShare()
-            imgView.makeCrop()
-        }
-    }
-
-    private val btnDownload by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_download) {
-            presenter.pressSave()
+    private val btnDone by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_done) {
             imgView.makeCrop()
         }
     }
@@ -65,9 +67,13 @@ class ImageCropFragment : BaseMvpFragment<ImageCropView, ImageCropPresenter>(), 
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
             this.add(btnGallery)
-            this.add(btnShare)
-            this.add(btnDownload)
+            this.add(btnDone)
         }
+    }
+
+    override fun saveToResult(uri: Uri) {
+        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGE_URI to uri))
+        (requireActivity() as BaseMvpView).backPress()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -99,15 +105,13 @@ class ImageCropFragment : BaseMvpFragment<ImageCropView, ImageCropPresenter>(), 
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        presenter.onCreate()
+        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
+
+        presenter.onCreate(uri = inputUri)
     }
 
     override fun openGallery() {
         FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
-    }
-
-    override fun createShareIntent(uri: Uri) {
-        getCurrentActivity().createImageIntent(uri)
     }
 
     override fun createCropOverlay(ratio: Ratio, isGrid: Boolean) {

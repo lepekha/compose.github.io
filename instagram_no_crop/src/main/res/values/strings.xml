@@ -1,5 +1,5 @@
 <resources>
-    <string name="module_instagram_no_crop_fragment_title_crop">Create no crop image:</string>
+    <string name="module_instagram_no_crop_fragment_title_crop">No crop</string>
     <string name="module_instagram_no_crop_fragment_title_crop_edit">Edit your image:</string>
     <string name="module_instagram_no_crop_fragment_title_crop_share">Share your image:</string>
     <string name="module_instagram_no_crop_fragment_title_no_crop_save_images">Save images:</string>

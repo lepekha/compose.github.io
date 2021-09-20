@@ -6,9 +6,7 @@
     android:layout_width="150dp"
     android:layout_height="80dp"
     android:layout_margin="8dp"
-    app:strokeColor="?attr/color_3"
-    app:strokeWidth="1dp"
-    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="?attr/color_2"
     app:cardCornerRadius="5dp">
 
     <TextView

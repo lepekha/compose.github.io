@@ -1,6 +1,5 @@
 package ua.com.compose.core.models.data
 
-import android.content.Context
 import androidx.fragment.app.FragmentManager
 import ua.com.compose.instagram_planer.view.main.InstagramPlanerFragment
 import ua.com.compose.image_crop.main.ImageCropFragment
@@ -11,23 +10,25 @@ import ua.com.compose.other_text_style.main.TextStyleFragment
 import ua.com.compose.navigator.replace
 import ua.com.compose.R
 import ua.com.compose.image_compress.main.ImageCompressFragment
+import ua.com.compose.view.main.history.ImageHistory
 import ua.com.compose.image_rotate.main.ImageRotateFragment
-import ua.com.compose.other_tags.main.FragmentTags
+import ua.com.compose.view.main.MainPresenter
 import java.lang.ref.WeakReference
 
-class MenuObjects(context: Context) {
+class MenuObjects(private val presenter: MainPresenter) {
 
     private var fragmentManager: WeakReference<FragmentManager>? = null
 
     fun getOrCreateMenu(fm: FragmentManager?): List<DynamicMenu> {
         fragmentManager = fragmentManager ?: WeakReference(fm) ?: return listOf()
-        return listOf(IMAGE, INSTAGRAM, OTHER)
+        return listOf(IMAGE, INSTAGRAM, OTHER).filter { it.innerMenu.any { _it -> _it.isVisible.invoke() } }
     }
 
     private val INSTAGRAM_PLANER by lazy {
         DynamicMenu.Medium(
                 id = R.id.id_menu_planer,
                 titleResId = R.string.menu_planer,
+                isVisible = { true },
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = InstagramPlanerFragment.newInstance(), addToBackStack = true)
                 },
@@ -39,8 +40,9 @@ class MenuObjects(context: Context) {
         DynamicMenu.Medium(
                 id = R.id.id_menu_no_crop,
                 titleResId = R.string.menu_no_crop,
+                isVisible = { true },
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = InstagramCropFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = InstagramCropFragment.newInstance(uri = ImageHistory.mainImage), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.ic_menu_no_crop
         )
@@ -50,8 +52,9 @@ class MenuObjects(context: Context) {
         DynamicMenu.Medium(
                 id = R.id.id_menu_grid,
                 titleResId = R.string.menu_grid,
+                isVisible = { true },
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = InstagramGridFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = InstagramGridFragment.newInstance(uri = ImageHistory.mainImage), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.ic_menu_grid
         )
@@ -61,8 +64,9 @@ class MenuObjects(context: Context) {
         DynamicMenu.Medium(
                 id = R.id.id_menu_panorama,
                 titleResId = R.string.menu_panorama,
+                isVisible = { true },
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = InstagramPanoramaFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = InstagramPanoramaFragment.newInstance(uri = ImageHistory.mainImage), addToBackStack = true)
                 },
                 backgroundImageId = R.drawable.ic_menu_panorama
         )
@@ -71,10 +75,11 @@ class MenuObjects(context: Context) {
     private val IMAGE_CROP by lazy {
         DynamicMenu.Icon(
                 id = R.id.id_menu_crop,
-                titleResId = -1,
+                titleResId = R.string.module_image_crop_fragment_image_crop_title,
                 iconResId = R.drawable.ic_crop,
+                isVisible = { true },
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageCropFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = ImageCropFragment.newInstance(uri = ImageHistory.mainImage), addToBackStack = true)
                 },
         )
     }
@@ -82,10 +87,11 @@ class MenuObjects(context: Context) {
     private val IMAGE_ROTATE by lazy {
         DynamicMenu.Icon(
                 id = R.id.id_menu_crop,
-                titleResId = -1,
+                titleResId = R.string.module_image_rotate_fragment_image_rotate_title,
                 iconResId = R.drawable.ic_rotate,
+                isVisible = { true },
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(uri = ImageHistory.mainImage), addToBackStack = true)
                 },
         )
     }
@@ -93,87 +99,11 @@ class MenuObjects(context: Context) {
     private val IMAGE_COMPRESS by lazy {
         DynamicMenu.Icon(
                 id = R.id.id_menu_compress,
-                titleResId = -1,
+                titleResId = R.string.module_image_compress_title,
                 iconResId = R.drawable.ic_compress,
+                isVisible = { true },
                 onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageCompressFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val IMAGE_EXPOSURE by lazy {
-        DynamicMenu.Icon(
-                id = R.id.id_menu_crop,
-                titleResId = -1,
-                iconResId = R.drawable.ic_exposure,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val IMAGE_HDR by lazy {
-        DynamicMenu.Icon(
-                id = R.id.id_menu_crop,
-                titleResId = -1,
-                iconResId = R.drawable.ic_filter_hdr,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val IMAGE_TILT_SHIFT by lazy {
-        DynamicMenu.Icon(
-                id = R.id.id_menu_crop,
-                titleResId = -1,
-                iconResId = R.drawable.ic_filter_tilt_shift,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val IMAGE_VINTAGE by lazy {
-        DynamicMenu.Icon(
-                id = R.id.id_menu_crop,
-                titleResId = -1,
-                iconResId = R.drawable.ic_filter_vintage,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val IMAGE_FLARE by lazy {
-        DynamicMenu.Icon(
-                id = R.id.id_menu_crop,
-                titleResId = -1,
-                iconResId = R.drawable.ic_flare,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val IMAGE_GRAIN by lazy {
-        DynamicMenu.Icon(
-                id = R.id.id_menu_crop,
-                titleResId = -1,
-                iconResId = R.drawable.ic_grain,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val IMAGE_ISO by lazy {
-        DynamicMenu.Icon(
-                id = R.id.id_menu_crop,
-                titleResId = -1,
-                iconResId = R.drawable.ic_iso,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = ImageRotateFragment.newInstance(), addToBackStack = true)
+                    fragmentManager?.get()?.replace(fragment = ImageCompressFragment.newInstance(uri = ImageHistory.mainImage), addToBackStack = true)
                 },
         )
     }
@@ -182,6 +112,7 @@ class MenuObjects(context: Context) {
         DynamicMenu.List(
                 id = R.id.id_menu_image,
                 titleResId = R.string.menu_image,
+                isVisible = { true },
                 innerMenu = mutableListOf(
                         IMAGE_CROP,
                         IMAGE_ROTATE,
@@ -194,6 +125,7 @@ class MenuObjects(context: Context) {
         DynamicMenu.List(
                 id = R.id.id_menu_instagram,
                 titleResId = R.string.menu_instagram,
+                isVisible = { true },
                 innerMenu = mutableListOf(INSTAGRAM_PLANER, INSTAGRAM_NO_CROP, INSTAGRAM_GRID, INSTAGRAM_PANORAMA)
         )
     }
@@ -202,7 +134,8 @@ class MenuObjects(context: Context) {
         DynamicMenu.List(
                 id = R.id.id_menu_other,
                 titleResId = R.string.menu_other,
-                innerMenu = mutableListOf(TEXT_STYLE)//, TAGS, TEXT_STYLE)
+                isVisible = { true },
+                innerMenu = mutableListOf(TEXT_STYLE)
         )
     }
 
@@ -211,18 +144,9 @@ class MenuObjects(context: Context) {
         DynamicMenu.Text(
                 id = R.id.id_menu_text_style,
                 titleResId = R.string.menu_text_style,
+                isVisible = { true },
                 onPress = {
                     fragmentManager?.get()?.replace(fragment = TextStyleFragment.newInstance(), addToBackStack = true)
-                },
-        )
-    }
-
-    private val TAGS by lazy {
-        DynamicMenu.Text(
-                id = R.id.id_menu_tags,
-                titleResId = R.string.menu_tags,
-                onPress = {
-                    fragmentManager?.get()?.replace(fragment = FragmentTags.newInstance(), addToBackStack = true)
                 },
         )
     }

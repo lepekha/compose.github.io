@@ -5,6 +5,7 @@ import ua.com.compose.mvp.BaseMvpPresenterImpl
 
 class MainPresenter constructor() : BaseMvpPresenterImpl<MainView>() {
 
+
     private var mCurrentFragment: androidx.fragment.app.Fragment? = null
 
     override fun attachView(view: MainView) {

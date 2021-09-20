@@ -37,10 +37,12 @@ class IconDelegateAdapter : ViewTypeDelegateAdapter {
         lateinit var innerItem: DynamicMenu.Icon
         val root = itemView.root
         val icon = itemView.imgIcon
+        val txtTitle = itemView.txtTitle
 
         fun bind(item: DynamicMenu.Icon) {
             innerItem = item
             icon.setImageResource(item.iconResId)
+            txtTitle.setText(item.titleResId)
 //            root.setCardBackgroundColor(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_2), 125))
 //            root.setCardForegroundColor(ColorStateList.valueOf(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_2), 125)))
         }

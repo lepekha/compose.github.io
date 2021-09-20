@@ -76,19 +76,8 @@ fun <T> Fragment.getListenerFromActivity(listenerClazz: Class<T>): T? {
     return getListener(listenerClazz, activity)
 }
 
-fun FragmentManager.replace(fragment: Fragment, containerId: Int = R.id.id_fragment_container, addToBackStack: Boolean = false, reordering: Boolean = false, vararg sharedElements: SharedElement) {
+fun FragmentManager.replace(fragment: Fragment, containerId: Int = R.id.id_fragment_container, addToBackStack: Boolean = false) {
     val transaction = this.beginTransaction()
-    sharedElements.iterator().forEach {
-        transaction.addSharedElement(it.view, it.id)
-    }
-    transaction.setCustomAnimations(
-            ua.com.compose.R.anim.fragment_enter,
-            ua.com.compose.R.anim.fragment_exit,
-            ua.com.compose.R.anim.fragment_enter,
-            ua.com.compose.R.anim.fragment_exit
-    )
-
-    transaction.setReorderingAllowed(reordering)
     transaction.replace(containerId, fragment, fragment.javaClass.simpleName)
     if (addToBackStack) {
         transaction.addToBackStack(fragment.javaClass.simpleName)

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_night_1">#000000</color>
-    <color name="color_night_2">#232323</color>
+    <color name="color_night_1">#1B1B1F</color>
+    <color name="color_night_2">#23232B</color>
     <color name="color_night_3">#454545</color>
     <color name="color_night_4">#535353</color>
     <color name="color_night_5">#FFFFFF</color>
-    <color name="color_night_6">#4CAF50</color>
+    <color name="color_night_6">#03A9F4</color>
 
 
-    <color name="color_night_10">#262626</color>
+    <color name="color_night_10">#31313D</color>
     <color name="color_night_11">#737373</color>
     <color name="color_night_12">#FAFAFA</color>
+    <color name="color_night_13">#A9A9C1</color>
 
 <!--    <color name="color_day_1">#FFFFFF</color>-->
 <!--    <color name="color_day_2">#535353</color>-->

@@ -25,10 +25,8 @@ class InstagramPlanerImageFragment : BaseMvpFragment<InstagramPlanerImageView, I
 
         private const val BUNDLE_IMAGE_URI = "BUNDLE_IMAGE_URI"
 
-        fun newInstance(uri: Uri): InstagramPlanerImageFragment {
-            return InstagramPlanerImageFragment().apply {
-                this.arguments = bundleOf(BUNDLE_IMAGE_URI to uri)
-            }
+        fun newInstance(): InstagramPlanerImageFragment {
+            return InstagramPlanerImageFragment()
         }
     }
 
@@ -81,13 +79,13 @@ class InstagramPlanerImageFragment : BaseMvpFragment<InstagramPlanerImageView, I
             presenter.onAddImages((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
-        loadImage()
+        presenter.onCreate()
     }
 
-    override fun loadImage(){
+    override fun setImage(uri: Uri){
         Glide
                 .with(image.context)
-                .load(this.arguments?.getParcelable<Uri>(BUNDLE_IMAGE_URI))
+                .load(uri)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .thumbnail(0.1f)

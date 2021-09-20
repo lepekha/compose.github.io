@@ -11,7 +11,7 @@ import ua.com.compose.core.models.data.DynamicMenu
 import ua.com.compose.view.main.main.MenuRvAdapter
 import kotlinx.android.synthetic.main.element_menu_list.view.*
 
-class GridDelegateAdapter : ViewTypeDelegateAdapter {
+class GridDelegateAdapter(private val onPress: () -> Unit) : ViewTypeDelegateAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return ViewHolder(parent).apply {
@@ -43,7 +43,7 @@ class GridDelegateAdapter : ViewTypeDelegateAdapter {
             innerItem = item
             txtTitle.setText(item.titleResId)
             list.layoutManager = GridLayoutManager(parent.context, 2, RecyclerView.HORIZONTAL, false)
-            list.adapter = MenuRvAdapter(items = item.innerMenu)
+            list.adapter = MenuRvAdapter(items = item.innerMenu, onPress = onPress)
         }
     }
 }

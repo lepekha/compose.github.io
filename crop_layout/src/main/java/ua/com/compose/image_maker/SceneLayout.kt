@@ -18,6 +18,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.view.setMargins
+import androidx.core.view.setPadding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -54,8 +55,7 @@ class SceneLayout @JvmOverloads constructor(
         defaultCropImageView.id = -1
         defaultCropImageView.adjustViewBounds = true
         defaultCropImageView.layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT, Gravity.CENTER)
-        defaultCropImageView.setPaddingLeft(15.dp.toInt())
-        defaultCropImageView.setPaddingRight(15.dp.toInt())
+        defaultCropImageView.setPadding(15.dp.toInt())
         addView(defaultCropImageView, 0)
         cropImageView = defaultCropImageView
         addView(overlayLayout)

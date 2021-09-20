@@ -1,7 +1,7 @@
 package ua.com.compose.image_compress.main
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -11,51 +11,61 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.module_image_compress_fragment_compress_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import ua.com.compose.extension.changeTextAnimate
 import ua.com.compose.image_compress.di.Scope
 import ua.com.compose.mvp.BaseMvpFragment
-import ua.com.compose.extension.createImageIntent
+import ua.com.compose.extension.getColorFromAttr
+import ua.com.compose.extension.toPercentString
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.image_compress.R
-import java.io.ByteArrayOutputStream
-import java.util.*
 
 
 class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPresenter>(), ImageCompressView {
 
     companion object {
-        fun newInstance(): ImageCompressFragment {
-            return ImageCompressFragment()
+
+        const val REQUEST_KEY = "REQUEST_KEY_IMAGE"
+
+        const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
+
+        fun newInstance(uri: Uri?): ImageCompressFragment {
+            return ImageCompressFragment().apply {
+                arguments = bundleOf(
+                    BUNDLE_KEY_IMAGE_URI to uri
+                )
+            }
         }
     }
 
     override val presenter: ImageCompressPresenter by lazy { Scope.IMAGE_COMPRESS.get() }
 
+    private val txtSizeRunnable = Runnable {
+        txtSize?.changeTextAnimate(text = requireContext().getString(R.string.module_image_compress_size))
+        txtSize?.setTextColor(requireContext().getColorFromAttr(R.attr.color_5))
+    }
+
+    private val txtQualityRunnable = Runnable {
+        txtQuality?.changeTextAnimate(text = requireContext().getString(R.string.module_image_compress_quality))
+        txtQuality?.setTextColor(requireContext().getColorFromAttr(R.attr.color_5))
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.module_image_compress_fragment_compress_main, container, false)
     }
 
-    private val btnShare by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_share) {
-            presenter.pressShare()
-        }
-    }
-
-    private val btnDownload by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_download) {
-            presenter.pressSave()
+    private val btnDone by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_done) {
+            presenter.pressDone()
         }
     }
 
@@ -68,11 +78,11 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
             this.add(btnGallery)
-            this.add(btnShare)
-            this.add(btnDownload)
+            this.add(btnDone)
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_image_compress_title))
@@ -92,49 +102,46 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
         sbQuality.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 presenter.onQualityChange(progress = progress)
+                txtQuality.text = progress.toPercentString()
+                txtQuality.setTextColor(requireContext().getColorFromAttr(R.attr.color_6))
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                txtQuality.removeCallbacks(null)
             }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                txtQuality.postDelayed(txtQualityRunnable, 1000)
             }
         })
 
         sbSize.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 presenter.onSizeChange(progress = progress)
+                txtSize.text = progress.toPercentString()
+                txtSize.setTextColor(requireContext().getColorFromAttr(R.attr.color_6))
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                txtSize.removeCallbacks(null)
             }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                txtSize.postDelayed(txtSizeRunnable, 1000)
             }
         })
 
-        presenter.onCreate()
-    }
+        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
 
-    override fun setNewProp(quality: Int, size: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                    ByteArrayOutputStream().use { out ->
-                        imgView.drawable?.toBitmap()?.compress(Bitmap.CompressFormat.JPEG, quality, out)
-                        BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size())
-                    }
-            }?.let {
-                Glide.with(requireContext().applicationContext).load(it).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imgView)
-            }
-        }
+        presenter.onCreate(uri = inputUri)
     }
 
     override fun openGallery() {
         FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
     }
 
-    override fun createShareIntent(uri: Uri) {
-        getCurrentActivity().createImageIntent(uri)
+    override fun saveToResult(uri: Uri) {
+        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGE_URI to uri))
     }
 
     override fun setImage(uri: Uri) {
@@ -149,20 +156,14 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
                     override fun onLoadCleared(placeholder: Drawable?) {}
 
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        presenter.onResourceLoad(resource)
+                        presenter.onResourceLoad(resource, resource)
                     }
                 })
 
     }
 
     override fun setImage(bmp: Bitmap) {
-        Glide.with(requireContext().applicationContext)
-                .asBitmap()
-                .load(bmp)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(imgView)
-
+        imgView.setImageBitmap(bmp)
     }
 
     override fun onDestroy() {

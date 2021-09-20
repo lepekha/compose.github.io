@@ -7,23 +7,28 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.TextViewCompat
 import java.lang.ref.WeakReference
 
-fun AppCompatTextView.sameTextSizes(vararg views: WeakReference<AppCompatTextView>){
-    this.doOnLayout {
-        val viewList = arrayListOf(*views)
-        viewList.mapNotNull { it.get()?.textSize }.min()?.let { minTextSize ->
-            views.mapNotNull { it.get() }.forEach { view ->
-                TextViewCompat.setAutoSizeTextTypeWithDefaults(view, TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE)
-                view.setTextSize(TypedValue.COMPLEX_UNIT_PX, minTextSize)
-            }
+fun TextView.changeTextAnimate(text: String){
+    val anim = AlphaAnimation(1.0f, 0.0f)
+    anim.duration = 200
+    anim.repeatCount = 1
+    anim.repeatMode = Animation.REVERSE
+
+    anim.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationEnd(animation: Animation?) { }
+        override fun onAnimationStart(animation: Animation?) { }
+        override fun onAnimationRepeat(animation: Animation?) {
+                this@changeTextAnimate.text = text
         }
-        true
-    }
+    })
+    this.startAnimation(anim)
 }
 
 fun TextView.underLine() {

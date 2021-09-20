@@ -24,6 +24,11 @@ class PresenterMain(private val menu: MenuObjects): BaseMvpPresenterImpl<ViewMai
     fun pressSave() {
     }
 
+    fun onCreate(){
+//        uri?.let {
+//            view?.setImage(it)
+//        }
+    }
 
     fun updateList(){
         view?.updatePhotoList()

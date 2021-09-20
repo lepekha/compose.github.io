@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.PermissionManager
+import com.eazypermissions.dsl.extension.requestPermissions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -109,10 +110,9 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             presenter.addImage()
         }
 
-        PermissionManager.requestPermissions(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        requestPermissions(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
         ){
             requestCode = 4
             resultCallback = {
@@ -134,6 +134,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 }
             }
         }
+
     }
 
     override fun clearSelect(){
@@ -156,11 +157,6 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 buttonContainer.isVisible = isVisible
             }
         }
-    }
-
-    override fun setCount(value: String) {
-        txtCount.text = value
-        txtCount.playAnimation(R.anim.bounce_animation, duration = 1000)
     }
 
     override fun onDestroy() {

@@ -32,8 +32,9 @@ class InstagramCropPresenter: BaseMvpPresenterImpl<InstagramCropView>() {
         }
     }
 
-    fun onCreate(){
+    fun onCreate(uri: Uri?){
         view?.initNoCrop()
+        this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)

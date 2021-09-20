@@ -42,22 +42,14 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
         }
     }
 
-    fun onCreate(){
+    fun onCreate(uri: Uri?){
+        this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)
         }else{
             view?.openGallery()
         }
-    }
-
-    fun pressSave() = CoroutineScope(Dispatchers.Main).launch {
-        val dialog = DialogManager.createLoad{}
-        withContext(Dispatchers.IO) {
-            createBitmap()?.let { context.saveBitmap(it) }
-        }
-        view?.showAlert(R.string.module_image_rotate_fragment_image_crop_save_ready)
-        dialog.closeDialog()
     }
 
     private fun createBitmap(): Bitmap? {
@@ -71,11 +63,13 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
         return null
     }
 
-    fun pressShare() = CoroutineScope(Dispatchers.Main).launch {
+    fun pressDone() = CoroutineScope(Dispatchers.Main).launch {
+        val dialog = DialogManager.createLoad{}
         createBitmap()?.let { bitmap ->
-            val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
-            view?.createShareIntent(uri)
+            val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap = bitmap, name = System.currentTimeMillis().toString()) }
+            view?.saveToResult(uri)
         }
+        dialog.closeDialog()
     }
 
     fun onResourceLoad(image: Bitmap){

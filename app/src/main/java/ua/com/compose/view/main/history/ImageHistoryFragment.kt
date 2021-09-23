@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_image_history.*
@@ -90,8 +92,25 @@ class ImageHistoryFragment : BaseMvvmFragment() {
         btnShare.setOnClickListener {
         }
 
+        val c1 = ConstraintSet().apply {
+            this.clone(container)
+        }
+
+        val c2 = ConstraintSet().apply {
+            this.clone(requireContext(), R.layout.fragment_image_history_full)
+        }
+
+        imgPreview.setOnClickListener {
+            TransitionManager.beginDelayedTransition(container)
+            val c = if(isOpen) c2 else c1
+            c.applyTo(container)
+            isOpen = !isOpen
+        }
+
         viewModule.onCreate(uri = inputUri)
     }
+
+    private var isOpen = false
 
     fun addImageToHistory(uri: Uri?){
         viewModule.addImageToHistory(uri)

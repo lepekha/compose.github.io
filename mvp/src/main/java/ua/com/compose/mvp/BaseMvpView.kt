@@ -22,6 +22,8 @@ interface BaseMvpView {
 
     fun createBottomMenu(): MutableList<Menu> = mutableListOf()
 
+    fun setVisibleBottomMenu(isVisible: Boolean)
+
     fun updateBottomMenu()
 
     fun backToMain()

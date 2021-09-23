@@ -14,7 +14,11 @@ import ua.com.compose.instagram_planer.R
 import ua.com.compose.instagram_planer.data.Image
 
 
-class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit, val onChange: (oldPosition: Int, newPosition: Int) -> Unit) : RecyclerView.Adapter<InstagramPlanerRvAdapter.ViewHolder>() {
+class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
+                               val onChange: (oldPosition: Int, newPosition: Int) -> Unit,
+                               val onStartDrag: () -> Unit = {},
+                               val onEndDrag: () -> Unit = {},
+) : RecyclerView.Adapter<InstagramPlanerRvAdapter.ViewHolder>() {
 
     companion object {
         private const val SCALE_DRAG_ENTERED = 0.75f
@@ -39,7 +43,7 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit, val onChang
             this.imgView.setOnLongClickListener {
                 val data = ClipData.newPlainText("NAME", adapterPosition.toString())
                 val shadowBuilder = View.DragShadowBuilder(it)
-
+                onStartDrag()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     it.startDragAndDrop(data, shadowBuilder, it, 0)
                 } else {
@@ -53,6 +57,9 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit, val onChang
 
             this.imgView.setOnDragListener { _, dragEvent ->
                 when (dragEvent.action) {
+                    DragEvent.ACTION_DRAG_ENDED -> {
+                        onEndDrag()
+                    }
                     DragEvent.ACTION_DRAG_ENTERED -> {
                         this.imgView.animateScale(toScale = SCALE_DRAG_ENTERED)
                     }
@@ -67,6 +74,7 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit, val onChang
                         }else{
                             onChange(oldPosition, newPosition)
                         }
+                        onEndDrag()
                     }
                 }
                 true

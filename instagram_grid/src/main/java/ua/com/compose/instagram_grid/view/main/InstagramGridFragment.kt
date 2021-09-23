@@ -35,7 +35,7 @@ class InstagramGridFragment : BaseMvpFragment<InstagramGridView, InstagramGridPr
 
         private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
 
-        fun newInstance(uri: Uri?): InstagramGridFragment {
+        fun newInstance(uri: Uri? = null): InstagramGridFragment {
             return InstagramGridFragment().apply {
                 arguments = bundleOf(
                     BUNDLE_KEY_IMAGE_URI to uri

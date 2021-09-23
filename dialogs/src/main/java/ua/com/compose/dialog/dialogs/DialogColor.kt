@@ -1,5 +1,6 @@
 package ua.com.compose.dialog.dialogs
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.dialog.R
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
 import kotlinx.android.synthetic.main.dialog_color.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.setVibrate
 
 
 class DialogColor : BottomSheetDialogFragment()  {
@@ -50,21 +53,18 @@ class DialogColor : BottomSheetDialogFragment()  {
 
         arguments?.getInt(BUNDLE_KEY_INPUT_COLOR)?.let { color ->
             colorPicker.setColor(color)
-            imgExample.setCardBackgroundColor(color)
+            imgExample.imageTintList = ColorStateList.valueOf(color)
             imgExample.tag = color
         }
 
         colorPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
             override fun onColorSelected(color: Int) {
                 imgExample.tag = color
-                imgExample.setCardBackgroundColor(color)
+                imgExample.imageTintList = ColorStateList.valueOf(color)
             }
         })
 
-        btnCancel.setOnClickListener {
-            dismiss()
-        }
-
+        btnDone.setVibrate(EVibrate.BUTTON)
         btnDone.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_ANSWER_COLOR to imgExample.tag as Int))
             dismiss()

@@ -21,6 +21,14 @@
     <string name="menu_grid">Grid</string>
     <string name="menu_tags">#Top\n#hashtegs</string>
 
+    <string name="shortcut_long_instagram_planer">Instagram planer</string>
+    <string name="shortcut_long_instagram_crop">Instagram crop</string>
+    <string name="shortcut_long_instagram_grid">Instagram grid</string>
+
+    <string name="shortcut_short_instagram_planer">Planer</string>
+    <string name="shortcut_short_instagram_crop">Crop</string>
+    <string name="shortcut_short_instagram_grid">Grid</string>
+
     <!-- TODO: ua.com.compose.navigator.remove this placeholder text -->
     <string name="new_message_notification_placeholder_text_template">You said %1$s and lorem ipsum
         dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel

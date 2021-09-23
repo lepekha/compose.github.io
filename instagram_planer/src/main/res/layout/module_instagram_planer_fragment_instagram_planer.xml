@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    tools:background="#000000"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:background="#000000">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gridList"
@@ -15,36 +15,158 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="8dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAccount" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
 
-    <TextView
-        android:id="@+id/txtAccount"
-        android:layout_width="0dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center_vertical"
-        android:maxWidth="600dp"
-        android:paddingBottom="6sp"
-        android:singleLine="true"
-        android:textColor="?attr/color_5"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:drawableEndCompat="@drawable/ic_expand_more"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardBackgroundColor="?attr/color_2"
+        app:cardCornerRadius="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap"
-        tools:text="@ruslan.lepekha" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="btnAddUser,btnClear,btnRemoveUser,chipGroup"
+                tools:layout_editor_absoluteY="8dp" />
+
+            <TextView
+                android:id="@+id/txtAccount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:maxWidth="600dp"
+                android:paddingBottom="6sp"
+                android:singleLine="true"
+                android:textColor="?attr/color_5"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/btnMore"
+                app:layout_constraintEnd_toStartOf="@+id/btnMore"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnMore"
+                tools:text="@ruslan.lepekha" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnMore"
+                app:selectionRequired="true"
+                app:singleSelection="true" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnMore"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="?attr/color_1"
+                app:cardCornerRadius="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imgMore"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:tint="?attr/color_5"
+                    app:srcCompat="@drawable/ic_expand_more" />
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnAddUser"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="?attr/color_12"
+                app:cardCornerRadius="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnRemoveUser"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroup">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:tint="?attr/color_10"
+                    app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_add" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnRemoveUser"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:cardBackgroundColor="?attr/color_12"
+                app:cardCornerRadius="25dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAddUser"
+                app:layout_constraintEnd_toStartOf="@+id/btnClear"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnAddUser"
+                app:layout_constraintTop_toTopOf="@+id/btnAddUser">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:tint="?attr/color_10"
+                    app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_remove" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnClear"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:cardBackgroundColor="?attr/color_12"
+                app:cardCornerRadius="25dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAddUser"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnRemoveUser"
+                app:layout_constraintTop_toTopOf="@+id/btnAddUser">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:tint="?attr/color_10"
+                    app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_clear" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <ImageView
         android:id="@+id/imgPlaceholder"
@@ -55,7 +177,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_image"
-        app:tint="?attr/color_3" />
+        app:tint="?attr/color_2" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnSave"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="?attr/color_12"
+        app:cardCornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnShare"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.25">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:tint="?attr/color_10"
+            app:srcCompat="@drawable/ic_download" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnShare"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="?attr/color_12"
+        app:cardCornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnRemove"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnSave"
+        app:layout_constraintWidth_percent="0.25">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:tint="?attr/color_10"
+            app:srcCompat="@drawable/ic_share" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnRemove"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="?attr/color_12"
+        app:cardCornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnShare"
+        app:layout_constraintWidth_percent="0.25">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:tint="?attr/color_10"
+            app:srcCompat="@drawable/ic_delete_forever" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="btnRemove,btnShare,btnSave" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

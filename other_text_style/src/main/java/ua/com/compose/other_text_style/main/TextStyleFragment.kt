@@ -56,12 +56,8 @@ class TextStyleFragment : BaseMvvmFragment() {
 
     private val viewModel: TextStyleViewModel by viewModel()
 
-    private val dividerItemDecoration by lazy {
-        RecyclerItemDivider(ContextCompat.getDrawable(requireContext(), R.drawable.module_other_text_style_list_divider), dividerMargin = 0)
-    }
     private fun initList() {
         binding?.list?.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.VERTICAL, false)
-        binding?.list?.addItemDecoration(dividerItemDecoration)
         binding?.list?.adapter = MenuRvAdapter {
             requireContext().clipboardCopy(text = it)
             showAlert(R.string.module_other_text_style_fragment_text_copied)

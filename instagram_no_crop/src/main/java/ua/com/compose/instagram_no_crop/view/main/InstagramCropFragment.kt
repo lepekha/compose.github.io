@@ -35,7 +35,7 @@ class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPr
 
         private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
 
-        fun newInstance(uri: Uri?): InstagramCropFragment {
+        fun newInstance(uri: Uri? = null): InstagramCropFragment {
             return InstagramCropFragment().apply {
                 arguments = bundleOf(
                         BUNDLE_KEY_IMAGE_URI to uri

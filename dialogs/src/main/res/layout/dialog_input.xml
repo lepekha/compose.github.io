@@ -21,7 +21,7 @@
 
     <EditText
         android:id="@+id/editText"
-        style="@style/EditTextDefault"
+        style="@style/EditTextBottomSheet"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -32,41 +32,89 @@
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
         android:lines="1"
+        android:paddingStart="55dp"
+        android:paddingEnd="50dp"
+        android:textColor="?attr/color_2"
+        android:textColorHint="?attr/color_2"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.8" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageView
+        android:id="@+id/btnClear"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="5dp"
+        android:tint="?attr/color_1"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="@+id/editText"
+        app:srcCompat="@drawable/ic_close" />
+
+    <ImageView
+        android:id="@+id/search"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:tint="?attr/color_1"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="@+id/editText"
+        app:srcCompat="@drawable/ic_text_fields" />
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnDone"
-        style="@style/CustomBottomSheetButton"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="30dp"
-        app:icon="@drawable/ic_done"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        app:cardBackgroundColor="?attr/color_12"
+        app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnCancel"
         app:layout_constraintTop_toBottomOf="@id/editText"
         app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.3" />
+        app:layout_constraintWidth_percent="0.3">
 
-    <com.google.android.material.button.MaterialButton
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:tint="?attr/color_10"
+            app:srcCompat="@drawable/ic_done" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnCancel"
-        style="@style/CustomBottomSheetButton"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        app:icon="@drawable/ic_close"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="?attr/color_12"
+        app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnDone"
         app:layout_constraintEnd_toStartOf="@+id/btnDone"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnDone"
         app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.3" />
+        app:layout_constraintWidth_percent="0.3">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:tint="?attr/color_10"
+            app:srcCompat="@drawable/ic_close" />
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

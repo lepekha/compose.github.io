@@ -50,6 +50,9 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
     private val _createDialogInputName: MutableLiveData<String?> = MutableLiveData(null)
     val createDialogInputName: LiveData<String?> = _createDialogInputName
 
+    private val _createUsersList: MutableLiveData<List<String>> = MutableLiveData(listOf())
+    val createUsersList: LiveData<List<String>> = _createUsersList
+
     private val _createAlert: MutableLiveData<Int> = MutableLiveData(-1)
     val createAlert: LiveData<Int> = _createAlert
 
@@ -79,9 +82,9 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
 
         currentUser = createUserUseCase.execute(userName = name)
         _images.postValue(listOf())
+        _createUsersList.postValue(users.filter { it != currentUser }.map { it.name })
         _isVisiblePlaceHolder.postValue(true)
         _isVisibleClearAll.postValue(true)
-        _isVisibleMoreAccount.postValue((users.size + 1) > 1)
         _isVisibleRemoveAccount.postValue((users.size + 1) > 1)
     }
 
@@ -94,8 +97,10 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
             currentUser = users.sortedBy { it.name }.first { it.currentUser }.apply {
                 val images = getAllUserImagesUseCase.execute(user = this)
                 _images.postValue(images)
+                _createUsersList.postValue(users.filter { it != this }.map { it.name })
                 _isVisiblePlaceHolder.postValue(images.isEmpty())
-                _isVisibleClearAll.postValue(images.isEmpty())
+                _isVisibleClearAll.postValue(images.isNotEmpty())
+                _isVisibleRemoveAccount.postValue(images.size > 1)
             }
         }
     }
@@ -105,8 +110,9 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
         currentUser = users.firstOrNull { it.name == name }?.apply {
             val images = getAllUserImagesUseCase.execute(user = this)
             _images.postValue(images)
+            _createUsersList.postValue(users.filter { it != this }.map { it.name })
             _isVisiblePlaceHolder.postValue(images.isEmpty())
-            _isVisibleClearAll.postValue(images.isEmpty())
+            _isVisibleClearAll.postValue(images.isNotEmpty())
         }
     }
 
@@ -146,7 +152,7 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
             val images = getAllUserImagesUseCase.execute(user)
             _images.postValue(images)
             _isVisiblePlaceHolder.postValue(images.isEmpty())
-            _isVisibleClearAll.postValue(images.isEmpty())
+            _isVisibleClearAll.postValue(images.isNotEmpty())
         }
     }
 
@@ -165,9 +171,13 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
                 val images = getAllUserImagesUseCase.execute(user)
                 _images.postValue(images)
                 _isVisiblePlaceHolder.postValue(images.isEmpty())
-                _isVisibleClearAll.postValue(images.isEmpty())
+                _isVisibleClearAll.postValue(images.isNotEmpty())
             }
         }
+    }
+
+    fun pressAddUser(){
+        _createDialogInputName.postValue("")
     }
 
 //    fun deleteImage() = CoroutineScope(Dispatchers.Main).launch {

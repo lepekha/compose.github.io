@@ -36,7 +36,7 @@ class InstagramPanoramaFragment : BaseMvpFragment<InstagramPanoramaView, Instagr
 
         private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
 
-        fun newInstance(uri: Uri?): InstagramPanoramaFragment {
+        fun newInstance(uri: Uri? = null): InstagramPanoramaFragment {
             return InstagramPanoramaFragment().apply {
                 arguments = bundleOf(
                     BUNDLE_KEY_IMAGE_URI to uri

@@ -67,8 +67,6 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
 
         btnBlur.setVibrate(EVibrate.BUTTON)
         btnBlur.setOnClickListener {
-            btnColorFill.setColorFilter(requireContext().getColorFromAttr(R.attr.color_3))
-            btnBlur.setColorFilter(requireContext().getColorFromAttr(R.attr.color_5))
             presenter.pressBlur()
         }
 
@@ -77,8 +75,6 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
             val request = DialogColor.show(fm = getCurrentActivity().supportFragmentManager, color = Color.RED)
             setFragmentResultListener(request) { _, bundle ->
                 presenter.onColorPick(color = bundle.getInt(DialogColor.BUNDLE_KEY_ANSWER_COLOR))
-                btnColorFill.setColorFilter(requireContext().getColorFromAttr(R.attr.color_5))
-                btnBlur.setColorFilter(requireContext().getColorFromAttr(R.attr.color_3))
             }
         }
 

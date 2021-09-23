@@ -39,6 +39,10 @@ abstract class BaseMvvmFragment: AppCompatDialogFragment(), BaseMvpView {
         return false
     }
 
+    override fun setVisibleBottomMenu(isVisible: Boolean) {
+        (activity as BaseMvpActivity<*, *>).setVisibleBottomMenu(isVisible)
+    }
+
     override fun updateBottomMenu() {
         (activity as BaseMvpActivity<*, *>).updateBottomMenu()
     }

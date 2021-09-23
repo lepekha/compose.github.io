@@ -24,7 +24,7 @@
 
     <style name="EditTextBottomSheet" parent="android:Widget.EditText">
         <item name="android:background">@drawable/selector_input_text</item>
-        <item name="android:textColor">?attr/color_5</item>
+        <item name="android:textColor">?attr/color_4</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingEnd">10dp</item>

@@ -35,6 +35,10 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         (activity as BaseMvpActivity<*, *>).setTitle(title, startDrawable)
     }
 
+    override fun setVisibleBottomMenu(isVisible: Boolean) {
+        (activity as BaseMvpActivity<*, *>).setVisibleBottomMenu(isVisible)
+    }
+
     override fun setVisibleBack(isVisible: Boolean) {
         (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
     }

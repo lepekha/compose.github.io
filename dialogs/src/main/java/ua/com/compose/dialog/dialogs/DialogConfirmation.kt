@@ -14,6 +14,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.dialog.R
 import kotlinx.android.synthetic.main.dialog_confirmation.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.setVibrate
 
 
 class DialogConfirmation : BottomSheetDialogFragment() {
@@ -53,12 +55,14 @@ class DialogConfirmation : BottomSheetDialogFragment() {
 
         txtMessage.text = arguments?.getString(BUNDLE_KEY_MESSAGE) ?: ""
 
+        btnCancel.setVibrate(EVibrate.BUTTON)
         btnCancel.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY)
                     ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_ANSWER to false))
             dismiss()
         }
 
+        btnDone.setVibrate(EVibrate.BUTTON)
         btnDone.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY)
                     ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_ANSWER to true))

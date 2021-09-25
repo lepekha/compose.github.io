@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -11,26 +12,25 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.dialog.R
-import ua.com.compose.extension.getColorFromAttr
 import kotlinx.android.synthetic.main.dialog_input.*
-import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.onTextChangedListener
-import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.*
 
 
 class DialogInput : BottomSheetDialogFragment() {
 
     companion object {
 
+        private const val BUNDLE_KEY_SINGLE_LINE = "BUNDLE_KEY_SINGLE_LINE"
         private const val BUNDLE_KEY_HINT = "BUNDLE_KEY_HINT"
         private const val BUNDLE_KEY_TEXT = "BUNDLE_KEY_TEXT"
         const val BUNDLE_KEY_INPUT_MESSAGE = "BUNDLE_KEY_INPUT_MESSAGE"
         private const val BUNDLE_KEY_REQUEST_KEY = "BUNDLE_KEY_REQUEST_KEY"
 
-        fun show(fm: FragmentManager, hint: String = "", text: String? = null): String {
+        fun show(fm: FragmentManager, hint: String = "", text: String? = null, singleLine: Boolean = false): String {
             val requestKey = System.currentTimeMillis().toString()
             val fragment = DialogInput().apply {
                 this.arguments = bundleOf(
+                        BUNDLE_KEY_SINGLE_LINE to singleLine,
                         BUNDLE_KEY_HINT to hint,
                         BUNDLE_KEY_TEXT to text,
                         BUNDLE_KEY_REQUEST_KEY to requestKey
@@ -57,6 +57,7 @@ class DialogInput : BottomSheetDialogFragment() {
             editText.setText(it)
         }
         editText.hint = arguments?.getString(BUNDLE_KEY_HINT) ?: ""
+        editText.isSingleLine = arguments?.getBoolean(BUNDLE_KEY_SINGLE_LINE, false) ?: false
 
         editText.onTextChangedListener {
             btnClear.isVisible = it.isNotEmpty()
@@ -75,6 +76,11 @@ class DialogInput : BottomSheetDialogFragment() {
 
         btnDone.setVibrate(EVibrate.BUTTON)
         btnDone.setOnClickListener {
+            setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to editText.text.toString()))
+            dismiss()
+        }
+
+        editText.onAction(EditorInfo.IME_ACTION_DONE){
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to editText.text.toString()))
             dismiss()
         }

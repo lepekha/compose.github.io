@@ -5,7 +5,7 @@ import kotlinx.coroutines.withContext
 import ua.com.compose.instagram_planer.data.Image
 import ua.com.compose.instagram_planer.data.User
 
-class ChangeImagePositionsUseCase(private val database: InstagramPlanerDatabase) {
+class ImageChangePositionsUseCase(private val database: InstagramPlanerDatabase) {
 
     suspend fun execute(user: User, oldPosition: Int, newPosition: Int) {
         return withContext(Dispatchers.IO) {

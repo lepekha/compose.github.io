@@ -44,26 +44,24 @@
             app:tabRippleColor="@null"
             app:tabSelectedTextColor="?attr/color_12"
             app:tabTextAppearance="@style/TabLayoutTextStyle"
-            app:tabTextColor="?attr/color_11" />
+            app:tabTextColor="?attr/color_1" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttonContainer"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="12dp"
+            android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnAddImages"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:foreground="?attr/color_12"
                 android:scaleX="0"
                 android:scaleY="0"
@@ -82,23 +80,36 @@
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:foregroundGravity="center"
-                    android:tint="?attr/color_10"
-                    app:srcCompat="@drawable/ic_done" />
+                    app:tint="?attr/color_10"
+                    app:srcCompat="@drawable/ic_done"
+                    tools:visibility="visible" />
 
             </com.google.android.material.card.MaterialCardView>
 
-            <ImageButton
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnClearAll"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center|end"
-                android:background="?android:attr/selectableItemBackground"
-                android:tint="?attr/color_12"
-                android:tintMode="multiply"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:scaleX="0"
+                android:scaleY="0"
+                app:cardBackgroundColor="?attr/color_1"
+                app:cardCornerRadius="48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/module_gallery_ic_remove" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:foregroundGravity="center"
+                    app:tint="?attr/color_12"
+                    app:srcCompat="@drawable/module_gallery_ic_remove"/>
+
+            </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Barrier

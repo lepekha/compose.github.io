@@ -10,6 +10,10 @@ class RemoveUserUseCase(private val database: InstagramPlanerDatabase) {
     suspend fun execute(user: User) {
         return withContext(Dispatchers.IO) {
             database.userDao?.delete(user)
+            database.userDao?.getAll()?.minByOrNull { it.name }?.let {
+                it.currentUser = true
+                database.userDao.update(it)
+            }
             FileStorage.clearDir(dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}")
         }
     }

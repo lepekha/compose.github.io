@@ -9,6 +9,7 @@ import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.doOnLayout
@@ -109,6 +110,16 @@ fun TextView.onTextChangedListener(listener: (e: String) -> Unit) = this.addText
         }
     }
 })
+
+fun EditText.onAction(actionID: Int, callback: () -> Unit) {
+    setOnEditorActionListener { _, actionId, _ ->
+        if (actionId == actionID) {
+            callback.invoke()
+            return@setOnEditorActionListener true
+        }
+        false
+    }
+}
 
 fun TextView.setDrawableRight(drawableResId: Int){
     this.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawableResId, 0)

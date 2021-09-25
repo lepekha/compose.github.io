@@ -29,7 +29,7 @@
         app:cardBackgroundColor="?attr/color_12"
         app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnShare"
+        app:layout_constraintEnd_toStartOf="@+id/btnChangeImage"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imgPreview"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,7 +44,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btnShare"
+        android:id="@+id/btnChangeImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:cardBackgroundColor="?attr/color_12"
@@ -73,7 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnShare"
+        app:layout_constraintStart_toEndOf="@+id/btnChangeImage"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.25">
 

@@ -8,9 +8,14 @@ class CreateUserUseCase(private val database: InstagramPlanerDatabase) {
 
     suspend fun execute(userName: String): User {
         return withContext(Dispatchers.IO) {
+            database.userDao?.getAll()?.onEach { it.currentUser = false }?.forEach {
+                database.userDao.update(it)
+            }
+
             User().apply {
                 this.name = userName
-                database.userDao?.insert(this)
+                this.currentUser = true
+                this.id = database.userDao?.insert(this) ?: this.id
             }
         }
     }

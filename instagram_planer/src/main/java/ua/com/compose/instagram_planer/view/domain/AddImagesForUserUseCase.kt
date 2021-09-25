@@ -22,6 +22,7 @@ class AddImagesForUserUseCase(private val context: Context, private val database
                 Image().apply {
                     this.position = --minPosition
                     this.uri = uri.toString()
+                    this.imageName = it.hashCode().toString()
                     this.userId = user.id
                 }
             }

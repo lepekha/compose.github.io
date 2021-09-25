@@ -9,21 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.module_instagram_planer_fragment_instagram_planer.*
 import kotlinx.android.synthetic.main.module_instagram_planer_fragment_instagram_planer.chipGroup
-import kotlinx.android.synthetic.main.module_instagram_planer_fragment_instagram_planer_image.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.com.compose.instagram_planer.di.Scope
 import ua.com.compose.instagram_planer.view.image.InstagramPlanerImageFragment
-import ua.com.compose.mvp.BaseMvpFragment
-import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.dialog.dialogs.DialogConfirmation
 import ua.com.compose.dialog.dialogs.DialogInput
 import ua.com.compose.extension.*
@@ -32,13 +27,15 @@ import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.navigator.replace
 import ua.com.compose.instagram_planer.R
-import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvvmFragment
 
 
 class InstagramPlanerFragment: BaseMvvmFragment() {
 
     companion object {
+
+        private const val REQUEST_CHANGE_IMAGE = "REQUEST_CHANGE_IMAGE"
+
         fun newInstance(): InstagramPlanerFragment {
             return InstagramPlanerFragment()
         }
@@ -59,14 +56,6 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
     private val btnAddBox = BottomMenu(iconResId = R.drawable.module_instagram_planer_ic_instagram_planer_add_box) {
         FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true)
     }
-
-//    private val btnAccountClear = BottomMenu(iconResId = R.drawable.module_instagram_planer_ic_instagram_planer_person_clear) {
-//        val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = "Clear current account?")
-//        setFragmentResultListener(request) { _, bundle ->
-//            viewModel.onAccountClearConfirm(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER))
-//        }
-//    }
-
 
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf(btnGallery, btnAddBox)
@@ -92,40 +81,36 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
         )
     }
 
-    fun changeImageInList(position: Int) {
-        gridList.adapter?.notifyItemChanged(position, InstagramPlanerRvAdapter.CHANGE_ITEM_POSITION)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_instagram_palaner_title))
 
         initGridPreview()
 
-        txtAccount.setOnClickListener {
-            viewModel.pressMoreAccount()
-        }
+        viewModel.loadUsers()
 
         setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
             viewModel.onAddImages((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
+        }
+
+        setFragmentResultListener(REQUEST_CHANGE_IMAGE) { _, bundle ->
+            viewModel.pressChangeImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
+        }
+
+        viewModel.changeImageInList.observe(this){
+            gridList.adapter?.notifyItemChanged(it, InstagramPlanerRvAdapter.CHANGE_ITEM_POSITION)
         }
 
         viewModel.images.observe(this){
             (gridList.adapter as InstagramPlanerRvAdapter).updateImages(images = it)
         }
 
-        viewModel.isVisiblePlaceHolder.observe(this){
-            imgPlaceholder.isVisible = it
+        viewModel.changeImages.observe(this){
+            (gridList.adapter as InstagramPlanerRvAdapter).changeImages(images = it)
         }
 
-        viewModel.isVisibleMoreAccount.observe(this){
-            if(it){
-                txtAccount.setDrawableRight(R.drawable.ic_expand_more)
-                txtAccount.isClickable = true
-            }else{
-                txtAccount.setDrawableRight(0)
-                txtAccount.isClickable = false
-            }
+        viewModel.isVisiblePlaceHolder.observe(this){
+            imgPlaceholder.isVisible = it
         }
 
         viewModel.userName.observe(this){
@@ -133,26 +118,34 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
         }
 
         viewModel.isVisibleClearAll.observe(this){
-            btnClear.isEnabled = it
-            btnClear.isClickable = it
-            btnClear.alpha = if(it) 1f else 0.5f
+            btnClear.isVisible = it
         }
 
-        viewModel.isVisibleRemoveAccount.observe(this){
-            btnRemoveUser.isEnabled = it
-            btnRemoveUser.isClickable = it
-            btnRemoveUser.alpha = if(it) 1f else 0.5f
+        viewModel.isVisibleMore.observe(this){
+            txtAccount.isVisible = it
+            btnMore.isVisible = it
+            btnAddFirstUser.isVisible = !it
+            txtCreateFirstUser.isVisible = !it
+            materialCardView.isClickable = it
+            materialCardView.isEnabled = it
+            setVisibleMore(false)
         }
 
         viewModel.createDialogInputName.observe(this){
             createDialogInputName(text = it)
         }
 
+        viewModel.createAlert.observe(this){
+            it?.let { showAlert(it) }
+        }
+
         viewModel.createUsersList.observe(this){
             showUsers(it)
         }
 
-        viewModel.loadUsers()
+        viewModel.removeImage.observe(this){
+            (gridList.adapter as InstagramPlanerRvAdapter).removeImage(image = it)
+        }
 
         btnRemove.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
@@ -166,6 +159,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                 DragEvent.ACTION_DROP -> {
                     btnRemove.animateScale(toScale = 1f)
                     groupButton.isVisible = false
+                    viewModel.pressRemoveImage(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
                 }
             }
             true
@@ -183,23 +177,26 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                 DragEvent.ACTION_DROP -> {
                     btnSave.animateScale(toScale = 1f)
                     groupButton.isVisible = false
+                    viewModel.pressImageSave(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
                 }
             }
             true
         }
 
-        btnShare.setOnDragListener { _, dragEvent ->
+        btnChangeImage.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     requireContext().vibrate(type = EVibrate.BUTTON)
-                    btnShare.animateScale(toScale = 1.5f)
+                    btnChangeImage.animateScale(toScale = 1.5f)
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    btnShare.animateScale(toScale = 1f)
+                    btnChangeImage.animateScale(toScale = 1f)
                 }
                 DragEvent.ACTION_DROP -> {
-                    btnShare.animateScale(toScale = 1f)
+                    btnChangeImage.animateScale(toScale = 1f)
                     groupButton.isVisible = false
+                    viewModel.onChangeImage(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
+                    FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true, requestKey = REQUEST_CHANGE_IMAGE)
                 }
             }
             true
@@ -207,22 +204,12 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
 
         btnMore.setVibrate(EVibrate.BUTTON)
         btnMore.setOnClickListener {
-            groupAccount.isVisible = !groupAccount.isVisible
-            if(groupAccount.isVisible){
-                imgMore.setImageResource(R.drawable.ic_expand_less)
-            }else{
-                imgMore.setImageResource(R.drawable.ic_expand_more)
-            }
+            setVisibleMore(!containerMore.isVisible)
         }
 
         materialCardView.setVibrate(EVibrate.BUTTON)
         materialCardView.setOnClickListener {
-            groupAccount.isVisible = !groupAccount.isVisible
-            if(groupAccount.isVisible){
-                imgMore.setImageResource(R.drawable.ic_expand_less)
-            }else{
-                imgMore.setImageResource(R.drawable.ic_expand_more)
-            }
+            setVisibleMore(!containerMore.isVisible)
         }
 
         btnAddUser.setVibrate(EVibrate.BUTTON)
@@ -230,9 +217,14 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
             viewModel.pressAddUser()
         }
 
+        btnAddFirstUser.setVibrate(EVibrate.BUTTON)
+        btnAddFirstUser.setOnClickListener {
+            viewModel.pressAddUser()
+        }
+
         btnClear.setVibrate(EVibrate.BUTTON)
         btnClear.setOnClickListener {
-            val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = "Clear current account?")
+            val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = requireContext().getString(R.string.module_instagram_palaner_clear_account))
             setFragmentResultListener(request) { _, bundle ->
                 viewModel.onAccountClearConfirm(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER))
             }
@@ -248,6 +240,26 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
 
         chipGroup.setOnCheckedChangeListener { group, checkedId ->
             viewModel.onAccountChange((group.get(checkedId) as Chip).text.toString())
+        }
+
+        gridList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                setVisibleMore(false)
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
+    }
+
+    private fun setVisibleMore(isVisible: Boolean){
+        containerMore.isVisible = isVisible
+        if(containerMore.isVisible){
+            imgMore.setImageResource(R.drawable.ic_expand_less)
+        }else{
+            imgMore.setImageResource(R.drawable.ic_expand_more)
         }
     }
 
@@ -272,22 +284,11 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
 
     }
 
-//    override fun createInstagramIntent(uri: Uri) {
-//        getCurrentActivity().createInstagramIntent(uri)
-//    }
-
     private fun createDialogInputName(text: String?){
         text ?: return
-        val request = DialogInput.show(fm = getCurrentActivity().supportFragmentManager, text = text)
+        val request = DialogInput.show(fm = getCurrentActivity().supportFragmentManager, text = text, singleLine = true)
         setFragmentResultListener(request) { _, bundle ->
             viewModel.onInputName(bundle.getString(DialogInput.BUNDLE_KEY_INPUT_MESSAGE))
-        }
-    }
-
-    fun createDialogList(list: List<String>, select: String){
-        val request = DialogChip.show(fm = getCurrentActivity().supportFragmentManager, list = list, selected = select)
-        setFragmentResultListener(request) { _, bundle ->
-            viewModel.onAccountChange(bundle.getString(DialogChip.BUNDLE_KEY_ANSWER_NAME))
         }
     }
 

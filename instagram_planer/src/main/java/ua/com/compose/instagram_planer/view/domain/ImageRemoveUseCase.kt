@@ -5,11 +5,12 @@ import kotlinx.coroutines.withContext
 import ua.com.compose.instagram_planer.data.Image
 import ua.com.compose.instagram_planer.data.User
 
-class UpdateImageUseCase(private val database: InstagramPlanerDatabase) {
+class ImageRemoveUseCase(private val database: InstagramPlanerDatabase) {
 
-    suspend fun execute(image: Image) {
+    suspend fun execute(image: Image): Image {
         return withContext(Dispatchers.IO) {
-            database.imageDao?.update(image = image)
+            database.imageDao?.delete(image = image)
+            image
         }
     }
 }

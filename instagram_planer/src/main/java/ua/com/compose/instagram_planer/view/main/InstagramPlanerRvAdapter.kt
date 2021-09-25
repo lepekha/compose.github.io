@@ -34,6 +34,19 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
         this.notifyDataSetChanged()
     }
 
+    fun changeImages(images: List<Image>){
+        this.images = images
+    }
+
+    fun removeImage(image: Image?){
+        this.images.indexOfFirst { it.id == image?.id }.takeIf { it >= 0 }?.let { position ->
+            this.images = this.images.toMutableList().apply {
+                removeAt(position)
+            }
+            this.notifyItemRemoved(position)
+        }
+    }
+
     override fun getItemCount(): Int {
         return images.size
     }

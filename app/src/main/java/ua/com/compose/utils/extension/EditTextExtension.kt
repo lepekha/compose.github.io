@@ -2,6 +2,7 @@ package ua.com.compose.utils.extension
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 
 fun EditText.afterTextChanged(cb: (String) -> Unit) {

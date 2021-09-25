@@ -13,6 +13,9 @@ class Image {
     @ColumnInfo(name = "userId")
     var userId: Long = 0
 
+    @ColumnInfo(name = "imageName")
+    var imageName: String = ""
+
     @ColumnInfo(name = "position")
     var position: Long = 0
 

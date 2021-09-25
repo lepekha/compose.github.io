@@ -9,13 +9,11 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_image_history.*
 import org.koin.android.ext.android.getKoin
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 import ua.com.compose.R
 import ua.com.compose.extension.EVibrate
@@ -88,8 +86,8 @@ class ImageHistoryFragment : BaseMvvmFragment() {
             viewModule.pressRemove()
         }
 
-        btnShare.setVibrate(EVibrate.BUTTON)
-        btnShare.setOnClickListener {
+        btnChangeImage.setVibrate(EVibrate.BUTTON)
+        btnChangeImage.setOnClickListener {
         }
 
         val c1 = ConstraintSet().apply {

@@ -13,6 +13,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_alert.*
 import ua.com.compose.dialog.R
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.setVibrate
 
 
 class DialogAlert : BottomSheetDialogFragment() {
@@ -53,6 +55,7 @@ class DialogAlert : BottomSheetDialogFragment() {
 
         txtMessage.text = arguments?.getString(BUNDLE_KEY_MESSAGE) ?: ""
 
+        btnDone.setVibrate(EVibrate.BUTTON)
         btnDone.setOnClickListener {
             dismiss()
         }

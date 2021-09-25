@@ -25,10 +25,13 @@ val instagramPlanerModule = module {
         scoped { GetAllUsersUseCase(database = get()) }
         scoped { GetAllUserImagesUseCase(database = get()) }
         scoped { RemoveUserUseCase(database = get()) }
-        scoped { UpdateImageUseCase(database = get()) }
+        scoped { ImageRemoveUseCase(database = get()) }
+        scoped { ImageUpdateUseCase(database = get()) }
         scoped { RemoveAllImagesFromUserUseCase(database = get()) }
-        scoped { ChangeImagePositionsUseCase(database = get()) }
+        scoped { ImageChangePositionsUseCase(database = get()) }
+        scoped { ImageChangeUriUseCase(context = androidContext(), database = get()) }
         scoped { AddImagesForUserUseCase(context = androidContext(), database = get()) }
+        scoped { ImageDownloadUseCase(context = androidContext()) }
 
         viewModel {
             InstagramPlanerViewModel(
@@ -36,10 +39,13 @@ val instagramPlanerModule = module {
                 getAllUsersUseCase = get(),
                 getAllUserImagesUseCase = get(),
                 removeUserUseCase = get(),
-                updateImageUseCase = get(),
+                imageUpdateUseCase = get(),
                 addImagesForUserUseCase = get(),
                 removeAllImagesFromUserUseCase = get(),
-                changeImagePositionsUseCase = get()
+                imageChangePositionsUseCase = get(),
+                imageRemoveUseCase = get(),
+                imageChangeUseCase = get(),
+                imageDownloadUseCase = get()
             )
         }
     }

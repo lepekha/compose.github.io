@@ -24,8 +24,10 @@ import ua.com.compose.gallery.main.content.FragmentGalleryContent
 import kotlinx.android.synthetic.main.module_gallery_fragment_gallery.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
+import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.animateScale
 import ua.com.compose.extension.playAnimation
+import ua.com.compose.extension.setVibrate
 
 
 class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery>(), ViewGallery {
@@ -34,12 +36,16 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
         const val REQUEST_KEY = "REQUEST_KEY_GALLERY"
 
+        private const val BUNDLE_KEY_REQUEST_KEY = "BUNDLE_KEY_REQUEST_KEY"
         const val BUNDLE_KEY_IMAGES = "BUNDLE_KEY_IMAGES"
         const val BUNDLE_KEY_MULTI_SELECT = "BUNDLE_KEY_MULTI_SELECT"
 
-        fun show(fm: FragmentManager, isMultiSelect: Boolean = false) {
+        fun show(fm: FragmentManager, isMultiSelect: Boolean = false, requestKey: String = REQUEST_KEY) {
             val fragment = FragmentGallery().apply {
-                this.arguments = bundleOf(BUNDLE_KEY_MULTI_SELECT to isMultiSelect)
+                this.arguments = bundleOf(
+                    BUNDLE_KEY_MULTI_SELECT to isMultiSelect,
+                    BUNDLE_KEY_REQUEST_KEY to requestKey
+                )
             }
             fragment.show(fm, fragment.tag)
         }
@@ -102,10 +108,12 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
         presenter.onCreate(isMultiSelect = arguments?.getBoolean(BUNDLE_KEY_MULTI_SELECT) ?: false)
 
+        btnClearAll.setVibrate(EVibrate.BUTTON)
         btnClearAll.setOnClickListener {
             presenter.pressClear()
         }
 
+        btnAddImages.setVibrate(EVibrate.BUTTON)
         btnAddImages.setOnClickListener {
             presenter.addImage()
         }
@@ -151,8 +159,12 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             if(isVisible){
                 btnAddImages.scaleX = 0f
                 btnAddImages.scaleY = 0f
+
+                btnClearAll.scaleX = 0f
+                btnClearAll.scaleY = 0f
                 buttonContainer.isVisible = isVisible
                 btnAddImages.animateScale(toScale = 1f)
+                btnClearAll.animateScale(toScale = 1f)
             }else{
                 buttonContainer.isVisible = isVisible
             }
@@ -161,7 +173,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
     override fun onDestroy() {
         super.onDestroy()
-        setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to presenter.doneImages))
+        setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to presenter.doneImages))
         getKoin().getScope("gallery").close()
     }
 

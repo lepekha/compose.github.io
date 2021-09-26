@@ -16,6 +16,7 @@ import ua.com.compose.instagram_planer.R
 import ua.com.compose.instagram_planer.data.Image
 import ua.com.compose.instagram_planer.data.User
 import ua.com.compose.instagram_planer.view.domain.*
+import ua.com.compose.mvp.data.SingleLiveEvent
 
 class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
                                private val getAllUsersUseCase: GetAllUsersUseCase,
@@ -27,7 +28,8 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
                                private val imageChangePositionsUseCase: ImageChangePositionsUseCase,
                                private val imageRemoveUseCase: ImageRemoveUseCase,
                                private val imageChangeUseCase: ImageChangeUriUseCase,
-                               private val imageDownloadUseCase: ImageDownloadUseCase
+                               private val imageDownloadUseCase: ImageDownloadUseCase,
+                               private val userChangeUseCase: UserChangeUseCase
 ): ViewModel() {
 
     private val _isVisiblePlaceHolder: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -36,42 +38,42 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
     private val _isVisibleClearAll: MutableLiveData<Boolean> = MutableLiveData(false)
     val isVisibleClearAll: LiveData<Boolean> = _isVisibleClearAll
 
-    private val _saveImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
-    val saveImage: LiveData<Bitmap?> = _saveImage
-
     private val _isVisibleMore: MutableLiveData<Boolean> = MutableLiveData(true)
     val isVisibleMore: LiveData<Boolean> = _isVisibleMore
 
-    private val _changeImageInList: MutableLiveData<Int> = MutableLiveData(0)
+    private val _changeImageInList = SingleLiveEvent<Int>()
     val changeImageInList: LiveData<Int> = _changeImageInList
 
-    private val _goToImage: MutableLiveData<Image?> = MutableLiveData(null)
+    private val _goToImage: SingleLiveEvent<Image?> = SingleLiveEvent()
     val goToImage: LiveData<Image?> = _goToImage
 
-    private val _userName: MutableLiveData<String> = MutableLiveData("")
+    private val _userName: SingleLiveEvent<String> = SingleLiveEvent()
     val userName: LiveData<String> = _userName
 
-    private val _createDialogInputName: MutableLiveData<String?> = MutableLiveData(null)
+    private val _createDialogInputName: SingleLiveEvent<String?> = SingleLiveEvent()
     val createDialogInputName: LiveData<String?> = _createDialogInputName
 
-    private val _createUsersList: MutableLiveData<List<String>> = MutableLiveData(listOf())
+    private val _createUsersList: SingleLiveEvent<List<String>> = SingleLiveEvent()
     val createUsersList: LiveData<List<String>> = _createUsersList
 
-    private val _createAlert: MutableLiveData<Int?> = MutableLiveData(null)
+    private val _createAlert: SingleLiveEvent<Int?> = SingleLiveEvent()
     val createAlert: LiveData<Int?> = _createAlert
 
-    private val _images: MutableLiveData<List<Image>> = MutableLiveData(mutableListOf())
+    private val _images: SingleLiveEvent<List<Image>> = SingleLiveEvent()
     val images: LiveData<List<Image>> = _images
 
-    private val _removeImage: MutableLiveData<Image?> = MutableLiveData(null)
+    private val _removeImage: SingleLiveEvent<Image?> = SingleLiveEvent()
     val removeImage: LiveData<Image?> = _removeImage
 
-    private val _changeImages: MutableLiveData<List<Image>> = MutableLiveData(mutableListOf())
+    private val _addImages: SingleLiveEvent<List<Image>> = SingleLiveEvent()
+    val addImages: LiveData<List<Image>> = _addImages
+
+    private val _changeImages: SingleLiveEvent<List<Image>> = SingleLiveEvent()
     val changeImages: LiveData<List<Image>> = _changeImages
 
-    var currentImage: Image? = null
+    private var currentImage: Image? = null
 
-    var currentUser: User? = null
+    private var currentUser: User? = null
         set(value) {
             if(value != null){
                 field = value
@@ -112,6 +114,7 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
     fun onAccountChange(name: String?) = viewModelScope.launch {
         val users = getAllUsersUseCase.execute()
         currentUser = users.firstOrNull { it.name == name }?.apply {
+            userChangeUseCase.execute(this)
             val images = getAllUserImagesUseCase.execute(user = this)
             _images.postValue(images)
             _createUsersList.postValue(users.filter { it != this }.map { it.name })
@@ -143,7 +146,8 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
         currentUser?.let { user ->
             val images = getAllUserImagesUseCase.execute(user)
             currentImage = images[position]
-            _goToImage.postValue(currentImage)
+            _goToImage.value = currentImage
+            _goToImage.value = null
         }
     }
 
@@ -162,7 +166,7 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
         currentUser?.let { user ->
             addImagesForUserUseCase.execute(user = user, uris = imageUris)
             val images = getAllUserImagesUseCase.execute(user)
-            _images.postValue(images)
+            _addImages.postValue(images)
             _isVisiblePlaceHolder.postValue(images.isEmpty())
             _isVisibleClearAll.postValue(images.isNotEmpty())
         }
@@ -179,11 +183,13 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
     fun pressChangeImage(imageUris: List<Uri>) = viewModelScope.launch {
         currentUser?.let { user ->
             imageForChange?.let { image ->
-                imageChangeUseCase.execute(user = user, image = image, uri = imageUris.first())
-                val images = getAllUserImagesUseCase.execute(user)
-                _changeImages.value = images
-                _changeImageInList.value = images.indexOfFirst { it.id == imageForChange?.id }
-                imageForChange = null
+                imageUris.firstOrNull()?.let { uri ->
+                    imageChangeUseCase.execute(user = user, image = image, uri = uri)
+                    val images = getAllUserImagesUseCase.execute(user)
+                    _changeImages.value = images
+                    _changeImageInList.value = images.indexOfFirst { it.id == imageForChange?.id }
+                    imageForChange = null
+                }
             }
         }
     }
@@ -217,6 +223,19 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
             val images = getAllUserImagesUseCase.execute(user).toMutableList()
             imageRemoveUseCase.execute(images[position])
             _removeImage.value = images[position]
+        }
+    }
+
+    fun pressAddBox(color: Int) = viewModelScope.launch {
+        currentUser?.let { user ->
+            val bitmap = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888).apply {
+                this.eraseColor(color)
+            }
+            addImagesForUserUseCase.execute(user, bitmap)
+            val images = getAllUserImagesUseCase.execute(user)
+            _images.postValue(images)
+            _isVisiblePlaceHolder.postValue(images.isEmpty())
+            _isVisibleClearAll.postValue(images.isNotEmpty())
         }
     }
 }

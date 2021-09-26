@@ -4,55 +4,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="#000000">
 
 
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="90dp"
+        android:background="@drawable/background_input_text_dark"
+        android:ems="10"
+        android:hint="Type your text here"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:minLines="2"
+        android:paddingStart="20dp"
+        android:paddingEnd="50dp"
+        android:textColor="?attr/color_12"
+        android:textColorHint="?attr/color_12"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
         android:scaleX="1"
-        app:layout_constraintBottom_toTopOf="@+id/btnInstagram"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintBottom_toTopOf="@+id/txtSymbolCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnCopy"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="?attr/color_1"
+        app:cardCornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="@+id/editText"
+        app:layout_constraintWidth_percent="0.3"
+        tools:visibility="visible">
 
-    <ImageButton
-        android:id="@+id/btnDownload"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="24dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:tint="?attr/color_5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnInstagram"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_download" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_copy"
+            app:tint="?attr/color_12" />
+    </com.google.android.material.card.MaterialCardView>
 
-    <ImageButton
-        android:id="@+id/btnInstagram"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="24dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:tint="?attr/color_5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnDownload"
-        app:srcCompat="@drawable/ic_instagram" />
+    <TextView
+        android:id="@+id/txtSymbolCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="3dp"
+        android:text="0/2200"
+        android:textColor="?attr/color_12"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintEnd_toStartOf="@+id/txtHashtagCount" />
 
+    <TextView
+        android:id="@+id/txtHashtagCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="3dp"
+        android:text="# 0/30"
+        android:textColor="?attr/color_12"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintEnd_toStartOf="@+id/txtMailCount" />
+
+    <TextView
+        android:id="@+id/txtMailCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="19dp"
+        android:layout_marginBottom="3dp"
+        android:text="@ 0/30"
+        android:textColor="?attr/color_12"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="@+id/editText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,11 @@
 <resources>
     <color name="color_night_1">#1B1B1F</color>
     <color name="color_night_2">#23232B</color>
-    <color name="color_night_3">#454545</color>
+    <color name="color_night_3">#303033</color>
     <color name="color_night_4">#535353</color>
     <color name="color_night_5">#FFFFFF</color>
     <color name="color_night_6">#03A9F4</color>
+    <color name="color_night_7">#F44336</color>
 
 
     <color name="color_night_10">#31313D</color>

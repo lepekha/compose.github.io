@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.module_instagram_planer_element_instagram_planer_image.view.*
+import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.animateScale
+import ua.com.compose.extension.setVibrate
 import ua.com.compose.instagram_planer.R
 import ua.com.compose.instagram_planer.data.Image
 
@@ -30,6 +32,11 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
     private var images: List<Image> = mutableListOf()
 
     fun updateImages(images: List<Image>){
+        this.images = images
+        this.notifyDataSetChanged()
+    }
+
+    fun addImages(images: List<Image>){
         this.images = images
         this.notifyDataSetChanged()
     }
@@ -64,6 +71,7 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
                 }
             }
 
+            this.imgView.setVibrate(EVibrate.BUTTON)
             this.imgView.setOnClickListener {
                 onPress(adapterPosition)
             }
@@ -71,6 +79,7 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
             this.imgView.setOnDragListener { _, dragEvent ->
                 when (dragEvent.action) {
                     DragEvent.ACTION_DRAG_ENDED -> {
+                        this.imgView.animateScale(toScale = SCALE_DRAG_EXITED)
                         onEndDrag()
                     }
                     DragEvent.ACTION_DRAG_ENTERED -> {

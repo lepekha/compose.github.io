@@ -97,7 +97,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/btnClear"
+                    android:id="@+id/btnCopy"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:visibility="visible"
@@ -141,7 +141,7 @@
                     app:cardBackgroundColor="?attr/color_1"
                     app:cardCornerRadius="25dp"
                     app:layout_constraintBottom_toBottomOf="@+id/btnAddUser"
-                    app:layout_constraintEnd_toStartOf="@+id/btnClear"
+                    app:layout_constraintEnd_toStartOf="@+id/btnCopy"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/btnAddUser"
                     app:layout_constraintTop_toTopOf="@+id/btnAddUser"

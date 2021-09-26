@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -60,7 +59,7 @@ class DialogInput : BottomSheetDialogFragment() {
         editText.isSingleLine = arguments?.getBoolean(BUNDLE_KEY_SINGLE_LINE, false) ?: false
 
         editText.onTextChangedListener {
-            btnClear.isVisible = it.isNotEmpty()
+            btnCopy.isVisible = it.isNotEmpty()
         }
 
         btnCancel.setVibrate(EVibrate.BUTTON)
@@ -69,8 +68,8 @@ class DialogInput : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        btnClear.setVibrate(EVibrate.BUTTON)
-        btnClear.setOnClickListener {
+        btnCopy.setVibrate(EVibrate.BUTTON)
+        btnCopy.setOnClickListener {
             editText.text.clear()
         }
 

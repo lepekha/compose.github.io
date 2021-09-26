@@ -40,10 +40,12 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnCopy"
             android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginEnd="16dp"
-            app:cardBackgroundColor="?attr/color_12"
-            app:cardCornerRadius="25dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="?attr/color_1"
+            app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -52,7 +54,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:tint="?attr/color_10"
+                android:tint="?attr/color_12"
                 app:srcCompat="@drawable/module_other_text_style_fragment_text_style_ic_copy" />
         </com.google.android.material.card.MaterialCardView>
 

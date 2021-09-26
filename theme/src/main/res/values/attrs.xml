@@ -6,6 +6,7 @@
     <attr name="color_4" format="color"/>
     <attr name="color_5" format="color"/>
     <attr name="color_6" format="color"/>
+    <attr name="color_7" format="color"/>
 
     <attr name="color_10" format="color"/>
     <attr name="color_11" format="color"/>

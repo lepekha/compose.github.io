@@ -1,6 +1,6 @@
 package ua.com.compose.instagram_planer.di
 
-import ua.com.compose.instagram_planer.view.image.InstagramPlanerImagePresenter
+import ua.com.compose.instagram_planer.view.image.InstagramPlanerImageViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -20,7 +20,6 @@ val instagramPlanerModule = module {
 
     scope(named("INSTAGRAM")) {
         scoped { InstagramPlanerDatabase(context = androidContext()) }
-        scoped { InstagramPlanerImagePresenter(context = androidContext()) }
         scoped { CreateUserUseCase(database = get()) }
         scoped { GetAllUsersUseCase(database = get()) }
         scoped { GetAllUserImagesUseCase(database = get()) }
@@ -32,6 +31,12 @@ val instagramPlanerModule = module {
         scoped { ImageChangeUriUseCase(context = androidContext(), database = get()) }
         scoped { AddImagesForUserUseCase(context = androidContext(), database = get()) }
         scoped { ImageDownloadUseCase(context = androidContext()) }
+        scoped { ImageByIdUseCase(database = get()) }
+        scoped { UserChangeUseCase(database = get()) }
+        scoped { TextSymbolCountUseCase() }
+        scoped { TextHashtagCountUseCase() }
+        scoped { TextMailCountUseCase() }
+        scoped { ImageUpdateTextUseCase(database = get()) }
 
         viewModel {
             InstagramPlanerViewModel(
@@ -45,7 +50,19 @@ val instagramPlanerModule = module {
                 imageChangePositionsUseCase = get(),
                 imageRemoveUseCase = get(),
                 imageChangeUseCase = get(),
-                imageDownloadUseCase = get()
+                imageDownloadUseCase = get(),
+                userChangeUseCase = get()
+            )
+        }
+
+        viewModel {
+            InstagramPlanerImageViewModel(
+                imageByIdUseCase = get(),
+                imageDownloadUseCase = get(),
+                textSymbolCountUseCase = get(),
+                textHashtagCountUseCase = get(),
+                textMailCountUseCase = get(),
+                imageUpdateTextUseCase = get()
             )
         }
     }

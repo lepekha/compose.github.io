@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':image_filter')
     implementation project(':image_crop')
     implementation project(':instagram_no_crop')
     implementation project(':instagram_panorama')

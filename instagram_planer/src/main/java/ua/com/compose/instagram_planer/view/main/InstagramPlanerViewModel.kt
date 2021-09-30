@@ -76,11 +76,11 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
     private var currentUser: User? = null
         set(value) {
             if(value != null){
-                field = value
                 _userName.postValue("@${value.name}")
             }else{
                 _userName.postValue("")
             }
+            field = value
         }
 
     fun loadUsers() = viewModelScope.launch {

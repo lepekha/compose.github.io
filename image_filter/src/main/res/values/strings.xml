@@ -1,0 +1,9 @@
+<resources>
+    <string name="module_image_filter_title">Filter</string>
+    <string name="module_image_filter_brightness">Brightness</string>
+    <string name="module_image_filter_contrast">Contrast</string>
+    <string name="module_image_filter_highlights">Highlights</string>
+    <string name="module_image_filter_shadows">Shadows</string>
+    <string name="module_image_filter_saturation">Saturation</string>
+    <string name="module_image_filter_tune_image">Tune image</string>
+</resources>

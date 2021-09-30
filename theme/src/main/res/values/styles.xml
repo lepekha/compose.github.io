@@ -22,7 +22,7 @@
         <item name="behavior_peekHeight">500dp</item>
     </style>
 
-    <style name="CustomSeekBar" parent="Widget.AppCompat.SeekBar">
+    <style name="CustomSeekBar" parent="Widget.MaterialComponents.Slider">
         <item name="android:progressTint">?attr/color_5</item>
         <item name="android:scrollbarStyle">outsideInset</item>
         <item name="android:secondaryProgressTint">?attr/color_3</item>

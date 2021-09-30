@@ -1,0 +1,2 @@
+ua/com/compose/image_filter/BuildConfig.java
+ ua.com.compose.image_filter.BuildConfig

@@ -17,6 +17,8 @@
     <string name="menu_panorama">Panorama</string>
     <string name="menu_instagram">Instagram</string>
     <string name="menu_image">Image</string>
+    <string name="menu_filter">Filter</string>
+    <string name="menu_style">Style</string>
     <string name="menu_other">Other</string>
     <string name="menu_grid">Grid</string>
     <string name="menu_tags">#Top\n#hashtegs</string>

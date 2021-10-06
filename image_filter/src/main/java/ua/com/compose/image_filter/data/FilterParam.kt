@@ -3,10 +3,11 @@ package ua.com.compose.image_filter.data
 import kotlin.math.abs
 
 
-data class FilterParam(val nameResId: Int, val minValue: Float, val maxValue: Float, val defValue: Float, val onChange:(value: Float) -> Unit){
+data class FilterParam(val nameResId: Int, val minValue: Float, val maxValue: Float, val defValue: Float, val onPercent:(value: Float) -> Unit = {}, val onChange:(value: Float) -> Unit = {}){
     var percent: Float = 0f
         set(value) {
             field = value
+            onPercent(field)
             onChange(range(percentage = field))
         }
 

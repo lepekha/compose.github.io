@@ -42,7 +42,7 @@ class GridDelegateAdapter(private val onPress: () -> Unit) : ViewTypeDelegateAda
         fun bind(item: DynamicMenu.Grid) {
             innerItem = item
             txtTitle.setText(item.titleResId)
-            list.layoutManager = GridLayoutManager(parent.context, 2, RecyclerView.HORIZONTAL, false)
+            list.layoutManager = GridLayoutManager(parent.context, 5, RecyclerView.VERTICAL, false)
             list.adapter = MenuRvAdapter(items = item.innerMenu, onPress = onPress)
         }
     }

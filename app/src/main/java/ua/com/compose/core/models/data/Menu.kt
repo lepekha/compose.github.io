@@ -22,7 +22,7 @@ class MenuObjects(private val presenter: MainPresenter) {
 
     fun getOrCreateMenu(fm: FragmentManager?): List<DynamicMenu> {
         fragmentManager = fragmentManager ?: WeakReference(fm) ?: return listOf()
-        return listOf(IMAGE, INSTAGRAM, OTHER).filter { it.innerMenu.any { _it -> _it.isVisible.invoke() } }
+        return listOf(IMAGE, INSTAGRAM, OTHER)
     }
 
     private val INSTAGRAM_PLANER by lazy {
@@ -134,7 +134,7 @@ class MenuObjects(private val presenter: MainPresenter) {
     }
 
     private val IMAGE by lazy {
-        DynamicMenu.List(
+        DynamicMenu.Grid(
                 id = R.id.id_menu_image,
                 titleResId = R.string.menu_image,
                 isVisible = { true },

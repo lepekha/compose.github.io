@@ -2,7 +2,6 @@ package ua.com.compose.image_filter.main
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -10,9 +9,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
-import androidx.core.view.doOnLayout
 import androidx.core.view.drawToBitmap
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResult
@@ -24,16 +21,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
 import kotlinx.android.synthetic.main.module_image_filter_fragment_filter.*
-import ua.com.compose.dialog.dialogs.DialogColor
-import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.image_filter.di.Scope
 import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.image_filter.R
 import ua.com.compose.image_filter.data.ImageFilter
-import ua.com.compose.image_filter.data.ImageFilterBrightness
 import ua.com.compose.image_filter.main.dialogFilters.DialogFilters
 import ua.com.compose.image_maker.FrameImageView
 import ua.com.compose.mvp.BaseMvpActivity
@@ -112,6 +105,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     override fun initHistory(){
         setVisibleBack(isVisible = true)
         setTitle(title = requireContext().getString(R.string.module_image_filter_title))
+        initHistoryList()
         (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnDone))
     }
 
@@ -126,6 +120,13 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         list.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.VERTICAL, false)
         list.adapter = ImageFilterRvAdapter(params = presenter.params){
             presenter.onProgressChange()
+        }
+    }
+
+    private fun initHistoryList() {
+        list.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.HORIZONTAL, false)
+        list.adapter = ImageFilterHistoryRvAdapter(presenter.historyImages.reversed().toMutableList(), presenter.historyFilters.reversed().toMutableList()){
+            presenter.pressImageHistory(it)
         }
     }
 
@@ -152,7 +153,6 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
             override fun imageSampleChange(bitmap: Bitmap?) {
                 if(imgView.drawable == null) return
                 presenter.onSampleLoad(imgView.drawToBitmap())
-//                presenter.onSampleLoad(image = bitmap)
             }
         })
 

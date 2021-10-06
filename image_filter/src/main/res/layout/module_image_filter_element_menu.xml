@@ -18,11 +18,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/root"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_margin="8dp"
-        app:cardBackgroundColor="?attr/color_12"
-        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="?attr/color_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,7 +31,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_1"
+            android:tint="?attr/color_12"
             app:srcCompat="@drawable/ic_copy" />
 
 

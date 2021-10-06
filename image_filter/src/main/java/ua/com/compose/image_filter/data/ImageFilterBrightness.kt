@@ -1,21 +1,19 @@
 package ua.com.compose.image_filter.data
 
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageBrightnessFilter
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageGrayscaleFilter
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageMonochromeFilter
+import jp.co.cyberagent.android.gpuimage.filter.*
 import ua.com.compose.image_filter.R
 
 class ImageFilterBrightness: ImageFilter() {
-    override val id: Int = 1
+    override val id: Int = 2
     override val nameResId: Int = R.string.module_image_filter_brightness
     override val iconResId: Int = R.drawable.module_image_filter_ic_brightness
 
-    override val filter by lazy { GPUImageMonochromeFilter()}
+    override val filter by lazy { GPUImageBrightnessFilter() }
 
     override val params by lazy {
         mutableListOf(
-            FilterParam(R.string.module_image_filter_brightness, 0.0f, 1.0f, 1.0f) {
-                filter.setIntensity(it)
+            FilterParam(R.string.module_image_filter_intensity, -0.2f, 0.2f, 0.0f) {
+                filter.setBrightness(it)
             }
         )
     }

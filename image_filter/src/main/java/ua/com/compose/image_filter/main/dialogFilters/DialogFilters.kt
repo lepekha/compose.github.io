@@ -70,7 +70,7 @@ class DialogFilters : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         list?.post {
-            list.layoutManager = GridLayoutManager(context, 4)
+            list.layoutManager = GridLayoutManager(context, 5)
             list.adapter = ImageFilterMenuRvAdapter(filters = filters) {
                 setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(
                     BUNDLE_KEY_FILTER_ID to it.id

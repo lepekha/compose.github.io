@@ -4,5 +4,4 @@ import android.net.Uri
 
 object ImageHistory {
     var mainImage: Uri? = null
-    var history = mutableListOf<Uri>()
 }

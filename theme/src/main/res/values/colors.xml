@@ -5,14 +5,17 @@
     <color name="color_night_3">#303033</color>
     <color name="color_night_4">#535353</color>
     <color name="color_night_5">#FFFFFF</color>
-    <color name="color_night_6">#03A9F4</color>
+    <color name="color_night_6">#24457F</color>
     <color name="color_night_7">#F44336</color>
+    <color name="color_night_8">#404758</color>
+    <color name="color_night_9">#D6E1FF</color>
 
 
     <color name="color_night_10">#31313D</color>
     <color name="color_night_11">#737373</color>
     <color name="color_night_12">#FAFAFA</color>
     <color name="color_night_13">#A9A9C1</color>
+    <color name="color_night_14">#ACC7FF</color>
 
 <!--    <color name="color_day_1">#FFFFFF</color>-->
 <!--    <color name="color_day_2">#535353</color>-->

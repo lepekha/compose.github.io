@@ -3,31 +3,34 @@ package ua.com.compose.gallery.main
 import android.Manifest
 import android.app.Dialog
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.view.marginTop
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.eazypermissions.common.model.PermissionResult
-import com.eazypermissions.dsl.PermissionManager
 import com.eazypermissions.dsl.extension.requestPermissions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
 import ua.com.compose.gallery.R
-import ua.com.compose.gallery.main.content.FragmentGalleryContent
 import kotlinx.android.synthetic.main.module_gallery_fragment_gallery.*
+import kotlinx.android.synthetic.main.module_gallery_fragment_gallery.list
+import kotlinx.android.synthetic.main.module_gallery_fragment_gallery_content.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
-import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.animateScale
-import ua.com.compose.extension.playAnimation
-import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.*
 
 
 class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery>(), ViewGallery {
@@ -57,21 +60,12 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         scope.get()
     }
 
-    private val adapter by lazy { GalleryContentRvAdapter(this.childFragmentManager, presenter.folders) }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.module_gallery_fragment_gallery, container, false)
     }
 
     override fun backPress() {
         dismiss()
-    }
-
-    private fun initList() {
-        list.post {
-            list.offscreenPageLimit = 1
-            list.adapter = adapter
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,17 +88,14 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         return dialog
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         dialog?.setOnShowListener { dialog ->
             val bottomSheetInternal = (dialog as BottomSheetDialog).findViewById<View>(R.id.design_bottom_sheet)
-            bottomSheetInternal?.minimumHeight= Resources.getSystem().displayMetrics.heightPixels
+            bottomSheetInternal?.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
+            list?.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
         }
-
-        tab_layout.setupWithViewPager(list)
 
         presenter.onCreate(isMultiSelect = arguments?.getBoolean(BUNDLE_KEY_MULTI_SELECT) ?: false)
 
@@ -118,6 +109,14 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             presenter.addImage()
         }
 
+        txtFolder.setOnClickListener {
+            if(list.adapter is GalleryFoldersRvAdapter){
+                initPhotos()
+            }else{
+                initFolders()
+            }
+        }
+
         requestPermissions(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -127,7 +126,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
                         presenter.getAllShownImagesPath(getCurrentActivity())
-                        initList()
+                        initPhotos()
                     }
                     is PermissionResult.PermissionDenied -> {
                         dismiss()
@@ -142,19 +141,43 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 }
             }
         }
+    }
 
+    override fun initFolders() {
+        txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_less), null)
+        list.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.VERTICAL, false)
+        list.adapter = GalleryFoldersRvAdapter(
+            presenter.folders,
+        ){
+            presenter.pressFolder(it)
+        }
+    }
+
+    override fun initPhotos() {
+        txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
+        list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
+        list.adapter = GalleryPhotoRvAdapter(
+            requireContext(),
+            presenter.images,
+            presenter.selectedImages,
+            onPress = { uri, isLongPress ->
+                presenter.pressImage(uri = uri, isMultiSelect = isLongPress)
+            },
+            onUpdateBadge = {
+                list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_BADGE)
+            }
+        )
+    }
+
+    override fun setFolderName(value: String) {
+        txtFolder.text = value
     }
 
     override fun clearSelect(){
-        (adapter.instantiateItem(list, list.currentItem) as? FragmentGalleryContent)?.clearSelectSelect()
-    }
-
-    override fun setVisibleTabs(isVisible: Boolean) {
-        tab_layout.isVisible = isVisible
+        list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_CLEAR_SELECT)
     }
 
     override fun setVisibleButtons(isVisible: Boolean) {
-        list.isPagingEnabled = !isVisible
         if(buttonContainer.isVisible != isVisible){
             if(isVisible){
                 btnAddImages.scaleX = 0f

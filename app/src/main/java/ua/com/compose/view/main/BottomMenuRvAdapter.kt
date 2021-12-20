@@ -34,7 +34,7 @@ class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<Bo
         val item = menu[position] as BottomMenu
         holder.btnMenu.isClickable = item.isEnabled
         holder.btnIcon.setImageResource(item.iconResId)
-        val iconTintRes = item.iconTintRes ?: R.attr.color_1
+        val iconTintRes = item.iconTintRes ?: R.attr.color_9
         holder.btnIcon.setImageResource(item.iconResId)
         holder.btnIcon.setColorFilter(holder.btnMenu.context.getColorFromAttr(iconTintRes))
     }

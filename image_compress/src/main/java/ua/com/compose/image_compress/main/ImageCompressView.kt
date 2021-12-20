@@ -10,4 +10,6 @@ interface ImageCompressView : BaseMvpView {
     fun setImage(bmp: Bitmap)
     fun openGallery()
     fun saveToResult(uri: Uri)
+    fun setQualityValue(value: String)
+    fun setSizeValue(value: String)
 }

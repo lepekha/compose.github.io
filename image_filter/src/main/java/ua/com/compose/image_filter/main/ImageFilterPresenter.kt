@@ -3,6 +3,7 @@ package ua.com.compose.image_filter.main
 import android.content.Context
 import android.graphics.*
 import android.net.Uri
+import com.google.gson.GsonBuilder
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import kotlinx.coroutines.*
 import ua.com.compose.mvp.BaseMvpPresenterImpl
@@ -19,6 +20,11 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     private var image: Bitmap? = null
     private var sampleImage: Bitmap? = null
     private var sampleOriginImage: Bitmap? = null
+    private val gson = GsonBuilder().apply {
+        this.excludeFieldsWithoutExposeAnnotation()
+    }.create()
+
+    val filters = EImageFilter.values().map { it.createFilter() }
 
     var historyFilters = mutableListOf<ImageFilter>()
     var historyImages = mutableListOf<Bitmap>()
@@ -32,7 +38,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             params.clear()
             if(value != null){
                 gpuSampleFilter.setFilter(value.filter)
-                params.addAll(value.params)
+                params.addAll(value.valueParams)
                 view?.initFilter(value)
             }
             view?.updateList()
@@ -74,6 +80,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             view?.openGallery()
         }
         onProgressChange()
+        view?.initMenuFilters()
     }
 
     fun pressFilter(id: Int){
@@ -83,12 +90,18 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         onProgressChange()
     }
 
+    fun pressMenuFilters(){
+        historyFilters = historyFilters.dropLast(backHistorySize).toMutableList()
+        historyImages = historyImages.dropLast(backHistorySize).toMutableList()
+        view?.initMenuFilters()
+    }
+
     fun pressCancelFilter(){
         currentFilter = null
         sampleImage?.let {
             view?.setImage(it)
         }
-        view?.initHistory()
+        view?.initMenuFilters()
     }
 
     fun onProgressChange() = CoroutineScope(Dispatchers.Main).launch {
@@ -132,6 +145,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             view?.saveToResult(uri)
         }
         dialog.closeDialog()
+        val json = gson.toJson(historyFilters.associateBy({it.id}, {it.valueParams}))
         (view?.getCurrentActivity() as BaseMvpView)?.backPress()
     }
 
@@ -149,7 +163,15 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             historyFilters.add(filter)
             historyImages.add(sampleImage!!)
             currentFilter = null
-            view?.initHistory()
+            view?.initMenuFilters()
+        }
+    }
+
+    fun pressBack(){
+        if(currentFilter != null){
+            pressCancelFilter()
+        }else{
+            view?.backToMain()
         }
     }
 
@@ -171,5 +193,9 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             this.sampleOriginImage = image
             gpuSampleFilter.setImage(image)
         }
+    }
+
+    fun onInputStyleName(value: String?){
+
     }
 }

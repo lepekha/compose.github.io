@@ -10,13 +10,18 @@ class ImageFilterSepiaTone: ImageFilter() {
 
     override val filter by lazy { GPUImageSepiaToneFilter() }
 
-    override val params by lazy {
-        mutableListOf(
-            FilterParam(R.string.module_image_filter_intensity, 0.0f, 1.0f, 0.0f) {
+    override val valueParams by lazy {
+        mutableListOf<FilterParam>(
+            FilterValueParam(R.string.module_image_filter_intensity, 0.0f, 1.0f, 0.0f) {
                 filter.setIntensity(it)
             }
         )
     }
 
-    override fun create(params: Array<Float>) = GPUImageSepiaToneFilter(params[0])
+    override fun applyParams(params: Array<FilterParam>) : ImageFilter {
+        this.valueParams.clear()
+        this.valueParams.addAll(params)
+        filter.setIntensity((params[0] as FilterValueParam).value)
+        return this
+    }
 }

@@ -42,7 +42,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"
-        app:cardBackgroundColor="?attr/color_12"
+        app:cardBackgroundColor="?attr/color_6"
         app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,8 +56,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            app:tint="?attr/color_10"
-            app:srcCompat="@drawable/ic_done" />
+            app:srcCompat="@drawable/ic_done"
+            app:tint="?attr/color_9" />
     </com.google.android.material.card.MaterialCardView>
 
 

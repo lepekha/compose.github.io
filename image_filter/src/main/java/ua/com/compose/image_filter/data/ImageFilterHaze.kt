@@ -10,16 +10,22 @@ class ImageFilterHaze: ImageFilter() {
 
     override val filter by lazy { GPUImageHazeFilter() }
 
-    override val params by lazy {
-        mutableListOf(
-            FilterParam(R.string.module_image_filter_distance, -0.3f, 0.3f, 0.0f) {
+    override val valueParams by lazy {
+        mutableListOf<FilterParam>(
+            FilterValueParam(R.string.module_image_filter_distance, -0.3f, 0.3f, 0.0f) {
                 filter.setDistance(it)
             },
-            FilterParam(R.string.module_image_filter_slope, -0.3f, 0.3f, 0.0f) {
+            FilterValueParam(R.string.module_image_filter_slope, -0.3f, 0.3f, 0.0f) {
                 filter.setSlope(it)
             }
         )
     }
 
-    override fun create(params: Array<Float>) = GPUImageSepiaToneFilter(params[0])
+    override fun applyParams(params: Array<FilterParam>) : ImageFilter {
+        this.valueParams.clear()
+        this.valueParams.addAll(params)
+        filter.setDistance((params[0] as FilterValueParam).value)
+        filter.setSlope((params[1] as FilterValueParam).value)
+        return this
+    }
 }

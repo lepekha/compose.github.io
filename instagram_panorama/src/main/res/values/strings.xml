@@ -1,6 +1,6 @@
 <resources>
     <string name="module_instagram_panorama_title">Panorama</string>
-    <string name="module_instagram_panorama_save_images">Save images:</string>
+    <string name="module_instagram_panorama_save_images">Save images</string>
     <string name="module_instagram_panorama_ready">Image saved</string>
 
 </resources>

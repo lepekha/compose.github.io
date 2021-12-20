@@ -1,5 +1,6 @@
 package ua.com.compose.image_crop.main
 
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
 import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.image_crop.data.ECrop
@@ -93,13 +95,11 @@ class ImageCropFragment : BaseMvpFragment<ImageCropView, ImageCropPresenter>(), 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 presenter.onTabSelect(tab.position)
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_5), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_5))
+                tab.customView?.findViewById<MaterialCardView>(R.id.card)?.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_6))
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
+                tab.customView?.findViewById<MaterialCardView>(R.id.card)?.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {}

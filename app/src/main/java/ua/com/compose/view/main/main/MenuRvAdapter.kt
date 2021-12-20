@@ -14,11 +14,7 @@ import ua.com.compose.view.main.main.menuDelegates.*
 class MenuRvAdapter(private val items: List<DynamicMenu>, private val onPress: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        const val VIEW_TYPE_SHORT = 0
-        const val VIEW_TYPE_MEDIUM = 1
-        const val VIEW_TYPE_LONG = 2
-        const val VIEW_TYPE_TEXT = 3
-        const val VIEW_TYPE_LIST = 4
+        const val VIEW_TYPE_IMAGE = 1
         const val VIEW_TYPE_ICON = 5
         const val VIEW_TYPE_GRID = 6
     }
@@ -26,11 +22,7 @@ class MenuRvAdapter(private val items: List<DynamicMenu>, private val onPress: (
     private var mDelegateAdapters = SparseArrayCompat<ViewTypeDelegateAdapter>()
 
     init {
-        mDelegateAdapters.put(VIEW_TYPE_SHORT, ShortDelegateAdapter())
-        mDelegateAdapters.put(VIEW_TYPE_MEDIUM, MediumDelegateAdapter(onPress = onPress))
-        mDelegateAdapters.put(VIEW_TYPE_LONG, LongDelegateAdapter())
-        mDelegateAdapters.put(VIEW_TYPE_TEXT, TextDelegateAdapter())
-        mDelegateAdapters.put(VIEW_TYPE_LIST, ListDelegateAdapter(onPress = onPress))
+        mDelegateAdapters.put(VIEW_TYPE_IMAGE, ImageDelegateAdapter(onPress = onPress))
         mDelegateAdapters.put(VIEW_TYPE_ICON, IconDelegateAdapter())
         mDelegateAdapters.put(VIEW_TYPE_GRID, GridDelegateAdapter(onPress = onPress))
     }
@@ -53,11 +45,7 @@ class MenuRvAdapter(private val items: List<DynamicMenu>, private val onPress: (
     }
 
     override fun getItemViewType(position: Int) = when (items[position]) {
-        is DynamicMenu.Short -> VIEW_TYPE_SHORT
-        is DynamicMenu.Medium -> VIEW_TYPE_MEDIUM
-        is DynamicMenu.Long -> VIEW_TYPE_LONG
-        is DynamicMenu.Text -> VIEW_TYPE_TEXT
-        is DynamicMenu.List -> VIEW_TYPE_LIST
+        is DynamicMenu.Image -> VIEW_TYPE_IMAGE
         is DynamicMenu.Icon -> VIEW_TYPE_ICON
         is DynamicMenu.Grid -> VIEW_TYPE_GRID
         else -> -1

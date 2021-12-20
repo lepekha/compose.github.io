@@ -12,22 +12,23 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.slider.Slider
 import kotlinx.android.synthetic.main.module_image_compress_fragment_compress_main.*
-import ua.com.compose.extension.changeTextAnimate
+import ua.com.compose.extension.*
 import ua.com.compose.image_compress.di.Scope
 import ua.com.compose.mvp.BaseMvpFragment
-import ua.com.compose.extension.getColorFromAttr
-import ua.com.compose.extension.toPercentString
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.image_compress.R
+import ua.com.compose.image_maker.FrameImageView
 
 
 class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPresenter>(), ImageCompressView {
@@ -48,16 +49,6 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
     }
 
     override val presenter: ImageCompressPresenter by lazy { Scope.IMAGE_COMPRESS.get() }
-
-    private val txtSizeRunnable = Runnable {
-        txtSize?.changeTextAnimate(text = requireContext().getString(R.string.module_image_compress_size))
-        txtSize?.setTextColor(requireContext().getColorFromAttr(R.attr.color_5))
-    }
-
-    private val txtQualityRunnable = Runnable {
-        txtQuality?.changeTextAnimate(text = requireContext().getString(R.string.module_image_compress_quality))
-        txtQuality?.setTextColor(requireContext().getColorFromAttr(R.attr.color_5))
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.module_image_compress_fragment_compress_main, container, false)
@@ -91,49 +82,39 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
             presenter.onAddImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
-        imgView.setOnTouchListener { _, event ->
-            when(event.action){
-                MotionEvent.ACTION_DOWN -> presenter.pressImageDown()
-                MotionEvent.ACTION_UP -> presenter.pressImageUp()
-            }
-            true
-        }
-
-        sbQuality.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                presenter.onQualityChange(progress = progress)
-                txtQuality.text = progress.toPercentString()
-                txtQuality.setTextColor(requireContext().getColorFromAttr(R.attr.color_6))
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                txtQuality.removeCallbacks(null)
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                txtQuality.postDelayed(txtQualityRunnable, 1000)
-            }
+        sbSize.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
+            txtSize.context.vibrate(EVibrate.SLIDER)
+            presenter.onSizeChange(progress = value.toInt())
         })
 
-        sbSize.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                presenter.onSizeChange(progress = progress)
-                txtSize.text = progress.toPercentString()
-                txtSize.setTextColor(requireContext().getColorFromAttr(R.attr.color_6))
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                txtSize.removeCallbacks(null)
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                txtSize.postDelayed(txtSizeRunnable, 1000)
-            }
+        sbQuality.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
+            txtSize.context.vibrate(EVibrate.SLIDER)
+            presenter.onQualityChange(progress = value.toInt())
         })
 
         val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
 
         presenter.onCreate(uri = inputUri)
+    }
+
+    override fun setQualityValue(value: String){
+        txtQuality.text = buildString {
+            append(requireContext().getString(R.string.module_image_compress_quality))
+            append(" ")
+            append(value)
+        }
+
+        txtQuality.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_6))
+    }
+
+    override fun setSizeValue(value: String){
+        txtSize.text = buildString {
+            append(requireContext().getString(R.string.module_image_compress_size))
+            append(" ")
+            append(value)
+        }
+
+        txtSize.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_6))
     }
 
     override fun openGallery() {
@@ -156,7 +137,7 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
                     override fun onLoadCleared(placeholder: Drawable?) {}
 
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        presenter.onResourceLoad(resource, resource)
+                        presenter.onResourceLoad(resource)
                     }
                 })
 

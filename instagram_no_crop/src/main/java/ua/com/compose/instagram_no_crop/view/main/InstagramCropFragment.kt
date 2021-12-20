@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.module_instagram_no_crop_fragment_instagram_no_crop.*
 import ua.com.compose.mvp.BaseMvpFragment
@@ -83,13 +84,11 @@ class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPr
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 presenter.onTabSelect(tab.position)
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_5), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_5))
+                tab.customView?.findViewById<MaterialCardView>(R.id.card)?.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_6))
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.customView?.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
-                tab.customView?.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
+                tab.customView?.findViewById<MaterialCardView>(R.id.card)?.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
@@ -113,8 +112,6 @@ class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPr
                     this.setVibrate(EVibrate.BUTTON)
                     this.findViewById<ImageView>(R.id.icon).setImageResource(it.iconResId)
                     this.findViewById<TextView>(R.id.txtTitle).setText(it.titleResId)
-                    this.findViewById<ImageView>(R.id.icon)?.setColorFilter(getCurrentContext().getColorFromAttr(R.attr.color_3), PorterDuff.Mode.MULTIPLY)
-                    this.findViewById<TextView>(R.id.txtTitle)?.setTextColor(getCurrentContext().getColorFromAttr(R.attr.color_3))
                 }
             }, false)
         }

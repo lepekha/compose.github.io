@@ -8,11 +8,14 @@
         <item name="color_5">@color/color_night_5</item>
         <item name="color_6">@color/color_night_6</item>
         <item name="color_7">@color/color_night_7</item>
+        <item name="color_8">@color/color_night_8</item>
+        <item name="color_9">@color/color_night_9</item>
 
         <item name="color_10">@color/color_night_10</item>
         <item name="color_11">@color/color_night_11</item>
         <item name="color_12">@color/color_night_12</item>
         <item name="color_13">@color/color_night_13</item>
+        <item name="color_14">@color/color_night_14</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/color_1</item>
         <item name="android:navigationBarColor">?attr/color_1</item>

@@ -87,8 +87,6 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
             presenter.onAddImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
-        imgView.isFrameEnable = true
-
         btnFlip.setVibrate(EVibrate.BUTTON)
         btnFlip.setOnClickListener {
             presenter.pressFlip()

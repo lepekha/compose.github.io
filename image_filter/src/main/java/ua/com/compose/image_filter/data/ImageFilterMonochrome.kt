@@ -1,6 +1,5 @@
 package ua.com.compose.image_filter.data
 
-import android.opengl.Matrix
 import jp.co.cyberagent.android.gpuimage.filter.*
 import ua.com.compose.image_filter.R
 
@@ -11,13 +10,18 @@ class ImageFilterMonochrome: ImageFilter() {
 
     override val filter by lazy { GPUImageMonochromeFilter() }
 
-    override val params by lazy {
-        mutableListOf(
-            FilterParam(R.string.module_image_filter_intensity, 0.0f, 2.0f, 1.0f, onChange = {
+    override val valueParams by lazy {
+        mutableListOf<FilterParam>(
+            FilterValueParam(R.string.module_image_filter_intensity, 0.0f, 2.0f, 1.0f, onChange = {
                 filter.setIntensity(it)
             })
         )
     }
 
-    override fun create(params: Array<Float>) = GPUImageBrightnessFilter(params[0])
+    override fun applyParams(params: Array<FilterParam>) : ImageFilter {
+        this.valueParams.clear()
+        this.valueParams.addAll(params)
+        filter.setIntensity((params[0] as FilterValueParam).value)
+        return this
+    }
 }

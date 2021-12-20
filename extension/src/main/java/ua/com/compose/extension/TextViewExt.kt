@@ -67,6 +67,13 @@ fun TextView.setColorAndSizeOfSubstring(substring: String, color: Int, size: Int
     text = spannable
 }
 
+fun TextView.setColorOfSubstring(substring: String, color: Int) {
+    val spannable = SpannableString(text)
+    val start = text.indexOf(substring)
+    spannable.setSpan(ForegroundColorSpan(color), start, start + substring.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    text = spannable
+}
+
 fun TextView.afterTextChangedListener(listener: (e: String) -> Unit) = this.addTextChangedListener(object : TextWatcher {
     override fun afterTextChanged(p0: Editable) {
         listener(p0.toString())

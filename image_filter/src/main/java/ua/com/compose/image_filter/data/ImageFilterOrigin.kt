@@ -1,6 +1,5 @@
 package ua.com.compose.image_filter.data
 
-import android.opengl.Matrix
 import jp.co.cyberagent.android.gpuimage.filter.*
 import ua.com.compose.image_filter.R
 
@@ -11,9 +10,11 @@ class ImageFilterOrigin: ImageFilter() {
 
     override val filter by lazy { GPUImageFilterGroup()}
 
-    override val params by lazy {
+    override val valueParams by lazy {
         mutableListOf<FilterParam>()
     }
 
-    override fun create(params: Array<Float>) = GPUImageFilterGroup()
+    override fun applyParams(params: Array<FilterParam>) : ImageFilter{
+        return this
+    }
 }

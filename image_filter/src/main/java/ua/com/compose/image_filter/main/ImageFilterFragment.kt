@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.drawToBitmap
+import androidx.core.view.isVisible
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -22,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.module_image_filter_fragment_filter.*
+import ua.com.compose.dialog.dialogs.DialogInput
 import ua.com.compose.image_filter.di.Scope
 import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.gallery.main.FragmentGallery
@@ -63,12 +65,6 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         }
     }
 
-    private val btnGallery by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_gallery) {
-            openGallery()
-        }
-    }
-
     private val btnCancel by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_close) {
            presenter.pressCancelFilter()
@@ -83,15 +79,24 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
 
     private val btnFilters by lazy {
         BottomMenu(iconResId = R.drawable.module_image_filter_ic_tune) {
-            openFilters()
+            presenter.pressMenuFilters()
         }
     }
 
-    private fun openFilters(){
-        val request = DialogFilters.show(fm = getCurrentActivity().supportFragmentManager)
-        setFragmentResultListener(request) { requestKey, bundle ->
-            presenter.pressFilter(bundle.getInt(DialogFilters.BUNDLE_KEY_FILTER_ID))
-            clearFragmentResultListener(requestKey)
+//    private val btnStyleAdd by lazy {
+//        BottomMenu(iconResId = R.drawable.module_image_filter_ic_style_add) {
+//            val request = DialogInput.show(fm = getCurrentActivity().supportFragmentManager, text = requireContext().getString(R.string.module_image_filter_input_style_name), singleLine = true)
+//            setFragmentResultListener(request) { _, bundle ->
+//                presenter.onInputStyleName(bundle.getString(DialogInput.BUNDLE_KEY_INPUT_MESSAGE))
+//            }
+//        }.apply {
+//            isVisible = { presenter.historyFilters.size > 1 }
+//        }
+//    }
+
+    private val btnHistory by lazy {
+        BottomMenu(iconResId = R.drawable.module_image_filter_ic_history) {
+            initHistory()
         }
     }
 
@@ -102,16 +107,23 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnCancel, btnSettingsRestore, btnDone))
     }
 
-    override fun initHistory(){
+    override fun initHistory() {
         setVisibleBack(isVisible = true)
         setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         initHistoryList()
         (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnDone))
     }
 
+    override fun initMenuFilters(){
+        initFiltersMenu()
+        setTitle(title = requireContext().getString(R.string.module_image_filter_title))
+        setVisibleBack(isVisible = true)
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnHistory, btnDone))
+    }
+
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
-            this.add(btnFilters)
+            this.add(btnHistory)
             this.add(btnDone)
         }
     }
@@ -130,15 +142,21 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         }
     }
 
+    private fun initFiltersMenu() {
+        list.layoutManager = GridLayoutManager(context, 2, RecyclerView.HORIZONTAL, false)
+        list.adapter = ImageFilterMenuRvAdapter(filters = presenter.filters) {
+            presenter.pressFilter(it.id)
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_image_filter_title))
 
-
         setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
-            presenter.onAddImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
-            openFilters()
+            val uris = (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>()
+            presenter.onAddImage(uris)
         }
 
         imgView.setOnTouchListener { _, event ->
@@ -156,14 +174,18 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
             }
         })
 
-
-        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
+        val inputUri = (arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri)
 
         presenter.onCreate(uri = inputUri)
     }
 
     override fun updateList() {
         list.adapter?.notifyDataSetChanged()
+    }
+
+    override fun backPress(): Boolean {
+        presenter.pressBack()
+        return true
     }
 
     override fun openGallery() {
@@ -184,18 +206,17 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
                 .skipMemoryCache(true)
                 .into(object: CustomTarget<Bitmap>() {
                     override fun onLoadCleared(placeholder: Drawable?) {}
-
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-//                            imgView.setImageBitmap(resource)
-
                             presenter.onResourceLoad(resource)
                     }
                 })
 
+        container.isVisible = true
     }
 
     override fun setImage(bmp: Bitmap) {
         imgView.setImageBitmap(bmp)
+        container.isVisible = true
     }
 
     override fun onDestroy() {

@@ -1,8 +1,8 @@
 <resources>
     <string name="module_instagram_no_crop_fragment_title_crop">No crop</string>
-    <string name="module_instagram_no_crop_fragment_title_crop_edit">Edit your image:</string>
-    <string name="module_instagram_no_crop_fragment_title_crop_share">Share your image:</string>
-    <string name="module_instagram_no_crop_fragment_title_no_crop_save_images">Save images:</string>
+    <string name="module_instagram_no_crop_fragment_title_crop_edit">Edit your image</string>
+    <string name="module_instagram_no_crop_fragment_title_crop_share">Share your image</string>
+    <string name="module_instagram_no_crop_fragment_title_no_crop_save_images">Save images</string>
     <string name="module_instagram_no_crop_fragment_no_crop_save_ready">Image saved</string>
 
     <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_origin">ORIGINAL</string>

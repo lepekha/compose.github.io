@@ -11,5 +11,6 @@
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="?attr/color_9"
         app:srcCompat="@drawable/ic_next" />
 </FrameLayout>

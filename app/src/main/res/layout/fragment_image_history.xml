@@ -26,8 +26,9 @@
         android:id="@+id/btnSave"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:cardBackgroundColor="?attr/color_12"
+        app:cardBackgroundColor="?attr/color_8"
         app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnChangeImage"
         app:layout_constraintHorizontal_bias="0.5"
@@ -39,7 +40,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_10"
+            android:tint="?attr/color_9"
             app:srcCompat="@drawable/ic_menu_save" />
     </com.google.android.material.card.MaterialCardView>
 
@@ -47,8 +48,9 @@
         android:id="@+id/btnChangeImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:cardBackgroundColor="?attr/color_12"
+        app:cardBackgroundColor="?attr/color_8"
         app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnRemove"
         app:layout_constraintHorizontal_bias="0.5"
@@ -60,7 +62,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_10"
+            android:tint="?attr/color_9"
             app:srcCompat="@drawable/ic_share" />
     </com.google.android.material.card.MaterialCardView>
 
@@ -68,8 +70,9 @@
         android:id="@+id/btnRemove"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:cardBackgroundColor="?attr/color_12"
+        app:cardBackgroundColor="?attr/color_8"
         app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -81,7 +84,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_10"
+            android:tint="?attr/color_9"
             app:srcCompat="@drawable/ic_delete_forever" />
     </com.google.android.material.card.MaterialCardView>
 

@@ -79,11 +79,9 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                     viewModel.onChangeImagePosition(oldPosition, newPosition)
                 },
                 onStartDrag = {
-                    setVisibleBottomMenu(isVisible = false)
                     groupButton.isVisible = true
                 },
                 onEndDrag = {
-                    setVisibleBottomMenu(isVisible = true)
                     groupButton.isVisible = false
                 }
         )

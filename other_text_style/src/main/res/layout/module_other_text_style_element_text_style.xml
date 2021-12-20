@@ -44,8 +44,9 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
-            app:cardBackgroundColor="?attr/color_1"
+            app:cardBackgroundColor="?attr/color_6"
             app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -54,7 +55,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:tint="?attr/color_12"
+                android:tint="?attr/color_9"
                 app:srcCompat="@drawable/module_other_text_style_fragment_text_style_ic_copy" />
         </com.google.android.material.card.MaterialCardView>
 

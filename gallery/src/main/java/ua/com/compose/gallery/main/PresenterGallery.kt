@@ -10,6 +10,7 @@ import java.io.File
 
 class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGallery>() {
 
+    val images = mutableListOf<Uri>()
     val folders = mutableListOf<ImageFolder>()
     val selectedImages = mutableListOf<Uri>()
     var doneImages = mutableListOf<Uri>()
@@ -18,12 +19,34 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
         set(value) {
             field = value && _multiSelect
             view?.setVisibleButtons(field)
-            view?.setVisibleTabs(!field && (folders.size > 2))
         }
         get() = field && _multiSelect
 
     fun onCreate(isMultiSelect: Boolean){
         _multiSelect = isMultiSelect
+    }
+
+    fun pressImage(uri: Uri, isMultiSelect: Boolean){
+        this.isMultiSelect = isMultiSelect or this.isMultiSelect
+        if(selectedImages.contains(uri)){
+            selectedImages.remove(uri)
+            if(selectedImages.isEmpty()){
+                this.isMultiSelect = false
+            }
+        }else{
+            selectedImages.add(uri)
+        }
+
+        if(!this.isMultiSelect && selectedImages.isNotEmpty()){
+            addImage()
+        }
+    }
+
+    fun pressFolder(value: ImageFolder){
+        images.clear()
+        images.addAll(value.images)
+        view?.setFolderName(value.name)
+        view?.initPhotos()
     }
 
     fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
@@ -59,9 +82,8 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
         }
         folders.add(allFolder)
         folders.sortBy { it.name }
-
+        images.addAll(folders[0].images)
         withContext(Dispatchers.Main){
-            view?.setVisibleTabs(isVisible = folders.size > 2)
             view?.updateAllList()
         }
     }

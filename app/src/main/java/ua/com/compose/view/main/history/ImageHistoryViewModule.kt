@@ -49,17 +49,11 @@ class ImageHistoryViewModule(private val context: Context): ViewModel()  {
     fun pressRemove() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             ImageHistory.mainImage = null
-            ImageHistory.history.clear()
         }
         _visible.postValue(false)
     }
 
     fun addImageToHistory(uri: Uri?){
-        if(ImageHistory.history.isEmpty()){
-            ImageHistory.mainImage?.let {
-                ImageHistory.history.add(0, it)
-            }
-        }
         ImageHistory.mainImage = uri
         _mainImage.postValue(uri)
     }

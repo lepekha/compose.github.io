@@ -5,13 +5,6 @@ sealed class DynamicMenu {
     abstract val titleResId: Int
     abstract val isVisible: () -> Boolean
 
-    class Text(
-            override val id: Int,
-            override val titleResId: Int,
-            val onPress: () -> Unit,
-            override val isVisible: () -> Boolean
-    ) : DynamicMenu()
-
     class Icon(
             override val id: Int,
             override val titleResId: Int,
@@ -20,40 +13,19 @@ sealed class DynamicMenu {
             override val isVisible: () -> Boolean
     ) : DynamicMenu()
 
-    class List(
-            override val id: Int,
-            override val titleResId: Int,
-            val innerMenu: MutableList<DynamicMenu>,
-            override val isVisible: () -> Boolean
-    ) : DynamicMenu()
-
     class Grid(
             override val id: Int,
             override val titleResId: Int,
             override val isVisible: () -> Boolean,
-            val innerMenu: MutableList<DynamicMenu>
+            val innerMenu: MutableList<DynamicMenu>,
+            val spanCount: Int
     ) : DynamicMenu()
 
-    class Short(
-            override val id: Int,
-            override val titleResId: Int,
-            val onPress: () -> Unit,
-            override val isVisible: () -> Boolean,
-            val backgroundImageId: Int
-    ) : DynamicMenu()
-
-    class Medium(override val id: Int,
-                 override val titleResId: Int,
-                 val onPress: () -> Unit,
-                 override val isVisible: () -> Boolean,
-                 val backgroundImageId: Int
+    class Image(override val id: Int,
+                override val titleResId: Int,
+                val onPress: () -> Unit,
+                override val isVisible: () -> Boolean,
+                val backgroundImageId: Int
     ): DynamicMenu()
 
-    class Long(
-            override val id: Int,
-            override val titleResId: Int,
-            val onPress: () -> Unit,
-            override val isVisible: () -> Boolean,
-            val backgroundImageId: Int
-    ): DynamicMenu()
 }

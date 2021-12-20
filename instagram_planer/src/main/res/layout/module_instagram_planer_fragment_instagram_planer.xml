@@ -6,6 +6,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/theme_bottom_menu_margin"
     tools:background="#000000">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -48,9 +49,11 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="?attr/color_12"
+                app:cardBackgroundColor="?attr/color_6"
                 app:cardCornerRadius="25dp"
+                app:cardElevation="0dp"
                 app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="8dp"
                 tools:visibility="visible">
 
                 <ImageView
@@ -58,15 +61,15 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_add"
-                    app:tint="?attr/color_1" />
+                    app:tint="?attr/color_9" />
             </com.google.android.material.card.MaterialCardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/containerMore"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 android:animateLayoutChanges="true"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,8 +82,9 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
                     android:visibility="visible"
-                    app:cardBackgroundColor="?attr/color_1"
+                    app:cardBackgroundColor="?attr/color_8"
                     app:cardCornerRadius="25dp"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnRemoveUser"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -92,8 +96,8 @@
                         android:layout_width="30dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
-                        app:tint="?attr/color_12"
-                        app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_add" />
+                        app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_add"
+                        app:tint="?attr/color_9" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
@@ -101,8 +105,9 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:visibility="visible"
-                    app:cardBackgroundColor="?attr/color_1"
+                    app:cardBackgroundColor="?attr/color_8"
                     app:cardCornerRadius="25dp"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="@+id/btnAddUser"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -114,8 +119,8 @@
                         android:layout_width="30dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
-                        app:tint="?attr/color_12"
-                        app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_clear" />
+                        app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_clear"
+                        app:tint="?attr/color_9" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.chip.ChipGroup
@@ -138,8 +143,9 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:visibility="visible"
-                    app:cardBackgroundColor="?attr/color_1"
+                    app:cardBackgroundColor="?attr/color_8"
                     app:cardCornerRadius="25dp"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="@+id/btnAddUser"
                     app:layout_constraintEnd_toStartOf="@+id/btnCopy"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -151,8 +157,8 @@
                         android:layout_width="30dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
-                        app:tint="?attr/color_12"
-                        app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_remove" />
+                        app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_person_remove"
+                        app:tint="?attr/color_9" />
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -200,8 +206,9 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_marginEnd="8dp"
-                app:cardBackgroundColor="?attr/color_12"
+                app:cardBackgroundColor="?attr/color_6"
                 app:cardCornerRadius="25dp"
+                app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -210,8 +217,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:tint="?attr/color_1"
-                    app:srcCompat="@drawable/ic_expand_more" />
+                    app:srcCompat="@drawable/ic_expand_more"
+                    app:tint="?attr/color_9" />
             </com.google.android.material.card.MaterialCardView>
 
 
@@ -231,63 +238,69 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnSave"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="?attr/color_12"
-        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="?attr/color_6"
+        app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnChangeImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.25">
+        app:layout_constraintWidth_percent="0.25"
+        app:strokeColor="?attr/color_9"
+        app:strokeWidth="2dp">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_10"
+            android:tint="?attr/color_9"
             app:srcCompat="@drawable/ic_download" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnChangeImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="?attr/color_12"
-        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="?attr/color_6"
+        app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnRemove"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnSave"
-        app:layout_constraintWidth_percent="0.25">
+        app:layout_constraintWidth_percent="0.25"
+        app:strokeColor="?attr/color_9"
+        app:strokeWidth="2dp">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_10"
-            app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_change_image" />
+            app:srcCompat="@drawable/module_instagram_planer_ic_instagram_planer_change_image"
+            app:tint="?attr/color_9" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnRemove"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="?attr/color_12"
-        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="?attr/color_6"
+        app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnChangeImage"
-        app:layout_constraintWidth_percent="0.25">
+        app:layout_constraintWidth_percent="0.25"
+        app:strokeColor="?attr/color_9"
+        app:strokeWidth="2dp">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_10"
+            android:tint="?attr/color_9"
             app:srcCompat="@drawable/ic_delete_forever" />
     </com.google.android.material.card.MaterialCardView>
 
@@ -297,7 +310,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="btnRemove,btnChangeImage,btnSave" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -94,16 +94,12 @@ class ImageHistoryFragment : BaseMvvmFragment() {
             this.clone(container)
         }
 
-        val c2 = ConstraintSet().apply {
-            this.clone(requireContext(), R.layout.fragment_image_history_full)
-        }
-
-        imgPreview.setOnClickListener {
-            TransitionManager.beginDelayedTransition(container)
-            val c = if(isOpen) c2 else c1
-            c.applyTo(container)
-            isOpen = !isOpen
-        }
+//        imgPreview.setOnClickListener {
+//            TransitionManager.beginDelayedTransition(container)
+//            val c = if(isOpen) c2 else c1
+//            c.applyTo(container)
+//            isOpen = !isOpen
+//        }
 
         viewModule.onCreate(uri = inputUri)
     }

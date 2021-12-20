@@ -52,6 +52,7 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
 
     fun onQualityChange(progress: Int) = CoroutineScope(Dispatchers.Main).launch {
         quality = progress
+        view?.setQualityValue("$quality%")
         this@ImageCompressPresenter.sampleImage?.let { sample ->
             withContext(Dispatchers.IO) { createBitmap(sample) }?.let {
                 view?.setImage(it)
@@ -61,21 +62,12 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
 
     fun onSizeChange(progress: Int) = CoroutineScope(Dispatchers.Main).launch {
         size = max(progress, 1)
+        view?.setSizeValue("${((image?.width ?: 1) * size) / 100} x ${((image?.height ?: 1) * size) / 100}")
         this@ImageCompressPresenter.sampleImage?.copy(Bitmap.Config.ARGB_8888, false)?.let { sample ->
             withContext(Dispatchers.IO) { createBitmap(sample) }?.let {
                 view?.setImage(it)
             }
         }
-    }
-
-    fun pressImageDown(){
-        this.image?.let {
-            view?.setImage(it)
-        }
-    }
-
-    fun pressImageUp(){
-        onQualityChange(progress = quality)
     }
 
     fun pressDone() = CoroutineScope(Dispatchers.Main).launch {
@@ -100,8 +92,10 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
         }
     }
 
-    fun onResourceLoad(image: Bitmap, sampleImage: Bitmap){
+    fun onResourceLoad(image: Bitmap){
         this.image = image
-        this.sampleImage = sampleImage
+        this.sampleImage = image
+        view?.setQualityValue("$quality%")
+        view?.setSizeValue("${(image.width * size) / 100} x ${(image.height * size) / 100}")
     }
 }

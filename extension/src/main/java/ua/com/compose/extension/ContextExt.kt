@@ -1,10 +1,7 @@
 package ua.com.compose.extension
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
+import android.content.*
 import androidx.core.content.ContextCompat
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
@@ -155,17 +152,22 @@ fun Context.createImageIntent(uri: Uri) {
 }
 
 fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "", quality: Int = 90, sizePercent: Int = 100) {
-    val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
-    val myDir = File("$root/Compose")
-    myDir.mkdirs()
     val millis = System.currentTimeMillis()
     val fname = "${prefix}compose_$millis.jpg"
-    val file = File(myDir, fname)
-    if (file.exists()) file.delete()
-    FileOutputStream(file).use { out ->
+    val resolver = this.contentResolver
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, fname)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+        put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/Compose")
+    }
+
+    val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues) ?: return
+
+    resolver.openOutputStream(uri).use { out ->
         Bitmap.createScaledBitmap(bitmap, (bitmap.width * sizePercent) / 100, (bitmap.height * sizePercent) / 100, false).compress(Bitmap.CompressFormat.JPEG, quality, out)
     }
-    MediaScannerConnection.scanFile(this, arrayOf(file.absolutePath), arrayOf("image/jpg"), null)
+
+    MediaScannerConnection.scanFile(this, arrayOf(uri.path), arrayOf("image/jpg"), null)
 }
 
 

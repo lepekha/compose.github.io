@@ -10,9 +10,11 @@ class ImageFilterGrayscale: ImageFilter() {
 
     override val filter by lazy { GPUImageLuminanceFilter() }
 
-    override val params by lazy {
+    override val valueParams by lazy {
         mutableListOf<FilterParam>()
     }
 
-    override fun create(params: Array<Float>) = GPUImageExposureFilter(params[0])
+    override fun applyParams(params: Array<FilterParam>): ImageFilter {
+        return this
+    }
 }

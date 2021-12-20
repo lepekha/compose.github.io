@@ -35,50 +35,74 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <ImageButton
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnFlip"
-            style="@style/Widget.AppCompat.ImageButton"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_marginBottom="50dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:backgroundTint="?attr/color_2"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
+            app:cardBackgroundColor="?attr/color_6"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/module_image_rotate_ic_flip" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
+            <ImageView
+                android:id="@+id/imgIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/module_image_rotate_ic_flip"
+                app:tint="?attr/color_5" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnRotateLeft"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginEnd="32dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:backgroundTint="?attr/color_2"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
+            app:cardBackgroundColor="?attr/color_8"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/btnFlip"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@+id/btnFlip"
-            app:layout_constraintTop_toTopOf="@+id/btnFlip"
-            app:srcCompat="@drawable/module_image_rotate_ic_rotate_left" />
+            app:layout_constraintTop_toTopOf="@+id/btnFlip">
 
-        <ImageButton
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/module_image_rotate_ic_rotate_left"
+                app:tint="?attr/color_5" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnRotateRight"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginStart="32dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:backgroundTint="?attr/color_2"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
+            app:cardBackgroundColor="?attr/color_8"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/btnFlip"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toEndOf="@+id/btnFlip"
-            app:layout_constraintTop_toTopOf="@+id/btnFlip"
-            app:srcCompat="@drawable/module_image_rotate_ic_rotate_right" />
+            app:layout_constraintTop_toTopOf="@+id/btnFlip">
 
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/module_image_rotate_ic_rotate_right"
+                app:tint="?attr/color_5" />
+
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

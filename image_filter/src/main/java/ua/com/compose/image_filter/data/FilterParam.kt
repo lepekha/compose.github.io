@@ -5,7 +5,7 @@ import kotlin.math.abs
 
 interface FilterParam
 
-data class FilterValueParam(val nameResId: Int = -1, val minValue: Float = 0f, val maxValue: Float = 0f, val defValue: Float = 0f, val step: Float = 5f, val onPercent:(value: Float) -> Unit = {}, val onChange:(value: Float) -> Unit = {}) :
+data class FilterValueParam(val nameResId: Int = -1, val minValue: Float = 0f, val maxValue: Float = 0f, val defValue: Float = 0f, val step: Float = 1f, val onPercent:(value: Float) -> Unit = {}, val onChange:(value: Float) -> Unit = {}) :
     FilterParam {
     @Expose var value: Float = 0f
         set(value) {

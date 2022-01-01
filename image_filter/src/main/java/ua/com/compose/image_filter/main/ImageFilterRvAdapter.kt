@@ -24,14 +24,14 @@ class ImageFilterRvAdapter(private val params: List<FilterParam>, private val on
                 (params[adapterPosition] as FilterValueParam).value = value
                 onChange.invoke()
                 txtSize.context.vibrate(EVibrate.SLIDER)
-                val formattedValue = if(value > 0f) { "+${value.toInt()}" } else { value.toInt().toString() }
+//                val formattedValue = if(value > 0f) { "+${value.toInt()}" } else { value.toInt().toString() }
                 txtSize.text = buildString {
                     append(txtSize.contentDescription)
-                    append(" ")
-                    append(formattedValue)
+//                    append(" ")
+//                    append(formattedValue)
                 }
 
-                txtSize.setColorOfSubstring(formattedValue, txtSize.context.getColorFromAttr(R.attr.color_14))
+//                txtSize.setColorOfSubstring(formattedValue, txtSize.context.getColorFromAttr(R.attr.color_14))
             })
         }
     }
@@ -45,10 +45,10 @@ class ImageFilterRvAdapter(private val params: List<FilterParam>, private val on
         holder.txtSize.contentDescription = holder.txtSize.context.getString(filter.nameResId)
         holder.txtSize.text = buildString {
             append(holder.txtSize.contentDescription)
-            append(" ")
-            append(holder.progress.value.toInt())
+//            append(" ")
+//            append(holder.progress.value.toInt())
         }
-        holder.txtSize.setColorOfSubstring(holder.progress.value.toInt().toString(), holder.txtSize.context.getColorFromAttr(R.attr.color_14))
+//        holder.txtSize.setColorOfSubstring(holder.progress.value.toInt().toString(), holder.txtSize.context.getColorFromAttr(R.attr.color_14))
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

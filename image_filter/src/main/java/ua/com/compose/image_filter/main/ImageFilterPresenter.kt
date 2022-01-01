@@ -80,7 +80,6 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             view?.openGallery()
         }
         onProgressChange()
-        view?.initMenuFilters()
     }
 
     fun pressFilter(id: Int){
@@ -130,6 +129,13 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         }
     }
 
+    fun pressHistoryDone() {
+        historyFilters = historyFilters.dropLast(backHistorySize).toMutableList()
+        historyImages = historyImages.dropLast(backHistorySize).toMutableList()
+        backHistorySize = 0
+        view?.initBottomMenu()
+    }
+
     private suspend fun saveAllFilters(){
         val dialog = DialogManager.createLoad{}
         withContext(Dispatchers.IO) {
@@ -145,8 +151,8 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             view?.saveToResult(uri)
         }
         dialog.closeDialog()
-        val json = gson.toJson(historyFilters.associateBy({it.id}, {it.valueParams}))
-        (view?.getCurrentActivity() as BaseMvpView)?.backPress()
+//        val json = gson.toJson(historyFilters.associateBy({it.id}, {it.valueParams}))
+        (view?.getCurrentActivity() as BaseMvpView)?.backPress(false)
     }
 
     private suspend fun applyCurrentFilter(){
@@ -161,7 +167,9 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
                 historyImages.add(sampleOriginImage!!)
             }
             historyFilters.add(filter)
-            historyImages.add(sampleImage!!)
+            sampleImage?.let {
+                historyImages.add(it)
+            }
             currentFilter = null
             view?.initMenuFilters()
         }
@@ -175,14 +183,6 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         }
     }
 
-    @Synchronized
-    private fun createBitmap(image: Bitmap): Bitmap? {
-        ByteArrayOutputStream().use { out ->
-            image.compress(Bitmap.CompressFormat.JPEG, 90, out)
-            return BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size())
-        }
-    }
-
     fun onResourceLoad(image: Bitmap){
         this.image = image
     }
@@ -193,9 +193,5 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             this.sampleOriginImage = image
             gpuSampleFilter.setImage(image)
         }
-    }
-
-    fun onInputStyleName(value: String?){
-
     }
 }

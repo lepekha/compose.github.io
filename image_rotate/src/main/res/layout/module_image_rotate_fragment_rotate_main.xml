@@ -37,8 +37,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnFlip"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_marginBottom="50dp"
             app:cardBackgroundColor="?attr/color_6"
             app:cardCornerRadius="50dp"
@@ -50,11 +50,11 @@
 
             <ImageView
                 android:id="@+id/imgIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/module_image_rotate_ic_flip"
-                app:tint="?attr/color_5" />
+                app:tint="?attr/color_9" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -73,11 +73,11 @@
             app:layout_constraintTop_toTopOf="@+id/btnFlip">
 
             <ImageView
-                android:layout_width="42dp"
-                android:layout_height="48dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/module_image_rotate_ic_rotate_left"
-                app:tint="?attr/color_5" />
+                app:tint="?attr/color_9" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -96,11 +96,11 @@
             app:layout_constraintTop_toTopOf="@+id/btnFlip">
 
             <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/module_image_rotate_ic_rotate_right"
-                app:tint="?attr/color_5" />
+                app:tint="?attr/color_9" />
 
         </com.google.android.material.card.MaterialCardView>
 

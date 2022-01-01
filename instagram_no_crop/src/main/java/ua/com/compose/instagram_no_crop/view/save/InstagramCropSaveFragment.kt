@@ -20,6 +20,7 @@ import ua.com.compose.instagram_no_crop.di.Scope
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import kotlinx.android.synthetic.main.module_instagram_no_crop_fragment_instagram_no_crop_share.*
+import ua.com.compose.navigator.back
 
 class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, InstagramCropSavePresenter>(), InstagramCropSaveView {
 
@@ -41,21 +42,21 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
         }
     }
 
-    private val btnShare by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_share) {
-            presenter.pressShare()
-        }
-    }
-
     private val btnInstagram by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_instagram) {
             presenter.pressInstagram()
         }
     }
 
+    private val btnBack by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_back) {
+            requireActivity().supportFragmentManager.back()
+        }
+    }
+
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
-            this.add(btnShare)
+            this.add(btnBack)
             this.add(btnInstagram)
             this.add(btnDownload)
         }
@@ -63,7 +64,7 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.module_instagram_no_crop_fragment_title_no_crop_save_images))
+        setTitle(getCurrentContext().getString(R.string.module_instagram_no_crop_fragment_title_crop))
 
         btnBlur.setVibrate(EVibrate.BUTTON)
         btnBlur.setOnClickListener {
@@ -107,13 +108,13 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
         btnColorFill.isVisible = isVisible
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Scope.INSTAGRAM.close()
-    }
-
-    override fun backPress(): Boolean {
-        backToMain()
+    override fun backPress(byBack: Boolean): Boolean {
+        if(byBack){
+            backToMain()
+            Scope.INSTAGRAM.close()
+        }else{
+            return false
+        }
         return true
     }
 }

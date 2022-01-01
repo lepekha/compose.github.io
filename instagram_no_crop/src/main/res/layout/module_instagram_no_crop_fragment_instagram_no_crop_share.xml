@@ -22,33 +22,53 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <ImageButton
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnBlur"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:scaleType="fitCenter"
-        android:tint="?attr/color_5"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_horizontal"
+        app:cardBackgroundColor="?attr/color_8"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnColorFill"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgView"
-        app:srcCompat="@drawable/ic_blur" />
+        app:layout_constraintTop_toBottomOf="@+id/imgView">
 
-    <ImageButton
+    <ImageView
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+        android:tintMode="multiply"
+        android:src="@drawable/ic_blur"
+        app:tint="?attr/color_9" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnColorFill"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:scaleType="fitCenter"
-        android:tint="?attr/color_5"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_horizontal"
+        app:cardBackgroundColor="?attr/color_8"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnBlur"
-        app:layout_constraintTop_toBottomOf="@+id/imgView"
-        app:srcCompat="@drawable/ic_color_fill" />
+        app:layout_constraintTop_toBottomOf="@+id/imgView">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_color_fill"
+            android:tintMode="multiply"
+            app:tint="?attr/color_9" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -104,7 +104,7 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
             append(value)
         }
 
-        txtQuality.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_6))
+        txtQuality.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_14))
     }
 
     override fun setSizeValue(value: String){
@@ -114,7 +114,7 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
             append(value)
         }
 
-        txtSize.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_6))
+        txtSize.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_14))
     }
 
     override fun openGallery() {

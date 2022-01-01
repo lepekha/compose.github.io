@@ -28,6 +28,25 @@
         <item name="android:background">@null</item>
         <item name="android:secondaryProgressTint">?attr/color_3</item>
         <item name="android:thumbTint">?attr/color_5</item>
+        <item name="thumbColor">?attr/color_13</item>
+        <item name="tickColor">?attr/color_5</item>
+        <item name="tickColorActive">?attr/color_5</item>
+        <item name="tickColorInactive">?attr/color_5</item>
+        <item name="tickVisible">false</item>
+        <item name="trackColor">?attr/color_2</item>
+        <item name="trackHeight">26dp</item>
+        <item name="labelStyle">@style/CustomSeekBarTooltip</item>
+    </style>
+
+    <style name="CustomSeekBarTooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundTint">?attr/color_14</item>
+        <item name="android:textAppearance">@style/CustomSeekBarTextAppearance</item>
+    </style>
+
+    <style name="CustomSeekBarTextAppearance" parent="TextAppearance.MaterialComponents.Tooltip">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?attr/color_2</item>
     </style>
 
     <style name="CustomBottomSheetButton" parent="Widget.MaterialComponents.Button.OutlinedButton">

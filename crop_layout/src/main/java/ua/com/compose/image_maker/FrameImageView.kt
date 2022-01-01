@@ -2,20 +2,15 @@ package ua.com.compose.image_maker
 
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.Animatable2
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.util.AttributeSet
-import android.widget.ImageView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import ua.com.compose.extension.bitmapPosition
 import ua.com.compose.extension.dp
 import ua.com.compose.extension.getColorFromAttr
+
 
 class FrameImageView @JvmOverloads constructor(
         context: Context,
@@ -43,6 +38,7 @@ class FrameImageView @JvmOverloads constructor(
     override fun setImageBitmap(bm: Bitmap?) {
         super.setImageBitmap(bm)
         this.post {
+            val dr = this.drawable ?: return@post
             onImageChangeListener?.imageSampleChange(bitmap = this.drawable?.toBitmap())
         }
     }

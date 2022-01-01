@@ -75,7 +75,7 @@ class ImageCropFragment : BaseMvpFragment<ImageCropView, ImageCropPresenter>(), 
 
     override fun saveToResult(uri: Uri) {
         setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGE_URI to uri))
-        (requireActivity() as BaseMvpView).backPress()
+        (requireActivity() as BaseMvpView).backPress(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

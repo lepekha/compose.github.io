@@ -48,7 +48,7 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         presenter.detachView()
     }
 
-    override fun backPress(): Boolean {
+    override fun backPress(byBack: Boolean): Boolean {
         return false
     }
 

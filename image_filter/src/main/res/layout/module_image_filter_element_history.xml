@@ -14,23 +14,15 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:background="#000000">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/root"
+    <ImageView
+        android:id="@+id/imgIcon"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_gravity="center"
         android:layout_margin="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imgIcon"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
-
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtTitle"
@@ -43,14 +35,14 @@
         android:text="Filter"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textColor="?attr/color_5"
+        android:textColor="?attr/color_9"
         android:textSize="12sp"
         android:textStyle="bold"
         android:typeface="normal"
         android:visibility="visible"
         app:autoSizeMaxTextSize="12sp"
         app:autoSizeMinTextSize="10sp"
-        app:layout_constraintEnd_toEndOf="@+id/root"
-        app:layout_constraintStart_toStartOf="@+id/root"
-        app:layout_constraintTop_toBottomOf="@+id/root" />
+        app:layout_constraintEnd_toEndOf="@+id/imgIcon"
+        app:layout_constraintStart_toStartOf="@+id/imgIcon"
+        app:layout_constraintTop_toBottomOf="@+id/imgIcon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

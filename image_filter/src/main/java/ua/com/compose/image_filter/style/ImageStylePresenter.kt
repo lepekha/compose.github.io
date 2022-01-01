@@ -141,7 +141,7 @@ class ImageStylePresenter(val context: Context, val database: ImageStyleDatabase
         }
         dialog.closeDialog()
         val json = gson.toJson(historyFilters.associateBy({it.id}, {it.valueParams}))
-        (view?.getCurrentActivity() as BaseMvpView)?.backPress()
+        (view?.getCurrentActivity() as BaseMvpView)?.backPress(false)
     }
 
     private suspend fun applyCurrentFilter(){

@@ -18,7 +18,7 @@ interface BaseMvpView {
 
     fun setVisibleBack(isVisible: Boolean)
 
-    fun backPress() : Boolean
+    fun backPress(byBack: Boolean) : Boolean
 
     fun createBottomMenu(): MutableList<Menu> = mutableListOf()
 

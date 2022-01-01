@@ -24,6 +24,8 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.module_image_filter_fragment_filter.*
 import ua.com.compose.dialog.dialogs.DialogInput
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.image_filter.di.Scope
 import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.gallery.main.FragmentGallery
@@ -65,8 +67,24 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         }
     }
 
+    private val btnHistoryDone by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_done) {
+            list.layoutManager = null
+            list.adapter = null
+            presenter.pressHistoryDone()
+        }
+    }
+
+    private val btnDown by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_arrow_down) {
+            list.layoutManager = null
+            list.adapter = null
+            initBottomMenu()
+        }
+    }
+
     private val btnCancel by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_close) {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_back) {
            presenter.pressCancelFilter()
         }
     }
@@ -82,17 +100,6 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
             presenter.pressMenuFilters()
         }
     }
-
-//    private val btnStyleAdd by lazy {
-//        BottomMenu(iconResId = R.drawable.module_image_filter_ic_style_add) {
-//            val request = DialogInput.show(fm = getCurrentActivity().supportFragmentManager, text = requireContext().getString(R.string.module_image_filter_input_style_name), singleLine = true)
-//            setFragmentResultListener(request) { _, bundle ->
-//                presenter.onInputStyleName(bundle.getString(DialogInput.BUNDLE_KEY_INPUT_MESSAGE))
-//            }
-//        }.apply {
-//            isVisible = { presenter.historyFilters.size > 1 }
-//        }
-//    }
 
     private val btnHistory by lazy {
         BottomMenu(iconResId = R.drawable.module_image_filter_ic_history) {
@@ -111,19 +118,27 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         setVisibleBack(isVisible = true)
         setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         initHistoryList()
-        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnDone))
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnDown, btnHistoryDone))
     }
 
     override fun initMenuFilters(){
         initFiltersMenu()
         setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         setVisibleBack(isVisible = true)
-        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnHistory, btnDone))
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnDown))
+    }
+
+    override fun initBottomMenu() {
+        if(presenter.historyImages.isNotEmpty()){
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnHistory, btnDone))
+        }else{
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnDone))
+        }
     }
 
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
-            this.add(btnHistory)
+            this.add(btnFilters)
             this.add(btnDone)
         }
     }
@@ -161,16 +176,21 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
 
         imgView.setOnTouchListener { _, event ->
             when(event.action){
-                MotionEvent.ACTION_DOWN -> presenter.pressImageDown()
-                MotionEvent.ACTION_UP -> presenter.pressImageUp()
+                MotionEvent.ACTION_DOWN -> {
+                    requireContext().vibrate(EVibrate.BUTTON_LONG)
+                    presenter.pressImageDown()
+                }
+                MotionEvent.ACTION_UP -> {
+                    presenter.pressImageUp()
+                }
             }
             true
         }
 
         imgView.setImageChangeListener(object : FrameImageView.OnImageChangeListener {
             override fun imageSampleChange(bitmap: Bitmap?) {
-                if(imgView.drawable == null) return
-                presenter.onSampleLoad(imgView.drawToBitmap())
+                if(bitmap == null) return
+                presenter.onSampleLoad(bitmap)
             }
         })
 
@@ -183,7 +203,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         list.adapter?.notifyDataSetChanged()
     }
 
-    override fun backPress(): Boolean {
+    override fun backPress(byBack: Boolean): Boolean {
         presenter.pressBack()
         return true
     }

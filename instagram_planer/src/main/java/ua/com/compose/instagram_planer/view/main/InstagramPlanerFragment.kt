@@ -308,7 +308,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
         }
     }
 
-    override fun backPress(): Boolean {
+    override fun backPress(byBack: Boolean): Boolean {
         backToMain()
         return true
     }

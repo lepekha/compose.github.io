@@ -11,7 +11,7 @@ interface ImageFilterView : BaseMvpView {
     fun setImage(bmp: Bitmap)
     fun openGallery()
     fun saveToResult(uri: Uri)
-
+    fun initBottomMenu()
     fun initMenuFilters()
     fun initFilter(filter: ImageFilter)
     fun initHistory()

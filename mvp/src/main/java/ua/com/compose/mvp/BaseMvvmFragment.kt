@@ -35,7 +35,7 @@ abstract class BaseMvvmFragment: AppCompatDialogFragment(), BaseMvpView {
         (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
     }
 
-    override fun backPress(): Boolean {
+    override fun backPress(byBack: Boolean): Boolean {
         return false
     }
 

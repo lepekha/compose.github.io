@@ -114,7 +114,7 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
         initStyleList()
     }
 
-    override fun backPress(): Boolean {
+    override fun backPress(byBack: Boolean): Boolean {
         presenter.pressBack()
         return true
     }

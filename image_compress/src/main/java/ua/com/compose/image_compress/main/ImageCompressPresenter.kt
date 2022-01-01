@@ -80,7 +80,7 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
             view?.saveToResult(uri)
         }
         dialog.closeDialog()
-        (view?.getCurrentActivity() as BaseMvpView)?.backPress()
+        (view?.getCurrentActivity() as BaseMvpView)?.backPress(false)
     }
 
     @Synchronized

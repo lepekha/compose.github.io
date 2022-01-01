@@ -137,7 +137,7 @@ class InstagramPanoramaFragment : BaseMvpFragment<InstagramPanoramaView, Instagr
     }
 
     override fun navigateToPanoramaSave(){
-        getCurrentActivity().supportFragmentManager.replace(fragment = InstagramPanoramaSaveFragment.newInstance(), addToBackStack = false)
+        getCurrentActivity().supportFragmentManager.replace(fragment = InstagramPanoramaSaveFragment.newInstance(), addToBackStack = true)
     }
 
     override fun onDestroy() {

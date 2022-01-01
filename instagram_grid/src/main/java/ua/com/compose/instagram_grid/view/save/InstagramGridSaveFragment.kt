@@ -73,9 +73,13 @@ class InstagramGridSaveFragment : BaseMvpFragment<InstagramGridSaveView, Instagr
         getCurrentActivity().createInstagramIntent(uri)
     }
 
-    override fun backPress(): Boolean {
-        backToMain()
-        Scope.INSTAGRAM.close()
+    override fun backPress(byBack: Boolean): Boolean {
+        if(byBack){
+            backToMain()
+            Scope.INSTAGRAM.close()
+        }else{
+            return false
+        }
         return true
     }
 }

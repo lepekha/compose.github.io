@@ -8,28 +8,13 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:animateLayoutChanges="true"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:background="#000000">
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:visibility="gone"
-        app:cardBackgroundColor="?attr/color_2"
-        app:cardCornerRadius="50dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sbSize" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/sbSize"
@@ -37,23 +22,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:max="100"
         android:progress="100"
-        android:stepSize="5"
-        app:haloColor="?attr/color_5"
-        app:labelBehavior="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:haloColor="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSize"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSize"
-        app:thumbColor="?attr/color_5"
-        app:tickColor="?attr/color_5"
-        app:tickColorActive="?attr/color_5"
-        app:tickColorInactive="?attr/color_5"
-        app:tickVisible="true"
-        app:trackColor="@android:color/transparent"
-        app:trackHeight="6dp" />
+        app:layout_constraintStart_toEndOf="@+id/txtSize"
+        app:layout_constraintTop_toTopOf="@+id/txtSize" />
 
     <TextView
         android:id="@+id/txtSize"
@@ -67,7 +42,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

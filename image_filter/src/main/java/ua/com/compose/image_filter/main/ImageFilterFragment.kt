@@ -143,7 +143,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     }
 
     private fun initFiltersMenu() {
-        list.layoutManager = GridLayoutManager(context, 2, RecyclerView.HORIZONTAL, false)
+        list.layoutManager = GridLayoutManager(context, 5, RecyclerView.VERTICAL, false)
         list.adapter = ImageFilterMenuRvAdapter(filters = presenter.filters) {
             presenter.pressFilter(it.id)
         }

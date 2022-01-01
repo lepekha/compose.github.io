@@ -13,6 +13,8 @@ import ua.com.compose.instagram_grid.di.Scope
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.instagram_grid.R
+import ua.com.compose.mvp.BaseMvpView
+import ua.com.compose.navigator.back
 
 
 class InstagramGridSaveFragment : BaseMvpFragment<InstagramGridSaveView, InstagramGridSavePresenter>(), InstagramGridSaveView {
@@ -38,8 +40,15 @@ class InstagramGridSaveFragment : BaseMvpFragment<InstagramGridSaveView, Instagr
         }
     }
 
+    private val btnBack by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_back) {
+            requireActivity().supportFragmentManager.back()
+        }
+    }
+
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
+            this.add(btnBack)
             this.add(btnDownload)
         }
     }
@@ -55,7 +64,7 @@ class InstagramGridSaveFragment : BaseMvpFragment<InstagramGridSaveView, Instagr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(getCurrentContext().getString(R.string.module_instagram_grid_save_images))
+        setTitle(getCurrentContext().getString(R.string.module_instagram_grid_title))
         presenter.onCreate()
         initGridPreview()
     }
@@ -66,11 +75,7 @@ class InstagramGridSaveFragment : BaseMvpFragment<InstagramGridSaveView, Instagr
 
     override fun backPress(): Boolean {
         backToMain()
-        return true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
         Scope.INSTAGRAM.close()
+        return true
     }
 }

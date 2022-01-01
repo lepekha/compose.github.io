@@ -67,10 +67,11 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnDone"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:cardBackgroundColor="?attr/color_12"
-        app:cardCornerRadius="25dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:cardBackgroundColor="?attr/color_8"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgExample"
         app:layout_constraintEnd_toEndOf="@+id/imgExample"
         app:layout_constraintStart_toStartOf="@+id/imgExample"
@@ -81,8 +82,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            app:tint="?attr/color_10"
-            app:srcCompat="@drawable/ic_done" />
+            app:srcCompat="@drawable/ic_done"
+            app:tint="?attr/color_9" />
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

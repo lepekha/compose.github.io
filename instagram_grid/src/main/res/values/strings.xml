@@ -1,6 +1,5 @@
 <resources>
     <string name="module_instagram_grid_title">Grid</string>
-    <string name="module_instagram_grid_save_images">Save images</string>
     <string name="module_instagram_grid_help">Tap each pic to fallowing order to share it to Instagram</string>
     <string name="module_instagram_grid_ready">Image saved</string>
 </resources>

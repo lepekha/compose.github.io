@@ -38,7 +38,7 @@ dependencies {
     implementation project(':gallery')
     implementation project(':navigator')
     implementation project(':crop_layout')
-    implementation project(':color')
+
     implementation project(':theme')
     implementation project(':dialogs')
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"

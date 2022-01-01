@@ -139,5 +139,4 @@ class InstagramGridFragment : BaseMvpFragment<InstagramGridView, InstagramGridPr
         super.onDestroy()
         Scope.INSTAGRAM.close()
     }
-
 }

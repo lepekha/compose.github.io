@@ -35,13 +35,13 @@ class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
 
     fun onCreate(uri: Uri?) {
         view?.initGrid()
-        this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
             view?.setImage(currentUri)
         }else{
             view?.openGallery()
         }
+        this.currentUri = uri ?: return
     }
 
     fun onResourceLoad() {

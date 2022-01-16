@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ua.com.compose.dialog.IDialog
 import ua.com.compose.image_crop.R
 import ua.com.compose.mvp.BaseMvpView
 
@@ -21,7 +22,10 @@ class ImageCropPresenter(val context: Context): BaseMvpPresenterImpl<ImageCropVi
     private var currentUri: Uri? = null
     private var eCrop = ECrop.FREE
 
+    private var loader: IDialog? = null
+
     fun onAddImage(uris: List<Uri>){
+        loader = DialogManager.createLoad {}
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
             (currentUri != null) -> {
@@ -29,6 +33,7 @@ class ImageCropPresenter(val context: Context): BaseMvpPresenterImpl<ImageCropVi
                 view?.setImage(currentUri)
             }
             else -> {
+                loader?.closeDialog()
                 view?.backToMain()
                 return
             }
@@ -40,6 +45,7 @@ class ImageCropPresenter(val context: Context): BaseMvpPresenterImpl<ImageCropVi
         this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
+            loader = DialogManager.createLoad {}
             view?.setImage(currentUri)
         }else{
             view?.openGallery()
@@ -49,6 +55,7 @@ class ImageCropPresenter(val context: Context): BaseMvpPresenterImpl<ImageCropVi
     fun onResourceLoad() {
         view?.setSelectedTab(position = eCrop.ordinal)
         view?.createCropOverlay(eCrop.ratio, isGrid = false)
+        loader?.closeDialog()
     }
 
     fun onTabSelect(position: Int) {

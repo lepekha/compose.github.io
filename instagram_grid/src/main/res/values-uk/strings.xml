@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_instagram_grid_title">Сітка</string>
+    <string name="module_instagram_grid_help">Торкніться кожного зображення, дотримуючись порядку, щоб поділитися ним в Instagram</string>
+    <string name="module_instagram_grid_ready">Зображення збережено</string>
+</resources>

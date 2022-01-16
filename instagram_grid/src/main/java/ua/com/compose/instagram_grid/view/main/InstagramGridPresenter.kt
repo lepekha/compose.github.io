@@ -2,6 +2,8 @@ package ua.com.compose.instagram_grid.view.main
 
 import android.graphics.Bitmap
 import android.net.Uri
+import ua.com.compose.dialog.DialogManager
+import ua.com.compose.dialog.IDialog
 import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.instagram_grid.data.*
 
@@ -10,7 +12,7 @@ class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
 
     private var currentUri: Uri? = null
     internal val images = mutableListOf<Bitmap>()
-
+    private var loader: IDialog? = null
     private var eGrid = EGrid.THREE_THREE
 
     fun pressCrop(bitmaps: List<Bitmap>){
@@ -20,6 +22,7 @@ class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
     }
 
     fun onAddImage(uris: List<Uri>){
+        loader = DialogManager.createLoad { }
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
             (currentUri != null) -> {
@@ -27,6 +30,7 @@ class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
                 view?.setImage(currentUri)
             }
             else -> {
+                loader?.closeDialog()
                 view?.backToMain()
                 return
             }
@@ -35,16 +39,18 @@ class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
 
     fun onCreate(uri: Uri?) {
         view?.initGrid()
+        this.currentUri = this.currentUri ?: uri
         val currentUri = this.currentUri
         if(currentUri != null) {
+            loader = DialogManager.createLoad { }
             view?.setImage(currentUri)
         }else{
             view?.openGallery()
         }
-        this.currentUri = uri ?: return
     }
 
     fun onResourceLoad() {
+        loader?.closeDialog()
         view?.setSelectedTab(position = eGrid.ordinal)
         view?.createCropOverlay(eGrid.ratio, isGrid = true)
     }

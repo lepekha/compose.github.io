@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_image_compress_title">Сжатие</string>
+    <string name="module_image_compress_size">Размер</string>
+    <string name="module_image_compress_quality">Качество</string>
+    <string name="module_image_compress_save_ready">Изображение сохранено</string>
+</resources>

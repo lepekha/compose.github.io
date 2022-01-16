@@ -28,7 +28,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
     private var isAnimate = false
 
     private val gridColor by lazy {
-        context.getColorFromAttr(R.attr.color_6)
+        context.getColorFromAttr(R.attr.color_5)
     }
 
     private val backgroundColor by lazy {

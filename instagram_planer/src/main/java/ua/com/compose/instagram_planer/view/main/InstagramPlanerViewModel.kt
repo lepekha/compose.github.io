@@ -164,11 +164,15 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
 
     fun onAddImages(imageUris: List<Uri>) = viewModelScope.launch {
         currentUser?.let { user ->
-            addImagesForUserUseCase.execute(user = user, uris = imageUris)
-            val images = getAllUserImagesUseCase.execute(user)
-            _addImages.postValue(images)
-            _isVisiblePlaceHolder.postValue(images.isEmpty())
-            _isVisibleClearAll.postValue(images.isNotEmpty())
+            val load = DialogManager.createLoad{}
+            imageUris.forEach {
+                addImagesForUserUseCase.execute(user = user, uri = it)
+                val images = getAllUserImagesUseCase.execute(user)
+                _addImages.postValue(images)
+                _isVisiblePlaceHolder.postValue(images.isEmpty())
+                _isVisibleClearAll.postValue(images.isNotEmpty())
+            }
+            load.closeDialog()
         }
     }
 
@@ -183,6 +187,7 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
     fun pressChangeImage(imageUris: List<Uri>) = viewModelScope.launch {
         currentUser?.let { user ->
             imageForChange?.let { image ->
+                val load = DialogManager.createLoad{}
                 imageUris.firstOrNull()?.let { uri ->
                     imageChangeUseCase.execute(user = user, image = image, uri = uri)
                     val images = getAllUserImagesUseCase.execute(user)
@@ -190,6 +195,7 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
                     _changeImageInList.value = images.indexOfFirst { it.id == imageForChange?.id }
                     imageForChange = null
                 }
+                load.closeDialog()
             }
         }
     }

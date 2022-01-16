@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Compose</string>
+    <string name="fragment_title_menu">ompose</string>
+    <string name="menu_instagram">Instagram</string>
+    <string name="menu_image">Фото</string>
+    <string name="menu_other">Iнше</string>
+    <string name="shortcut_long_instagram_planer">Instagram візуалізація</string>
+    <string name="shortcut_long_instagram_crop">Instagram квадрат</string>
+    <string name="shortcut_long_instagram_grid">Instagram сітка</string>
+    <string name="shortcut_short_instagram_planer">Візуалізація</string>
+    <string name="shortcut_short_instagram_crop">Кадрування</string>
+    <string name="shortcut_short_instagram_grid">Сітка</string>
+</resources>

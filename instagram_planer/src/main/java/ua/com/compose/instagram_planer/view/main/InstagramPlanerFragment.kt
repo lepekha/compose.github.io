@@ -30,6 +30,7 @@ import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.navigator.replace
 import ua.com.compose.instagram_planer.R
+import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvvmFragment
 
 
@@ -66,7 +67,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
     }
 
     override fun createBottomMenu(): MutableList<Menu> {
-        return mutableListOf(btnGallery, btnAddBox)
+        return mutableListOf()
     }
 
     private fun initGridPreview() {
@@ -145,6 +146,11 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
             materialCardView.isClickable = it
             materialCardView.isEnabled = it
             setVisibleMore(false)
+            if(it){
+                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnAddBox))
+            }else{
+                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf())
+            }
         }
 
         viewModel.createDialogInputName.observe(viewLifecycleOwner){
@@ -248,7 +254,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
 
         btnRemoveUser.setVibrate(EVibrate.BUTTON)
         btnRemoveUser.setOnClickListener {
-            val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = "Remove current account?")
+            val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = requireContext().getString(R.string.module_instagram_palaner_remove_account))
             setFragmentResultListener(request) { _, bundle ->
                 viewModel.onRemoveAccount(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER))
             }

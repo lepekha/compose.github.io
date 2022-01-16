@@ -193,7 +193,7 @@
                 android:singleLine="true"
                 android:text="@string/module_instagram_palaner_create_first_user"
                 android:textColor="?attr/color_5"
-                android:textSize="28sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/btnAddFirstUser"
@@ -203,11 +203,11 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnMore"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
                 android:layout_marginEnd="8dp"
                 app:cardBackgroundColor="?attr/color_6"
-                app:cardCornerRadius="25dp"
+                app:cardCornerRadius="23dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">

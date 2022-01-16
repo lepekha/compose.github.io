@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_image_filter_title">Фільтри </string>
+    <string name="module_image_filter_vibrance">Соковитість</string>
+    <string name="module_image_filter_rgb">RGB</string>
+    <string name="module_image_filter_monochrome">Монохромний</string>
+    <string name="module_image_filter_origin">Оригінал</string>
+    <string name="module_image_filter_sharpen">Різкість</string>
+    <string name="module_image_filter_black_white">Чорне і біле</string>
+    <string name="module_image_filter_vignette">Віньєтка</string>
+    <string name="module_image_filter_intensity">Інтенсивність</string>
+    <string name="module_image_filter_red">Червоний</string>
+    <string name="module_image_filter_green">Зелений</string>
+    <string name="module_image_filter_blue">Синій</string>
+    <string name="module_image_filter_temperature">Температура</string>
+    <string name="module_image_filter_greyscale">Відтінки сірого</string>
+    <string name="module_image_filter_gamma">Гамма</string>
+    <string name="module_image_filter_exposure">Експозиція</string>
+    <string name="module_image_filter_distance">Відстань</string>
+    <string name="module_image_filter_slope">Крутизна</string>
+    <string name="module_image_filter_sepia">Сепія</string>
+    <string name="module_image_filter_haze">Димка</string>
+    <string name="module_image_filter_brightness">Яскравість</string>
+    <string name="module_image_filter_contrast">Контраст</string>
+    <string name="module_image_filter_highlights">Свiтло</string>
+    <string name="module_image_filter_shadow_highlight">Відтінок</string>
+    <string name="module_image_filter_shadows">Тiнь</string>
+    <string name="module_image_filter_saturation">Насиченість</string>
+    <string name="module_image_filter_uv">Ультрафіолет</string>
+</resources>

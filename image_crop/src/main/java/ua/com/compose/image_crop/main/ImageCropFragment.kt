@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.isInvisible
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.card.MaterialCardView
@@ -132,6 +133,7 @@ class ImageCropFragment : BaseMvpFragment<ImageCropView, ImageCropPresenter>(), 
     }
 
     override fun setImage(uri: Uri){
+        container_secondary.isInvisible = false
         imgView.setImage(uri){
             presenter.onResourceLoad()
         }

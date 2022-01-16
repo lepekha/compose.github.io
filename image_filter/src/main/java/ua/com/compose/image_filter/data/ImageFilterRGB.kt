@@ -24,6 +24,10 @@ class ImageFilterRGB: ImageFilter() {
         )
     }
 
+    override fun isDefault(): Boolean {
+        return valueParams.filterIsInstance<FilterValueParam>().all { it.value == it.defValue }
+    }
+
     override fun applyParams(params: Array<FilterParam>) : ImageFilter{
         this.valueParams.clear()
         this.valueParams.addAll(params)

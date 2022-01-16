@@ -28,7 +28,7 @@ class MenuObjects(private val presenter: MainPresenter) {
     private val INSTAGRAM_PLANER by lazy {
         DynamicMenu.Image(
             id = R.id.id_menu_planer,
-            titleResId = R.string.menu_planer,
+            titleResId = R.string.module_instagram_palaner_title,
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
@@ -43,7 +43,7 @@ class MenuObjects(private val presenter: MainPresenter) {
     private val INSTAGRAM_NO_CROP by lazy {
         DynamicMenu.Image(
             id = R.id.id_menu_no_crop,
-            titleResId = R.string.menu_no_crop,
+            titleResId = R.string.module_instagram_no_crop_fragment_title_crop,
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
@@ -58,7 +58,7 @@ class MenuObjects(private val presenter: MainPresenter) {
     private val INSTAGRAM_GRID by lazy {
         DynamicMenu.Image(
             id = R.id.id_menu_grid,
-            titleResId = R.string.menu_grid,
+            titleResId = R.string.module_instagram_grid_title,
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
@@ -73,7 +73,7 @@ class MenuObjects(private val presenter: MainPresenter) {
     private val INSTAGRAM_PANORAMA by lazy {
         DynamicMenu.Image(
             id = R.id.id_menu_panorama,
-            titleResId = R.string.menu_panorama,
+            titleResId = R.string.module_instagram_panorama_title,
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
@@ -133,7 +133,7 @@ class MenuObjects(private val presenter: MainPresenter) {
     private val IMAGE_FILTER by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_filter,
-            titleResId = R.string.menu_filter,
+            titleResId = R.string.module_image_filter_title,
             iconResId = R.drawable.ic_filter,
             isVisible = { true },
             onPress = {
@@ -148,7 +148,7 @@ class MenuObjects(private val presenter: MainPresenter) {
     private val IMAGE_STYLE by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_style,
-            titleResId = R.string.menu_style,
+            titleResId = -1,
             iconResId = R.drawable.ic_style,
             isVisible = { true },
             onPress = {

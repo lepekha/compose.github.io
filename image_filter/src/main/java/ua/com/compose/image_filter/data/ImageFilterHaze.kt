@@ -10,6 +10,10 @@ class ImageFilterHaze: ImageFilter() {
 
     override val filter by lazy { GPUImageHazeFilter() }
 
+    override fun isDefault(): Boolean {
+        return valueParams.filterIsInstance<FilterValueParam>().all { it.value == it.defValue }
+    }
+
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
             FilterValueParam(R.string.module_image_filter_distance, -0.3f, 0.3f, 0.0f) {

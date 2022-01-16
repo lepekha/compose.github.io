@@ -10,9 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.core.view.drawToBitmap
 import androidx.core.view.isVisible
-import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,7 +21,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.module_image_filter_fragment_filter.*
-import ua.com.compose.dialog.dialogs.DialogInput
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 import ua.com.compose.image_filter.di.Scope
@@ -31,7 +28,6 @@ import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.image_filter.R
 import ua.com.compose.image_filter.data.ImageFilter
-import ua.com.compose.image_filter.main.dialogFilters.DialogFilters
 import ua.com.compose.image_maker.FrameImageView
 import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.data.BottomMenu
@@ -76,10 +72,10 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     }
 
     private val btnDown by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_arrow_down) {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_done) {
             list.layoutManager = null
             list.adapter = null
-            initBottomMenu()
+            presenter.pressDown()
         }
     }
 
@@ -103,7 +99,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
 
     private val btnHistory by lazy {
         BottomMenu(iconResId = R.drawable.module_image_filter_ic_history) {
-            initHistory()
+            presenter.pressMenuHistory()
         }
     }
 
@@ -116,9 +112,8 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
 
     override fun initHistory() {
         setVisibleBack(isVisible = true)
-        setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         initHistoryList()
-        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnDown, btnHistoryDone))
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnHistoryDone))
     }
 
     override fun initMenuFilters(){
@@ -129,6 +124,9 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     }
 
     override fun initBottomMenu() {
+        list.layoutManager = null
+        list.adapter = null
+        setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         if(presenter.historyImages.isNotEmpty()){
             (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnHistory, btnDone))
         }else{
@@ -177,7 +175,6 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         imgView.setOnTouchListener { _, event ->
             when(event.action){
                 MotionEvent.ACTION_DOWN -> {
-                    requireContext().vibrate(EVibrate.BUTTON_LONG)
                     presenter.pressImageDown()
                 }
                 MotionEvent.ACTION_UP -> {
@@ -199,12 +196,18 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         presenter.onCreate(uri = inputUri)
     }
 
+    override fun vibrateToShowHistory() {
+        requireContext().vibrate(EVibrate.BUTTON_LONG)
+    }
+
     override fun updateList() {
         list.adapter?.notifyDataSetChanged()
     }
 
     override fun backPress(byBack: Boolean): Boolean {
-        presenter.pressBack()
+        presenter.pressBack(byBack)
+        list.layoutManager = null
+        list.adapter = null
         return true
     }
 

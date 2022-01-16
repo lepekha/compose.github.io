@@ -105,7 +105,7 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(holder.imgView.context).load(images[position].uri).centerInside().skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE).thumbnail(0.1f).into(holder.imgView)
+        Glide.with(holder.imgView.context).load(images[position].uri).centerInside().thumbnail(0.1f).into(holder.imgView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {

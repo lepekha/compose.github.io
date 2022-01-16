@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_instagram_panorama_title">Панорама</string>
+    <string name="module_instagram_panorama_ready">Зображення збережено</string>
+</resources>

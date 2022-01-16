@@ -16,4 +16,5 @@ interface ImageFilterView : BaseMvpView {
     fun initFilter(filter: ImageFilter)
     fun initHistory()
     fun updateList()
+    fun vibrateToShowHistory()
 }

@@ -11,6 +11,7 @@ sealed class ImageFilter: Filter {
     abstract val filter: GPUImageFilter
     abstract val valueParams: List<FilterParam>
 
+    abstract fun isDefault(): Boolean
     abstract fun applyParams(params: Array<FilterParam>): ImageFilter
 }
 
@@ -56,6 +57,9 @@ enum class EImageFilter(val id: Int) {
     },
     IMAGE_FILTER_UV(id = 13) {
         override fun createFilter() = ImageFilterUV()
+    },
+    IMAGE_SEPIA(id = 14) {
+        override fun createFilter() = ImageFilterSepiaTone()
     };
 
     abstract fun createFilter(): ImageFilter

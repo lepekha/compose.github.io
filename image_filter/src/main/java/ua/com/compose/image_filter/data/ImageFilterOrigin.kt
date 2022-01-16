@@ -14,6 +14,10 @@ class ImageFilterOrigin: ImageFilter() {
         mutableListOf<FilterParam>()
     }
 
+    override fun isDefault(): Boolean {
+        return valueParams.filterIsInstance<FilterValueParam>().all { it.value == it.defValue }
+    }
+
     override fun applyParams(params: Array<FilterParam>) : ImageFilter{
         return this
     }

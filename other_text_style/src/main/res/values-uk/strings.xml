@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_other_text_style_fragment_title_text_style">Стиль тексту</string>
+    <string name="module_other_text_style_fragment_text_copied">Текст скопійовано</string>
+    <string name="module_other_text_style_enter_text">Compose</string>
+</resources>

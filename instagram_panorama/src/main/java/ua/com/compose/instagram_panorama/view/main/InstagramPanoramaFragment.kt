@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.card.MaterialCardView
@@ -130,6 +131,7 @@ class InstagramPanoramaFragment : BaseMvpFragment<InstagramPanoramaView, Instagr
         imgView.setImage(uri){
             presenter.onResourceLoad()
         }
+        container_secondary.isInvisible = false
     }
 
     override fun setSelectedTab(value: EPanorama) {

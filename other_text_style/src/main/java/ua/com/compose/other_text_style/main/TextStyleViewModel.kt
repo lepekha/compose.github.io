@@ -22,16 +22,9 @@ class TextStyleViewModel(private val getStringsUseCase: GetStringsUseCase): View
     private val _strings: MutableLiveData<List<String>> = MutableLiveData(mutableListOf())
     val strings: LiveData<List<String>> = _strings
 
-    init {
-        enterText("")
-    }
-
     fun enterText(value: String){
         viewModelScope.launch {
             var inputText = value
-            if(value.isEmpty() or value.isBlank()){
-                inputText = "Enter text"
-            }
             val list = getStringsUseCase.execute(inputText = inputText)
             _isVisibleClearText.postValue(value.isNotEmpty())
             _isVisiblePlaceHolder.postValue(list.isEmpty())

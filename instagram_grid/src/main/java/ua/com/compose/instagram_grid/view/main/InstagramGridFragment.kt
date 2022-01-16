@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.isInvisible
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayout
@@ -125,6 +126,7 @@ class InstagramGridFragment : BaseMvpFragment<InstagramGridView, InstagramGridPr
         imgView.setImage(uri) {
             presenter.onResourceLoad()
         }
+        container_secondary.isInvisible = false
     }
 
     override fun setSelectedTab(position: Int) {

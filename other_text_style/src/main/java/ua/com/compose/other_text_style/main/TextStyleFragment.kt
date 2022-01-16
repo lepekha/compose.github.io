@@ -110,6 +110,7 @@ class TextStyleFragment : BaseMvvmFragment() {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_other_text_style_fragment_title_text_style))
         initList()
+        enterText("")
 
         viewModel.isVisibleClearText.observe(this) {
             binding?.btnClear?.isVisible = it
@@ -124,12 +125,20 @@ class TextStyleFragment : BaseMvvmFragment() {
         }
 
         binding?.editText?.onTextChangedListener {
-            viewModel.enterText(it)
+            enterText(it)
         }
 
         binding?.btnClear?.setOnClickListener {
             binding?.editText?.text?.clear()
-            viewModel.enterText("")
+            enterText("")
+        }
+    }
+
+    private fun enterText(value: String){
+        if(value.isEmpty() or value.isBlank()){
+            viewModel.enterText(requireContext().getString(R.string.module_other_text_style_enter_text))
+        }else{
+            viewModel.enterText(value)
         }
     }
 }

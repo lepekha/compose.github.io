@@ -3,23 +3,28 @@ package ua.com.compose.image_filter.main
 import android.content.Context
 import android.graphics.*
 import android.net.Uri
+import android.os.Build
 import com.google.gson.GsonBuilder
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import kotlinx.coroutines.*
 import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.dialog.DialogManager
+import ua.com.compose.dialog.IDialog
 import ua.com.compose.extension.createTempUri
 import ua.com.compose.image_filter.data.*
 import ua.com.compose.mvp.BaseMvpView
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.FileOutputStream
 
 class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilterView>() {
 
-
+    private var type = EMenuType.NONE
     private var currentUri: Uri? = null
     private var image: Bitmap? = null
     private var sampleImage: Bitmap? = null
     private var sampleOriginImage: Bitmap? = null
+    private var dialogLoad: IDialog? = null
     private val gson = GsonBuilder().apply {
         this.excludeFieldsWithoutExposeAnnotation()
     }.create()
@@ -62,6 +67,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         when{
             (currentUri != null) -> {
                 this.currentUri = currentUri
+                dialogLoad = DialogManager.createLoad {  }
                 view?.setImage(currentUri)
             }
             else -> {
@@ -75,6 +81,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
+            dialogLoad = DialogManager.createLoad {  }
             view?.setImage(currentUri)
         }else{
             view?.openGallery()
@@ -90,9 +97,15 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     }
 
     fun pressMenuFilters(){
+        type = EMenuType.FILTERS
         historyFilters = historyFilters.dropLast(backHistorySize).toMutableList()
         historyImages = historyImages.dropLast(backHistorySize).toMutableList()
         view?.initMenuFilters()
+    }
+
+    fun pressMenuHistory(){
+        type = EMenuType.HISTORY
+        view?.initHistory()
     }
 
     fun pressCancelFilter(){
@@ -111,6 +124,9 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
 
     fun pressImageDown(){
         this.sampleOriginImage?.let {
+            if(historyImages.isNotEmpty()){
+                view?.vibrateToShowHistory()
+            }
             view?.setImage(it)
         }
     }
@@ -133,6 +149,12 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         historyFilters = historyFilters.dropLast(backHistorySize).toMutableList()
         historyImages = historyImages.dropLast(backHistorySize).toMutableList()
         backHistorySize = 0
+        type = EMenuType.NONE
+        view?.initBottomMenu()
+    }
+
+    fun pressDown(){
+        type = EMenuType.NONE
         view?.initBottomMenu()
     }
 
@@ -160,26 +182,38 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         historyImages = historyImages.dropLast(backHistorySize).toMutableList()
 
         currentFilter?.let { filter ->
-            sampleImage = gpuSampleFilter.bitmapWithFilterApplied
-            gpuSampleFilter.setImage(sampleImage)
-            if(historyImages.isEmpty()){
-                historyFilters.add(ImageFilterOrigin())
-                historyImages.add(sampleOriginImage!!)
-            }
-            historyFilters.add(filter)
-            sampleImage?.let {
-                historyImages.add(it)
+            if(!filter.isDefault()){
+                sampleImage = gpuSampleFilter.bitmapWithFilterApplied
+                gpuSampleFilter.setImage(sampleImage)
+                if(historyImages.isEmpty()){
+                    historyFilters.add(ImageFilterOrigin())
+                    historyImages.add(sampleOriginImage!!)
+                }
+                historyFilters.add(filter)
+                sampleImage?.let {
+                    historyImages.add(it)
+                }
             }
             currentFilter = null
             view?.initMenuFilters()
         }
     }
 
-    fun pressBack(){
-        if(currentFilter != null){
-            pressCancelFilter()
-        }else{
-            view?.backToMain()
+    fun pressBack(byBack: Boolean){
+        when{
+            byBack -> {
+                view?.backToMain()
+            }
+            currentFilter != null -> {
+                pressCancelFilter()
+            }
+            (type == EMenuType.HISTORY) or (type == EMenuType.FILTERS) -> {
+                type = EMenuType.NONE
+                view?.initBottomMenu()
+            }
+            else -> {
+                view?.backToMain()
+            }
         }
     }
 
@@ -188,10 +222,19 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     }
 
     fun onSampleLoad(image: Bitmap?){
-        if(this.sampleImage == null) {
-            this.sampleImage = image
-            this.sampleOriginImage = image
-            gpuSampleFilter.setImage(image)
+        dialogLoad?.closeDialog()
+        if(this.sampleImage == null && image != null) {
+            val baos = ByteArrayOutputStream()
+            val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Bitmap.CompressFormat.WEBP_LOSSY
+            } else {
+                Bitmap.CompressFormat.JPEG
+            }
+            image.compress(format, 90, baos)
+            val newBitmap = BitmapFactory.decodeStream(ByteArrayInputStream(baos.toByteArray()))
+            this.sampleImage = newBitmap
+            this.sampleOriginImage = newBitmap
+            gpuSampleFilter.setImage(newBitmap)
         }
     }
 }

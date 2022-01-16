@@ -13,14 +13,20 @@ import android.widget.SeekBar
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.core.view.drawToBitmap
+import androidx.core.view.isInvisible
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.slider.Slider
 import kotlinx.android.synthetic.main.module_image_compress_fragment_compress_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ua.com.compose.extension.*
 import ua.com.compose.image_compress.di.Scope
 import ua.com.compose.mvp.BaseMvpFragment
@@ -66,10 +72,58 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
         }
     }
 
+    private val btnSettingsRestore by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_settings_restore) {
+            presenter.pressRestoreSettings()
+        }
+    }
+
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
             this.add(btnGallery)
+            this.add(btnSettingsRestore)
             this.add(btnDone)
+        }
+    }
+
+    private val txtSizeRunnable = Runnable {
+        txtSize?.changeTextAnimate(text = requireContext().getString(R.string.module_image_compress_size))
+        txtSize?.setTextColor(requireContext().getColorFromAttr(R.attr.color_9))
+    }
+
+    private val txtQualityRunnable = Runnable {
+        txtQuality?.changeTextAnimate(text = requireContext().getString(R.string.module_image_compress_quality))
+        txtQuality?.setTextColor(requireContext().getColorFromAttr(R.attr.color_9))
+    }
+
+    val onSizeChange: (Int) -> Unit by lazy {
+        debounce(
+            250,
+            viewLifecycleOwner.lifecycleScope,
+            presenter::onSizeChange
+        )
+    }
+
+    val onQualityChange: (Int) -> Unit  by lazy {
+        debounce(
+            250,
+            viewLifecycleOwner.lifecycleScope,
+            presenter::onQualityChange
+        )
+    }
+
+    fun <T> debounce(
+        waitMs: Long = 200,
+        coroutineScope: CoroutineScope,
+        destinationFunction: (T) -> Unit
+    ): (T) -> Unit {
+        var debounceJob: Job? = null
+        return { param: T ->
+            debounceJob?.cancel()
+            debounceJob = coroutineScope.launch {
+                delay(waitMs)
+                destinationFunction(param)
+            }
         }
     }
 
@@ -84,12 +138,14 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
 
         sbSize.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
             txtSize.context.vibrate(EVibrate.SLIDER)
-            presenter.onSizeChange(progress = value.toInt())
+            presenter.onPreviewSizeChange(progress = value.toInt())
+            onSizeChange(value.toInt())
         })
 
         sbQuality.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
-            txtSize.context.vibrate(EVibrate.SLIDER)
-            presenter.onQualityChange(progress = value.toInt())
+            txtQuality.context.vibrate(EVibrate.SLIDER)
+            presenter.onPreviewQualityChange(progress = value.toInt())
+            onQualityChange(value.toInt())
         })
 
         val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
@@ -98,23 +154,17 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
     }
 
     override fun setQualityValue(value: String){
-        txtQuality.text = buildString {
-            append(requireContext().getString(R.string.module_image_compress_quality))
-            append(" ")
-            append(value)
-        }
-
-        txtQuality.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_14))
+        txtQuality.setTextColor(requireContext().getColorFromAttr(R.attr.color_14))
+        txtQuality.text = value
+        txtQuality.removeCallbacks(txtQualityRunnable)
+        txtQuality.postDelayed(txtQualityRunnable, 700)
     }
 
     override fun setSizeValue(value: String){
-        txtSize.text = buildString {
-            append(requireContext().getString(R.string.module_image_compress_size))
-            append(" ")
-            append(value)
-        }
-
-        txtSize.setColorOfSubstring(value, requireContext().getColorFromAttr(R.attr.color_14))
+        txtSize.setTextColor(requireContext().getColorFromAttr(R.attr.color_14))
+        txtSize.text = value
+        txtSize.removeCallbacks(txtSizeRunnable)
+        txtSize.postDelayed(txtSizeRunnable, 700)
     }
 
     override fun openGallery() {
@@ -141,10 +191,16 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
                     }
                 })
 
+        container_secondary.isInvisible = false
+    }
+
+    override fun restoreSettings(quality: Int, size: Int) {
+        sbQuality.value = quality.toFloat()
+        sbSize.value = size.toFloat()
     }
 
     override fun setImage(bmp: Bitmap) {
-        imgView.setImageBitmap(bmp)
+        Glide.with(requireContext().applicationContext).load(bmp).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).fitCenter().thumbnail(0.1f).into(imgView)
     }
 
     override fun onDestroy() {

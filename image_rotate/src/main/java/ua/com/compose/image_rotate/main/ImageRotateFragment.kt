@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
@@ -67,9 +69,16 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
         }
     }
 
+    private val btnSettingsRestore by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_settings_restore) {
+            presenter.pressRestoreSettings()
+        }
+    }
+
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
             this.add(btnGallery)
+            this.add(btnSettingsRestore)
             this.add(btnDone)
         }
     }
@@ -141,6 +150,8 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
                         presenter.onResourceLoad(resource)
                     }
                 })
+
+        container_secondary.isInvisible = false
 
     }
 

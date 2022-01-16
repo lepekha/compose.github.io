@@ -21,14 +21,13 @@
         style="@style/CustomSeekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:max="100"
         android:progress="100"
         app:haloColor="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/txtSize"
+        app:labelBehavior="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtSize"
-        app:layout_constraintTop_toTopOf="@+id/txtSize" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSize" />
 
     <TextView
         android:id="@+id/txtSize"
@@ -42,7 +41,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

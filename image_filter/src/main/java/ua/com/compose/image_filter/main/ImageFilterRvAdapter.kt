@@ -24,14 +24,10 @@ class ImageFilterRvAdapter(private val params: List<FilterParam>, private val on
                 (params[adapterPosition] as FilterValueParam).value = value
                 onChange.invoke()
                 txtSize.context.vibrate(EVibrate.SLIDER)
-//                val formattedValue = if(value > 0f) { "+${value.toInt()}" } else { value.toInt().toString() }
-                txtSize.text = buildString {
-                    append(txtSize.contentDescription)
-//                    append(" ")
-//                    append(formattedValue)
-                }
-
-//                txtSize.setColorOfSubstring(formattedValue, txtSize.context.getColorFromAttr(R.attr.color_14))
+                txtSize.text = if(value > 0f) { "+${value.toInt()}" } else { value.toInt().toString() }
+                txtSize.setTextColor(txtSize.context.getColorFromAttr(R.attr.color_14))
+                txtSize.removeCallbacks(runnable)
+                txtSize.postDelayed(runnable, 700)
             })
         }
     }
@@ -40,19 +36,19 @@ class ImageFilterRvAdapter(private val params: List<FilterParam>, private val on
         val filter = params[position] as FilterValueParam
         holder.progress.valueFrom = filter.minPercent()
         holder.progress.valueTo = filter.maxPercent()
-        holder.progress.value = filter.defaultPercent()
         holder.progress.stepSize = filter.step
         holder.txtSize.contentDescription = holder.txtSize.context.getString(filter.nameResId)
-        holder.txtSize.text = buildString {
-            append(holder.txtSize.contentDescription)
-//            append(" ")
-//            append(holder.progress.value.toInt())
-        }
-//        holder.txtSize.setColorOfSubstring(holder.progress.value.toInt().toString(), holder.txtSize.context.getColorFromAttr(R.attr.color_14))
+        holder.txtSize.text = holder.txtSize.contentDescription
+        holder.progress.value = filter.defaultPercent()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val progress: Slider = view.sbSize
         val txtSize: TextView = view.txtSize
+
+        val runnable = Runnable {
+            txtSize.changeTextAnimate(text = txtSize.contentDescription.toString())
+            txtSize.setTextColor(txtSize.context.getColorFromAttr(R.attr.color_9))
+        }
     }
 }

@@ -20,6 +20,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/color_1</item>
         <item name="android:navigationBarColor">?attr/color_1</item>
         <item name="editTextStyle">@style/EditTextDefault</item>
+        <item name="android:windowBackground">@color/color_night_1</item>
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/color_night_1</item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/ic_splashscreen</item>

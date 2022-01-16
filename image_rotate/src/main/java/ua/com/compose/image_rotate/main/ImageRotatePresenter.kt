@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ua.com.compose.dialog.IDialog
 import ua.com.compose.image_rotate.R
 
 
@@ -28,7 +29,10 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
     private var flipYScale: Float = 1f
     private var rotateAngel: Float = 0f
 
+    private var loader: IDialog? = null
+
     fun onAddImage(uris: List<Uri>){
+        loader = DialogManager.createLoad {}
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
             (currentUri != null) -> {
@@ -36,6 +40,7 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
                 view?.setImage(currentUri)
             }
             else -> {
+                loader?.closeDialog()
                 view?.backToMain()
                 return
             }
@@ -46,6 +51,7 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
         this.currentUri = uri
         val currentUri = this.currentUri
         if(currentUri != null) {
+            loader = DialogManager.createLoad {}
             view?.setImage(currentUri)
         }else{
             view?.openGallery()
@@ -72,8 +78,18 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
         dialog.closeDialog()
     }
 
+    fun pressRestoreSettings() {
+        flipXScale = 1f
+        flipYScale = 1f
+        rotateAngel = 0f
+        view?.setRotateToImage(angel = rotateAngel)
+        view?.setFlipXToImage(scale = flipXScale)
+        view?.setFlipYToImage(scale = flipYScale)
+    }
+
     fun onResourceLoad(image: Bitmap){
         this.image = image
+        loader?.closeDialog()
     }
 
     fun pressRotateLeft() {

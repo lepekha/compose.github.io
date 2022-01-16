@@ -25,6 +25,8 @@ abstract class BaseMvpActivity<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         return this
     }
 
+    abstract fun isVisibleBottomMenu(): Boolean
+
     abstract fun setupBottomMenu(menu: MutableList<Menu>)
 
     override fun onDestroy() {

@@ -12,7 +12,7 @@ class ImageFilterVibrance: ImageFilter() {
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity, -0.8f, 0.8f, 0.0f) {
+            FilterValueParam(R.string.module_image_filter_vibrance, -0.8f, 0.8f, 0.0f) {
                 filter.setVibrance(it)
             }
         )

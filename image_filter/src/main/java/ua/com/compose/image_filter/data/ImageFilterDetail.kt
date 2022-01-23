@@ -12,7 +12,7 @@ class ImageFilterSharpen: ImageFilter() {
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity, -0.7f, 0.7f, 0.0f, onChange = {
+            FilterValueParam(R.string.module_image_filter_sharpen, -0.7f, 0.7f, 0.0f, onChange = {
                 filter.setSharpness(it)
             })
         )

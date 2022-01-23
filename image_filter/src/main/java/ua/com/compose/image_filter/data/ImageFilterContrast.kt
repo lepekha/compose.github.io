@@ -12,7 +12,7 @@ class ImageFilterContrast: ImageFilter() {
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity,  0.7f, 1.3f, 1.0f) {
+            FilterValueParam(R.string.module_image_filter_contrast,  0.7f, 1.3f, 1.0f) {
                 filter.setContrast(it)
             }
         )

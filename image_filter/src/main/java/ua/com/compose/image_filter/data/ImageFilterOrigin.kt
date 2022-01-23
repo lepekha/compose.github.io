@@ -8,7 +8,7 @@ class ImageFilterOrigin: ImageFilter() {
     override val nameResId: Int = R.string.module_image_filter_origin
     override val iconResId: Int = -1
 
-    override val filter by lazy { GPUImageFilterGroup()}
+    override val filter by lazy { GPUImageFilter()}
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>()

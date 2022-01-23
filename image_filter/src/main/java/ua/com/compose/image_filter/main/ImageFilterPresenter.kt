@@ -4,8 +4,9 @@ import android.content.Context
 import android.graphics.*
 import android.net.Uri
 import android.os.Build
-import com.google.gson.GsonBuilder
 import jp.co.cyberagent.android.gpuimage.GPUImage
+import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
+import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilterGroup
 import kotlinx.coroutines.*
 import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.dialog.DialogManager
@@ -15,51 +16,42 @@ import ua.com.compose.image_filter.data.*
 import ua.com.compose.mvp.BaseMvpView
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
 
 class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilterView>() {
 
     private var type = EMenuType.NONE
     private var currentUri: Uri? = null
     private var image: Bitmap? = null
-    private var sampleImage: Bitmap? = null
-    private var sampleOriginImage: Bitmap? = null
+    var sampleImage: Bitmap? = null
     private var dialogLoad: IDialog? = null
-    private val gson = GsonBuilder().apply {
-        this.excludeFieldsWithoutExposeAnnotation()
-    }.create()
 
-    val filters = EImageFilter.values().map { it.createFilter() }
+    val filters = EImageFilter.visibleFilters.map { it.createFilter() }
 
     var historyFilters = mutableListOf<ImageFilter>()
-    var historyImages = mutableListOf<Bitmap>()
+    var tempHistoryFilters = mutableListOf<ImageFilter>()
 
-    private val gpuSampleFilter = GPUImage(context.applicationContext)
-    private val gpuFilter = GPUImage(context.applicationContext)
+    val gpuSampleFilter = GPUImage(context.applicationContext).apply {
+        this.setScaleType(GPUImage.ScaleType.CENTER_INSIDE)
+        this.setBackgroundColor(27 / 255f,27 / 255f,31 / 255f)
+    }
+
+    private val gpuFilter = GPUImage(context.applicationContext).apply {
+        this.setScaleType(GPUImage.ScaleType.CENTER_INSIDE)
+        this.setBackgroundColor(27 / 255f,27 / 255f,31 / 255f)
+    }
 
     private var currentFilter: ImageFilter? = null
-        set(value) {
-            field = value
-            params.clear()
-            if(value != null){
-                gpuSampleFilter.setFilter(value.filter)
-                params.addAll(value.valueParams)
-                view?.initFilter(value)
-            }
-            view?.updateList()
-        }
 
     val params = mutableListOf<FilterParam>()
 
-    private var backHistorySize = 0
-    fun pressImageHistory(filter: ImageFilter){
-        val index = historyFilters.indexOf(filter)
-        backHistorySize = historyFilters.reversed().indexOf(filter)
-        historyImages.getOrNull(index)?.let {
-            sampleImage = it
-            gpuSampleFilter.setImage(it)
-            view?.setImage(it)
-        }
+    fun pressImageHistory(position: Int){
+        historyFilters = tempHistoryFilters.dropLast(position).toMutableList()
+        gpuSampleFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters)))
+    }
+
+    fun pressHistory() {
+        tempHistoryFilters.clear()
+        tempHistoryFilters.addAll(historyFilters)
     }
 
     fun onAddImage(uris: List<Uri>){
@@ -87,19 +79,27 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             view?.openGallery()
         }
         onProgressChange()
+        pressMenuFilters()
     }
 
     fun pressFilter(id: Int){
         EImageFilter.values().firstOrNull { it.id == id }?.let {
-            currentFilter = it.createFilter()
+            val currentFilter = it.createFilter()
+            this.currentFilter = currentFilter
+
+            params.clear()
+            gpuSampleFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters).toMutableList().apply {
+                this.add(currentFilter.filter)
+            }))
+            params.addAll(currentFilter.valueParams)
+            view?.initFilter(currentFilter)
+            view?.updateList()
         }
         onProgressChange()
     }
 
     fun pressMenuFilters(){
         type = EMenuType.FILTERS
-        historyFilters = historyFilters.dropLast(backHistorySize).toMutableList()
-        historyImages = historyImages.dropLast(backHistorySize).toMutableList()
         view?.initMenuFilters()
     }
 
@@ -109,31 +109,32 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     }
 
     fun pressCancelFilter(){
-        currentFilter = null
-        sampleImage?.let {
-            view?.setImage(it)
+        val filters = getAllFilters(historyFilters)
+        if(filters.isEmpty()){
+            gpuSampleFilter.setFilter(GPUImageFilter())
+        }else{
+            gpuSampleFilter.setFilter(GPUImageFilterGroup(filters))
         }
+        currentFilter = null
         view?.initMenuFilters()
     }
 
     fun onProgressChange() = CoroutineScope(Dispatchers.Main).launch {
-        this@ImageFilterPresenter.sampleImage?.let { sample ->
-            view?.setImage(gpuSampleFilter.bitmapWithFilterApplied)
-        }
+        gpuSampleFilter.requestRender()
     }
 
     fun pressImageDown(){
-        this.sampleOriginImage?.let {
-            if(historyImages.isNotEmpty()){
+        if(currentFilter == null) {
+            if(historyFilters.size > 1){
                 view?.vibrateToShowHistory()
+                gpuSampleFilter.setFilter(GPUImageFilter())
             }
-            view?.setImage(it)
         }
     }
 
     fun pressImageUp(){
-        this.sampleImage?.let {
-            view?.setImage(it)
+        if(currentFilter == null) {
+            gpuSampleFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters)))
         }
     }
 
@@ -145,58 +146,40 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         }
     }
 
-    fun pressHistoryDone() {
-        historyFilters = historyFilters.dropLast(backHistorySize).toMutableList()
-        historyImages = historyImages.dropLast(backHistorySize).toMutableList()
-        backHistorySize = 0
-        type = EMenuType.NONE
-        view?.initBottomMenu()
-    }
-
-    fun pressDown(){
-        type = EMenuType.NONE
-        view?.initBottomMenu()
-    }
-
     private suspend fun saveAllFilters(){
         val dialog = DialogManager.createLoad{}
         withContext(Dispatchers.IO) {
             this@ImageFilterPresenter.image?.let { bitmap ->
-                var bitmapWithFilter = bitmap
-                historyFilters.reversed().dropLast(1).forEach { filter ->
-                    gpuFilter.setFilter(filter.filter)
-                    bitmapWithFilter = gpuFilter.getBitmapWithFilterApplied(bitmapWithFilter)
-                }
-                context.createTempUri(bitmap = bitmapWithFilter, name = System.currentTimeMillis().toString())
+                gpuFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters.map { it.copy() })))
+                val bm = gpuFilter.getBitmapWithFilterApplied(bitmap)
+                context.createTempUri(bitmap = bm, name = System.currentTimeMillis().toString())
             }
         }?.let { uri ->
             view?.saveToResult(uri)
         }
         dialog.closeDialog()
-//        val json = gson.toJson(historyFilters.associateBy({it.id}, {it.valueParams}))
-        (view?.getCurrentActivity() as BaseMvpView)?.backPress(false)
+        (view?.getCurrentActivity() as BaseMvpView).backToMain()
+    }
+
+    fun getAllFilters(historyFilters: List<ImageFilter>): List<GPUImageFilter> {
+        val filters = mutableListOf<GPUImageFilter>()
+        historyFilters.forEach {
+            filters.add(it.filter)
+        }
+        if(filters.isEmpty()){
+            filters.add(GPUImageFilter())
+        }
+        return filters
     }
 
     private suspend fun applyCurrentFilter(){
-        historyFilters = historyFilters.dropLast(backHistorySize).toMutableList()
-        historyImages = historyImages.dropLast(backHistorySize).toMutableList()
-
-        currentFilter?.let { filter ->
-            if(!filter.isDefault()){
-                sampleImage = gpuSampleFilter.bitmapWithFilterApplied
-                gpuSampleFilter.setImage(sampleImage)
-                if(historyImages.isEmpty()){
-                    historyFilters.add(ImageFilterOrigin())
-                    historyImages.add(sampleOriginImage!!)
-                }
-                historyFilters.add(filter)
-                sampleImage?.let {
-                    historyImages.add(it)
-                }
-            }
-            currentFilter = null
-            view?.initMenuFilters()
+        if(historyFilters.isEmpty()){
+            historyFilters.add(ImageFilterOrigin())
         }
+        currentFilter?.let { historyFilters.add(it) }
+        currentFilter = null
+        gpuSampleFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters)))
+        view?.initMenuFilters()
     }
 
     fun pressBack(byBack: Boolean){
@@ -207,10 +190,6 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             currentFilter != null -> {
                 pressCancelFilter()
             }
-            (type == EMenuType.HISTORY) or (type == EMenuType.FILTERS) -> {
-                type = EMenuType.NONE
-                view?.initBottomMenu()
-            }
             else -> {
                 view?.backToMain()
             }
@@ -219,10 +198,10 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
 
     fun onResourceLoad(image: Bitmap){
         this.image = image
+        gpuFilter.setImage(image)
     }
 
     fun onSampleLoad(image: Bitmap?){
-        dialogLoad?.closeDialog()
         if(this.sampleImage == null && image != null) {
             val baos = ByteArrayOutputStream()
             val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -233,8 +212,8 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             image.compress(format, 90, baos)
             val newBitmap = BitmapFactory.decodeStream(ByteArrayInputStream(baos.toByteArray()))
             this.sampleImage = newBitmap
-            this.sampleOriginImage = newBitmap
             gpuSampleFilter.setImage(newBitmap)
         }
+        dialogLoad?.closeDialog()
     }
 }

@@ -96,37 +96,6 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
         txtQuality?.setTextColor(requireContext().getColorFromAttr(R.attr.color_9))
     }
 
-    val onSizeChange: (Int) -> Unit by lazy {
-        debounce(
-            250,
-            viewLifecycleOwner.lifecycleScope,
-            presenter::onSizeChange
-        )
-    }
-
-    val onQualityChange: (Int) -> Unit  by lazy {
-        debounce(
-            250,
-            viewLifecycleOwner.lifecycleScope,
-            presenter::onQualityChange
-        )
-    }
-
-    fun <T> debounce(
-        waitMs: Long = 200,
-        coroutineScope: CoroutineScope,
-        destinationFunction: (T) -> Unit
-    ): (T) -> Unit {
-        var debounceJob: Job? = null
-        return { param: T ->
-            debounceJob?.cancel()
-            debounceJob = coroutineScope.launch {
-                delay(waitMs)
-                destinationFunction(param)
-            }
-        }
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -139,13 +108,25 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
         sbSize.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
             txtSize.context.vibrate(EVibrate.SLIDER)
             presenter.onPreviewSizeChange(progress = value.toInt())
-            onSizeChange(value.toInt())
         })
+
+        sbSize.setOnTouchListener { _, motionEvent ->
+            if(motionEvent.action == MotionEvent.ACTION_UP){
+                presenter.onSizeChange(sbSize.value.toInt())
+            }
+            false
+        }
+
+        sbQuality.setOnTouchListener { _, motionEvent ->
+            if(motionEvent.action == MotionEvent.ACTION_UP){
+                presenter.onQualityChange(sbQuality.value.toInt())
+            }
+            false
+        }
 
         sbQuality.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
             txtQuality.context.vibrate(EVibrate.SLIDER)
             presenter.onPreviewQualityChange(progress = value.toInt())
-            onQualityChange(value.toInt())
         })
 
         val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri

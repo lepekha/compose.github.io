@@ -13,12 +13,19 @@ sealed class ImageFilter: Filter {
 
     abstract fun isDefault(): Boolean
     abstract fun applyParams(params: Array<FilterParam>): ImageFilter
+
+    fun copy(): ImageFilter {
+        return EImageFilter.findById(this.id).createFilter().applyParams(this@ImageFilter.valueParams.toTypedArray())
+    }
 }
 
 
 
 enum class EImageFilter(val id: Int) {
 
+    IMAGE_FILTER_ORIGIN(id = -1) {
+        override fun createFilter() = ImageFilterOrigin()
+    },
     IMAGE_FILTER_CONTRAST(id = 1) {
         override fun createFilter() = ImageFilterContrast()
     },
@@ -65,6 +72,23 @@ enum class EImageFilter(val id: Int) {
     abstract fun createFilter(): ImageFilter
 
     companion object {
+        val visibleFilters = listOf(
+            IMAGE_FILTER_CONTRAST,
+            IMAGE_FILTER_BRIGHTNESS,
+            IMAGE_FILTER_SATURATION,
+            IMAGE_FILTER_VIBRANCE,
+            IMAGE_FILTER_EXPOSURE,
+            IMAGE_FILTER_TEMPERATURE,
+            IMAGE_FILTER_GAMMA,
+            IMAGE_FILTER_RGB,
+            IMAGE_FILTER_SHARPEN,
+            IMAGE_FILTER_VIGNETTE,
+            IMAGE_FILTER_BLACK_AND_WHITE,
+            IMAGE_FILTER_SHADOW,
+            IMAGE_FILTER_UV,
+            IMAGE_SEPIA
+        )
+
         fun findById(id: Int) = values().first { it.id == id }
     }
 

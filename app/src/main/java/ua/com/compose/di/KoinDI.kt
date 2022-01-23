@@ -7,7 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import ua.com.compose.view.main.history.ImageHistoryViewModule
+import ua.com.compose.view.main.info.ImageInfoViewModule
 
 val appModule = module {
 
@@ -15,6 +15,6 @@ val appModule = module {
         scoped { MainPresenter() }
         scoped { PresenterMain(menu = get()) }
         scoped { MenuObjects(presenter = get()) }
-        viewModel { ImageHistoryViewModule(context = androidContext()) }
+        viewModel { ImageInfoViewModule(context = androidContext()) }
     }
 }

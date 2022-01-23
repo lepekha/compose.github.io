@@ -8,11 +8,11 @@ class ImageFilterSepiaTone: ImageFilter() {
     override val nameResId: Int = R.string.module_image_filter_sepia
     override val iconResId: Int = R.drawable.module_image_filter_ic_sepia
 
-    override val filter by lazy { GPUImageSepiaToneFilter() }
+    override val filter by lazy { GPUImageSepiaToneFilter(0.0f) }
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity, 0.0f, 1.0f, 0.0f) {
+            FilterValueParam(R.string.module_image_filter_sepia, 0.0f, 1.0f, 0.0f) {
                 filter.setIntensity(it)
             }
         )

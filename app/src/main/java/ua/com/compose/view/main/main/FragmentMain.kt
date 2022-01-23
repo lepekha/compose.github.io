@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import ua.com.compose.mvp.BaseMvpFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
-import ua.com.compose.view.main.history.ImageHistoryFragment
-import ua.com.compose.navigator.replace
 import ua.com.compose.view.main.MainActivity
-import ua.com.compose.view.main.history.ImageHistory
 
 
 class FragmentMain : BaseMvpFragment<ViewMain, PresenterMain>(), ViewMain {

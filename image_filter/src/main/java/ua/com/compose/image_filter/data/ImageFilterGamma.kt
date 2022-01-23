@@ -12,7 +12,7 @@ class ImageFilterGamma: ImageFilter() {
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity,  0.5f, 1.5f, 1.0f) {
+            FilterValueParam(R.string.module_image_filter_gamma,  0.5f, 1.5f, 1.0f) {
                 filter.setGamma(it)
             }
         )

@@ -34,13 +34,13 @@ class ImageFilterHistoryRvAdapter(val images: List<Bitmap>, val onImagePress: (v
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(holder.imgView.context.applicationContext).load(images[position]).diskCacheStrategy(
-            DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.imgView)
+//        Glide.with(holder.imgView.context.applicationContext).load(images[position]).diskCacheStrategy(
+//            DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.imgView)
 //        holder.txtTitle.text = holder.txtTitle.context.getString(filters[position].nameResId)
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val imgView: ImageView = view.imgIcon
+        val imgView = view.imgIcon
         val txtTitle: TextView = view.txtTitle
     }
 }

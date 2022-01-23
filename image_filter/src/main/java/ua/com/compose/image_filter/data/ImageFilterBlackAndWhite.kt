@@ -11,11 +11,13 @@ class ImageFilterBlackAndWhite: ImageFilter() {
     private val filter1 by lazy { GPUImageGrayscaleFilter() }
     private val filter2 by lazy { GPUImageBrightnessFilter() }
 
-    override val filter by lazy { GPUImageFilterGroup(listOf(filter1, filter2)) }
+    override val filter by lazy { GPUImageFilterGroup(listOf(filter2, filter1)).apply {
+        this.setBackgroundColor(27 / 255f,27 / 255f,31 / 255f)
+    } }
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity, -0.2f, 0.2f, 0.0f) {
+            FilterValueParam(R.string.module_image_filter_black_white, -0.2f, 0.2f, 0.0f) {
                 filter2.setBrightness(it)
             }
         )

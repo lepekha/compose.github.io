@@ -7,7 +7,7 @@ interface FilterParam
 
 data class FilterValueParam(val nameResId: Int = -1, val minValue: Float = 0f, val maxValue: Float = 0f, val defValue: Float = 0f, val step: Float = 1f, val onPercent:(value: Float) -> Unit = {}, val onChange:(value: Float) -> Unit = {}) :
     FilterParam {
-    @Expose var value: Float = 0f
+    @Expose var value: Float = defValue
         set(value) {
             val real = range(percentage = value)
             onPercent(value)

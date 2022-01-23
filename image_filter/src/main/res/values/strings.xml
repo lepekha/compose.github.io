@@ -1,5 +1,5 @@
 <resources>
-    <string name="module_image_filter_title">Filters</string>
+    <string name="module_image_filter_title">Filter</string>
     <string name="module_image_filter_vibrance">Vibrance</string>
     <string name="module_image_filter_rgb">RGB</string>
     <string name="module_image_filter_monochrome">Monochrome</string>
@@ -26,4 +26,5 @@
     <string name="module_image_filter_shadows">Shadows</string>
     <string name="module_image_filter_saturation">Saturation</string>
     <string name="module_image_filter_uv">Ultraviolet</string>
+    <string name="module_image_filter_exit_without_save">Exit without saving?</string>
 </resources>

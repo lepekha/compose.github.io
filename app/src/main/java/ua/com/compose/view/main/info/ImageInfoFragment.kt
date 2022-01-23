@@ -1,5 +1,6 @@
-package ua.com.compose.view.main.history
+package ua.com.compose.view.main.info
 
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +10,11 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
-import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.fragment_image_history.*
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.stfalcon.imageviewer.StfalconImageViewer
+import kotlinx.android.synthetic.main.fragment_image_info.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import ua.com.compose.R
@@ -21,18 +23,19 @@ import ua.com.compose.extension.nonNull
 import ua.com.compose.extension.observe
 import ua.com.compose.extension.setVibrate
 import ua.com.compose.image_compress.main.ImageCompressFragment
+import ua.com.compose.image_crop.main.ImageCropFragment
 import ua.com.compose.mvp.BaseMvvmFragment
+import ua.com.compose.navigator.replace
 
 
-
-class ImageHistoryFragment : BaseMvvmFragment() {
+class ImageInfoFragment : BaseMvvmFragment() {
 
     companion object {
 
         private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
 
-        fun newInstance(uri: Uri?): ImageHistoryFragment {
-            return ImageHistoryFragment().apply {
+        fun newInstance(uri: Uri?): ImageInfoFragment {
+            return ImageInfoFragment().apply {
                 arguments = bundleOf(
                     BUNDLE_KEY_IMAGE_URI to uri
                 )
@@ -40,7 +43,7 @@ class ImageHistoryFragment : BaseMvvmFragment() {
         }
     }
 
-    private val viewModule: ImageHistoryViewModule by lazy {
+    private val viewModule: ImageInfoViewModule by lazy {
         val scope = getKoin().getOrCreateScope(
             "app", named("app")
         )
@@ -48,7 +51,7 @@ class ImageHistoryFragment : BaseMvvmFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_image_history, container, false)
+        return inflater.inflate(R.layout.fragment_image_info, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,23 +93,15 @@ class ImageHistoryFragment : BaseMvvmFragment() {
         btnChangeImage.setOnClickListener {
         }
 
-        val c1 = ConstraintSet().apply {
-            this.clone(container)
+        imgPreview.setVibrate(EVibrate.BUTTON)
+        imgPreview.setOnClickListener {
+            requireActivity().supportFragmentManager.replace(
+                fragment = ua.com.compose.other_image_info.main.ImageInfoFragment.newInstance(uri = ImageInfo.mainImage),
+                addToBackStack = true
+            )
         }
-
-//        imgPreview.setOnClickListener {
-//            TransitionManager.beginDelayedTransition(container)
-//            val c = if(isOpen) c2 else c1
-//            c.applyTo(container)
-//            isOpen = !isOpen
-//        }
 
         viewModule.onCreate(uri = inputUri)
     }
 
-    private var isOpen = false
-
-    fun addImageToHistory(uri: Uri?){
-        viewModule.addImageToHistory(uri)
-    }
 }

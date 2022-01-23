@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="module_image_filter_title">Фильтры</string>
+    <string name="module_image_filter_title">Фильтр</string>
     <string name="module_image_filter_vibrance">Сочность</string>
     <string name="module_image_filter_rgb">RGB</string>
     <string name="module_image_filter_monochrome">Монохромный</string>
@@ -27,4 +27,5 @@
     <string name="module_image_filter_shadows">Тень</string>
     <string name="module_image_filter_saturation">Насыщенность</string>
     <string name="module_image_filter_uv">Ультрафиолет</string>
+    <string name="module_image_filter_exit_without_save">Выйти без сохранения?</string>
 </resources>

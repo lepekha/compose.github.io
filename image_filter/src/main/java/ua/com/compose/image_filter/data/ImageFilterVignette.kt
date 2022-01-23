@@ -18,7 +18,7 @@ class ImageFilterVignette: ImageFilter() {
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity,  -1.2f, -0.8f, -1.2f) {
+            FilterValueParam(R.string.module_image_filter_vignette,  -1.2f, -0.8f, -1.2f) {
                 filter.setVignetteEnd(abs(it))
             }
         )

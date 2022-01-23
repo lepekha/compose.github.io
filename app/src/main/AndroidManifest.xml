@@ -21,22 +21,22 @@
 
     <application
         android:name=".MainApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:exported = "false"
-        android:theme="@style/Theme.Compose"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">v
+        android:theme="@style/Theme.ComposeSplash"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".view.main.MainActivity"
             android:launchMode="singleInstance"
             android:exported = "true"
             android:screenOrientation="portrait">
             <intent-filter
-                android:icon="@drawable/ic_logo_vector">
+                android:icon="@drawable/ic_logo_vector"
                 android:roundIcon="@drawable/ic_logo_vector">
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />

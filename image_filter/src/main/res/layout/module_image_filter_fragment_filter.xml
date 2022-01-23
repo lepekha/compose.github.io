@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="@dimen/theme_bottom_menu_margin"
+    android:visibility="invisible"
     android:animateLayoutChanges="true"
-    android:visibility="gone"
     tools:background="#000000"
     tools:visibility="visible">
 
@@ -16,19 +16,19 @@
         android:id="@+id/container_secondary"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:animateLayoutChanges="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ua.com.compose.image_maker.FrameImageView
+        <android.opengl.GLSurfaceView
             android:id="@+id/imgView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:visibility="invisible"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/list"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="wrap"
             tools:srcCompat="@tools:sample/avatars" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"

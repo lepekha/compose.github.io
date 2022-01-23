@@ -37,6 +37,10 @@
     @retrofit.http.* <methods>;
 }
 
+-keep class com.drew.** {*;}
+-keep interface com.drew.** {*;}
+-keep enum com.drew.** {*;}
+
 -keepattributes Signature
 -keepattributes *Annotation*
 

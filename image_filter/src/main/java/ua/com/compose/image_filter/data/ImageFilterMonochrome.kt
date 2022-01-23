@@ -12,7 +12,7 @@ class ImageFilterMonochrome: ImageFilter() {
 
     override val valueParams by lazy {
         mutableListOf<FilterParam>(
-            FilterValueParam(R.string.module_image_filter_intensity, 0.0f, 2.0f, 1.0f, onChange = {
+            FilterValueParam(R.string.module_image_filter_monochrome, 0.0f, 2.0f, 1.0f, onChange = {
                 filter.setIntensity(it)
             })
         )

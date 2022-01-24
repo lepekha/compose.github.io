@@ -71,6 +71,22 @@ class ImageInfoFragment : BaseMvvmFragment() {
             }
         }
 
+        viewModule.imageName.nonNull().observe(viewLifecycleOwner) {
+            binding?.txtImage?.text = it
+        }
+
+        viewModule.imageNameDescription.nonNull().observe(viewLifecycleOwner) {
+            binding?.txtImageDescription?.text = it
+        }
+
+        viewModule.imageDate.nonNull().observe(viewLifecycleOwner) {
+            binding?.txtDate?.text = it
+        }
+
+        viewModule.imageDateDescription.nonNull().observe(viewLifecycleOwner) {
+            binding?.txtDateDescription?.text = it
+        }
+
         viewModule.visible.observe(this){
             binding?.container?.isVisible = it
         }

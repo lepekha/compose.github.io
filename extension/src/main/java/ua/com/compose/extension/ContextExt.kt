@@ -171,7 +171,7 @@ fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "", quality: Int = 90, s
 }
 
 
-fun Context.createTempUri(bitmap: Bitmap, quality: Int = 90, sizePercent: Int = 100, name: String = "compose_instagram"): Uri {
+fun Context.createTempUri(bitmap: Bitmap, quality: Int = 90, sizePercent: Int = 100, name: String = "COMPOSE"): Uri {
     val root = this.cacheDir.path
     val myDir = File("$root/temp")
     myDir.mkdirs()

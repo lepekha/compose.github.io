@@ -115,7 +115,7 @@
             app:layout_constraintEnd_toEndOf="@+id/imgPreview"
             app:layout_constraintTop_toTopOf="@+id/imgPreview"
             app:layout_constraintWidth_percent="0.25"
-            app:srcCompat="@drawable/ic_eye"
+            app:srcCompat="@drawable/ic_info"
             app:tint="?attr/color_9" />
     </com.google.android.material.card.MaterialCardView>
 

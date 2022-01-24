@@ -72,7 +72,7 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
     fun pressDone() = CoroutineScope(Dispatchers.Main).launch {
         val dialog = DialogManager.createLoad{}
         createBitmap()?.let { bitmap ->
-            val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap = bitmap, name = System.currentTimeMillis().toString()) }
+            val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap = bitmap, name = "COMPOSE_"+System.currentTimeMillis().toString()) }
             view?.saveToResult(uri)
         }
         dialog.closeDialog()

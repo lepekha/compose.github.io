@@ -14,6 +14,6 @@ fun File.sizeStrInMb(decimals: Int = 0): String = "%.${decimals}f".format(sizeIn
 fun File.sizeStrInGb(decimals: Int = 0): String = "%.${decimals}f".format(sizeInGb)
 
 fun File.sizeStrWithBytes(): String = sizeStr() + "b"
-fun File.sizeStrWithKb(decimals: Int = 0): String = sizeStrInKb(decimals) + "Kb"
-fun File.sizeStrWithMb(decimals: Int = 0): String = sizeStrInMb(decimals) + "Mb"
-fun File.sizeStrWithGb(decimals: Int = 0): String = sizeStrInGb(decimals) + "Gb"
+fun File.sizeStrWithKb(decimals: Int = 0): String = sizeStrInKb(decimals) + " Кб"
+fun File.sizeStrWithMb(decimals: Int = 0): String = sizeStrInMb(decimals) + " Мб"
+fun File.sizeStrWithGb(decimals: Int = 0): String = sizeStrInGb(decimals) + " Гб"

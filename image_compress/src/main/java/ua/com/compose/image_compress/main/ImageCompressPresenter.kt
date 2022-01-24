@@ -89,7 +89,7 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
         val dialog = DialogManager.createLoad{}
         withContext(Dispatchers.IO) {
             this@ImageCompressPresenter.image?.let { bitmap ->
-                context.createTempUri(bitmap = bitmap, quality = quality, sizePercent = size, name = System.currentTimeMillis().toString())
+                context.createTempUri(bitmap = bitmap, quality = quality, sizePercent = size, name = "COMPOSE_"+System.currentTimeMillis().toString())
             }
         }?.let { uri ->
             view?.saveToResult(uri)

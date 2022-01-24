@@ -67,7 +67,7 @@ class ImageCropPresenter(val context: Context): BaseMvpPresenterImpl<ImageCropVi
         val bitmap = bitmaps.firstOrNull() ?: return@launch
         val dialog = DialogManager.createLoad{}
         withContext(Dispatchers.IO) {
-            context.createTempUri(bitmap = bitmap, name = System.currentTimeMillis().toString())
+            context.createTempUri(bitmap = bitmap, name = "COMPOSE_"+System.currentTimeMillis().toString())
         }.let { uri ->
             view?.saveToResult(uri)
         }

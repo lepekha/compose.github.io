@@ -3,7 +3,7 @@
     <string name="app_name">Compose</string>
     <string name="fragment_title_menu">ompose</string>
     <string name="menu_instagram">Instagram</string>
-    <string name="menu_image">Фото</string>
+    <string name="menu_image">Зображення</string>
     <string name="menu_other">Iнше</string>
     <string name="shortcut_long_instagram_planer">Instagram візуалізація</string>
     <string name="shortcut_long_instagram_crop">Instagram квадрат</string>

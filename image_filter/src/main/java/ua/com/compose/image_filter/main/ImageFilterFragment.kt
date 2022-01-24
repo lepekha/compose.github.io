@@ -272,7 +272,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     }
 
     override fun backToMain() {
-        if(presenter.historyFilters.isNotEmpty()){
+        if(presenter.historyFilters.isNotEmpty() || presenter.currentFilter != null){
             val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = requireContext().getString(R.string.module_image_filter_exit_without_save))
             setFragmentResultListener(request) { _, bundle ->
                 if(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER)){

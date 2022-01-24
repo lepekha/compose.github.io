@@ -40,7 +40,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         this.setBackgroundColor(27 / 255f,27 / 255f,31 / 255f)
     }
 
-    private var currentFilter: ImageFilter? = null
+    var currentFilter: ImageFilter? = null
 
     val params = mutableListOf<FilterParam>()
 
@@ -152,7 +152,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             this@ImageFilterPresenter.image?.let { bitmap ->
                 gpuFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters.map { it.copy() })))
                 val bm = gpuFilter.getBitmapWithFilterApplied(bitmap)
-                context.createTempUri(bitmap = bm, name = System.currentTimeMillis().toString())
+                context.createTempUri(bitmap = bm, name = "COMPOSE_"+System.currentTimeMillis().toString())
             }
         }?.let { uri ->
             view?.saveToResult(uri)

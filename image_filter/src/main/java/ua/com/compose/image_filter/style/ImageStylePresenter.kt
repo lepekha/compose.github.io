@@ -134,7 +134,7 @@ class ImageStylePresenter(val context: Context, val database: ImageStyleDatabase
                     gpuFilter.setFilter(filter.filter)
                     bitmapWithFilter = gpuFilter.getBitmapWithFilterApplied(bitmapWithFilter)
                 }
-                context.createTempUri(bitmap = bitmapWithFilter, name = System.currentTimeMillis().toString())
+                context.createTempUri(bitmap = bitmapWithFilter, name = "COMPOSE_"+System.currentTimeMillis().toString())
             }
         }?.let { uri ->
             view?.saveToResult(uri)

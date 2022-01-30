@@ -1,29 +1,21 @@
 package ua.com.compose.view.main.info
 
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.fragment_image_info.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import ua.com.compose.R
-import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.nonNull
-import ua.com.compose.extension.observe
-import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.*
 import ua.com.compose.image_compress.main.ImageCompressFragment
-import ua.com.compose.image_crop.main.ImageCropFragment
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.navigator.replace
 
@@ -76,7 +68,7 @@ class ImageInfoFragment : BaseMvvmFragment() {
         }
 
         setFragmentResultListener(ImageCompressFragment.REQUEST_KEY) { _, bundle ->
-            viewModule.addImageToHistory(bundle.getParcelable<Uri>(ImageCompressFragment.BUNDLE_KEY_IMAGE_URI))
+            viewModule.addImage(bundle.getParcelable<Uri>(ImageCompressFragment.BUNDLE_KEY_IMAGE_URI))
         }
 
         btnSave.setVibrate(EVibrate.BUTTON)
@@ -89,14 +81,17 @@ class ImageInfoFragment : BaseMvvmFragment() {
             viewModule.pressRemove()
         }
 
-        btnChangeImage.setVibrate(EVibrate.BUTTON)
-        btnChangeImage.setOnClickListener {
+        btnShareImage.setVibrate(EVibrate.BUTTON)
+        btnShareImage.setOnClickListener {
+            viewModule.image?.let {
+                requireActivity().createImageIntent(it)
+            }
         }
 
         imgPreview.setVibrate(EVibrate.BUTTON)
         imgPreview.setOnClickListener {
             requireActivity().supportFragmentManager.replace(
-                fragment = ua.com.compose.other_image_info.main.ImageInfoFragment.newInstance(uri = ImageInfo.mainImage),
+                fragment = ua.com.compose.other_image_info.main.ImageInfoFragment.newInstance(uri = viewModule.image),
                 addToBackStack = true
             )
         }

@@ -11,12 +11,12 @@ import ua.com.compose.navigator.replace
 import ua.com.compose.R
 import ua.com.compose.image_compress.main.ImageCompressFragment
 import ua.com.compose.image_filter.main.ImageFilterFragment
-import ua.com.compose.view.main.info.ImageInfo
 import ua.com.compose.image_rotate.main.ImageRotateFragment
 import ua.com.compose.view.main.MainPresenter
+import ua.com.compose.view.main.info.ImageInfoViewModule
 import java.lang.ref.WeakReference
 
-class MenuObjects(private val presenter: MainPresenter) {
+class MenuObjects(private val imageInfoViewModule: ImageInfoViewModule) {
 
     private var fragmentManager: WeakReference<FragmentManager>? = null
 
@@ -47,7 +47,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = InstagramCropFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = InstagramCropFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },
@@ -62,7 +62,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = InstagramGridFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = InstagramGridFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },
@@ -77,7 +77,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = InstagramPanoramaFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = InstagramPanoramaFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },
@@ -93,7 +93,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = ImageCropFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = ImageCropFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },
@@ -108,7 +108,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = ImageRotateFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = ImageRotateFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },
@@ -123,7 +123,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = ImageCompressFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = ImageCompressFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },
@@ -138,7 +138,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = ImageFilterFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = ImageFilterFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },
@@ -153,7 +153,7 @@ class MenuObjects(private val presenter: MainPresenter) {
             isVisible = { true },
             onPress = {
                 fragmentManager?.get()?.replace(
-                    fragment = ImageCompressFragment.newInstance(uri = ImageInfo.mainImage),
+                    fragment = ImageCompressFragment.newInstance(uri = imageInfoViewModule.image),
                     addToBackStack = true
                 )
             },

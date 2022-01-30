@@ -14,7 +14,7 @@ val appModule = module {
     scope(named("app")) {
         scoped { MainPresenter() }
         scoped { PresenterMain(menu = get()) }
-        scoped { MenuObjects(presenter = get()) }
+        scoped { MenuObjects(get()) }
         viewModel { ImageInfoViewModule(context = androidContext()) }
     }
 }

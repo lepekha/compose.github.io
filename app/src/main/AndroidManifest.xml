@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.GET_CLIPS" />
     <uses-permission android:name="android.permission.READ_CLIPS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE " />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE " />
     <uses-permission android:name="android.permission.WRITE_CLIPS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -20,6 +21,7 @@
         android:required="true" />
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".MainApp"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
@@ -30,14 +32,26 @@
         android:exported = "false"
         android:theme="@style/Theme.ComposeSplash"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="ua.com.compose.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_xml"/>
+        </provider>
+
         <activity
             android:name=".view.main.MainActivity"
             android:launchMode="singleInstance"
             android:exported = "true"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
             <intent-filter
-                android:icon="@drawable/ic_logo_vector"
-                android:roundIcon="@drawable/ic_logo_vector">
+                android:icon="@mipmap/ic_launcher"
+                android:roundIcon="@mipmap/ic_launcher_round">
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*" />
@@ -50,13 +64,6 @@
 
             <meta-data android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity>
-        <activity
-            android:exported = "true"
-            android:name=".view.SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-
         </activity>
     </application>
 

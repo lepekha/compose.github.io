@@ -152,7 +152,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             this@ImageFilterPresenter.image?.let { bitmap ->
                 gpuFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters.map { it.copy() })))
                 val bm = gpuFilter.getBitmapWithFilterApplied(bitmap)
-                context.createTempUri(bitmap = bm, name = "COMPOSE_"+System.currentTimeMillis().toString())
+                context.createTempUri(bitmap = bm)
             }
         }?.let { uri ->
             view?.saveToResult(uri)

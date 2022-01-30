@@ -11,17 +11,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ua.com.compose.R
 import ua.com.compose.dialog.DialogManager
-import ua.com.compose.extension.saveBitmap
 import android.provider.MediaStore
+import ua.com.compose.extension.*
+import ua.com.compose.file_storage.FileStorage.copyFileToDir
 
 
 class ImageInfoViewModule(private val context: Context): ViewModel()  {
 
+    var image: Uri? = null
+    
     private val _mainImage: MutableLiveData<Uri?> = MutableLiveData(null)
     val mainImage: LiveData<Uri?> = _mainImage
-
-    private val _previewImage: MutableLiveData<Uri?> = MutableLiveData(null)
-    val previewImage: LiveData<Uri?> = _previewImage
 
     private val _alert: MutableLiveData<Int?> = MutableLiveData(null)
     val alert: LiveData<Int?> = _alert
@@ -30,16 +30,15 @@ class ImageInfoViewModule(private val context: Context): ViewModel()  {
     val visible: LiveData<Boolean> = _visible
 
     fun onCreate(uri: Uri?){
-        ImageInfo.mainImage = (uri ?: ImageInfo.mainImage)?.apply {
-            _mainImage.postValue(this)
-        }
-        _visible.postValue(ImageInfo.mainImage != null)
+        addImage(uri ?: image)
+        _visible.postValue(image != null)
     }
 
     fun pressSave() = viewModelScope.launch {
+        val uri = image ?: return@launch
         DialogManager.createLoad{}.apply {
             withContext(Dispatchers.IO) {
-                val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, ImageInfo.mainImage)
+                val bitmap = context.loadImage(uri)
                 context.saveBitmap(bitmap)
             }
             _alert.postValue(R.string.module_image_crop_fragment_image_crop_save_ready)
@@ -49,17 +48,22 @@ class ImageInfoViewModule(private val context: Context): ViewModel()  {
 
     fun pressRemove() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            ImageInfo.mainImage = null
+            image = null
         }
         _visible.postValue(false)
     }
 
-    fun pressPreview(){
-        _previewImage.postValue(ImageInfo.mainImage)
+    fun pressShare() = viewModelScope.launch {
+        image?.let {
+            context.createImageIntent(it)
+        }
     }
 
-    fun addImageToHistory(uri: Uri?){
-        ImageInfo.mainImage = uri
-        _mainImage.postValue(uri)
+    fun addImage(uri: Uri?) = viewModelScope.launch {
+        val it = uri ?: return@launch
+        withContext(Dispatchers.IO){
+            image = it
+            _mainImage.postValue(it)
+        }
     }
 }

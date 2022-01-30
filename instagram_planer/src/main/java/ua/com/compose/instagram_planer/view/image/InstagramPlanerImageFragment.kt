@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.module_instagram_planer_fragment_instagram_planer_image.*
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.getColorFromAttr
+import ua.com.compose.extension.hideKeyboard
 import ua.com.compose.instagram_planer.di.Scope
 import ua.com.compose.extension.onTextChangedListener
 import ua.com.compose.mvp.data.BottomMenu
@@ -123,5 +124,10 @@ class InstagramPlanerImageFragment : BaseMvvmFragment() {
                 txtMailCount.setTextColor(requireContext().getColorFromAttr(R.attr.color_12))
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        hideKeyboard()
     }
 }

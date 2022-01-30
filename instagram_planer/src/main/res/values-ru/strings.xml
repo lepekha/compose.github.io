@@ -6,7 +6,7 @@
     <string name="module_instagram_palaner_clear_account">Очистить текущую учетную запись?</string>
     <string name="module_instagram_palaner_remove_account">Удалить текущую учетную запись?</string>
     <string name="module_instagram_palaner_user_already_contain">Учетная запись уже существует</string>
-    <string name="module_instagram_palaner_create_first_user">Создайте учетную запись</string>
+    <string name="module_instagram_palaner_create_first_user">Создать учетную запись</string>
     <string name="module_instagram_palaner_save_ready">Изображение сохранено</string>
     <string name="module_instagram_palaner_text_copied">Текст скопирован</string>
 </resources>

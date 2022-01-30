@@ -5,7 +5,7 @@
     <string name="module_instagram_palaner_clear_account">Clear current account?</string>
     <string name="module_instagram_palaner_remove_account">Remove current account?</string>
     <string name="module_instagram_palaner_user_already_contain">Account already contain</string>
-    <string name="module_instagram_palaner_create_first_user">Create first account</string>
+    <string name="module_instagram_palaner_create_first_user">Create an account</string>
     <string name="module_instagram_palaner_save_ready">Image saved</string>
     <string name="module_instagram_palaner_text_copied">Text copied</string>
 </resources>

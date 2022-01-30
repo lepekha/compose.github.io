@@ -51,18 +51,13 @@ class InstagramCropSavePresenter(val context: Context, val presenter: InstagramC
         image?.let { context.saveBitmap(it) }
     }
 
-    fun pressShare() = CoroutineScope(Main).launch {
-        createImage()?.let { bitmap ->
-            val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
-            view?.createShareIntent(uri)
-        }
-    }
-
     fun pressInstagram() = CoroutineScope(Main).launch {
+        val dialog = DialogManager.createLoad{}
         createImage()?.let { bitmap ->
             val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
             view?.createInstagramIntent(uri)
         }
+        dialog.closeDialog()
     }
 
     fun onColorPick(color: Int) {
@@ -80,7 +75,8 @@ class InstagramCropSavePresenter(val context: Context, val presenter: InstagramC
 
     private fun createImage(): Bitmap? {
         val background = this.background ?: return null
-        val image = this.image ?: return null
+        var image = this.image ?: return null
+        image = image.copy(image.config, true)
         val scaledBackground = Bitmap.createScaledBitmap(background.copy(Bitmap.Config.RGB_565, false), IMAGE_SIZE, IMAGE_SIZE, false)
         return scaledBackground.mergeWith(image)
     }

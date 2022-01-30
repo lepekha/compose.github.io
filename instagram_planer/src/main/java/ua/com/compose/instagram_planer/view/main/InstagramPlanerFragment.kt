@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
@@ -80,9 +81,11 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                     viewModel.onChangeImagePosition(oldPosition, newPosition)
                 },
                 onStartDrag = {
+                    materialCardView.isInvisible = true
                     groupButton.isVisible = true
                 },
                 onEndDrag = {
+                    materialCardView.isInvisible = false
                     groupButton.isVisible = false
                 }
         )
@@ -173,7 +176,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     requireContext().vibrate(type = EVibrate.BUTTON)
-                    btnRemove.animateScale(toScale = 1.5f)
+                    btnRemove.animateScale(toScale = 1.3f)
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
                     btnRemove.animateScale(toScale = 1f)
@@ -191,7 +194,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     requireContext().vibrate(type = EVibrate.BUTTON)
-                    btnSave.animateScale(toScale = 1.5f)
+                    btnSave.animateScale(toScale = 1.3f)
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
                     btnSave.animateScale(toScale = 1f)
@@ -205,17 +208,17 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
             true
         }
 
-        btnChangeImage.setOnDragListener { _, dragEvent ->
+        btnShareImage.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     requireContext().vibrate(type = EVibrate.BUTTON)
-                    btnChangeImage.animateScale(toScale = 1.5f)
+                    btnShareImage.animateScale(toScale = 1.3f)
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    btnChangeImage.animateScale(toScale = 1f)
+                    btnShareImage.animateScale(toScale = 1f)
                 }
                 DragEvent.ACTION_DROP -> {
-                    btnChangeImage.animateScale(toScale = 1f)
+                    btnShareImage.animateScale(toScale = 1f)
                     groupButton.isVisible = false
                     viewModel.onChangeImage(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
                     FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true, requestKey = REQUEST_CHANGE_IMAGE)
@@ -241,6 +244,11 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
 
         btnAddFirstUser.setVibrate(EVibrate.BUTTON)
         btnAddFirstUser.setOnClickListener {
+            viewModel.pressAddUser()
+        }
+
+        txtCreateFirstUser.setVibrate(EVibrate.BUTTON)
+        txtCreateFirstUser.setOnClickListener {
             viewModel.pressAddUser()
         }
 

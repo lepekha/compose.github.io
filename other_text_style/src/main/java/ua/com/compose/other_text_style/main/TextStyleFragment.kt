@@ -125,6 +125,7 @@ class TextStyleFragment : BaseMvvmFragment() {
         }
 
         binding?.editText?.onTextChangedListener {
+            binding?.btnClear?.isVisible = it.isNotEmpty() && it.isNotBlank()
             enterText(it)
         }
 

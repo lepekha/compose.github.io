@@ -85,8 +85,7 @@ enum class EImageFilter(val id: Int) {
             IMAGE_FILTER_VIGNETTE,
             IMAGE_FILTER_BLACK_AND_WHITE,
             IMAGE_FILTER_SHADOW,
-            IMAGE_FILTER_UV,
-            IMAGE_SEPIA
+            IMAGE_FILTER_UV
         )
 
         fun findById(id: Int) = values().first { it.id == id }

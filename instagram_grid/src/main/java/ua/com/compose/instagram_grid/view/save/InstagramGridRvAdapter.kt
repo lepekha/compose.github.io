@@ -25,7 +25,6 @@ class GridRvAdapter(val images: MutableList<Bitmap>, val onPress: (position: Int
             this.imgView.setOnClickListener {
                 btnShare.alpha = 0.3f
                 this.imgView.setVibrate(EVibrate.NONE)
-                this.imgView.isClickable = false
                 onPress(adapterPosition)
             }
         }

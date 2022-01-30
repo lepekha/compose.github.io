@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="module_other_image_info_fragment_title">Інформація</string>
+    <string name="module_other_image_info_mb">Мб</string>
+    <string name="module_other_image_info_mpixel">Мпiкс.</string>
 </resources>

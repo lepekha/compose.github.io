@@ -3,6 +3,7 @@ package ua.com.compose.extension
 import android.content.*
 import androidx.core.content.ContextCompat
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -14,9 +15,16 @@ import android.provider.MediaStore
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
+import androidx.core.app.ShareCompat
+import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.concurrent.thread
+
+suspend fun Context.loadImage(uri: Uri) = when {
+        Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+        else -> ImageDecoder.decodeBitmap(ImageDecoder.createSource(this.contentResolver, uri))
+    }
 
 fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let {
     Toast.makeText(it, text, duration).show()
@@ -135,23 +143,27 @@ fun Context.vibrate(type: EVibrate){
 }
 
 fun Context.createInstagramIntent(uri: Uri) {
-    val share = Intent(Intent.ACTION_SEND)
-    share.type = "image/*"
-    share.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    share.putExtra(Intent.EXTRA_STREAM, uri)
-    share.setPackage("com.instagram.android")
+    val share = Intent(Intent.ACTION_SEND).apply {
+        this.type = "image/*"
+        this.clipData = ClipData.newRawUri("", uri)
+        this.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        this.putExtra(Intent.EXTRA_STREAM, uri)
+        this.setPackage("com.instagram.android")
+    }
     startActivity(Intent.createChooser(share, "Share to"))
 }
 
 fun Context.createImageIntent(uri: Uri) {
-    val share = Intent(Intent.ACTION_SEND)
-    share.type = "image/*"
-    share.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    share.putExtra(Intent.EXTRA_STREAM, uri)
+    val share = Intent(Intent.ACTION_SEND).apply {
+        this.type = "image/*"
+        this.clipData = ClipData.newRawUri("", uri)
+        this.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        this.putExtra(Intent.EXTRA_STREAM, uri)
+    }
     startActivity(Intent.createChooser(share, "Share to"))
 }
 
-fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "", quality: Int = 90, sizePercent: Int = 100) {
+fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "", quality: Int = 100, sizePercent: Int = 100) {
     val millis = System.currentTimeMillis()
     val fname = "${prefix}compose_$millis.jpg"
     val resolver = this.contentResolver
@@ -181,5 +193,5 @@ fun Context.createTempUri(bitmap: Bitmap, quality: Int = 90, sizePercent: Int = 
     FileOutputStream(file).use { out ->
         Bitmap.createScaledBitmap(bitmap, (bitmap.width * sizePercent) / 100, (bitmap.height * sizePercent) / 100, false).compress(Bitmap.CompressFormat.JPEG, quality, out)
     }
-    return Uri.fromFile(file)
+    return FileProvider.getUriForFile(this, "ua.com.compose.fileprovider", file)
 }

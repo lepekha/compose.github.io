@@ -1,25 +1,33 @@
 package ua.com.compose.file_storage
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.net.toUri
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
-import java.net.URLEncoder
 
 object FileStorage {
-
-    private const val STORAGE_NAME = "dali"
-
 
     private var dir: String = ""
 
     fun init(context: Context) {
-        val appDir = File(context.cacheDir.path + File.separator + STORAGE_NAME)
-        if (!appDir.exists() && !appDir.isDirectory) {
-            appDir.mkdirs()
+        dir = context.cacheDir.path
+    }
+
+    suspend fun Bitmap.writeToFile(fileName: String, dirName: String? = null, quality: Int = 100): Uri {
+        val dirPath = makeDir(dirName)
+        val outputFile = File(dirPath, fileName)
+        removeFile(fileName = fileName, dirName = dirName)
+        try {
+            FileOutputStream(outputFile).use { out ->
+                this.compress(Bitmap.CompressFormat.JPEG, quality, out)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
-        dir = appDir.path
+        return outputFile.toUri()
     }
 
     fun writeToFile(fileName: String, data: String, dirName: String? = null) {
@@ -78,12 +86,12 @@ object FileStorage {
         }
     }
 
-    fun copyFileToDir(file: File, dirName: String, fileName: String): Uri {
+    fun Context.copyFileToDir(file: File, dirName: String = "temp", fileName: String): Uri {
         val dirPath = makeDir(dirName)
         val outputFile = File(dirPath, fileName)
         removeFile(fileName = fileName, dirName = dirName)
         file.copyTo(outputFile)
-        return Uri.fromFile(outputFile)
+        return outputFile.toUri()
     }
 
     fun clearDir(dirName: String) {

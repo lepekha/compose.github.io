@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import ua.com.compose.mvp.bottomSheetFragment.BaseMvpDialogPresenterImpl
 import kotlinx.coroutines.*
+import ua.com.compose.gallery.R
 import java.io.File
 
 class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGallery>() {
@@ -52,14 +53,14 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
     fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
         val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val imageFolders = mutableMapOf<String, ImageFolder>()
-        val projection = arrayOf(MediaStore.Images.Thumbnails._ID, MediaStore.Images.Thumbnails.DATA)
+        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
         val cursor = activity.contentResolver.query(uriExternal, projection, null, null, null)
         if (cursor != null) {
-            val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID)
-            val columnDataID = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.DATA)
+            val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+            val columnBacketID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
             while (cursor.moveToNext()) {
                 val imageId = cursor.getLong(columnIndexID)
-                val dirName = (File(cursor.getString(columnDataID)).parentFile as File).name
+                val dirName = cursor.getString(columnBacketID)
                 val uriImage = Uri.withAppendedPath(uriExternal, "" + imageId)
                 (imageFolders[dirName] ?: ImageFolder()).apply {
                     this.name = dirName
@@ -75,13 +76,13 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
         imageFolders.values.onEach { it.images.reverse() }
 
         val allFolder = ImageFolder().apply {
-            this.name = "All"
+            this.name = context.getString(R.string.module_gallery_fragment_all)
             imageFolders.values.forEach {
                 this.images.addAll(it.images)
             }
         }
-        folders.add(allFolder)
         folders.sortBy { it.name }
+        folders.add(0, allFolder)
         images.addAll(folders[0].images)
         withContext(Dispatchers.Main){
             view?.updateAllList()

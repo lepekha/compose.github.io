@@ -26,7 +26,6 @@ class TextStyleViewModel(private val getStringsUseCase: GetStringsUseCase): View
         viewModelScope.launch {
             var inputText = value
             val list = getStringsUseCase.execute(inputText = inputText)
-            _isVisibleClearText.postValue(value.isNotEmpty())
             _isVisiblePlaceHolder.postValue(list.isEmpty())
             _strings.postValue(list)
         }

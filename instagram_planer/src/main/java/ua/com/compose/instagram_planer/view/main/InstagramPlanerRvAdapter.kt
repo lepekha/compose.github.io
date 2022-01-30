@@ -1,9 +1,11 @@
 package ua.com.compose.instagram_planer.view.main
 
 import android.content.ClipData
-import android.net.Uri
 import android.os.Build
-import android.view.*
+import android.view.DragEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,10 +18,11 @@ import ua.com.compose.instagram_planer.R
 import ua.com.compose.instagram_planer.data.Image
 
 
-class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
-                               val onChange: (oldPosition: Int, newPosition: Int) -> Unit,
-                               val onStartDrag: () -> Unit = {},
-                               val onEndDrag: () -> Unit = {},
+class InstagramPlanerRvAdapter(
+    val onPress: (position: Int) -> Unit,
+    val onChange: (oldPosition: Int, newPosition: Int) -> Unit,
+    val onStartDrag: () -> Unit = {},
+    val onEndDrag: () -> Unit = {},
 ) : RecyclerView.Adapter<InstagramPlanerRvAdapter.ViewHolder>() {
 
     companion object {
@@ -60,23 +63,12 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.module_instagram_planer_element_instagram_planer_image, parent, false)).apply {
-            this.imgView.setOnLongClickListener {
-                val data = ClipData.newPlainText("NAME", adapterPosition.toString())
-                val shadowBuilder = View.DragShadowBuilder(it)
-                onStartDrag()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    it.startDragAndDrop(data, shadowBuilder, it, 0)
-                } else {
-                    it.startDrag(data, shadowBuilder, it, 0)
-                }
-            }
-
             this.imgView.setVibrate(EVibrate.BUTTON)
             this.imgView.setOnClickListener {
                 onPress(adapterPosition)
             }
 
-            this.imgView.setOnDragListener { _, dragEvent ->
+            this.imgView.setOnDragListener { view, dragEvent ->
                 when (dragEvent.action) {
                     DragEvent.ACTION_DRAG_ENDED -> {
                         this.imgView.animateScale(toScale = SCALE_DRAG_EXITED)
@@ -100,6 +92,18 @@ class InstagramPlanerRvAdapter(val onPress: (position: Int) -> Unit,
                     }
                 }
                 true
+            }
+
+            this.imgView.setOnLongClickListener {
+                val data = ClipData.newPlainText("NAME", adapterPosition.toString())
+                onStartDrag()
+                this.imgView.animateScale(toScale = SCALE_DRAG_ENTERED)
+                val shadowBuilder = View.DragShadowBuilder(it)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    it.startDragAndDrop(data, shadowBuilder, it, 0)
+                } else {
+                    it.startDrag(data, shadowBuilder, it, 0)
+                }
             }
         }
     }

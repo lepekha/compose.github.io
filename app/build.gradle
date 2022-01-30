@@ -12,6 +12,8 @@ android {
         pickFirst 'lib/arm64-v8a/libc++_shared.so'
         pickFirst 'lib/arm64-v8a/libyuv-decoder.so'
         pickFirst 'lib/x86/libyuv-decoder.so'
+        pickFirst 'lib/armeabi-v7a/libyuv-decoder.so'
+        pickFirst 'lib/x86_64/libyuv-decoder.so'
     }
 
 
@@ -20,7 +22,7 @@ android {
         applicationId "ua.com.compose"
         minSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,7 +49,11 @@ android {
         jvmTarget = '1.8'
     }
 
+    lintOptions {
 
+        checkReleaseBuilds false
+
+    }
 }
 
 dependencies {

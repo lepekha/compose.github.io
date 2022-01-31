@@ -150,9 +150,7 @@ fun Context.createInstagramIntent(uri: Uri) {
         this.putExtra(Intent.EXTRA_STREAM, uri)
         this.setPackage("com.instagram.android")
     }
-    startActivity(Intent.createChooser(share, "Share to").apply {
-        this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    })
+    startActivity(Intent.createChooser(share, "Share to"))
 }
 
 fun Context.createImageIntent(uri: Uri) {
@@ -162,9 +160,7 @@ fun Context.createImageIntent(uri: Uri) {
         this.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         this.putExtra(Intent.EXTRA_STREAM, uri)
     }
-    startActivity(Intent.createChooser(share, "Share to").apply {
-        this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    })
+    startActivity(Intent.createChooser(share, "Share to"))
 }
 
 fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "", quality: Int = 100, sizePercent: Int = 100) {

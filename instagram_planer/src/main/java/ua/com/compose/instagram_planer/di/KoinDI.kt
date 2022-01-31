@@ -37,8 +37,6 @@ val instagramPlanerModule = module {
         scoped { TextHashtagCountUseCase() }
         scoped { TextMailCountUseCase() }
         scoped { ImageUpdateTextUseCase(database = get()) }
-        scoped { ImageShareInstagramUseCase(context = androidContext()) }
-        scoped { ImageShareUseCase(context = androidContext()) }
 
         viewModel {
             InstagramPlanerViewModel(
@@ -64,9 +62,7 @@ val instagramPlanerModule = module {
                 textSymbolCountUseCase = get(),
                 textHashtagCountUseCase = get(),
                 textMailCountUseCase = get(),
-                imageUpdateTextUseCase = get(),
-                imageShareUseCase = get(),
-                imageShareInstagramUseCase = get()
+                imageUpdateTextUseCase = get()
             )
         }
     }

@@ -239,10 +239,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnSave"
-        android:layout_width="48dp"
+        android:layout_width="75dp"
         android:layout_height="48dp"
         app:cardBackgroundColor="?attr/color_8"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
         app:layout_constraintEnd_toStartOf="@+id/btnShareImage"
         app:layout_constraintStart_toStartOf="parent"
@@ -259,10 +259,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnShareImage"
-        android:layout_width="48dp"
+        android:layout_width="75dp"
         android:layout_height="48dp"
         app:cardBackgroundColor="?attr/color_8"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
         app:layout_constraintEnd_toStartOf="@+id/btnRemove"
         app:layout_constraintHorizontal_bias="0.5"
@@ -280,10 +280,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnRemove"
-        android:layout_width="48dp"
+        android:layout_width="75dp"
         android:layout_height="48dp"
         app:cardBackgroundColor="?attr/color_8"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

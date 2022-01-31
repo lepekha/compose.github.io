@@ -29,12 +29,10 @@ class InstagramPlanerImageViewModel(
     private val textSymbolCountUseCase: TextSymbolCountUseCase,
     private val textHashtagCountUseCase: TextHashtagCountUseCase,
     private val textMailCountUseCase: TextMailCountUseCase,
-    private val imageUpdateTextUseCase: ImageUpdateTextUseCase,
-    private val imageShareInstagramUseCase: ImageShareInstagramUseCase,
-    private val imageShareUseCase: ImageShareUseCase
+    private val imageUpdateTextUseCase: ImageUpdateTextUseCase
 ): ViewModel() {
 
-    private var currentImage: Image? = null
+    var currentImage: Image? = null
 
     private val _image: SingleLiveEvent<Uri?> = SingleLiveEvent()
     val image: LiveData<Uri?> = _image
@@ -81,22 +79,6 @@ class InstagramPlanerImageViewModel(
             val dialog = DialogManager.createLoad{}
             imageDownloadUseCase.execute(image = it)
             _createAlert.postValue(R.string.module_instagram_palaner_save_ready)
-            dialog.closeDialog()
-        }
-    }
-
-    fun pressShare() = viewModelScope.launch {
-        currentImage?.let {
-            val dialog = DialogManager.createLoad{}
-            imageShareUseCase.execute(image = it)
-            dialog.closeDialog()
-        }
-    }
-
-    fun pressShareInstagram() = viewModelScope.launch {
-        currentImage?.let {
-            val dialog = DialogManager.createLoad{}
-            imageShareUseCase.execute(image = it)
             dialog.closeDialog()
         }
     }

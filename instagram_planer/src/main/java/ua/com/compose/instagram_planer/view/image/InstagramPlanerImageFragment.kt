@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.module_instagram_planer_fragment_instagram_planer_image.*
-import ua.com.compose.extension.clipboardCopy
-import ua.com.compose.extension.getColorFromAttr
-import ua.com.compose.extension.hideKeyboard
+import ua.com.compose.extension.*
 import ua.com.compose.instagram_planer.di.Scope
-import ua.com.compose.extension.onTextChangedListener
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.instagram_planer.R
@@ -50,13 +50,19 @@ class InstagramPlanerImageFragment : BaseMvvmFragment() {
 
     private val btnShare by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_share) {
-            viewModel.pressShare()
+            viewModel.currentImage?.uri?.toUri()?.toFile()?.let {
+                val uri = FileProvider.getUriForFile(requireContext(), "ua.com.compose.fileprovider", it)
+                requireActivity().createImageIntent(uri)
+            }
         }
     }
 
     private val btnInstagram by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_instagram) {
-            viewModel.pressShareInstagram()
+            viewModel.currentImage?.uri?.toUri()?.toFile()?.let {
+                val uri = FileProvider.getUriForFile(requireContext(), "ua.com.compose.fileprovider", it)
+                requireActivity().createInstagramIntent(uri)
+            }
         }
     }
 

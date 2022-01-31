@@ -24,7 +24,7 @@ class AddImagesForUserUseCase(
             var minPosition = images.minOfOrNull { it.position } ?: Long.MAX_VALUE
             val newImages = listOf(uri).map {
                 val bitmap = context.loadImage(it)
-                val name = UUID.randomUUID().toString()
+                val name = UUID.randomUUID().toString()+".jpg"
                 val nUri = bitmap.writeToFile(
                     dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}",
                     fileName = name,
@@ -49,7 +49,7 @@ class AddImagesForUserUseCase(
                 .sortedBy { it.position }
                 .toMutableList()
             var minPosition = images.minOfOrNull { it.position } ?: Long.MAX_VALUE
-            val name = UUID.randomUUID().toString()
+            val name = UUID.randomUUID().toString()+".jpg"
             val nUri = bitmap.writeToFile(
                 dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}",
                 fileName = name,

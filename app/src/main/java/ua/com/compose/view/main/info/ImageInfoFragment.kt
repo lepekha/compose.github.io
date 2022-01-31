@@ -83,7 +83,7 @@ class ImageInfoFragment : BaseMvvmFragment() {
 
         btnShareImage.setVibrate(EVibrate.BUTTON)
         btnShareImage.setOnClickListener {
-            viewModule.image?.let {
+            viewModule.imageHolder.image?.let {
                 requireActivity().createImageIntent(it)
             }
         }
@@ -91,7 +91,7 @@ class ImageInfoFragment : BaseMvvmFragment() {
         imgPreview.setVibrate(EVibrate.BUTTON)
         imgPreview.setOnClickListener {
             requireActivity().supportFragmentManager.replace(
-                fragment = ua.com.compose.other_image_info.main.ImageInfoFragment.newInstance(uri = viewModule.image),
+                fragment = ua.com.compose.other_image_info.main.ImageInfoFragment.newInstance(uri = viewModule.imageHolder.image),
                 addToBackStack = true
             )
         }

@@ -25,6 +25,7 @@ class ImageCropPresenter(val context: Context): BaseMvpPresenterImpl<ImageCropVi
     private var loader: IDialog? = null
 
     fun onAddImage(uris: List<Uri>){
+        if(uris.isEmpty() && this.currentUri != null) return
         loader = DialogManager.createLoad {}
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{

@@ -16,9 +16,7 @@ import ua.com.compose.extension.*
 import ua.com.compose.file_storage.FileStorage.copyFileToDir
 
 
-class ImageInfoViewModule(private val context: Context): ViewModel()  {
-
-    var image: Uri? = null
+class ImageInfoViewModule(private val context: Context, val imageHolder: ImageHolder): ViewModel()  {
     
     private val _mainImage: MutableLiveData<Uri?> = MutableLiveData(null)
     val mainImage: LiveData<Uri?> = _mainImage
@@ -30,12 +28,12 @@ class ImageInfoViewModule(private val context: Context): ViewModel()  {
     val visible: LiveData<Boolean> = _visible
 
     fun onCreate(uri: Uri?){
-        addImage(uri ?: image)
-        _visible.postValue(image != null)
+        addImage(uri ?: imageHolder.image)
+        _visible.postValue(imageHolder.image != null)
     }
 
     fun pressSave() = viewModelScope.launch {
-        val uri = image ?: return@launch
+        val uri = imageHolder.image ?: return@launch
         DialogManager.createLoad{}.apply {
             withContext(Dispatchers.IO) {
                 val bitmap = context.loadImage(uri)
@@ -48,13 +46,13 @@ class ImageInfoViewModule(private val context: Context): ViewModel()  {
 
     fun pressRemove() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            image = null
+            imageHolder.image = null
         }
         _visible.postValue(false)
     }
 
     fun pressShare() = viewModelScope.launch {
-        image?.let {
+        imageHolder.image?.let {
             context.createImageIntent(it)
         }
     }
@@ -62,7 +60,7 @@ class ImageInfoViewModule(private val context: Context): ViewModel()  {
     fun addImage(uri: Uri?) = viewModelScope.launch {
         val it = uri ?: return@launch
         withContext(Dispatchers.IO){
-            image = it
+            imageHolder.image = it
             _mainImage.postValue(it)
         }
     }

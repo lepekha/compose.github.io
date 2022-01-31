@@ -22,6 +22,7 @@ class InstagramCropPresenter: BaseMvpPresenterImpl<InstagramCropView>() {
     }
 
     fun onAddImage(uris: List<Uri>){
+        if(uris.isEmpty() && this.currentUri != null) return
         loader = DialogManager.createLoad {  }
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{

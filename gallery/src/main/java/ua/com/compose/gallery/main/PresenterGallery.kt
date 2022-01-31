@@ -53,8 +53,8 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
     fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
         val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val imageFolders = mutableMapOf<String, ImageFolder>()
-        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
-        val cursor = activity.contentResolver.query(uriExternal, projection, null, null, null)
+        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATE_ADDED)
+        val cursor = activity.contentResolver.query(uriExternal, projection, null, null, MediaStore.Images.Media.DATE_ADDED)
         if (cursor != null) {
             val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             val columnBacketID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)

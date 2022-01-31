@@ -16,6 +16,22 @@ import java.io.FileOutputStream
 import java.util.*
 import kotlin.math.roundToInt
 
+fun Bitmap.resizeImage(
+    maxImageSize: Float,
+    filter: Boolean
+): Bitmap {
+    val ratio = Math.min(
+        maxImageSize / this.width,
+        maxImageSize / this.height
+    )
+    val width = Math.round(ratio * this.width)
+    val height = Math.round(ratio * this.height)
+    return Bitmap.createScaledBitmap(
+        this, width,
+        height, filter
+    )
+}
+
 fun Bitmap.mergeWith(bmp: Bitmap): Bitmap {
     val bmOverlay = Bitmap.createBitmap(this.width, this.height, this.config)
     val canvas = Canvas(bmOverlay)

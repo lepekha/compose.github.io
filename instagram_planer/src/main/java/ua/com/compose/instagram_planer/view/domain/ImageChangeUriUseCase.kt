@@ -20,9 +20,9 @@ class ImageChangeUriUseCase(private val context: Context, private val database: 
         return withContext(Dispatchers.IO) {
             FileStorage.removeFile(fileName = image.imageName, dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}")
             val bitmap = context.loadImage(uri)
-            val newUri = bitmap.writeToFile(dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}", fileName = uri.hashCode().toString())
+            val newUri = bitmap.writeToFile(dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}", fileName = uri.hashCode().toString(), quality = 90)
             image.uri = newUri.toString()
-            image.imageName = uri.hashCode().toString()
+            image.imageName = uri.hashCode().toString()+".jpg"
             database.imageDao?.update(image = image)
         }
     }

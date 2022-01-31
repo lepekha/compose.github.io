@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ua.com.compose.dialog.DialogManager
+import ua.com.compose.extension.createImageIntent
 import ua.com.compose.file_storage.FileStorage
 import ua.com.compose.instagram_planer.R
 import ua.com.compose.instagram_planer.data.Image
@@ -28,7 +29,9 @@ class InstagramPlanerImageViewModel(
     private val textSymbolCountUseCase: TextSymbolCountUseCase,
     private val textHashtagCountUseCase: TextHashtagCountUseCase,
     private val textMailCountUseCase: TextMailCountUseCase,
-    private val imageUpdateTextUseCase: ImageUpdateTextUseCase
+    private val imageUpdateTextUseCase: ImageUpdateTextUseCase,
+    private val imageShareInstagramUseCase: ImageShareInstagramUseCase,
+    private val imageShareUseCase: ImageShareUseCase
 ): ViewModel() {
 
     private var currentImage: Image? = null
@@ -78,6 +81,22 @@ class InstagramPlanerImageViewModel(
             val dialog = DialogManager.createLoad{}
             imageDownloadUseCase.execute(image = it)
             _createAlert.postValue(R.string.module_instagram_palaner_save_ready)
+            dialog.closeDialog()
+        }
+    }
+
+    fun pressShare() = viewModelScope.launch {
+        currentImage?.let {
+            val dialog = DialogManager.createLoad{}
+            imageShareUseCase.execute(image = it)
+            dialog.closeDialog()
+        }
+    }
+
+    fun pressShareInstagram() = viewModelScope.launch {
+        currentImage?.let {
+            val dialog = DialogManager.createLoad{}
+            imageShareUseCase.execute(image = it)
             dialog.closeDialog()
         }
     }

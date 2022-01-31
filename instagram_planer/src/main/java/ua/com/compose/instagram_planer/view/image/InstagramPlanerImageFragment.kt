@@ -50,11 +50,13 @@ class InstagramPlanerImageFragment : BaseMvvmFragment() {
 
     private val btnShare by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_share) {
+            viewModel.pressShare()
         }
     }
 
     private val btnInstagram by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_instagram) {
+            viewModel.pressShareInstagram()
         }
     }
 

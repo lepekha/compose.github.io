@@ -26,6 +26,7 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
     private var size: Int = 100
 
     fun onAddImage(uris: List<Uri>){
+        if(uris.isEmpty() && this.currentUri != null) return
         loader = DialogManager.createLoad {}
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{

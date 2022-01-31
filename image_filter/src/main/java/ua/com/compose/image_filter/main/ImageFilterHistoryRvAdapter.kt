@@ -13,10 +13,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilterGroup
-import ua.com.compose.extension.EVibrate
 import kotlinx.android.synthetic.main.module_image_filter_element_history.view.*
-import ua.com.compose.extension.getColorFromAttr
-import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.*
 import ua.com.compose.image_filter.R
 import ua.com.compose.image_filter.data.ImageFilter
 
@@ -26,7 +24,7 @@ class ImageFilterHistoryRvAdapter(val context: Context, val image: Bitmap, val f
     private val gpuFilter = GPUImage(context).apply {
         this.setScaleType(GPUImage.ScaleType.CENTER_INSIDE)
         this.setBackgroundColor(27 / 255f,27 / 255f,31 / 255f)
-        this.setImage(image)
+        this.setImage(image.resizeImage(100.dp, false))
     }
 
     private fun copyAllFilters(historyFilters: List<ImageFilter>): List<GPUImageFilter> {
@@ -72,6 +70,14 @@ class ImageFilterHistoryRvAdapter(val context: Context, val image: Bitmap, val f
             holder.txtTitle.setTextColor(holder.txtTitle.context.getColorFromAttr(R.attr.color_14))
         }else{
             holder.txtTitle.setTextColor(holder.txtTitle.context.getColorFromAttr(R.attr.color_9))
+        }
+
+        if(position < currentPosition){
+            holder.imgView.alpha = 0.4f
+            holder.txtTitle.alpha = 0.4f
+        }else{
+            holder.imgView.alpha = 1f
+            holder.txtTitle.alpha = 1f
         }
     }
 

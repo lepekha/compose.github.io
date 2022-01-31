@@ -22,6 +22,7 @@ class InstagramGridPresenter: BaseMvpPresenterImpl<InstagramGridView>() {
     }
 
     fun onAddImage(uris: List<Uri>){
+        if(uris.isEmpty() && this.currentUri != null) return
         loader = DialogManager.createLoad { }
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{

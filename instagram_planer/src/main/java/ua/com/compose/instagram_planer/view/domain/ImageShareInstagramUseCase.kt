@@ -6,18 +6,21 @@ import android.provider.MediaStore
 import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ua.com.compose.extension.createImageIntent
+import ua.com.compose.extension.createInstagramIntent
 import ua.com.compose.extension.loadImage
 import ua.com.compose.extension.saveBitmap
 import ua.com.compose.instagram_planer.data.Image
 import ua.com.compose.instagram_planer.data.User
 
-class ImageDownloadUseCase(private val context: Context) {
+class ImageShareInstagramUseCase(private val context: Context) {
 
     suspend fun execute(image: Image?) {
-        return withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.Main) {
             image?.let {
-                val bitmap = context.loadImage(it.uri.toUri())
-                context.saveBitmap(bitmap)
+                it.uri.toUri().path?.toUri()?.let {
+                    context.createInstagramIntent(it)
+                }
             }
         }
     }

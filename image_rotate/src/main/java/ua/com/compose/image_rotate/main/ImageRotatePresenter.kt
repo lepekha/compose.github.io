@@ -32,6 +32,7 @@ class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRota
     private var loader: IDialog? = null
 
     fun onAddImage(uris: List<Uri>){
+        if(uris.isEmpty() && this.currentUri != null) return
         loader = DialogManager.createLoad {}
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{

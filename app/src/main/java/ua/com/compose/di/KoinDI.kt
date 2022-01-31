@@ -7,14 +7,16 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import ua.com.compose.view.main.info.ImageHolder
 import ua.com.compose.view.main.info.ImageInfoViewModule
 
 val appModule = module {
 
     scope(named("app")) {
+        scoped { ImageHolder() }
         scoped { MainPresenter() }
         scoped { PresenterMain(menu = get()) }
         scoped { MenuObjects(get()) }
-        viewModel { ImageInfoViewModule(context = androidContext()) }
+        viewModel { ImageInfoViewModule(context = androidContext(), imageHolder = get()) }
     }
 }

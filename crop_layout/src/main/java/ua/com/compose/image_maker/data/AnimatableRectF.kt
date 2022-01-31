@@ -2,7 +2,9 @@ package ua.com.compose.image_maker.data
 
 import android.graphics.Rect
 import android.graphics.RectF
+import androidx.annotation.Keep
 
+@Keep
 class AnimatableRectF(val cropRect: Rect) {
 
     fun setTop(top: Int) {

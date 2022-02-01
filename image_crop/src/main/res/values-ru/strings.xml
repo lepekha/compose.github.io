@@ -3,8 +3,8 @@
     <string name="module_image_crop_fragment_image_crop_title">Кадрирование</string>
     <string name="module_image_crop_fragment_image_crop_save_ready">Изображение сохранено</string>
 
-    <string name="module_image_crop_fragment_crop_aspect_ratio_origin">ОРИГИНАЛ</string>
-    <string name="module_image_crop_fragment_crop_aspect_ratio_free">СВОБОДНЫЙ</string>
+    <string name="module_image_crop_fragment_crop_aspect_ratio_origin">Оригинал</string>
+    <string name="module_image_crop_fragment_crop_aspect_ratio_free">Свободный</string>
     <string name="module_image_crop_fragment_crop_aspect_ratio_1_1">1:1</string>
     <string name="module_image_crop_fragment_crop_aspect_ratio_4_5">4:5</string>
     <string name="module_image_crop_fragment_crop_aspect_ratio_4_3">4:3</string>

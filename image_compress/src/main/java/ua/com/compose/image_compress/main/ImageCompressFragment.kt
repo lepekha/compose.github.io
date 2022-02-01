@@ -178,6 +178,8 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
     override fun restoreSettings(quality: Int, size: Int) {
         sbQuality.value = quality.toFloat()
         sbSize.value = size.toFloat()
+        presenter.onQualityChange(quality)
+        presenter.onSizeChange(size)
     }
 
     override fun setImage(bmp: Bitmap) {

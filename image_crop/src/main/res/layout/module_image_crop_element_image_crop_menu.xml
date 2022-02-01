@@ -11,8 +11,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         app:cardBackgroundColor="?attr/color_8"
         app:cardCornerRadius="28dp"
@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
             android:tintMode="multiply"
             app:srcCompat="@drawable/module_image_crop_ic_crop_16_9"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="4dp"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:textColor="?attr/color_9"
         android:textSize="14sp"
         android:textStyle="bold"

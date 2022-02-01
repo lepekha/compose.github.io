@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.module_instagram_planer_element_instagram_
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.animateScale
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.instagram_planer.R
 import ua.com.compose.instagram_planer.data.Image
 
@@ -75,6 +76,7 @@ class InstagramPlanerRvAdapter(
                         onEndDrag()
                     }
                     DragEvent.ACTION_DRAG_ENTERED -> {
+                        this.imgView.context.vibrate(type = EVibrate.DRAG_AND_DROP)
                         this.imgView.animateScale(toScale = SCALE_DRAG_ENTERED)
                     }
                     DragEvent.ACTION_DRAG_EXITED -> {

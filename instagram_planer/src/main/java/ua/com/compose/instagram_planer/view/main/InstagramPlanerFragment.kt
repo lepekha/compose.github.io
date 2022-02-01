@@ -18,6 +18,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
+import com.google.android.material.shape.CornerFamily
 import kotlinx.android.synthetic.main.module_instagram_planer_fragment_instagram_planer.*
 import kotlinx.android.synthetic.main.module_instagram_planer_fragment_instagram_planer.chipGroup
 import ua.com.compose.dialog.dialogs.DialogColor
@@ -60,7 +61,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
     }
 
     private val btnAddBox = BottomMenu(iconResId = R.drawable.module_instagram_planer_ic_instagram_planer_add_box) {
-        val request = DialogColor.show(fm = getCurrentActivity().supportFragmentManager, color = Color.GREEN)
+        val request = DialogColor.show(fm = getCurrentActivity().supportFragmentManager)
         setFragmentResultListener(request) { requestKey, bundle ->
             viewModel.pressAddBox(color = bundle.getInt(DialogColor.BUNDLE_KEY_ANSWER_COLOR))
             clearFragmentResultListener(requestKey)
@@ -81,6 +82,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                     viewModel.onChangeImagePosition(oldPosition, newPosition)
                 },
                 onStartDrag = {
+//                    setVisibleMore(false)
                     materialCardView.isInvisible = true
                     groupButton.isVisible = true
                 },
@@ -94,6 +96,22 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_instagram_palaner_title))
+
+        btnSave.shapeAppearanceModel = btnSave.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, 16.dp)
+            .setTopRightCornerSize(0f)
+            .setBottomRightCornerSize(0f)
+            .setBottomLeftCorner(CornerFamily.ROUNDED, 16.dp)
+            .build()
+
+        btnRemove.shapeAppearanceModel = btnRemove.shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCornerSize(0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 16.dp)
+            .setBottomRightCorner(CornerFamily.ROUNDED, 16.dp)
+            .setBottomLeftCornerSize(0f)
+            .build()
 
         initGridPreview()
 
@@ -175,14 +193,14 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
         btnRemove.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_ENTERED -> {
+                    btnRemove.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_6))
                     requireContext().vibrate(type = EVibrate.BUTTON)
-                    btnRemove.animateScale(toScale = 1.3f)
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    btnRemove.animateScale(toScale = 1f)
+                    btnRemove.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
                 }
                 DragEvent.ACTION_DROP -> {
-                    btnRemove.animateScale(toScale = 1f)
+                    btnRemove.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
                     groupButton.isVisible = false
                     viewModel.pressRemoveImage(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
                 }
@@ -193,14 +211,14 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
         btnSave.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_ENTERED -> {
+                    btnSave.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_6))
                     requireContext().vibrate(type = EVibrate.BUTTON)
-                    btnSave.animateScale(toScale = 1.3f)
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    btnSave.animateScale(toScale = 1f)
+                    btnSave.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
                 }
                 DragEvent.ACTION_DROP -> {
-                    btnSave.animateScale(toScale = 1f)
+                    btnSave.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
                     groupButton.isVisible = false
                     viewModel.pressImageSave(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
                 }
@@ -211,14 +229,14 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
         btnShareImage.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_ENTERED -> {
+                    btnShareImage.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_6))
                     requireContext().vibrate(type = EVibrate.BUTTON)
-                    btnShareImage.animateScale(toScale = 1.3f)
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    btnShareImage.animateScale(toScale = 1f)
+                    btnShareImage.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
                 }
                 DragEvent.ACTION_DROP -> {
-                    btnShareImage.animateScale(toScale = 1f)
+                    btnShareImage.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
                     groupButton.isVisible = false
                     viewModel.onChangeImage(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
                     FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true, requestKey = REQUEST_CHANGE_IMAGE)
@@ -278,9 +296,6 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                 setVisibleMore(false)
             }
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-            }
         })
     }
 

@@ -73,7 +73,7 @@ class InstagramCropSaveFragment : BaseMvpFragment<InstagramCropSaveView, Instagr
 
         btnColorFill.setVibrate(EVibrate.BUTTON)
         btnColorFill.setOnClickListener {
-            val request = DialogColor.show(fm = getCurrentActivity().supportFragmentManager, color = Color.RED)
+            val request = DialogColor.show(fm = getCurrentActivity().supportFragmentManager)
             setFragmentResultListener(request) { _, bundle ->
                 presenter.onColorPick(color = bundle.getInt(DialogColor.BUNDLE_KEY_ANSWER_COLOR))
             }

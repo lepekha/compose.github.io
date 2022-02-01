@@ -9,6 +9,118 @@
     android:layout_height="wrap_content"
     android:background="@drawable/background_bottom_sheet">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/btnColor0"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:contentDescription="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnColor1"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#000000"
+            pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+        <ImageView
+            android:id="@+id/btnColor1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:contentDescription="#FF5252"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnColor2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnColor0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FF5252"
+            pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+        <ImageView
+            android:id="@+id/btnColor2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:contentDescription="#FFC400"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnColor3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnColor1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FFC400"
+            pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+        <ImageView
+            android:id="@+id/btnColor3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:contentDescription="#06E576"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnColor4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnColor2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#06E576"
+            pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+        <ImageView
+            android:id="@+id/btnColor4"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:contentDescription="#06B0FF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnColor5"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnColor3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#06B0FF"
+            pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+        <ImageView
+            android:id="@+id/btnColor5"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:contentDescription="#D501F9"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnColor6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnColor4"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#D501F9"
+            pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+        <ImageView
+            android:id="@+id/btnColor6"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:contentDescription="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnColor5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FFFFFF"
+            pikolo:srcCompat="@drawable/module_dialog_dot" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <View
         android:id="@+id/view"
         android:layout_width="40dp"
@@ -26,6 +138,7 @@
         android:layout_marginTop="16dp"
         android:nestedScrollingEnabled="true"
         android:padding="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
@@ -69,7 +182,7 @@
         android:id="@+id/btnDone"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        app:cardBackgroundColor="?attr/color_8"
+        app:cardBackgroundColor="?attr/color_5"
         app:cardCornerRadius="28dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgExample"
@@ -83,7 +196,7 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/ic_done"
-            app:tint="?attr/color_9" />
+            app:tint="?attr/color_2" />
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,8 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.concurrent.thread
 
+lateinit var prefs: SharedPreferences
+
 suspend fun Context.loadImage(uri: Uri) = when {
         Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
         else -> ImageDecoder.decodeBitmap(ImageDecoder.createSource(this.contentResolver, uri))
@@ -128,6 +130,7 @@ enum class EVibrate(internal val long: Long){
     NONE(long = 0L),
     BUTTON(long = 8L),
     SLIDER(long = 4L),
+    DRAG_AND_DROP(long = 4L),
     BUTTON_LONG(long = 30L)
 }
 

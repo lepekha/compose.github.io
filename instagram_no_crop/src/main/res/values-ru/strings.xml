@@ -3,7 +3,7 @@
     <string name="module_instagram_no_crop_fragment_title_crop">Квадрат</string>
     <string name="module_instagram_no_crop_fragment_no_crop_save_ready">Изображение сохранено</string>
 
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_origin">ОРИГИНАЛ</string>
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_free">СВОБОДНЫЙ</string>
+    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_origin">Оригинал</string>
+    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_free">Свободный</string>
     <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_1_1">1:1</string>
 </resources>

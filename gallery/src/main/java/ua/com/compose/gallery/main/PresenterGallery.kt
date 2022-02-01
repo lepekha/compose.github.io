@@ -52,9 +52,14 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
 
     fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
         val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val imageFolders = mutableMapOf<String, ImageFolder>()
+        val allDirName = context.getString(R.string.module_gallery_fragment_all)
+        val imageFolders = mutableMapOf<String, ImageFolder>().apply {
+            this[allDirName] = ImageFolder().apply {
+                this.name = allDirName
+            }
+        }
         val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATE_ADDED)
-        val cursor = activity.contentResolver.query(uriExternal, projection, null, null, MediaStore.Images.Media.DATE_ADDED)
+        val cursor = activity.contentResolver.query(uriExternal, projection, null, null, MediaStore.Images.Media.DATE_ADDED+" DESC")
         if (cursor != null) {
             val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             val columnBacketID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
@@ -62,6 +67,7 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
                 val imageId = cursor.getLong(columnIndexID)
                 val dirName = cursor.getString(columnBacketID)
                 val uriImage = Uri.withAppendedPath(uriExternal, "" + imageId)
+                imageFolders[allDirName]?.images?.add(uriImage)
                 (imageFolders[dirName] ?: ImageFolder()).apply {
                     this.name = dirName
                     this.images.add(uriImage)
@@ -73,16 +79,16 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
 
         folders.clear()
         folders.addAll(imageFolders.values)
-        imageFolders.values.onEach { it.images.reverse() }
+//        imageFolders.values.onEach { it.images.reverse() }
 
-        val allFolder = ImageFolder().apply {
-            this.name = context.getString(R.string.module_gallery_fragment_all)
-            imageFolders.values.forEach {
-                this.images.addAll(it.images)
-            }
-        }
-        folders.sortBy { it.name }
-        folders.add(0, allFolder)
+//        val allFolder = ImageFolder().apply {
+//            this.name = context.getString(R.string.module_gallery_fragment_all)
+//            imageFolders.values.forEach {
+//                this.images.addAll(it.images)
+//            }
+//        }
+//        folders.sortBy { it.name }
+//        folders.add(0, allFolder)
         images.addAll(folders[0].images)
         withContext(Dispatchers.Main){
             view?.updateAllList()

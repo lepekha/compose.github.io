@@ -37,7 +37,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
 
     private val backgroundPaint = Paint().apply {
         this.color = backgroundColor
-        this.style = Paint.Style.FILL
+        this.style = Paint.Style.FILL_AND_STROKE
     }
 
     private val borderPaint = Paint().apply {

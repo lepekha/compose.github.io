@@ -40,7 +40,7 @@ class InstagramGridSavePresenter(val context: Context, val presenter: InstagramG
     }
 
     fun pressImage(position: Int) = CoroutineScope(Main).launch {
-        gridImages.reversed().getOrNull(position)?.scale(512, 512, false)?.let { bitmap ->
+        gridImages.getOrNull(position)?.scale(512, 512, false)?.let { bitmap ->
             val uri = withContext(Dispatchers.IO) { context.createTempUri(bitmap) }
             view?.createInstagramIntent(uri = uri)
         }

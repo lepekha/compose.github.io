@@ -15,12 +15,14 @@ import ua.com.compose.dialog.R
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
 import kotlinx.android.synthetic.main.dialog_color.*
 import ua.com.compose.extension.*
+import ua.com.compose.navigator.remove
 
 
 class DialogColor : BottomSheetDialogFragment()  {
 
     companion object {
 
+        const val TAG = "DialogColorTag"
         const val PREF_KEY_COLOR = "DIALOG_COLOR_LAST"
         const val BUNDLE_KEY_ANSWER_COLOR = "BUNDLE_KEY_ANSWER_COLOR"
         private const val BUNDLE_KEY_INPUT_COLOR = "BUNDLE_KEY_INPUT_COLOR"
@@ -35,7 +37,8 @@ class DialogColor : BottomSheetDialogFragment()  {
                     color?.let { this.putInt(BUNDLE_KEY_INPUT_COLOR, it) }
                 }
             }
-            fragment.show(fm, fragment.tag)
+            fm.remove(TAG)
+            fragment.show(fm, TAG)
             return requestKey
         }
     }

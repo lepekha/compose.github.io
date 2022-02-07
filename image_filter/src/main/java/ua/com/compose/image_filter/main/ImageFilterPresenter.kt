@@ -30,7 +30,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     var historyFilters = mutableListOf<ImageFilter>()
     var tempHistoryFilters = mutableListOf<ImageFilter>()
 
-    val gpuSampleFilter = GPUImage(context.applicationContext).apply {
+    var gpuSampleFilter = GPUImage(context.applicationContext).apply {
         this.setScaleType(GPUImage.ScaleType.CENTER_INSIDE)
         this.setBackgroundColor(27 / 255f,27 / 255f,31 / 255f)
     }
@@ -55,6 +55,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     }
 
     fun onAddImage(uris: List<Uri>){
+        if(uris.isEmpty() && this.currentUri != null) return
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
             (currentUri != null) -> {
@@ -72,6 +73,8 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     fun onCreate(uri: Uri?){
         this.currentUri = uri
         val currentUri = this.currentUri
+        historyFilters.clear()
+        tempHistoryFilters.clear()
         if(currentUri != null) {
             dialogLoad = DialogManager.createLoad {  }
             view?.setImage(currentUri)
@@ -99,6 +102,16 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     }
 
     fun pressMenuFilters(){
+        if(type == EMenuType.HISTORY){
+            historyFilters = tempHistoryFilters.toMutableList()
+            gpuSampleFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters)))
+        }
+        type = EMenuType.FILTERS
+        view?.initMenuFilters()
+    }
+
+    fun pressHistoryDone(){
+        tempHistoryFilters.clear()
         type = EMenuType.FILTERS
         view?.initMenuFilters()
     }
@@ -198,11 +211,12 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
 
     fun onResourceLoad(image: Bitmap){
         this.image = image
+        gpuFilter.deleteImage()
         gpuFilter.setImage(image)
     }
 
     fun onSampleLoad(image: Bitmap?){
-        if(this.sampleImage == null && image != null) {
+        if(image != null) {
             val baos = ByteArrayOutputStream()
             val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 Bitmap.CompressFormat.WEBP_LOSSY
@@ -212,7 +226,12 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             image.compress(format, 90, baos)
             val newBitmap = BitmapFactory.decodeStream(ByteArrayInputStream(baos.toByteArray()))
             this.sampleImage = newBitmap
+            gpuSampleFilter.setFilter(GPUImageFilter())
+            gpuSampleFilter.deleteImage()
             gpuSampleFilter.setImage(newBitmap)
+            historyFilters.clear()
+            tempHistoryFilters.clear()
+            view?.initMenuFilters()
         }
         dialogLoad?.closeDialog()
     }

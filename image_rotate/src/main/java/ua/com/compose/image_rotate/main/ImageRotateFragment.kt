@@ -92,7 +92,7 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_image_rotate_fragment_image_rotate_title))
 
-        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             presenter.onAddImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
@@ -117,7 +117,7 @@ class ImageRotateFragment : BaseMvpFragment<ImageRotateView, ImageRotatePresente
     }
 
     override fun openGallery() {
-        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
+        FragmentGallery.show(fm = childFragmentManager, isMultiSelect = false)
     }
 
     override fun setFlipXToImage(scale: Float) {

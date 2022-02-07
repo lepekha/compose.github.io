@@ -72,7 +72,7 @@ class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPr
         super.onViewCreated(view, savedInstanceState)
         setTitle(getCurrentContext().getString(R.string.module_instagram_no_crop_fragment_title_crop))
 
-        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             presenter.onAddImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
@@ -119,7 +119,7 @@ class InstagramCropFragment : BaseMvpFragment<InstagramCropView, InstagramCropPr
     }
 
     override fun openGallery() {
-        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
+        FragmentGallery.show(fm = childFragmentManager, isMultiSelect = false)
     }
 
     override fun setImage(uri: Uri){

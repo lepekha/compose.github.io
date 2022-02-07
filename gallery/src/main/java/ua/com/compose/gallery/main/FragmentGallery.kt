@@ -31,12 +31,14 @@ import kotlinx.android.synthetic.main.module_gallery_fragment_gallery_content.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import ua.com.compose.extension.*
+import ua.com.compose.navigator.remove
 
 
 class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery>(), ViewGallery {
 
     companion object {
 
+        const val TAG = "FragmentGalleryTag"
         const val REQUEST_KEY = "REQUEST_KEY_GALLERY"
 
         private const val BUNDLE_KEY_REQUEST_KEY = "BUNDLE_KEY_REQUEST_KEY"
@@ -50,7 +52,8 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                     BUNDLE_KEY_REQUEST_KEY to requestKey
                 )
             }
-            fragment.show(fm, fragment.tag)
+            fm.remove(TAG)
+            fragment.show(fm, TAG)
         }
     }
 

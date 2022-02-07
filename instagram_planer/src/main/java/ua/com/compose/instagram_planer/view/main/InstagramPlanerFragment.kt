@@ -57,7 +57,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
     }
 
     private val btnGallery = BottomMenu(iconResId = ua.com.compose.R.drawable.ic_gallery) {
-        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true)
+        FragmentGallery.show(fm = childFragmentManager, isMultiSelect = true)
     }
 
     private val btnAddBox = BottomMenu(iconResId = R.drawable.module_instagram_planer_ic_instagram_planer_add_box) {
@@ -123,11 +123,11 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
             }
         }
 
-        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             viewModel.onAddImages((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
-        setFragmentResultListener(REQUEST_CHANGE_IMAGE) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(REQUEST_CHANGE_IMAGE, viewLifecycleOwner) { _, bundle ->
             viewModel.pressChangeImage((bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>())
         }
 
@@ -239,7 +239,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                     btnShareImage.setCardBackgroundColor(requireContext().getColorFromAttr(R.attr.color_8))
                     groupButton.isVisible = false
                     viewModel.onChangeImage(position = dragEvent.clipData.getItemAt(0).text.toString().toInt())
-                    FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = true, requestKey = REQUEST_CHANGE_IMAGE)
+                    FragmentGallery.show(fm = childFragmentManager, isMultiSelect = true, requestKey = REQUEST_CHANGE_IMAGE)
                 }
             }
             true

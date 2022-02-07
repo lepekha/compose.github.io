@@ -23,6 +23,7 @@ import ua.com.compose.extension.dp
 import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.extension.sp
 import kotlinx.android.synthetic.main.dialog_list.*
+import ua.com.compose.navigator.remove
 import java.util.ArrayList
 
 
@@ -30,6 +31,7 @@ class DialogChip : BottomSheetDialogFragment() {
 
     companion object {
 
+        const val TAG = "DialogChipTag"
         private const val BUNDLE_KEY_LIST = "BUNDLE_KEY_LIST"
         private const val BUNDLE_KEY_SELECTED = "BUNDLE_KEY_SELECTED"
         const val BUNDLE_KEY_ANSWER_POSITION = "BUNDLE_KEY_ANSWER_POSITION"
@@ -45,7 +47,8 @@ class DialogChip : BottomSheetDialogFragment() {
                         BUNDLE_KEY_LIST to list.toTypedArray()
                 )
             }
-            fragment.show(fm, fragment.tag)
+            fm.remove(TAG)
+            fragment.show(fm, TAG)
             return requestKey
         }
     }

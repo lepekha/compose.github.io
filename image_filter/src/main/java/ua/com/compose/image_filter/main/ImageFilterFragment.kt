@@ -79,6 +79,12 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         }
     }
 
+    private val btnHistoryDone by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_done) {
+            presenter.pressHistoryDone()
+        }
+    }
+
     private val btnCancel by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_back) {
            presenter.pressCancelFilter()
@@ -95,10 +101,16 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_eye) {
             list.isVisible = false
             if(presenter.historyFilters.isNotEmpty()){
-                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnHistory, btnFilters, btnDone))
+                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnHistory, btnFilters))
             }else{
-                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnDone))
+                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters))
             }
+        }
+    }
+
+    private val btnGallery by lazy {
+        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_gallery) {
+            openGallery()
         }
     }
 
@@ -126,7 +138,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     override fun initHistory() {
         setVisibleBack(isVisible = true)
         initHistoryList()
-        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnDone))
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnHistoryDone))
     }
 
     override fun initMenuFilters(){
@@ -134,20 +146,9 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         setVisibleBack(isVisible = true)
         if(presenter.historyFilters.isNotEmpty()){
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnHistory, btnPreview, btnDone))
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnHistory, btnPreview, btnDone))
         }else{
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnPreview, btnDone))
-        }
-    }
-
-    override fun initBottomMenu() {
-        list.layoutManager = null
-        list.adapter = null
-        setTitle(title = requireContext().getString(R.string.module_image_filter_title))
-        if(presenter.historyFilters.isNotEmpty()){
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnHistory, btnPreview, btnDone))
-        }else{
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters, btnPreview, btnDone))
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnPreview, btnDone))
         }
     }
 
@@ -187,7 +188,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         setTitle(getCurrentContext().getString(R.string.module_image_filter_title))
         imgView.setZOrderOnTop(true)
         presenter.gpuSampleFilter.setGLSurfaceView(imgView)
-        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             val uris = (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>()
             presenter.onAddImage(uris)
         }
@@ -223,7 +224,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     }
 
     override fun openGallery() {
-        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
+        FragmentGallery.show(fm = childFragmentManager, isMultiSelect = false)
     }
 
     override fun setVisibleContent(isVisible: Boolean) {
@@ -246,6 +247,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
                     transition: Transition<in Bitmap>?
                 ) {
                     presenter.onSampleLoad(resource)
+
                     container.isInvisible = false
                     imgView.isInvisible = false
                 }

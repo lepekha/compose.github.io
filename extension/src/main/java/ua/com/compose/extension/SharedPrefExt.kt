@@ -35,8 +35,8 @@ fun <T> SharedPreferences.put(key: String, value: T) {
 
 fun SharedPreferences.getListOfString(key: String, defaultValue: List<String>): List<String> {
     val s = this.getString(key, "")
-    val favs = s?.split("\\|".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray() ?: arrayOf()
-    return if (favs.size == 1 && favs[0] == "") {
+    val favs = s?.takeIf { it.isNotEmpty() }?.split("\\|".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray() ?: arrayOf()
+    return if (favs.isEmpty()) {
         defaultValue
     } else {
         listOf(*favs)

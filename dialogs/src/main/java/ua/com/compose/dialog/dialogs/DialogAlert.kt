@@ -47,7 +47,9 @@ class DialogAlert : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
+            this.setCancelable(false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

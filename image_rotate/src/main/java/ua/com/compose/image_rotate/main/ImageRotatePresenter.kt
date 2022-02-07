@@ -4,16 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
-import ua.com.compose.mvp.BaseMvpPresenterImpl
-import ua.com.compose.dialog.DialogManager
-import ua.com.compose.extension.createTempUri
-import ua.com.compose.extension.saveBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ua.com.compose.dialog.DialogManager
 import ua.com.compose.dialog.IDialog
-import ua.com.compose.image_rotate.R
+import ua.com.compose.extension.createTempUri
+import ua.com.compose.mvp.BaseMvpPresenterImpl
 
 
 class ImageRotatePresenter(val context: Context): BaseMvpPresenterImpl<ImageRotateView>() {

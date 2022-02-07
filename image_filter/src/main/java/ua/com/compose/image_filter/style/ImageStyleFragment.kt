@@ -85,7 +85,7 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
         setTitle(getCurrentContext().getString(R.string.module_image_filter_title))
         initStyleList()
 
-        setFragmentResultListener(FragmentGallery.REQUEST_KEY) { _, bundle ->
+        childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             val uris = (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>()
             presenter.onAddImage(uris)
         }
@@ -120,7 +120,7 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
     }
 
     override fun openGallery() {
-        FragmentGallery.show(fm = getCurrentActivity().supportFragmentManager, isMultiSelect = false)
+        FragmentGallery.show(fm = childFragmentManager, isMultiSelect = false)
     }
 
     override fun saveToResult(uri: Uri) {

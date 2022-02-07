@@ -129,7 +129,7 @@ fun Context.vibrate(milliseconds: Long = 500){
 enum class EVibrate(internal val long: Long){
     NONE(long = 0L),
     BUTTON(long = 8L),
-    SLIDER(long = 4L),
+    SLIDER(long = 2L),
     DRAG_AND_DROP(long = 4L),
     BUTTON_LONG(long = 30L)
 }

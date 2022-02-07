@@ -68,65 +68,53 @@ class DialogColor : BottomSheetDialogFragment()  {
 
         btnColor0.setVibrate(EVibrate.BUTTON)
         btnColor0.setOnClickListener {
-            val color = Color.parseColor(it.contentDescription.toString())
-            colorPicker.setColor(color)
-            imgExample.imageTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+            setColor(Color.parseColor(it.contentDescription.toString()))
         }
 
         btnColor1.setVibrate(EVibrate.BUTTON)
         btnColor1.setOnClickListener {
-            val color = Color.parseColor(it.contentDescription.toString())
-            colorPicker.setColor(color)
-            imgExample.imageTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+            setColor(Color.parseColor(it.contentDescription.toString()))
         }
 
         btnColor2.setVibrate(EVibrate.BUTTON)
         btnColor2.setOnClickListener {
-            val color = Color.parseColor(it.contentDescription.toString())
-            colorPicker.setColor(color)
-            imgExample.imageTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+            setColor(Color.parseColor(it.contentDescription.toString()))
         }
 
         btnColor3.setVibrate(EVibrate.BUTTON)
         btnColor3.setOnClickListener {
-            val color = Color.parseColor(it.contentDescription.toString())
-            colorPicker.setColor(color)
-            imgExample.imageTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+            setColor(Color.parseColor(it.contentDescription.toString()))
         }
 
         btnColor4.setVibrate(EVibrate.BUTTON)
         btnColor4.setOnClickListener {
-            val color = Color.parseColor(it.contentDescription.toString())
-            colorPicker.setColor(color)
-            imgExample.imageTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+            setColor(Color.parseColor(it.contentDescription.toString()))
         }
 
         btnColor5.setVibrate(EVibrate.BUTTON)
         btnColor5.setOnClickListener {
-            val color = Color.parseColor(it.contentDescription.toString())
-            colorPicker.setColor(color)
-            imgExample.imageTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+            setColor(Color.parseColor(it.contentDescription.toString()))
         }
 
         btnColor6.setVibrate(EVibrate.BUTTON)
         btnColor6.setOnClickListener {
-            val color = Color.parseColor(it.contentDescription.toString())
-            colorPicker.setColor(color)
-            imgExample.imageTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+            setColor(Color.parseColor(it.contentDescription.toString()))
         }
 
         btnDone.setVibrate(EVibrate.BUTTON)
         btnDone.setOnClickListener {
-            prefs.put(PREF_KEY_COLOR, imgExample.tag as Int)
-            setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_ANSWER_COLOR to imgExample.tag as Int))
+            val color = imgExample.tag as Int
+            if(color != Color.BLACK && color != Color.WHITE){
+                prefs.put(PREF_KEY_COLOR, color)
+            }
+            setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_ANSWER_COLOR to color))
             dismiss()
         }
+    }
+
+    private fun setColor(color: Int){
+        colorPicker.setColor(color)
+        imgExample.imageTintList = ColorStateList.valueOf(color)
+        imgExample.tag = color
     }
 }

@@ -16,12 +16,14 @@ import ua.com.compose.dialog.R
 import kotlinx.android.synthetic.main.dialog_confirmation.*
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.navigator.remove
 
 
 class DialogConfirmation : BottomSheetDialogFragment() {
 
     companion object {
 
+        const val TAG = "DialogConfirmationTag"
         const val BUNDLE_KEY_ANSWER = "BUNDLE_KEY_ANSWER"
         private const val BUNDLE_KEY_MESSAGE = "BUNDLE_KEY_MESSAGE"
         private const val BUNDLE_KEY_REQUEST_KEY = "BUNDLE_KEY_REQUEST_KEY"
@@ -34,16 +36,21 @@ class DialogConfirmation : BottomSheetDialogFragment() {
                         BUNDLE_KEY_REQUEST_KEY to requestKey
                 )
             }
-            fragment.show(fm, fragment.tag)
+            fm.remove(TAG)
+            fragment.show(fm, TAG)
             return requestKey
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
+            this.setCancelable(false)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_confirmation, container, false)
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -31,7 +31,6 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
             (currentUri != null) -> {
-                pressRestoreSettings()
                 this.currentUri = currentUri
                 view?.setImage(currentUri)
             }
@@ -126,6 +125,8 @@ class ImageCompressPresenter(val context: Context): BaseMvpPresenterImpl<ImageCo
         this.image = image
         this.sampleImage = image
         loader?.closeDialog()
+        quality = 100
+        size = 100
         view?.setQualityValue("$quality%")
         view?.setSizeValue("${(image.width * size) / 100} x ${(image.height * size) / 100}")
     }

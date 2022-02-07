@@ -1,5 +1,6 @@
 package ua.com.compose.dialog.dialogs
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,16 +10,19 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.dialog.R
 import kotlinx.android.synthetic.main.dialog_input.*
 import ua.com.compose.extension.*
+import ua.com.compose.navigator.remove
 
 
 class DialogInput : BottomSheetDialogFragment() {
 
     companion object {
 
+        const val TAG = "DialogInputTag"
         private const val BUNDLE_KEY_SINGLE_LINE = "BUNDLE_KEY_SINGLE_LINE"
         private const val BUNDLE_KEY_HINT = "BUNDLE_KEY_HINT"
         private const val BUNDLE_KEY_TEXT = "BUNDLE_KEY_TEXT"
@@ -35,7 +39,8 @@ class DialogInput : BottomSheetDialogFragment() {
                         BUNDLE_KEY_REQUEST_KEY to requestKey
                 )
             }
-            fragment.show(fm, fragment.tag)
+            fm.remove(TAG)
+            fragment.show(fm, TAG)
             return requestKey
         }
     }
@@ -47,6 +52,12 @@ class DialogInput : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
+            this.setCancelable(false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,11 +86,6 @@ class DialogInput : BottomSheetDialogFragment() {
 
         btnDone.setVibrate(EVibrate.BUTTON)
         btnDone.setOnClickListener {
-            setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to editText.text.toString()))
-            dismiss()
-        }
-
-        editText.onAction(EditorInfo.IME_ACTION_DONE){
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to editText.text.toString()))
             dismiss()
         }

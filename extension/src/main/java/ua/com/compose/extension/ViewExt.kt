@@ -164,10 +164,10 @@ fun View.setVibrate(type: EVibrate) {
     val origH = d.intrinsicHeight
 
     // Calculate the actual dimensions
-    val actW = Math.round(origW * scaleX)
-    val actH = Math.round(origH * scaleY)
-    ret[2] = actW
-    ret[3] = actH
+    val actW = origW * scaleX
+    val actH = origH * scaleY
+    ret[2] = actW.toInt()
+    ret[3] = actH.toInt()
 
     // Get image position
     // We assume that the image is centered into ImageView
@@ -175,7 +175,7 @@ fun View.setVibrate(type: EVibrate) {
     val imgViewH = this.height
     val top = (imgViewH - actH) / 2
     val left = (imgViewW - actW) / 2
-    ret[0] = left
-    ret[1] = top
+    ret[0] = left.toInt()
+    ret[1] = top.toInt()
     return ret
   }

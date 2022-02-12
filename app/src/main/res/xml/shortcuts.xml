@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_shortcut_instagram_planer"
         android:label="@string/shortcut_short_instagram_planer"
         android:shortcutShortLabel="@string/shortcut_short_instagram_planer"
-        android:shortcutLongLabel="@string/shortcut_long_instagram_planer">
+        android:shortcutLongLabel="@string/shortcut_short_instagram_planer">
         <intent
             android:action="ua.com.compose.action.INSTAGRAM_PLANER"
             android:targetPackage="ua.com.compose"
@@ -19,7 +19,7 @@
         android:icon="@drawable/ic_shortcut_instagram_crop"
         android:label="@string/shortcut_short_instagram_crop"
         android:shortcutShortLabel="@string/shortcut_short_instagram_crop"
-        android:shortcutLongLabel="@string/shortcut_long_instagram_crop">
+        android:shortcutLongLabel="@string/shortcut_short_instagram_crop">
         <intent
             android:action="ua.com.compose.action.INSTAGRAM_CROP"
             android:targetPackage="ua.com.compose"
@@ -30,9 +30,9 @@
         android:shortcutId="instagram_grid"
         android:enabled="true"
         android:icon="@drawable/ic_shortcut_instagram_grid"
-        android:shortcutShortLabel="@string/shortcut_short_instagram_grid"
         android:label="@string/shortcut_short_instagram_grid"
-        android:shortcutLongLabel="@string/shortcut_long_instagram_grid">
+        android:shortcutShortLabel="@string/shortcut_short_instagram_grid"
+        android:shortcutLongLabel="@string/shortcut_short_instagram_grid">
         <intent
             android:action="ua.com.compose.action.INSTAGRAM_GRID"
             android:targetPackage="ua.com.compose"

@@ -7,7 +7,7 @@
     <string name="shortcut_long_instagram_planer">Instagram planer</string>
     <string name="shortcut_long_instagram_crop">Instagram crop</string>
     <string name="shortcut_long_instagram_grid">Instagram grid</string>
-    <string name="shortcut_short_instagram_planer">Planer</string>
-    <string name="shortcut_short_instagram_crop">Crop</string>
+    <string name="shortcut_short_instagram_planer">Visual</string>
+    <string name="shortcut_short_instagram_crop">Square</string>
     <string name="shortcut_short_instagram_grid">Grid</string>
 </resources>

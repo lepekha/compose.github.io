@@ -23,7 +23,7 @@ class ImageFilterRvAdapter(private val params: List<FilterParam>, private val on
             progress.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
                 (params[adapterPosition] as FilterValueParam).value = value
                 onChange.invoke()
-                txtSize.context.vibrate(EVibrate.SLIDER)
+//                txtSize.context.vibrate(EVibrate.SLIDER)
                 txtSize.text = if(value > 0f) { "+${value.toInt()}" } else { value.toInt().toString() }
                 txtSize.setTextColor(txtSize.context.getColorFromAttr(R.attr.color_14))
                 txtSize.removeCallbacks(runnable)

@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterBlackAndWhite: ImageFilter() {
     override val id: Int = EImageFilter.IMAGE_FILTER_BLACK_AND_WHITE.id
+    override val name: String = "BlackAndWhite"
     override val nameResId: Int = R.string.module_image_filter_black_white
     override val iconResId: Int = R.drawable.module_image_filter_ic_black_and_white
 

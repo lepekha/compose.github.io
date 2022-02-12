@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterGrayscale: ImageFilter() {
     override val id: Int = 7
+    override val name: String = "Grayscale"
     override val nameResId: Int = R.string.module_image_filter_greyscale
     override val iconResId: Int = R.drawable.module_image_filter_ic_tune
 

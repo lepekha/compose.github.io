@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterSaturation: ImageFilter() {
     override val id: Int = EImageFilter.IMAGE_FILTER_SATURATION.id
+    override val name: String = "Saturation"
     override val nameResId: Int = R.string.module_image_filter_saturation
     override val iconResId: Int = R.drawable.module_image_filter_ic_saturation
 

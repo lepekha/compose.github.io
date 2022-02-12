@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterSepiaTone: ImageFilter() {
     override val id: Int = 14
+    override val name: String = "SepiaTone"
     override val nameResId: Int = R.string.module_image_filter_sepia
     override val iconResId: Int = R.drawable.module_image_filter_ic_sepia
 

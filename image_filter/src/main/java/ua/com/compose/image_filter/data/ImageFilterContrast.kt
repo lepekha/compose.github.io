@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterContrast: ImageFilter() {
     override val id: Int = EImageFilter.IMAGE_FILTER_CONTRAST.id
+    override val name: String = "Contrast"
     override val nameResId: Int = R.string.module_image_filter_contrast
     override val iconResId: Int = R.drawable.module_image_filter_ic_contrast
 

@@ -1,5 +1,6 @@
 package ua.com.compose.core.models.data
 
+import android.graphics.Color
 import androidx.fragment.app.FragmentManager
 import ua.com.compose.instagram_planer.view.main.InstagramPlanerFragment
 import ua.com.compose.image_crop.main.ImageCropFragment
@@ -12,8 +13,7 @@ import ua.com.compose.R
 import ua.com.compose.image_compress.main.ImageCompressFragment
 import ua.com.compose.image_filter.main.ImageFilterFragment
 import ua.com.compose.image_rotate.main.ImageRotateFragment
-import ua.com.compose.view.main.info.ImageHolder
-import ua.com.compose.view.main.info.ImageInfoViewModule
+import ua.com.compose.view.main.main.ImageHolder
 import java.lang.ref.WeakReference
 
 class MenuObjects(private val imageHolder: ImageHolder) {
@@ -26,68 +26,77 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     }
 
     private val INSTAGRAM_PLANER by lazy {
-        DynamicMenu.Image(
+        DynamicMenu.Icon(
             id = R.id.id_menu_planer,
+            name = "INSTAGRAM_PLANER",
             titleResId = R.string.module_instagram_palaner_title,
             isVisible = { true },
+            iconColor = Color.parseColor("#CCFFC400"),
             onPress = {
                 fragmentManager?.get()?.replace(
                     fragment = InstagramPlanerFragment.newInstance(),
                     addToBackStack = true
                 )
             },
-            backgroundImageId = R.drawable.ic_menu_planer
+            iconResId = R.drawable.ic_instagram_visual
         )
     }
 
     private val INSTAGRAM_NO_CROP by lazy {
-        DynamicMenu.Image(
+        DynamicMenu.Icon(
             id = R.id.id_menu_no_crop,
+            name = "INSTAGRAM_NO_CROP",
             titleResId = R.string.module_instagram_no_crop_fragment_title_crop,
             isVisible = { true },
+            iconColor = Color.parseColor("#FF5252"),
             onPress = {
                 fragmentManager?.get()?.replace(
                     fragment = InstagramCropFragment.newInstance(uri = imageHolder.image),
                     addToBackStack = true
                 )
             },
-            backgroundImageId = R.drawable.ic_menu_no_crop
+            iconResId = R.drawable.ic_instagram_square
         )
     }
 
     private val INSTAGRAM_GRID by lazy {
-        DynamicMenu.Image(
+        DynamicMenu.Icon(
             id = R.id.id_menu_grid,
+            name = "INSTAGRAM_GRID",
             titleResId = R.string.module_instagram_grid_title,
             isVisible = { true },
+            iconColor = Color.parseColor("#CC06B0FF"),
             onPress = {
                 fragmentManager?.get()?.replace(
                     fragment = InstagramGridFragment.newInstance(uri = imageHolder.image),
                     addToBackStack = true
                 )
             },
-            backgroundImageId = R.drawable.ic_menu_grid
+            iconResId = R.drawable.ic_instagram_grid
         )
     }
 
     private val INSTAGRAM_PANORAMA by lazy {
-        DynamicMenu.Image(
+        DynamicMenu.Icon(
             id = R.id.id_menu_panorama,
+            name = "INSTAGRAM_PANORAMA",
             titleResId = R.string.module_instagram_panorama_title,
             isVisible = { true },
+            iconColor = Color.parseColor("#CC06E576"),
             onPress = {
                 fragmentManager?.get()?.replace(
                     fragment = InstagramPanoramaFragment.newInstance(uri = imageHolder.image),
                     addToBackStack = true
                 )
             },
-            backgroundImageId = R.drawable.ic_menu_panorama
+            iconResId = R.drawable.ic_instagram_panorama
         )
     }
 
     private val IMAGE_CROP by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_crop,
+            name = "IMAGE_CROP",
             titleResId = R.string.module_image_crop_fragment_image_crop_title,
             iconResId = R.drawable.ic_crop,
             isVisible = { true },
@@ -103,6 +112,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val IMAGE_ROTATE by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_crop,
+            name = "IMAGE_ROTATE",
             titleResId = R.string.module_image_rotate_fragment_image_rotate_title,
             iconResId = R.drawable.ic_rotate,
             isVisible = { true },
@@ -118,6 +128,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val IMAGE_COMPRESS by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_compress,
+            name = "IMAGE_COMPRESS",
             titleResId = R.string.module_image_compress_title,
             iconResId = R.drawable.ic_compress,
             isVisible = { true },
@@ -133,6 +144,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val IMAGE_FILTER by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_filter,
+            name = "IMAGE_FILTER",
             titleResId = R.string.module_image_filter_title,
             iconResId = R.drawable.ic_filter,
             isVisible = { true },
@@ -148,6 +160,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val IMAGE_STYLE by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_style,
+            name = "IMAGE_STYLE",
             titleResId = -1,
             iconResId = R.drawable.ic_style,
             isVisible = { true },
@@ -163,6 +176,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val IMAGE by lazy {
         DynamicMenu.Grid(
             id = R.id.id_menu_image,
+            name = "IMAGE",
             titleResId = R.string.menu_image,
             isVisible = { true },
             spanCount = 5,
@@ -178,6 +192,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val INSTAGRAM by lazy {
         DynamicMenu.Grid(
             id = R.id.id_menu_instagram,
+            name = "INSTAGRAM",
             titleResId = R.string.menu_instagram,
             isVisible = { true },
             spanCount = 4,
@@ -193,6 +208,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val OTHER by lazy {
         DynamicMenu.Grid(
             id = R.id.id_menu_other,
+            name = "OTHER",
             titleResId = R.string.menu_other,
             isVisible = { true },
             spanCount = 5,
@@ -203,6 +219,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
     private val TEXT_STYLE by lazy {
         DynamicMenu.Icon(
             id = R.id.id_menu_text_style,
+            name = "TEXT_STYLE",
             titleResId = R.string.module_other_text_style_fragment_title_text_style,
             iconResId = R.drawable.module_other_text_style_fragment_text_style_ic_menu_icon,
             isVisible = { true },

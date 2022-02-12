@@ -6,6 +6,7 @@ import kotlin.math.abs
 
 class ImageFilterShadow: ImageFilter() {
     override val id: Int = EImageFilter.IMAGE_FILTER_SHADOW.id
+    override val name: String = "Shadow"
     override val nameResId: Int = R.string.module_image_filter_shadow_highlight
     override val iconResId: Int = R.drawable.module_image_filter_ic_shadow
 

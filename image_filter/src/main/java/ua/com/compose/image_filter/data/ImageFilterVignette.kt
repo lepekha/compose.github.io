@@ -7,6 +7,7 @@ import kotlin.math.abs
 
 class ImageFilterVignette: ImageFilter() {
     override val id: Int = EImageFilter.IMAGE_FILTER_VIGNETTE.id
+    override val name: String = "Vignette"
     override val nameResId: Int = R.string.module_image_filter_vignette
     override val iconResId: Int = R.drawable.module_image_filter_ic_vignette
 

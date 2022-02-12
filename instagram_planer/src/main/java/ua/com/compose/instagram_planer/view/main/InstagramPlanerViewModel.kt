@@ -227,7 +227,7 @@ class InstagramPlanerViewModel(private val createUserUseCase: CreateUserUseCase,
     fun pressRemoveImage(position: Int) = viewModelScope.launch {
         currentUser?.let { user ->
             val images = getAllUserImagesUseCase.execute(user).toMutableList()
-            imageRemoveUseCase.execute(images[position])
+            imageRemoveUseCase.execute(user, images[position])
             _isVisibleClearAll.postValue((images.size - 1) > 0)
             _removeImage.value = images[position]
         }

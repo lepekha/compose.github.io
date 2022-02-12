@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 apply plugin: 'kotlin-android-extensions'
 
@@ -35,6 +36,12 @@ android {
         }
 
         release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles 'proguard-rules.pro', getDefaultProguardFile('proguard-android.txt')
+        }
+
+        google {
             minifyEnabled true
             shrinkResources true
             proguardFiles 'proguard-rules.pro', getDefaultProguardFile('proguard-android.txt')
@@ -76,6 +83,7 @@ dependencies {
     implementation project(':file_storage')
     implementation project(':other_image_info')
 
+    implementation "com.google.firebase:firebase-analytics:$firebase_version"
     implementation "com.sagar:dslpermission:$dslpermission_version"
     implementation "com.github.madrapps:pikolo:$pikolo_version"
     implementation "androidx.core:core-ktx:$core_ktx_version"

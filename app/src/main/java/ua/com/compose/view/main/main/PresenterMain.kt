@@ -6,11 +6,24 @@ import android.provider.MediaStore.MediaColumns
 import android.database.Cursor
 import android.net.Uri
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ua.com.compose.R
+import ua.com.compose.analytics.Analytics
+import ua.com.compose.analytics.Event
+import ua.com.compose.analytics.SimpleEvent
+import ua.com.compose.analytics.analytics
 import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.core.models.data.MenuObjects
+import ua.com.compose.dialog.DialogManager
+import ua.com.compose.extension.createImageIntent
+import ua.com.compose.extension.loadImage
+import ua.com.compose.extension.saveBitmap
 
 
-class PresenterMain(private val menu: MenuObjects): BaseMvpPresenterImpl<ViewMain>() {
+class PresenterMain(private val menu: MenuObjects, val context: Context, val imageHolder: ImageHolder): BaseMvpPresenterImpl<ViewMain>() {
 
     val photoList = mutableListOf<String>()
 
@@ -21,63 +34,41 @@ class PresenterMain(private val menu: MenuObjects): BaseMvpPresenterImpl<ViewMai
 
     fun getOrCreateMenu(fm: FragmentManager?) = menu.getOrCreateMenu(fm)
 
-    fun pressSave() {
+    fun onCreate(uri: Uri?){
+        addImage(uri ?: imageHolder.image)
+        view?.setVisibleImage(isVisible = imageHolder.image != null)
     }
 
-    fun onCreate(){
-//        uri?.let {
-//            view?.setImage(it)
-//        }
+    fun addImage(uri: Uri?) {
+        val it = uri ?: return
+        imageHolder.image = it
+        view?.setImage(it)
+    }
+
+    fun pressSave() = launch(Dispatchers.Main) {
+        val uri = imageHolder.image ?: return@launch
+        DialogManager.createLoad{}.apply {
+            withContext(Dispatchers.IO) {
+                val bitmap = context.loadImage(uri)
+                context.saveBitmap(bitmap)
+            }
+            analytics.send(event = SimpleEvent(
+                key = Analytics.Event.IMAGE_SAVE
+            ))
+            view?.showAlert(R.string.module_image_crop_fragment_image_crop_save_ready)
+            this.closeDialog()
+        }
+    }
+
+    fun pressRemove() = launch(Dispatchers.Main) {
+        withContext(Dispatchers.IO) {
+            imageHolder.image = null
+        }
+        view?.setVisibleImage(false)
     }
 
     fun updateList(){
         view?.updatePhotoList()
-    }
-
-
-//    fun getCameraImages(context: Context): List<String> {
-//        val projection = arrayOf(MediaStore.Images.Media.DATA)
-//        val selection = MediaStore.Images.Media.BUCKET_ID + " = ?"
-//        val selectionArgs = arrayOf<String>(CAMERA_IMAGE_BUCKET_ID)
-//        val cursor = context.getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI,
-//                projection,
-//                selection,
-//                selectionArgs,
-//                null)
-//        val result = ArrayList<String>(cursor.getCount())
-//        if (cursor.moveToFirst()) {
-//            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//            do {
-//                val ua.com.compose.mvp.data = cursor.getString(dataColumn)
-//                result.add(ua.com.compose.mvp.data)
-//            } while (cursor.moveToNext())
-//        }
-//        cursor.close()
-//        return result
-//    }
-
-    fun getImagesPath(context: Context): MutableList<String> {
-        val uri: Uri
-        val listOfAllImages = ArrayList<String>()
-        val cursor: Cursor?
-        val column_index_data: Int
-        val column_index_folder_name: Int
-        var PathOfImage: String? = null
-        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-
-        val projection = arrayOf(MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
-
-        cursor = context.contentResolver.query(uri, projection, null, null, null)
-
-        column_index_data = cursor!!.getColumnIndexOrThrow(MediaColumns.DATA)
-        column_index_folder_name = cursor!!
-                .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
-        while (cursor!!.moveToNext()) {
-            PathOfImage = cursor!!.getString(column_index_data)
-
-            listOfAllImages.add(PathOfImage)
-        }
-        return listOfAllImages
     }
 }
 

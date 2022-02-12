@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterHaze: ImageFilter() {
     override val id: Int = 3
+    override val name: String = "Haze"
     override val nameResId: Int = R.string.module_image_filter_haze
     override val iconResId: Int = R.drawable.module_image_filter_ic_haze
 

@@ -12,6 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ua.com.compose.analytics.Analytics
+import ua.com.compose.analytics.Event
+import ua.com.compose.analytics.analytics
 import ua.com.compose.dialog.IDialog
 import ua.com.compose.image_crop.R
 import ua.com.compose.mvp.BaseMvpView
@@ -72,6 +75,10 @@ class ImageCropPresenter(val context: Context): BaseMvpPresenterImpl<ImageCropVi
         }.let { uri ->
             view?.saveToResult(uri)
         }
+        analytics.send(event = Event(
+            key = Analytics.Event.CROP_NAME,
+            params = arrayOf("name" to (eCrop.name))
+        ))
         dialog.closeDialog()
     }
 }

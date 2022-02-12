@@ -1,6 +1,15 @@
 package ua.com.compose.mvp
 
-open class BaseMvpPresenterImpl<V : BaseMvpView> : BaseMvpPresenter<V> {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
+
+open class BaseMvpPresenterImpl<V : BaseMvpView> : BaseMvpPresenter<V>, CoroutineScope {
+
+    private var job = Job()
+    override val coroutineContext: CoroutineContext = job + Dispatchers.IO
+
     override fun onBackPress() {
         this.view?.getCurrentActivity()?.onBackPressed()
     }
@@ -14,6 +23,7 @@ open class BaseMvpPresenterImpl<V : BaseMvpView> : BaseMvpPresenter<V> {
      */
     override fun attachView(view: V) {
         this.view = view
+        job = Job()
     }
 
 
@@ -23,6 +33,7 @@ open class BaseMvpPresenterImpl<V : BaseMvpView> : BaseMvpPresenter<V> {
      * Drops the reference to the view when destroyed
      */
     override fun detachView() {
+        job.cancel()
         view = null
     }
 }

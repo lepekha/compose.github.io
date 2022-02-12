@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterOrigin: ImageFilter() {
     override val id: Int = -1
+    override val name: String = "Origin"
     override val nameResId: Int = R.string.module_image_filter_origin
     override val iconResId: Int = -1
 

@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterSharpen: ImageFilter() {
     override val id: Int = EImageFilter.IMAGE_FILTER_SHARPEN.id
+    override val name: String = "Sharpen"
     override val nameResId: Int = R.string.module_image_filter_sharpen
     override val iconResId: Int = R.drawable.module_image_filter_ic_details
 

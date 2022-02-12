@@ -1,5 +1,6 @@
 package ua.com.compose.view.main.main.menuDelegates
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,14 +11,20 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
 import kotlinx.android.synthetic.main.element_menu_icon.view.*
 
-class IconDelegateAdapter : ViewTypeDelegateAdapter {
+class IconDelegateAdapter(val onPress: (item: DynamicMenu) -> Unit) : ViewTypeDelegateAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return ViewHolder(parent).apply {
             this.root.setOnClickListener {
                 innerItem.onPress()
+                onPress(innerItem)
+            }
+            this.txtTitle.setOnClickListener {
+                innerItem.onPress()
+                onPress(innerItem)
             }
             this.root.setVibrate(type = EVibrate.BUTTON)
+            this.txtTitle.setVibrate(type = EVibrate.BUTTON)
         }
     }
 
@@ -42,6 +49,9 @@ class IconDelegateAdapter : ViewTypeDelegateAdapter {
         fun bind(item: DynamicMenu.Icon) {
             innerItem = item
             icon.setImageResource(item.iconResId)
+            item.iconColor?.let { color ->
+                icon.imageTintList = ColorStateList.valueOf(color)
+            }
             txtTitle.setText(item.titleResId)
 //            root.setCardBackgroundColor(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_2), 125))
 //            root.setCardForegroundColor(ColorStateList.valueOf(ColorUtils.setAlphaComponent(root.context.getColorFromAttr(R.attr.color_2), 125)))

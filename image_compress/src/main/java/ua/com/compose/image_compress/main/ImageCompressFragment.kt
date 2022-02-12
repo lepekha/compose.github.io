@@ -106,7 +106,7 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
         }
 
         sbSize.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
-            txtSize.context.vibrate(EVibrate.SLIDER)
+//            txtSize.context.vibrate(EVibrate.SLIDER)
             presenter.onPreviewSizeChange(progress = value.toInt())
         })
 
@@ -125,7 +125,7 @@ class ImageCompressFragment : BaseMvpFragment<ImageCompressView, ImageCompressPr
         }
 
         sbQuality.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
-            txtQuality.context.vibrate(EVibrate.SLIDER)
+//            txtQuality.context.vibrate(EVibrate.SLIDER)
             presenter.onPreviewQualityChange(progress = value.toInt())
         })
 

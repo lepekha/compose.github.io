@@ -1,6 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.firebase_version = '20.1.0'
     ext.kotlin_version = '1.5.21'
     ext.koin_version = '3.1.2'
     ext.room_version = "2.2.6"
@@ -25,6 +26,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'net.sf.proguard:proguard-gradle:6.0.3'
+        classpath 'com.google.gms:google-services:4.3.10'
     }
 }
 

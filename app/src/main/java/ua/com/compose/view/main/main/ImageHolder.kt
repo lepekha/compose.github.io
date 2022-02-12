@@ -1,4 +1,4 @@
-package ua.com.compose.view.main.info
+package ua.com.compose.view.main.main
 
 import android.net.Uri
 

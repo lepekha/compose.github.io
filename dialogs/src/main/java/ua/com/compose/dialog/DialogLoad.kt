@@ -28,6 +28,7 @@ class DialogLoad private constructor() : IDialog {
             this.setCanceledOnTouchOutside(false)
             this.requestWindowFeature(Window.FEATURE_NO_TITLE)
             this.setCancelable(false)
+            this.setCanceledOnTouchOutside(false)
             this.setContentView(R.layout.dialog_load)
             rocketAnimation = this.imgSync.background as AnimatedVectorDrawable
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

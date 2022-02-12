@@ -57,6 +57,7 @@ class DialogInput : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
             this.setCancelable(false)
+            this.setCanceledOnTouchOutside(false)
         }
     }
 

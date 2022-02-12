@@ -13,6 +13,7 @@ import ua.com.compose.file_storage.FileStorage.copyFileToDir
 import ua.com.compose.file_storage.FileStorage.writeToFile
 import ua.com.compose.instagram_planer.data.Image
 import ua.com.compose.instagram_planer.data.User
+import java.util.*
 
 class ImageChangeUriUseCase(private val context: Context, private val database: InstagramPlanerDatabase) {
 
@@ -20,9 +21,10 @@ class ImageChangeUriUseCase(private val context: Context, private val database: 
         return withContext(Dispatchers.IO) {
             FileStorage.removeFile(fileName = image.imageName, dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}")
             val bitmap = context.loadImage(uri)
-            val newUri = bitmap.writeToFile(dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}", fileName = uri.hashCode().toString(), quality = 90)
+            val name = UUID.randomUUID().toString()+".jpg"
+            val newUri = bitmap.writeToFile(dirName = "${database.INSTAGRAM_PLANNER_DIR}/${user.id}", fileName = name, quality = 90)
             image.uri = newUri.toString()
-            image.imageName = uri.hashCode().toString()+".jpg"
+            image.imageName = name
             database.imageDao?.update(image = image)
         }
     }

@@ -43,9 +43,9 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         presenter.detachView()
+        super.onDestroyView()
     }
 
     override fun backPress(byBack: Boolean): Boolean {

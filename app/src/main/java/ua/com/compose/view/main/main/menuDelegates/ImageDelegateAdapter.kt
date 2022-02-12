@@ -11,16 +11,21 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
 import kotlinx.android.synthetic.main.element_menu_image.view.*
 
-class ImageDelegateAdapter(val onPress: () -> Unit): ViewTypeDelegateAdapter {
+class ImageDelegateAdapter(val onPress: (item: DynamicMenu) -> Unit): ViewTypeDelegateAdapter {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return ViewHolder(parent).apply {
             this.root.setOnClickListener {
                 innerItem.onPress()
-                onPress()
+                onPress(innerItem)
+            }
+            this.txtTitle.setOnClickListener {
+                innerItem.onPress()
+                onPress(innerItem)
             }
             this.root.setVibrate(type = EVibrate.BUTTON)
+            this.txtTitle.setVibrate(type = EVibrate.BUTTON)
         }
     }
 

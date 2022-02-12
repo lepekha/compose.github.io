@@ -5,4 +5,6 @@ import ua.com.compose.mvp.BaseMvpView
 
 interface ViewMain : BaseMvpView {
     fun updatePhotoList()
+    fun setVisibleImage(isVisible: Boolean)
+    fun setImage(uri: Uri)
 }

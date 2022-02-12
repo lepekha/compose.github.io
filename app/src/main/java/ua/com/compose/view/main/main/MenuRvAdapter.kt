@@ -11,7 +11,7 @@ import ua.com.compose.mvp.adapters.ViewTypeDelegateAdapter
 import ua.com.compose.core.models.data.DynamicMenu
 import ua.com.compose.view.main.main.menuDelegates.*
 
-class MenuRvAdapter(private val items: List<DynamicMenu>, private val onPress: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MenuRvAdapter(private val items: List<DynamicMenu>, private val onPress: (item: DynamicMenu) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val VIEW_TYPE_IMAGE = 1
@@ -23,7 +23,7 @@ class MenuRvAdapter(private val items: List<DynamicMenu>, private val onPress: (
 
     init {
         mDelegateAdapters.put(VIEW_TYPE_IMAGE, ImageDelegateAdapter(onPress = onPress))
-        mDelegateAdapters.put(VIEW_TYPE_ICON, IconDelegateAdapter())
+        mDelegateAdapters.put(VIEW_TYPE_ICON, IconDelegateAdapter(onPress = onPress))
         mDelegateAdapters.put(VIEW_TYPE_GRID, GridDelegateAdapter(onPress = onPress))
     }
 

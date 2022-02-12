@@ -11,7 +11,7 @@ import ua.com.compose.core.models.data.DynamicMenu
 import ua.com.compose.view.main.main.MenuRvAdapter
 import kotlinx.android.synthetic.main.element_menu_list.view.*
 
-class GridDelegateAdapter(private val onPress: () -> Unit) : ViewTypeDelegateAdapter {
+class GridDelegateAdapter(private val onPress: (item: DynamicMenu) -> Unit) : ViewTypeDelegateAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return ViewHolder(parent).apply {

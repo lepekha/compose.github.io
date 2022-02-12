@@ -13,7 +13,7 @@ object FileStorage {
     private var dir: String = ""
 
     fun init(context: Context) {
-        dir = context.cacheDir.path
+        dir = context.filesDir.path
     }
 
     suspend fun Bitmap.writeToFile(fileName: String, dirName: String? = null, quality: Int = 100): Uri {
@@ -76,7 +76,7 @@ object FileStorage {
         val dirPath = makeDir(dirName)
         val outputFile = File(dirPath, fileName)
         if (outputFile.exists()) {
-            outputFile.delete()
+            outputFile.absoluteFile.delete()
         }
     }
 

@@ -8,6 +8,9 @@ import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilterGroup
 import kotlinx.coroutines.*
+import ua.com.compose.analytics.Analytics
+import ua.com.compose.analytics.Event
+import ua.com.compose.analytics.analytics
 import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.dialog.DialogManager
 import ua.com.compose.dialog.IDialog
@@ -190,6 +193,10 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
             historyFilters.add(ImageFilterOrigin())
         }
         currentFilter?.let { historyFilters.add(it) }
+        analytics.send(event = Event(
+            key = Analytics.Event.FILTER_NAME,
+            params = arrayOf("name" to (currentFilter?.name ?: ""))
+        ))
         currentFilter = null
         gpuSampleFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters)))
         view?.initMenuFilters()

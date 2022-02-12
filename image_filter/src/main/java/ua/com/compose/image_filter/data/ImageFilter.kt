@@ -6,6 +6,7 @@ interface Filter
 
 sealed class ImageFilter: Filter {
     abstract val id: Int
+    abstract val name: String
     abstract val nameResId: Int
     abstract val iconResId: Int
     abstract val filter: GPUImageFilter

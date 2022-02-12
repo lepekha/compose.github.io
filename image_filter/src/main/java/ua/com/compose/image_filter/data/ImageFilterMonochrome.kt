@@ -5,6 +5,7 @@ import ua.com.compose.image_filter.R
 
 class ImageFilterMonochrome: ImageFilter() {
     override val id: Int = 12
+    override val name: String = "Monochrome"
     override val nameResId: Int = R.string.module_image_filter_monochrome
     override val iconResId: Int = R.drawable.module_image_filter_ic_tune
 

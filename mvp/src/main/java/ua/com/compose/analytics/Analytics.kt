@@ -11,7 +11,7 @@ interface Analytics {
             const val IMAGE_SAVE = "image_save"
             const val IMAGE_SHARE = "image_share"
             const val MAIN_MENU = "main_menu"
-            const val FILTER_NAME = "filter_name"
+            const val FILTER_NAME = "filters"
             const val CROP_NAME = "crop_name"
         }
     }

@@ -34,7 +34,6 @@
             android:layout_marginStart="80dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="80dp"
-            android:drawableEnd="@drawable/ic_expand_more"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:paddingStart="50dp"

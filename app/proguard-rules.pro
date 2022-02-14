@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 -ignorewarnings
 #-keep class javax.** { *; }
-
+-printmapping mapping.txt
 -dontwarn rx.**
 
 -dontwarn okio.**

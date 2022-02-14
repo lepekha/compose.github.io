@@ -195,7 +195,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         currentFilter?.let { historyFilters.add(it) }
         analytics.send(event = Event(
             key = Analytics.Event.FILTER_NAME,
-            params = arrayOf("name" to (currentFilter?.name ?: ""))
+            params = arrayOf("filter_name" to (currentFilter?.name ?: ""))
         ))
         currentFilter = null
         gpuSampleFilter.setFilter(GPUImageFilterGroup(getAllFilters(historyFilters)))

@@ -4,6 +4,7 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -32,7 +33,10 @@ class GalleryFoldersRvAdapter(private val folders: List<ImageFolder>, val onPres
         val folder = folders[position]
         holder.txtName.text = folder.name
         holder.txtCount.text = folder.images.count().toString()
-        Glide.with(holder.imgPhoto.context).load(folder.images.first()).centerInside().thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imgPhoto)
+        holder.imgPhoto.isVisible = folder.images.isNotEmpty()
+        folder.images.firstOrNull()?.let {
+            Glide.with(holder.imgPhoto.context).load(it).centerInside().thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imgPhoto)
+        }
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

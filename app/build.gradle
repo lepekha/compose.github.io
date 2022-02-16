@@ -21,9 +21,9 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "ua.com.compose"
-        minSdkVersion 21
+        minSdkVersion 26
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

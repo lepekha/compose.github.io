@@ -120,7 +120,7 @@ class FragmentMain : BaseMvpFragment<ViewMain, PresenterMain>(), ViewMain {
 
     private fun initList() {
         menuList.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        mMenuRvAdapter = MenuRvAdapter(presenter.getOrCreateMenu(fm = fragmentManager)){
+        mMenuRvAdapter = MenuRvAdapter(presenter.getOrCreateMenu(fm = requireActivity().supportFragmentManager)){
             analytics.send(event = Event(
                 key = Analytics.Event.MAIN_MENU,
                 params = arrayOf("name" to it.name)

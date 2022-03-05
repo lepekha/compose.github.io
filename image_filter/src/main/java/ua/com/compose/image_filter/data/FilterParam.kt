@@ -3,7 +3,9 @@ package ua.com.compose.image_filter.data
 import com.google.gson.annotations.Expose
 import kotlin.math.abs
 
-interface FilterParam
+interface FilterParam {
+    fun setParam(value: String)
+}
 
 data class FilterValueParam(val nameResId: Int = -1, val minValue: Float = 0f, val maxValue: Float = 0f, val defValue: Float = 0f, val step: Float = 1f, val onPercent:(value: Float) -> Unit = {}, val onChange:(value: Float) -> Unit = {}) :
     FilterParam {
@@ -25,5 +27,13 @@ data class FilterValueParam(val nameResId: Int = -1, val minValue: Float = 0f, v
         }else{
             ((maxValue - defValue) * abs(percentage) / 100) + defValue
         }
+    }
+
+    override fun toString(): String {
+        return value.toString()
+    }
+
+    override fun setParam(value: String) {
+        onChange(value.toFloat())
     }
 }

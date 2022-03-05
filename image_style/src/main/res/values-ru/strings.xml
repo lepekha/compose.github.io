@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_image_style_title">Стиль</string>
+    <string name="module_image_style_share">Поделиться текущим стилем</string>
+    <string name="module_image_style_remove">Удалить текущий стиль?</string>
+    <string name="module_image_style_qr_correct">Стиль добавлен</string>
+    <string name="module_image_style_qr_wrong">QR-код не из Compos</string>
+    <string name="module_image_style_qr_is_add_style">Добавить \"%1$s\"?</string>
+</resources>

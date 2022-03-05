@@ -1,5 +1,7 @@
 <resources>
     <string name="module_image_filter_title">Filter</string>
+    <string name="module_image_filter_style_name">Style name</string>
+    <string name="module_image_filter_style_created">Style created</string>
     <string name="module_image_filter_vibrance">Vibrance</string>
     <string name="module_image_filter_rgb">RGB</string>
     <string name="module_image_filter_monochrome">Monochrome</string>

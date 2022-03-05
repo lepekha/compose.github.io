@@ -26,16 +26,18 @@ class DialogInput : BottomSheetDialogFragment() {
         private const val BUNDLE_KEY_SINGLE_LINE = "BUNDLE_KEY_SINGLE_LINE"
         private const val BUNDLE_KEY_HINT = "BUNDLE_KEY_HINT"
         private const val BUNDLE_KEY_TEXT = "BUNDLE_KEY_TEXT"
+        private const val BUNDLE_KEY_TITLE = "BUNDLE_KEY_TITLE"
         const val BUNDLE_KEY_INPUT_MESSAGE = "BUNDLE_KEY_INPUT_MESSAGE"
         private const val BUNDLE_KEY_REQUEST_KEY = "BUNDLE_KEY_REQUEST_KEY"
 
-        fun show(fm: FragmentManager, hint: String = "", text: String? = null, singleLine: Boolean = false): String {
+        fun show(fm: FragmentManager, title: String, hint: String = "", text: String? = null, singleLine: Boolean = false): String {
             val requestKey = System.currentTimeMillis().toString()
             val fragment = DialogInput().apply {
                 this.arguments = bundleOf(
                         BUNDLE_KEY_SINGLE_LINE to singleLine,
                         BUNDLE_KEY_HINT to hint,
                         BUNDLE_KEY_TEXT to text,
+                        BUNDLE_KEY_TITLE to title,
                         BUNDLE_KEY_REQUEST_KEY to requestKey
                 )
             }
@@ -64,14 +66,15 @@ class DialogInput : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.getString(BUNDLE_KEY_TEXT)?.let {
-            editText.setText(it)
+        arguments?.getString(BUNDLE_KEY_TITLE)?.let {
+            txtMessage.text = it
         }
         editText.hint = arguments?.getString(BUNDLE_KEY_HINT) ?: ""
         editText.isSingleLine = arguments?.getBoolean(BUNDLE_KEY_SINGLE_LINE, false) ?: false
 
         editText.onTextChangedListener {
             btnCopy.isVisible = it.isNotEmpty()
+            btnDone.isVisible = it.isNotEmpty() || it.isNotBlank()
         }
 
         btnCancel.setVibrate(EVibrate.BUTTON)
@@ -89,6 +92,12 @@ class DialogInput : BottomSheetDialogFragment() {
         btnDone.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to editText.text.toString()))
             dismiss()
+        }
+
+        btnDone.isVisible = false
+        arguments?.getString(BUNDLE_KEY_TEXT)?.let {
+            editText.setText(it)
+            btnDone.isVisible = it.isNotEmpty() || it.isNotBlank()
         }
     }
 

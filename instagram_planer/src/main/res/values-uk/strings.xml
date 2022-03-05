@@ -2,7 +2,7 @@
 <resources>
     <string name="module_instagram_palaner_title">Візуал</string>
     <string name="module_instagram_palaner_image_title">Перегляд</string>
-    <string name="module_instagram_palaner_wall_name">Введіть назву облікового запису</string>
+    <string name="module_instagram_palaner_wall_name">Назва облікового запису</string>
     <string name="module_instagram_palaner_clear_account">Очистити поточний обліковий запис?</string>
     <string name="module_instagram_palaner_remove_account">Видалити поточний обліковий запис?</string>
     <string name="module_instagram_palaner_user_already_contain">Обліковий запис вже існує</string>

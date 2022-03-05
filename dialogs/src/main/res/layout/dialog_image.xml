@@ -10,7 +10,7 @@
     tools:background="#201F1F">
 
     <TextView
-        android:id="@+id/txtMessage"
+        android:id="@+id/txtMessage2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -38,58 +38,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editText"
-        style="@style/EditTextBottomSheet"
-        android:layout_width="0dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine"
-        android:lines="1"
-        android:paddingStart="55dp"
-        android:paddingEnd="50dp"
-        android:textColor="?attr/color_2"
-        android:textColorHint="?attr/color_2"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMessage"
-        app:layout_constraintWidth_percent="0.8" />
-
-    <ImageView
-        android:id="@+id/btnCopy"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="16dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="5dp"
-        app:tint="?attr/color_1"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
-        app:layout_constraintEnd_toEndOf="@+id/editText"
-        app:layout_constraintTop_toTopOf="@+id/editText"
-        app:srcCompat="@drawable/ic_close" />
-
-    <ImageView
-        android:id="@+id/search"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
         android:layout_marginStart="16dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        app:tint="?attr/color_1"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
-        app:layout_constraintStart_toStartOf="@+id/editText"
-        app:layout_constraintTop_toTopOf="@+id/editText"
-        app:srcCompat="@drawable/ic_text_fields" />
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="400dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtMessage2"
+        app:layout_goneMarginTop="45dp"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btnDone"
+        android:id="@+id/btnShare"
         android:layout_width="80dp"
         android:layout_height="50dp"
         android:layout_marginTop="40dp"
@@ -100,43 +64,40 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCancel"
-        app:layout_constraintTop_toBottomOf="@id/editText"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btnLoad"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintWidth_percent="0.3">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_9"
-            app:srcCompat="@drawable/ic_done" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btnCancel"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        app:cardBackgroundColor="?attr/color_8"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnDone"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.3">
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_close"
+            app:srcCompat="@drawable/ic_share"
             app:tint="?attr/color_9" />
     </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnLoad"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="?attr/color_8"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnShare"
+        app:layout_constraintEnd_toStartOf="@+id/btnShare"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnShare"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.3">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_download"
+            app:tint="?attr/color_9" />
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

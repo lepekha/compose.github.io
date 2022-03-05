@@ -21,8 +21,8 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "ua.com.compose"
-        minSdkVersion 26
-        versionCode 1
+        minSdkVersion 24
+        versionCode 2
         versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -66,6 +66,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':image_filter')
+    implementation project(':image_style')
     implementation project(':image_crop')
     implementation project(':instagram_no_crop')
     implementation project(':instagram_panorama')

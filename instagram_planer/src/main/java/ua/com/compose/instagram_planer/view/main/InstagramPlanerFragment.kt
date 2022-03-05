@@ -330,8 +330,7 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
     }
 
     private fun createDialogInputName(text: String?){
-        text ?: return
-        val request = DialogInput.show(fm = getCurrentActivity().supportFragmentManager, text = text, singleLine = true)
+        val request = DialogInput.show(fm = getCurrentActivity().supportFragmentManager, title = requireContext().getString(R.string.module_instagram_palaner_wall_name), text = text, singleLine = true)
         setFragmentResultListener(request) { _, bundle ->
             viewModel.onInputName(bundle.getString(DialogInput.BUNDLE_KEY_INPUT_MESSAGE))
         }

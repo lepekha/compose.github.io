@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="module_image_filter_title">Фильтр</string>
+    <string name="module_image_filter_style_name">Название стиля</string>
+    <string name="module_image_filter_style_created">Стиль создан</string>
     <string name="module_image_filter_vibrance">Сочность</string>
     <string name="module_image_filter_rgb">RGB</string>
     <string name="module_image_filter_monochrome">Монохромный</string>

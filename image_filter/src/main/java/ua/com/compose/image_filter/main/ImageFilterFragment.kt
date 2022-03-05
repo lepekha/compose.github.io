@@ -37,6 +37,7 @@ import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilterGroup
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageGrayscaleFilter
 import kotlinx.android.synthetic.main.module_image_filter_fragment_filter.*
 import ua.com.compose.dialog.dialogs.DialogConfirmation
+import ua.com.compose.dialog.dialogs.DialogInput
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 import ua.com.compose.image_filter.di.Scope
@@ -97,17 +98,6 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         }
     }
 
-    private val btnPreview by lazy {
-        BottomMenu(iconResId = ua.com.compose.R.drawable.ic_eye) {
-            list.isVisible = false
-            if(presenter.historyFilters.isNotEmpty()){
-                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnHistory, btnFilters))
-            }else{
-                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnFilters))
-            }
-        }
-    }
-
     private val btnGallery by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_gallery) {
             openGallery()
@@ -125,6 +115,19 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         BottomMenu(iconResId = R.drawable.module_image_filter_ic_history) {
             list.isVisible = true
             presenter.pressMenuHistory()
+        }
+    }
+
+    private val btnStyleAdd by lazy {
+        BottomMenu(iconResId = R.drawable.module_image_filter_ic_style_add) {
+            createDialogInputStyleName()
+        }
+    }
+
+    private fun createDialogInputStyleName() {
+        val request = DialogInput.show(fm = childFragmentManager, title = requireContext().getString(R.string.module_image_filter_style_name), singleLine = true)
+        childFragmentManager.setFragmentResultListener(request, viewLifecycleOwner) { _, bundle ->
+            presenter.onInputStyleName(bundle.getString(DialogInput.BUNDLE_KEY_INPUT_MESSAGE))
         }
     }
 
@@ -146,9 +149,9 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         setVisibleBack(isVisible = true)
         if(presenter.historyFilters.isNotEmpty()){
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnHistory, btnPreview, btnDone))
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnStyleAdd, btnHistory, btnDone))
         }else{
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnPreview, btnDone))
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnDone))
         }
     }
 
@@ -188,6 +191,7 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         setTitle(getCurrentContext().getString(R.string.module_image_filter_title))
         imgView.setZOrderOnTop(true)
         presenter.gpuSampleFilter.setGLSurfaceView(imgView)
+
         childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             val uris = (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>()
             presenter.onAddImage(uris)

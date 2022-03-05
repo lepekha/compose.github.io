@@ -19,4 +19,33 @@ class RemoteConfigImpl: RemoteConfigSetup(), IRemoteConfig {
         get() = read<Boolean>(ConfigParam.MENU_INSTAGRAM_GRID) ?: true
     override val isMenuInstagramPanorama: Boolean
         get() = read<Boolean>(ConfigParam.MENU_INSTAGRAM_PANORAMA) ?: true
+
+    override val isFilterContrast: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_CONTRAST) ?: true
+    override val isFilterBrightness: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_BRIGHTNESS) ?: true
+    override val isFilterSaturation: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_SATURATION) ?: true
+    override val isFilterVibrance: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_VIBRANCE) ?: true
+    override val isFilterExposure: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_EXPOSURE) ?: true
+    override val isFilterTemperature: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_TEMPERATURE) ?: true
+    override val isFilterGamma: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_GAMMA) ?: true
+    override val isFilterRGB: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_RGB) ?: true
+    override val isFilterSharpen: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_SHARPEN) ?: true
+    override val isFilterVignette: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_VIGNETTE) ?: true
+    override val isFilterBlackAndWhite: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_BLACK_AND_WHITE) ?: true
+    override val isFilterShadow: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_SHADOW) ?: true
+    override val isFilterUV: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_UV) ?: true
+    override val isFilterSepia: Boolean
+        get() = read<Boolean>(ConfigParam.FILTER_SEPIA) ?: false
 }

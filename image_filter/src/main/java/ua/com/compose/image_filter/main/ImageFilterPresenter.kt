@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.net.Uri
 import android.os.Build
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilterGroup
@@ -11,11 +13,14 @@ import kotlinx.coroutines.*
 import ua.com.compose.analytics.Analytics
 import ua.com.compose.analytics.Event
 import ua.com.compose.analytics.analytics
-import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.dialog.DialogManager
 import ua.com.compose.dialog.IDialog
 import ua.com.compose.extension.createTempUri
+import ua.com.compose.extension.get
+import ua.com.compose.extension.prefs
+import ua.com.compose.image_filter.R
 import ua.com.compose.image_filter.data.*
+import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.mvp.BaseMvpView
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -27,6 +32,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     private var image: Bitmap? = null
     var sampleImage: Bitmap? = null
     private var dialogLoad: IDialog? = null
+    private val gson = GsonBuilder().create()
 
     val filters = EImageFilter.visibleFilters.map { it.createFilter() }
 
@@ -119,6 +125,20 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         view?.initMenuFilters()
     }
 
+    fun onInputStyleName(value: String?) {
+        val name = value ?: return
+        val styles = Style.loadStyles()
+        val style = Style().apply {
+            this.appBuildVersion = "1"
+            this.name = name
+            this.setFilters(historyFilters.takeLast(historyFilters.size - 1))
+        }
+
+        styles.add(style)
+        Style.saveStyles(styles)
+        view?.showAlert(R.string.module_image_filter_style_created)
+    }
+
     fun pressMenuHistory(){
         type = EMenuType.HISTORY
         view?.initHistory()
@@ -162,7 +182,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         }
     }
 
-    private suspend fun saveAllFilters(){
+    private suspend fun saveAllFilters() {
         val dialog = DialogManager.createLoad{}
         withContext(Dispatchers.IO) {
             this@ImageFilterPresenter.image?.let { bitmap ->

@@ -2,24 +2,19 @@ package ua.com.compose.image_filter.main
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,13 +23,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
-import jp.co.cyberagent.android.gpuimage.GLTextureView
-import jp.co.cyberagent.android.gpuimage.GPUImage
-import jp.co.cyberagent.android.gpuimage.GPUImageView
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageBrightnessFilter
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilterGroup
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageGrayscaleFilter
 import kotlinx.android.synthetic.main.module_image_filter_fragment_filter.*
 import ua.com.compose.dialog.dialogs.DialogConfirmation
 import ua.com.compose.dialog.dialogs.DialogInput
@@ -45,10 +33,10 @@ import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.image_filter.R
 import ua.com.compose.image_filter.data.ImageFilter
-import ua.com.compose.image_maker.FrameImageView
 import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
+import ua.com.compose.navigator.back
 
 
 class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresenter>(), ImageFilterView {
@@ -58,11 +46,13 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         const val REQUEST_KEY = "REQUEST_KEY_IMAGE"
 
         const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
+        const val BUNDLE_KEY_IMAGE_FROM_STYLE = "BUNDLE_KEY_IMAGE_FROM_STYLE"
 
-        fun newInstance(uri: Uri?): ImageFilterFragment {
+        fun newInstance(uri: Uri?, isFromStyle: Boolean = false): ImageFilterFragment {
             return ImageFilterFragment().apply {
                 arguments = bundleOf(
-                    BUNDLE_KEY_IMAGE_URI to uri
+                    BUNDLE_KEY_IMAGE_URI to uri,
+                    BUNDLE_KEY_IMAGE_FROM_STYLE to isFromStyle
                 )
             }
         }
@@ -101,6 +91,8 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     private val btnGallery by lazy {
         BottomMenu(iconResId = ua.com.compose.R.drawable.ic_gallery) {
             openGallery()
+        }.apply {
+            this.isVisible = { !presenter.isFromStyle }
         }
     }
 
@@ -121,10 +113,12 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
     private val btnStyleAdd by lazy {
         BottomMenu(iconResId = R.drawable.module_image_filter_ic_style_add) {
             createDialogInputStyleName()
+        }.apply {
+            this.isVisible = { !presenter.isFromStyle }
         }
     }
 
-    private fun createDialogInputStyleName() {
+    override fun createDialogInputStyleName() {
         val request = DialogInput.show(fm = childFragmentManager, title = requireContext().getString(R.string.module_image_filter_style_name), singleLine = true)
         childFragmentManager.setFragmentResultListener(request, viewLifecycleOwner) { _, bundle ->
             presenter.onInputStyleName(bundle.getString(DialogInput.BUNDLE_KEY_INPUT_MESSAGE))
@@ -149,9 +143,9 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         setTitle(title = requireContext().getString(R.string.module_image_filter_title))
         setVisibleBack(isVisible = true)
         if(presenter.historyFilters.isNotEmpty()){
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnStyleAdd, btnHistory, btnDone))
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnHistory, btnStyleAdd, btnDone))
         }else{
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnDone))
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnStyleAdd, btnDone))
         }
     }
 
@@ -191,6 +185,8 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
         setTitle(getCurrentContext().getString(R.string.module_image_filter_title))
         imgView.setZOrderOnTop(true)
         presenter.gpuSampleFilter.setGLSurfaceView(imgView)
+
+        presenter.isFromStyle = arguments?.getBoolean(BUNDLE_KEY_IMAGE_FROM_STYLE) ?: false
 
         childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             val uris = (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>()
@@ -283,11 +279,19 @@ class ImageFilterFragment : BaseMvpFragment<ImageFilterView, ImageFilterPresente
             val request = DialogConfirmation.show(fm = requireActivity().supportFragmentManager, message = requireContext().getString(R.string.module_image_filter_exit_without_save))
             setFragmentResultListener(request) { _, bundle ->
                 if(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER)){
-                    super.backToMain()
+                    backToPrev()
                 }
             }
         }else{
+            backToPrev()
+        }
+    }
+
+    private fun backToPrev() {
+        if(!presenter.isFromStyle){
             super.backToMain()
+        }else{
+            requireActivity().supportFragmentManager.back()
         }
     }
 

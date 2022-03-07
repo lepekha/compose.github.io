@@ -5,6 +5,8 @@ class RemoteConfigImpl: RemoteConfigSetup(), IRemoteConfig {
         get() = read<Boolean>(ConfigParam.MENU_TEXT_STYLE) ?: true
     override val isMenuImageFilter: Boolean
         get() = read<Boolean>(ConfigParam.MENU_IMAGE_FILTER) ?: true
+    override val isMenuImageStyle: Boolean
+        get() = read<Boolean>(ConfigParam.MENU_IMAGE_STYLE) ?: true
     override val isMenuImageCrop: Boolean
         get() = read<Boolean>(ConfigParam.MENU_IMAGE_CROP) ?: true
     override val isMenuImageRotate: Boolean

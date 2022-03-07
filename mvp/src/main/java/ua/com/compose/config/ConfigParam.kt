@@ -9,6 +9,7 @@ enum class ConfigParam(val key: String) {
     MENU_IMAGE_ROTATE("menu_image_rotate"),
     MENU_IMAGE_CROP("menu_image_crop"),
     MENU_IMAGE_FILTER("menu_image_filter"),
+    MENU_IMAGE_STYLE("menu_image_style"),
     MENU_TEXT_STYLE("menu_text_style"),
 
     FILTER_CONTRAST("filter_contrast"),

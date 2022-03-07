@@ -32,8 +32,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
     private var image: Bitmap? = null
     var sampleImage: Bitmap? = null
     private var dialogLoad: IDialog? = null
-    private val gson = GsonBuilder().create()
-
+    var isFromStyle = false
     val filters = EImageFilter.visibleFilters.map { it.createFilter() }
 
     var historyFilters = mutableListOf<ImageFilter>()
@@ -136,6 +135,11 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
 
         styles.add(style)
         Style.saveStyles(styles)
+        if(isDoneForStyle) {
+            historyFilters.clear()
+            currentFilter = null
+            view?.backToMain()
+        }
         view?.showAlert(R.string.module_image_filter_style_created)
     }
 
@@ -174,11 +178,19 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         }
     }
 
+    var isDoneForStyle = false
     fun pressDone() = CoroutineScope(Dispatchers.Main).launch {
-        if(currentFilter != null){
-            applyCurrentFilter()
-        }else{
-            saveAllFilters()
+        when {
+            currentFilter != null -> {
+                applyCurrentFilter()
+            }
+            isFromStyle -> {
+                isDoneForStyle = true
+                view?.createDialogInputStyleName()
+            }
+            else -> {
+                saveAllFilters()
+            }
         }
     }
 

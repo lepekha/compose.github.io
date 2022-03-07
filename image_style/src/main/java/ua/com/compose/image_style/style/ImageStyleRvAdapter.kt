@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,12 +15,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.card.MaterialCardView
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilterGroup
-import kotlinx.android.synthetic.main.module_image_filter_element_style.view.*
+import kotlinx.android.synthetic.main.module_image_style_element_style.view.*
 import ua.com.compose.extension.*
-import ua.com.compose.image_filter.R
-import ua.com.compose.image_filter.data.ImageFilter
+import ua.com.compose.image_style.R
 import ua.com.compose.image_filter.data.Style
-import ua.com.compose.image_filter.main.ImageFilterHistoryRvAdapter
 
 
 class ImageStyleRvAdapter(val context: Context,
@@ -42,7 +39,7 @@ class ImageStyleRvAdapter(val context: Context,
     override fun getItemCount(): Int = styles.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.module_image_filter_element_style, parent, false)).apply {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.module_image_style_element_style, parent, false)).apply {
             this.container.setVibrate(EVibrate.BUTTON)
             this.container.setOnClickListener {
                 currentPosition = adapterPosition
@@ -79,6 +76,7 @@ class ImageStyleRvAdapter(val context: Context,
     private fun changeTextColor(holder: ViewHolder, position: Int) {
         if(position == currentPosition){
             holder.btnRoot.isVisible = true
+            holder.btnRemove.isVisible = !styles[position].app
             holder.txtTitle.setTextColor(holder.txtTitle.context.getColorFromAttr(R.attr.color_14))
         }else{
             holder.btnRoot.isVisible = false

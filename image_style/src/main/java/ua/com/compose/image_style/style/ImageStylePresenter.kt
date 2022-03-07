@@ -20,7 +20,7 @@ import kotlin.math.min
 
 class ImageStylePresenter(val context: Context): BaseMvpPresenterImpl<ImageStyleView>() {
 
-    private var currentUri: Uri? = null
+    var currentUri: Uri? = null
     var image: Bitmap? = null
     var previewImage: Bitmap? = null
     var currentStyle: Style? = null
@@ -43,9 +43,9 @@ class ImageStylePresenter(val context: Context): BaseMvpPresenterImpl<ImageStyle
 
     private var dialogLoad: IDialog? = null
 
-    val styles = Style.loadStyles()
+    val styles = mutableListOf<Style>()
 
-    fun onAddImage(uris: List<Uri>){
+    fun onAddImage(uris: List<Uri>) {
         if(uris.isEmpty() && this.currentUri != null) return
         val currentUri = uris.firstOrNull() ?: this.currentUri
         when{
@@ -61,8 +61,10 @@ class ImageStylePresenter(val context: Context): BaseMvpPresenterImpl<ImageStyle
         }
     }
 
-    fun onCreate(uri: Uri?){
-        this.currentUri = uri
+    fun onCreate(uri: Uri?) {
+        styles.clear()
+        styles.addAll(Style.loadStyles())
+        this.currentUri = this.currentUri ?: uri
         val currentUri = this.currentUri
         if(currentUri != null) {
             dialogLoad = DialogManager.createLoad {  }

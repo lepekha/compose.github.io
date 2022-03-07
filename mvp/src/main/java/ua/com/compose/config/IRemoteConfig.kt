@@ -5,6 +5,7 @@ lateinit var remoteConfig: IRemoteConfig
 interface IRemoteConfig {
     val isMenuTextStyle: Boolean
     val isMenuImageFilter: Boolean
+    val isMenuImageStyle: Boolean
     val isMenuImageCrop: Boolean
     val isMenuImageRotate: Boolean
     val isMenuImageCompress: Boolean

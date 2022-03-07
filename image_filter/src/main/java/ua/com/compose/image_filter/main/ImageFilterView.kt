@@ -18,4 +18,5 @@ interface ImageFilterView : BaseMvpView {
     fun updateList()
     fun vibrateToShowHistory()
     fun setVisibleContent(isVisible: Boolean)
+    fun createDialogInputStyleName()
 }

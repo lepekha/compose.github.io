@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,17 +21,18 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanQRCode
-import io.github.g00fy2.quickie.config.ScannerConfig
-import kotlinx.android.synthetic.main.module_image_filter_fragment_style.*
+import kotlinx.android.synthetic.main.module_image_style_fragment_style.*
+import ua.com.compose.config.remoteConfig
 import ua.com.compose.dialog.dialogs.DialogConfirmation
 import ua.com.compose.dialog.dialogs.DialogImage
-import ua.com.compose.dialog.dialogs.DialogInput
 import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.gallery.main.FragmentGallery
+import ua.com.compose.image_filter.main.ImageFilterFragment
 import ua.com.compose.image_style.R
 import ua.com.compose.image_style.di.Scope
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
+import ua.com.compose.navigator.replace
 
 
 class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(), ImageStyleView {
@@ -56,12 +56,12 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
     override val presenter: ImageStylePresenter by lazy { Scope.IMAGE_STYLE.get() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.module_image_filter_fragment_style, container, false)
+        return inflater.inflate(R.layout.module_image_style_fragment_style, container, false)
     }
 
     private val scanQrCode = registerForActivityResult(ScanQRCode(), ::handleResult)
     private val btnQRScanner by lazy {
-        BottomMenu(iconResId =  ua.com.compose.image_style.R.drawable.module_image_style_ic_qr_scanner) {
+        BottomMenu(iconResId = R.drawable.module_image_style_ic_qr_scanner) {
             scanQrCode.launch(null)
         }
     }
@@ -85,9 +85,21 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
         }
     }
 
+    private val btnFilters by lazy {
+        BottomMenu(iconResId = ua.com.compose.image_filter.R.drawable.module_image_filter_ic_style_add) {
+            requireActivity().supportFragmentManager.replace(
+                fragment = ImageFilterFragment.newInstance(uri = presenter.currentUri, isFromStyle = true),
+                addToBackStack = true
+            )
+        }.apply {
+            this.isVisible = { remoteConfig.isMenuImageFilter }
+        }
+    }
+
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
             this.add(btnGallery)
+            this.add(btnFilters)
             this.add(btnQRScanner)
             this.add(btnDone)
         }

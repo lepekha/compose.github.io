@@ -79,7 +79,7 @@
                 android:startOffset="201"
                 android:duration="201"
                 android:valueFrom="#ffffff"
-                android:valueTo="#2196f3"
+                android:valueTo="#ffeb3b"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
@@ -91,7 +91,7 @@
                 android:startOffset="402"
                 android:duration="200"
                 android:valueFrom="#ffffff"
-                android:valueTo="#f44336"
+                android:valueTo="#2196f3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
@@ -103,7 +103,7 @@
                 android:startOffset="402"
                 android:duration="200"
                 android:valueFrom="#ffffff"
-                android:valueTo="#f44336"
+                android:valueTo="#ffeb3b"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
@@ -115,7 +115,7 @@
                 android:startOffset="602"
                 android:duration="202"
                 android:valueFrom="#ffffff"
-                android:valueTo="#4caf50"
+                android:valueTo="#ffeb3b"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
@@ -127,7 +127,7 @@
                 android:startOffset="602"
                 android:duration="202"
                 android:valueFrom="#ffffff"
-                android:valueTo="#4caf50"
+                android:valueTo="#2196f3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
@@ -151,7 +151,7 @@
                 android:startOffset="804"
                 android:duration="196"
                 android:valueFrom="#ffffff"
-                android:valueTo="#ffeb3b"
+                android:valueTo="#2196f3"
                 android:valueType="colorType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>

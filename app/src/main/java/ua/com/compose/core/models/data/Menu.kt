@@ -15,6 +15,7 @@ import ua.com.compose.image_compress.main.ImageCompressFragment
 import ua.com.compose.image_filter.main.ImageFilterFragment
 import ua.com.compose.image_rotate.main.ImageRotateFragment
 import ua.com.compose.image_style.style.ImageStyleFragment
+import ua.com.compose.other_color_pick.main.ColorPickFragment
 import ua.com.compose.view.main.main.ImageHolder
 import java.lang.ref.WeakReference
 
@@ -243,6 +244,21 @@ class MenuObjects(private val imageHolder: ImageHolder) {
             },
         ).apply {
             isVisible = { remoteConfig.isMenuTextStyle }
+        }
+    }
+
+    private val COLOR_PICK by lazy {
+        DynamicMenu.Icon(
+            id = R.id.id_menu_color_pick,
+            name = "COLOR_PICK",
+            titleResId = R.string.module_other_color_pick_fragment_title,
+            iconResId = ua.com.compose.other_color_pick.R.drawable.ic_colorize,
+            onPress = {
+                fragmentManager?.get()
+                    ?.replace(fragment = ColorPickFragment.newInstance(imageHolder.image), addToBackStack = true)
+            },
+        ).apply {
+            isVisible = { true }
         }
     }
 }

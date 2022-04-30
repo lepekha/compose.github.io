@@ -23,6 +23,14 @@ import kotlin.concurrent.thread
 
 lateinit var prefs: SharedPreferences
 
+fun Context.appVersion(): Long {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        this.packageManager.getPackageInfo(this.packageName, 0).longVersionCode
+    }else{
+        this.packageManager.getPackageInfo(this.packageName, 0).versionCode.toLong()
+    }
+}
+
 suspend fun Context.loadImage(uri: Uri) = when {
         Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
         else -> ImageDecoder.decodeBitmap(ImageDecoder.createSource(this.contentResolver, uri))

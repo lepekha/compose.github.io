@@ -15,6 +15,7 @@ import ua.com.compose.analytics.Event
 import ua.com.compose.analytics.analytics
 import ua.com.compose.dialog.DialogManager
 import ua.com.compose.dialog.IDialog
+import ua.com.compose.extension.appVersion
 import ua.com.compose.extension.createTempUri
 import ua.com.compose.extension.get
 import ua.com.compose.extension.prefs
@@ -126,9 +127,10 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
 
     fun onInputStyleName(value: String?) {
         val name = value ?: return
-        val styles = Style.loadStyles()
+        val appVersion = context.appVersion()
+        val styles = Style.loadStyles(appVersion)
         val style = Style().apply {
-            this.appBuildVersion = "1"
+            this.appBuildVersion = appVersion
             this.name = name
             this.setFilters(historyFilters.takeLast(historyFilters.size - 1))
         }

@@ -40,7 +40,6 @@ class ImageStyleRvAdapter(val context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.module_image_style_element_style, parent, false)).apply {
-            this.container.setVibrate(EVibrate.BUTTON)
             this.container.setOnClickListener {
                 currentPosition = adapterPosition
                 onImagePress(adapterPosition)

@@ -25,6 +25,9 @@ import kotlinx.android.synthetic.main.module_image_style_fragment_style.*
 import ua.com.compose.config.remoteConfig
 import ua.com.compose.dialog.dialogs.DialogConfirmation
 import ua.com.compose.dialog.dialogs.DialogImage
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.BaseMvpFragment
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.image_filter.main.ImageFilterFragment
@@ -51,7 +54,6 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
             }
         }
     }
-
 
     override val presenter: ImageStylePresenter by lazy { Scope.IMAGE_STYLE.get() }
 
@@ -135,6 +137,7 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
             presenter.styles,
             onImagePress = {
                 presenter.pressStyle(it)
+                requireContext().vibrate(type = EVibrate.BUTTON)
             },
             onRemovePress = {
                presenter.pressRemove(it)
@@ -150,18 +153,6 @@ class ImageStyleFragment : BaseMvpFragment<ImageStyleView, ImageStylePresenter>(
 
         imageView.setZOrderOnTop(true)
         presenter.gpuFilter.setGLSurfaceView(imageView)
-
-        imageView.setOnTouchListener { _, event ->
-            when(event.action){
-                MotionEvent.ACTION_DOWN -> {
-                    presenter.pressImageDown()
-                }
-                MotionEvent.ACTION_UP -> {
-                    presenter.pressImageUp()
-                }
-            }
-            true
-        }
 
         childFragmentManager.setFragmentResultListener(FragmentGallery.REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             val uris = (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>()

@@ -39,6 +39,10 @@ abstract class BaseMvvmFragment: AppCompatDialogFragment(), BaseMvpView {
         return false
     }
 
+    override fun setBottomMenuColor(color: Int) {
+        (activity as BaseMvpActivity<*, *>).setBottomMenuColor(color)
+    }
+
     override fun setVisibleBottomMenu(isVisible: Boolean) {
         (activity as BaseMvpActivity<*, *>).setVisibleBottomMenu(isVisible)
     }

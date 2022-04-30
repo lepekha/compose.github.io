@@ -63,7 +63,7 @@ class ImageStylePresenter(val context: Context): BaseMvpPresenterImpl<ImageStyle
 
     fun onCreate(uri: Uri?) {
         styles.clear()
-        styles.addAll(Style.loadStyles())
+        styles.addAll(Style.loadStyles(context.appVersion()))
         this.currentUri = this.currentUri ?: uri
         val currentUri = this.currentUri
         if(currentUri != null) {
@@ -72,16 +72,6 @@ class ImageStylePresenter(val context: Context): BaseMvpPresenterImpl<ImageStyle
         }else{
             view?.openGallery()
         }
-    }
-
-    fun pressImageUp(){
-        currentStyle?.let { style ->
-            gpuFilter.setFilter(GPUImageFilterGroup(style.getFilters().map { it.filter }))
-        }
-    }
-
-    fun pressImageDown(){
-        gpuFilter.setFilter(EImageFilter.IMAGE_FILTER_ORIGIN.createFilter().filter)
     }
 
     fun pressDone() = CoroutineScope(Dispatchers.Main).launch {

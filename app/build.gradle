@@ -83,6 +83,7 @@ dependencies {
     implementation project(':image_compress')
     implementation project(':file_storage')
     implementation project(':other_image_info')
+    implementation project(':other_color_pick')
 
     implementation "com.google.firebase:firebase-analytics:$firebase_version"
     implementation "com.sagar:dslpermission:$dslpermission_version"

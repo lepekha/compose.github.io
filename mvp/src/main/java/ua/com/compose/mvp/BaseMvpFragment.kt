@@ -39,6 +39,10 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         (activity as BaseMvpActivity<*, *>).setVisibleBottomMenu(isVisible)
     }
 
+    override fun setBottomMenuColor(color: Int) {
+        (activity as BaseMvpActivity<*, *>).setBottomMenuColor(color)
+    }
+
     override fun setVisibleBack(isVisible: Boolean) {
         (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
     }

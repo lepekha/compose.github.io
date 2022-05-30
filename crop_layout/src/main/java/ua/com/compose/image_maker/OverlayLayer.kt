@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.graphics.toRect
 import ua.com.compose.extension.vibrate
 
 class OverlayLayer @JvmOverloads constructor(
@@ -53,13 +54,13 @@ class OverlayLayer @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        val systemG = mutableListOf<Rect>()
+        val systemG = mutableListOf<RectF>()
         overlays.forEach { overlay ->
             overlay.onDraw(canvas = canvas)
             systemG.addAll(overlay.gestureExclusion)
         }
         if (Build.VERSION.SDK_INT >= 29){
-            systemGestureExclusionRects = systemG
+            systemGestureExclusionRects = systemG.map { it.toRect() }
         }
     }
 }

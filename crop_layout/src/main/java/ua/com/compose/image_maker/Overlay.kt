@@ -9,11 +9,11 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 
 abstract class Overlay constructor(val context: Context){
-  internal var frame: Rect? = null
-  internal val gestureExclusion = mutableListOf<Rect>()
+  internal var frame: RectF? = null
+  internal val gestureExclusion = mutableListOf<RectF>()
   internal var onAnimate: () -> Unit = {}
   internal abstract fun onDraw(canvas: Canvas)
-  internal abstract fun init(frame: Rect)
+  internal abstract fun init(frame: RectF)
   internal open fun onTouch(e: MotionEvent) {}
   internal open fun onTouchUp(e: MotionEvent) {}
   internal open fun onTouchMove(e: MotionEvent) {}

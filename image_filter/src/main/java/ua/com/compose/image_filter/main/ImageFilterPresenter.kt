@@ -132,7 +132,7 @@ class ImageFilterPresenter(val context: Context): BaseMvpPresenterImpl<ImageFilt
         val style = Style().apply {
             this.appBuildVersion = appVersion
             this.name = name
-            this.setFilters(historyFilters.takeLast(historyFilters.size - 1))
+            this.setFilters(historyFilters)
         }
 
         styles.add(style)

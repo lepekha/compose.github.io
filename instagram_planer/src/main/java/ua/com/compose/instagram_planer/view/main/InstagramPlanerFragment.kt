@@ -82,7 +82,6 @@ class InstagramPlanerFragment: BaseMvvmFragment() {
                     viewModel.onChangeImagePosition(oldPosition, newPosition)
                 },
                 onStartDrag = {
-//                    setVisibleMore(false)
                     materialCardView.isInvisible = true
                     groupButton.isVisible = true
                 },

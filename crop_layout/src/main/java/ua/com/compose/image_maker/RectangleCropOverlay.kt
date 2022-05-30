@@ -17,13 +17,13 @@ import ua.com.compose.extension.dp
 import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.extension.vibrate
 
-class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid: Boolean = false, val oldRect: Rect? = null) : Overlay(context) {
+class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid: Boolean = false, val oldRect: RectF? = null) : Overlay(context) {
 
     companion object {
         private val MIN_CROP_SIZE = 50.dp
     }
 
-    private val cropRect = Rect()
+    private val cropRect = RectF()
 
     private var isAnimate = false
 
@@ -55,9 +55,9 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
     }
 
 
-    private val backgroundRect = Rect()
+    private val backgroundRect = RectF()
 
-    override fun init(frame: Rect) {
+    override fun init(frame: RectF) {
         this.frame = frame
         oldRect?.takeIf { !isAnimate }?.let {
             startRectAnimation(oldRect = it)
@@ -95,14 +95,14 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
 
     override fun onDraw(canvas: Canvas) {
         gestureExclusion.clear()
-        region.set(backgroundRect)
-        region.op(cropRect, op)
+        region.set(backgroundRect.toRect())
+        region.op(cropRect.toRect(), op)
 
         canvas.drawPath(region.boundaryPath, backgroundPaint)
         canvas.drawRect(cropRect, borderPaint)
 
         (ratio as? Ratio.AspectRatio)?.takeIf { isSliceByGrid }?.let { param ->
-            (1 until param.first).forEach {
+            (1 until param.first.toInt()).forEach {
                 canvas.drawLine(
                         cropRect.left + (cropRect.width() / param.first) * it.toFloat(),
                         cropRect.top.toFloat(),
@@ -111,7 +111,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
                         borderPaint)
             }
 
-            (1 until param.second).forEach {
+            (1 until param.second.toInt()).forEach {
                 canvas.drawLine(
                         cropRect.left.toFloat(),
                         cropRect.top + (cropRect.height() / param.second) * it.toFloat(),
@@ -122,21 +122,21 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         }
 
         mutableListOf(
-                Point(cropRect.left, cropRect.top),
-                Point(cropRect.right, cropRect.top),
-                Point(cropRect.right, cropRect.bottom),
-                Point(cropRect.left, cropRect.bottom),
+            PointF(cropRect.left, cropRect.top),
+            PointF(cropRect.right, cropRect.top),
+            PointF(cropRect.right, cropRect.bottom),
+            PointF(cropRect.left, cropRect.bottom),
         ).forEachIndexed { _, point ->
             val radius = 50.dp
-            canvas.drawCircle(point.x.toFloat(), point.y.toFloat(), 10.dp, pointInnerPaint)
-            gestureExclusion.add(Rect(point.x - radius.toInt() / 2, point.y - radius.toInt() / 2, point.x + radius.toInt() / 2, point.y + radius.toInt() / 2))
+            canvas.drawCircle(point.x, point.y, 10.dp, pointInnerPaint)
+            gestureExclusion.add(RectF(point.x - radius / 2, point.y - radius / 2, point.x + radius.toInt() / 2, point.y + radius.toInt() / 2))
         }
     }
 
     private var pointNumber: Int = -1
     private val touchPoint = PointF()
     private var action = ECropAction.NONE
-    private var moveRect = Rect()
+    private var moveRect = RectF()
 
     override fun onTouch(e: MotionEvent) {
         when {
@@ -146,10 +146,10 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
                 val yOffset = (touchPoint.y - 20.dp)..(touchPoint.y + 20.dp)
 
                 mutableListOf(
-                        Point(cropRect.left, cropRect.top),
-                        Point(cropRect.right, cropRect.top),
-                        Point(cropRect.right, cropRect.bottom),
-                        Point(cropRect.left, cropRect.bottom),
+                        PointF(cropRect.left, cropRect.top),
+                        PointF(cropRect.right, cropRect.top),
+                        PointF(cropRect.right, cropRect.bottom),
+                        PointF(cropRect.left, cropRect.bottom),
                 ).forEachIndexed { index, point ->
                     if (xOffset.contains(point.x.toFloat()) and yOffset.contains(point.y.toFloat())) {
                         pointNumber = index
@@ -160,7 +160,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
                     }
                 }
 
-                if (cropRect.toRectF().contains(touchPoint.x, touchPoint.y)) {
+                if (cropRect.contains(touchPoint.x, touchPoint.y)) {
                     action = ECropAction.MOVE_RECT
                     moveRect.set(cropRect)
                     context.vibrate(50L)
@@ -186,7 +186,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
             }
 
             (e.actionMasked == MotionEvent.ACTION_DOWN) || (e.actionMasked == MotionEvent.ACTION_POINTER_DOWN) -> {
-                if(e.pointerCount == 2 && (0 until e.pointerCount).map { cropRect.contains(e.getX(it).toInt(), e.getY(it).toInt()) }.all { it }){
+                if(e.pointerCount == 2 && (0 until e.pointerCount).map { cropRect.contains(e.getX(it), e.getY(it)) }.all { it }){
                     action = ECropAction.SCALE_RECT
                 }
             }
@@ -198,7 +198,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         val diffX = touchPoint.x - e.x
         val diffY = touchPoint.y - e.y
         if (!moveRect.isEmpty && action == ECropAction.MOVE_RECT) {
-            val rect = Rect(moveRect.left - diffX.toInt(), moveRect.top - diffY.toInt(), moveRect.right - diffX.toInt(), moveRect.bottom - diffY.toInt())
+            val rect = RectF(moveRect.left - diffX, moveRect.top - diffY, moveRect.right - diffX, moveRect.bottom - diffY)
 
             if (rect.left < frame.left) {
                 rect.offsetTo(frame.left, rect.top)
@@ -222,27 +222,27 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
 
     private fun movePointByAspectRatio(e: MotionEvent) {
         val frame = frame ?: return
-        val aspectRatio = (ratio as? Ratio.AspectRatio) ?: Ratio.AspectRatio(1,1)
+        val aspectRatio = (ratio as? Ratio.AspectRatio) ?: Ratio.AspectRatio(1f,1f)
         val diffX = touchPoint.x - e.x
         val diffYRatio = diffX * ((aspectRatio.second).toFloat() / (aspectRatio.first).toFloat())
 
         if ((0..3).contains(pointNumber) && action == ECropAction.MOVE_POINT) {
-            val rect = Rect(moveRect)
+            val rect = RectF(moveRect)
 
             if (pointNumber == 0) {
-                rect.set(moveRect.left - diffX.toInt(), moveRect.top - diffYRatio.toInt(), moveRect.right, moveRect.bottom)
+                rect.set(moveRect.left - diffX, moveRect.top - diffYRatio, moveRect.right, moveRect.bottom)
             }
 
             if (pointNumber == 1) {
-                rect.set(moveRect.left, moveRect.top + diffYRatio.toInt(), moveRect.right - diffX.toInt(), moveRect.bottom)
+                rect.set(moveRect.left, moveRect.top + diffYRatio, moveRect.right - diffX, moveRect.bottom)
             }
 
             if (pointNumber == 2) {
-                rect.set(moveRect.left, moveRect.top, moveRect.right - diffX.toInt(), moveRect.bottom - diffYRatio.toInt())
+                rect.set(moveRect.left, moveRect.top, moveRect.right - diffX, moveRect.bottom - diffYRatio)
             }
 
             if (pointNumber == 3) {
-                rect.set(moveRect.left - diffX.toInt(), moveRect.top, moveRect.right, moveRect.bottom + diffYRatio.toInt())
+                rect.set(moveRect.left - diffX, moveRect.top, moveRect.right, moveRect.bottom + diffYRatio)
             }
 
             if ((rect.left < frame.left) or (rect.right > frame.right) or (rect.top < frame.top) or (rect.bottom > frame.bottom)) {
@@ -271,22 +271,22 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         }
 
         if ((0..3).contains(pointNumber) && action == ECropAction.MOVE_POINT) {
-            val rect = Rect(moveRect)
+            val rect = RectF(moveRect)
 
             if (pointNumber == 0) {
-                rect.set(x, y, moveRect.right, moveRect.bottom)
+                rect.set(x.toFloat(), y.toFloat(), moveRect.right, moveRect.bottom)
             }
 
             if (pointNumber == 1) {
-                rect.set(moveRect.left, y, x, moveRect.bottom)
+                rect.set(moveRect.left, y.toFloat(), x.toFloat(), moveRect.bottom)
             }
 
             if (pointNumber == 2) {
-                rect.set(moveRect.left, moveRect.top, x, y)
+                rect.set(moveRect.left, moveRect.top, x.toFloat(), y.toFloat())
             }
 
             if (pointNumber == 3) {
-                rect.set(x, moveRect.top, moveRect.right, y)
+                rect.set(x.toFloat(), moveRect.top, moveRect.right, y.toFloat())
             }
 
             if (rect.height() < RectangleCropOverlay.MIN_CROP_SIZE || rect.width() < RectangleCropOverlay.MIN_CROP_SIZE) {
@@ -304,11 +304,11 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         val originRect = RectF(0f, 0f, originWidth, originHeight)
         if (param != null && isSliceByGrid) {
             val oneSide = cropRect.width() / param.first
-            (0 until param.second).forEach { second ->
-                (0 until param.first).forEach { first ->
+            (0 until param.second.toInt()).forEach { second ->
+                (0 until param.first.toInt()).forEach { first ->
                     val cropPercent = CropPercent.create(
                             originRect = originRect,
-                            targetRect = backgroundRect.toRectF(),
+                            targetRect = backgroundRect,
                             left = (cropRect.left - backgroundRect.left) + oneSide * first.toFloat(),
                             top = (cropRect.top - backgroundRect.top) + oneSide * second.toFloat(),
                             right = (cropRect.left - backgroundRect.left) + oneSide * (first + 1).toFloat(),
@@ -321,7 +321,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         } else {
             val cropPercent = CropPercent.create(
                     originRect = originRect,
-                    targetRect = backgroundRect.toRectF(),
+                    targetRect = backgroundRect,
                     left = (cropRect.left - backgroundRect.left).toFloat(),
                     top = (cropRect.top - backgroundRect.top).toFloat(),
                     right = (cropRect.left - backgroundRect.left) + cropRect.width().toFloat(),
@@ -333,22 +333,22 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
     }
 
     override fun onDoubleTap(x: Float, y: Float): Boolean {
-        if (cropRect.toRectF().contains(x, y)) {
-            startRectAnimation(Rect(cropRect))
+        if (cropRect.contains(x, y)) {
+            startRectAnimation(RectF(cropRect))
         }
         return true
     }
 
-    private fun startRectAnimation(oldRect: Rect) {
+    private fun startRectAnimation(oldRect: RectF) {
         isAnimate = true
         this.frame?.let {
             init(frame = it)
         }
         val animatableRectNew = AnimatableRectF(cropRect)
-        val animateLeft: ObjectAnimator = ObjectAnimator.ofInt(animatableRectNew, "left", oldRect.left, cropRect.left)
-        val animateTop: ObjectAnimator = ObjectAnimator.ofInt(animatableRectNew, "top", oldRect.top, cropRect.top)
-        val animateRight: ObjectAnimator = ObjectAnimator.ofInt(animatableRectNew, "right", oldRect.right, cropRect.right)
-        val animateBottom: ObjectAnimator = ObjectAnimator.ofInt(animatableRectNew, "bottom", oldRect.bottom, cropRect.bottom)
+        val animateLeft: ObjectAnimator = ObjectAnimator.ofFloat(animatableRectNew, "left", oldRect.left, cropRect.left)
+        val animateTop: ObjectAnimator = ObjectAnimator.ofFloat(animatableRectNew, "top", oldRect.top, cropRect.top)
+        val animateRight: ObjectAnimator = ObjectAnimator.ofFloat(animatableRectNew, "right", oldRect.right, cropRect.right)
+        val animateBottom: ObjectAnimator = ObjectAnimator.ofFloat(animatableRectNew, "bottom", oldRect.bottom, cropRect.bottom)
 
         animateBottom.addUpdateListener {
             onAnimate()
@@ -360,10 +360,10 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         }.start()
     }
 
-    private val scaleRect = Rect()
+    private val scaleRect = RectF()
 
     override fun onScaleBegin(x: Float, y: Float): Boolean {
-        if (cropRect.toRectF().contains(x, y)) {
+        if (cropRect.contains(x, y)) {
             scaleRect.set(cropRect)
         }
         return true
@@ -374,7 +374,7 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         val diffW = scaleRect.width() - (scaleRect.width() * scaleFactor).toInt()
         val diffH = scaleRect.height() - (scaleRect.height() * scaleFactor).toInt()
 
-        val rect = Rect(cropRect.left + diffW / 2, cropRect.top + diffH / 2, cropRect.right - diffW / 2, cropRect.bottom - diffH / 2)
+        val rect = RectF(cropRect.left + diffW / 2, cropRect.top + diffH / 2, cropRect.right - diffW / 2, cropRect.bottom - diffH / 2)
 
         if (rect.left < frame.left) {
             rect.offsetTo(frame.left, rect.top)
@@ -407,5 +407,5 @@ class RectangleCropOverlay(context: Context, val ratio: Ratio, val isSliceByGrid
         cropRect.set(rect)
     }
 
-    fun getCropRect() = Rect(cropRect)
+    fun getCropRect() = RectF(cropRect)
 }

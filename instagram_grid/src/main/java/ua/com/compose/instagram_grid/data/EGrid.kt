@@ -4,11 +4,11 @@ import ua.com.compose.image_maker.data.Ratio
 import ua.com.compose.instagram_grid.R
 
 enum class EGrid(val title: String, val iconResId: Int, val ratio: Ratio) {
-    THREE_ONE(title= "3x1", iconResId = R.drawable.module_instagram_grid_ic_grid_3_1, ratio = Ratio.AspectRatio(3, 1)),
-    THREE_TWO(title= "3x2", iconResId = R.drawable.module_instagram_grid_ic_grid_3_2, ratio = Ratio.AspectRatio(3, 2)),
-    THREE_THREE(title= "3x3", iconResId = R.drawable.module_instagram_grid_ic_grid_3_3, ratio = Ratio.AspectRatio(3, 3)),
-    THREE_FOUR(title= "3x4", iconResId = R.drawable.module_instagram_grid_ic_grid_3_4, ratio = Ratio.AspectRatio(3, 4)),
-    THREE_FIVE(title= "3x5", iconResId = R.drawable.module_instagram_grid_ic_grid_3_5, ratio = Ratio.AspectRatio(3, 5)),
+    THREE_ONE(title= "3x1", iconResId = R.drawable.module_instagram_grid_ic_grid_3_1, ratio = Ratio.AspectRatio(3f, 1f)),
+    THREE_TWO(title= "3x2", iconResId = R.drawable.module_instagram_grid_ic_grid_3_2, ratio = Ratio.AspectRatio(3f, 2f)),
+    THREE_THREE(title= "3x3", iconResId = R.drawable.module_instagram_grid_ic_grid_3_3, ratio = Ratio.AspectRatio(3f, 3f)),
+    THREE_FOUR(title= "3x4", iconResId = R.drawable.module_instagram_grid_ic_grid_3_4, ratio = Ratio.AspectRatio(3f, 4f)),
+    THREE_FIVE(title= "3x5", iconResId = R.drawable.module_instagram_grid_ic_grid_3_5, ratio = Ratio.AspectRatio(3f, 5f)),
 //    TWO_ONE(title= "2x1", iconResId = R.drawable.ic_grid_2_1, ratio = Ratio.AspectRatio(2, 1)),
 //    TWO_TWO(title= "2x2", iconResId = R.drawable.ic_grid_2_2, ratio = Ratio.AspectRatio(2, 2)),
 //    TWO_THREE(title= "2x3", iconResId = R.drawable.ic_grid_2_3, ratio = Ratio.AspectRatio(2, 3)),

@@ -3,6 +3,7 @@ package ua.com.compose.image_maker
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
@@ -17,6 +18,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.core.graphics.toRectF
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import com.bumptech.glide.Glide
@@ -99,7 +101,7 @@ class SceneLayout @JvmOverloads constructor(
         overlayLayout.overlays.clear()
         overlayLayout.overlays.add(RectangleCropOverlay(context = context, ratio = ratio, isSliceByGrid = isShowGrid, oldRect = lastRect).apply {
             val ret = cropImageView.bitmapPosition()
-            val frameRect = Rect(ret[0], ret[1], (ret[0] + ret[2]), (ret[1] + ret[3]))
+            val frameRect = RectF(ret[0], ret[1], (ret[0] + ret[2]), (ret[1] + ret[3]))
             this.init(frame = frameRect)
             this.onAnimate = {
                 overlayLayout.invalidate()

@@ -87,7 +87,7 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="@dimen/theme_bottom_menu_margin"
         android:background="?attr/color_3"
         android:visibility="visible"

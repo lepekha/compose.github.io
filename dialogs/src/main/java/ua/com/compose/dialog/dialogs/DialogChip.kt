@@ -63,7 +63,9 @@ class DialogChip : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
+            this.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

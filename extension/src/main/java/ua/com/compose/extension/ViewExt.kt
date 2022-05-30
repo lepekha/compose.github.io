@@ -145,8 +145,8 @@ fun View.setVibrate(type: EVibrate) {
     this.startAnimation(anim)
   }
 
-  fun ImageView.bitmapPosition(): IntArray {
-    val ret = IntArray(4)
+  fun ImageView.bitmapPosition(): FloatArray {
+    val ret = FloatArray(4)
     if (this.drawable == null) return ret
 
     // Get image dimensions
@@ -166,8 +166,8 @@ fun View.setVibrate(type: EVibrate) {
     // Calculate the actual dimensions
     val actW = origW * scaleX
     val actH = origH * scaleY
-    ret[2] = actW.toInt()
-    ret[3] = actH.toInt()
+    ret[2] = actW
+    ret[3] = actH
 
     // Get image position
     // We assume that the image is centered into ImageView
@@ -175,7 +175,7 @@ fun View.setVibrate(type: EVibrate) {
     val imgViewH = this.height
     val top = (imgViewH - actH) / 2
     val left = (imgViewW - actW) / 2
-    ret[0] = left.toInt()
-    ret[1] = top.toInt()
+    ret[0] = left
+    ret[1] = top
     return ret
   }

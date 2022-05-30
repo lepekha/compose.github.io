@@ -5,21 +5,21 @@ import android.graphics.RectF
 import androidx.annotation.Keep
 
 @Keep
-class AnimatableRectF(val cropRect: Rect) {
+class AnimatableRectF(val cropRect: RectF) {
 
-    fun setTop(top: Int) {
+    fun setTop(top: Float) {
         cropRect.top = top
     }
 
-    fun setBottom(bottom: Int) {
+    fun setBottom(bottom: Float) {
         cropRect.bottom = bottom
     }
 
-    fun setRight(right: Int) {
+    fun setRight(right: Float) {
         cropRect.right = right
     }
 
-    fun setLeft(left: Int) {
+    fun setLeft(left: Float) {
         cropRect.left = left
     }
 }

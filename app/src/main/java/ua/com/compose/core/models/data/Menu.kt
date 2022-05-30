@@ -16,6 +16,7 @@ import ua.com.compose.image_filter.main.ImageFilterFragment
 import ua.com.compose.image_rotate.main.ImageRotateFragment
 import ua.com.compose.image_style.style.ImageStyleFragment
 import ua.com.compose.other_color_pick.main.ColorPickFragment
+import ua.com.compose.other_social_media_crop.main.SocialMediaCropFragment
 import ua.com.compose.view.main.main.ImageHolder
 import java.lang.ref.WeakReference
 
@@ -226,7 +227,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
             name = "OTHER",
             titleResId = R.string.menu_other,
             spanCount = 5,
-            innerMenu = mutableListOf(TEXT_STYLE).filter { it.isVisible.invoke() }.toMutableList()
+            innerMenu = mutableListOf(TEXT_STYLE, SOCIAL_MEDIA_CROP, COLOR_PICK).filter { it.isVisible.invoke() }.toMutableList()
         ).apply {
             isVisible = { innerMenu.isNotEmpty() }
         }
@@ -256,6 +257,21 @@ class MenuObjects(private val imageHolder: ImageHolder) {
             onPress = {
                 fragmentManager?.get()
                     ?.replace(fragment = ColorPickFragment.newInstance(imageHolder.image), addToBackStack = true)
+            },
+        ).apply {
+            isVisible = { true }
+        }
+    }
+
+    private val SOCIAL_MEDIA_CROP by lazy {
+        DynamicMenu.Icon(
+            id = R.id.id_menu_social_media_crop,
+            name = "SOCIAL_MEDIA_CROP",
+            titleResId = R.string.module_other_social_media_title,
+            iconResId = R.drawable.ic_crop,
+            onPress = {
+                fragmentManager?.get()
+                    ?.replace(fragment = SocialMediaCropFragment.newInstance(imageHolder.image), addToBackStack = true)
             },
         ).apply {
             isVisible = { true }

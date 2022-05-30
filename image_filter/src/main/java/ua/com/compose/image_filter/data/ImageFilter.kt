@@ -24,7 +24,7 @@ sealed class ImageFilter: Filter {
     fun export() = "$id|${valueParams.joinToString(":") { it.toString() }}"
 
     fun import(value: String) {
-        value.split(":").forEachIndexed { index, s ->
+        value.takeIf { it.isNotEmpty() }?.split(":")?.forEachIndexed { index, s ->
             valueParams[index].setParam(s)
         }
     }
@@ -121,8 +121,8 @@ enum class EImageFilter(val id: Int) {
 
         fun create(value: String): ImageFilter {
             val params = value.split("|")
-            return findById(id = params[0].toInt()).createFilter().apply {
-                this.import(value = params[1])
+            return findById(id = params.getOrNull(0)?.toIntOrNull() ?: -1).createFilter().apply {
+                this.import(value = params.getOrNull(1) ?: "")
             }
         }
     }

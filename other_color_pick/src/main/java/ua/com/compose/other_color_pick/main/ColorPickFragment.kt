@@ -168,7 +168,6 @@ class ColorPickFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSe
                 val colorHex = Integer.toHexString(color).substring(2).toUpperCase()
                 binding?.textView?.text = "#$colorHex"
                 binding?.frameLayout?.setBackgroundColor(color)
-                this.setBottomMenuColor(color)
                 binding?.pointerRing?.background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
             }
         }

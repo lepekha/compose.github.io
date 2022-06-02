@@ -1,6 +1,9 @@
 package ua.com.compose.view.main.main.menuDelegates
 
 import android.content.res.ColorStateList
+import android.os.Build
+import android.text.TextUtils
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +13,7 @@ import ua.com.compose.core.models.data.DynamicMenu
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
 import kotlinx.android.synthetic.main.element_menu_icon.view.*
+import ua.com.compose.extension.sp
 
 class IconDelegateAdapter(val onPress: (item: DynamicMenu) -> Unit) : ViewTypeDelegateAdapter {
 

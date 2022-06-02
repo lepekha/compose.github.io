@@ -28,7 +28,7 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,8 +41,11 @@
         android:singleLine="false"
         android:textAlignment="center"
         android:textAllCaps="true"
+        app:autoSizeMinTextSize="8sp"
+        app:autoSizeMaxTextSize="12sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
         android:textColor="?attr/color_9"
-        android:textSize="12sp"
         android:textStyle="bold"
         android:typeface="normal"
         android:visibility="visible"

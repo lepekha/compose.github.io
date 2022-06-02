@@ -8,25 +8,30 @@
     android:background="?attr/color_1"
     android:fitsSystemWindows="true">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTitle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:drawablePadding="2dp"
+        android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
         android:paddingTop="8dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="8dp"
-        android:singleLine="true"
+        android:singleLine="false"
         android:textColor="?attr/color_5"
-        android:textSize="32sp"
         android:textStyle="bold"
+        app:autoSizeMaxTextSize="32sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
         app:drawableStartCompat="@drawable/ic_logo_vector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginStart="14dp"
-        tools:text="Make your choiсe:" />
+        tools:text="ompose" />
 
     <FrameLayout
         android:id="@+id/id_fragment_header"

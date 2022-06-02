@@ -14,6 +14,7 @@ import ua.com.compose.dialog.IDialog
 import ua.com.compose.extension.saveBitmap
 import ua.com.compose.image_maker.data.Ratio
 import ua.com.compose.other_social_media_crop.R
+import ua.com.compose.other_social_media_crop.data.ESocialMedia
 import ua.com.compose.other_social_media_crop.data.Size
 
 
@@ -58,9 +59,9 @@ class SocialMediaCropPresenter(val context: Context): BaseMvpPresenterImpl<Socia
         loader?.closeDialog()
     }
 
-    fun onSizeSelect(size: Size) {
+    fun onSizeSelect(socialMedia: ESocialMedia, size: Size) {
         ratio = size.ratio.apply {
-            view?.createCropOverlay(this, isGrid = false)
+            view?.createCropOverlay(socialMedia = socialMedia, ratio = this, isGrid = false)
         }
     }
 

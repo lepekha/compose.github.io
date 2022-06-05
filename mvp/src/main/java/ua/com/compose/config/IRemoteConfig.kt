@@ -3,7 +3,8 @@ package ua.com.compose.config
 lateinit var remoteConfig: IRemoteConfig
 
 interface IRemoteConfig {
-    val isMenuTextStyle: Boolean
+    val isMenuOtherSocialMediaCrop: Boolean
+    val isMenuOtherTextStyle: Boolean
     val isMenuImageFilter: Boolean
     val isMenuImageStyle: Boolean
     val isMenuImageCrop: Boolean

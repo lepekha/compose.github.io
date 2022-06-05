@@ -10,7 +10,8 @@ enum class ConfigParam(val key: String) {
     MENU_IMAGE_CROP("menu_image_crop"),
     MENU_IMAGE_FILTER("menu_image_filter"),
     MENU_IMAGE_STYLE("menu_image_style"),
-    MENU_TEXT_STYLE("menu_text_style"),
+    MENU_OTHER_TEXT_STYLE("menu_text_style"),
+    MENU_OTHER_SOCIAL_MEDIA_CROP("menu_social_media_crop"),
 
     FILTER_CONTRAST("filter_contrast"),
     FILTER_BRIGHTNESS("filter_brightness"),

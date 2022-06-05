@@ -227,7 +227,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
             name = "OTHER",
             titleResId = R.string.menu_other,
             spanCount = 5,
-            innerMenu = mutableListOf(TEXT_STYLE, SOCIAL_MEDIA_CROP, COLOR_PICK).filter { it.isVisible.invoke() }.toMutableList()
+            innerMenu = mutableListOf(TEXT_STYLE, SOCIAL_MEDIA_CROP).filter { it.isVisible.invoke() }.toMutableList()
         ).apply {
             isVisible = { innerMenu.isNotEmpty() }
         }
@@ -244,7 +244,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
                     ?.replace(fragment = TextStyleFragment.newInstance(), addToBackStack = true)
             },
         ).apply {
-            isVisible = { remoteConfig.isMenuTextStyle }
+            isVisible = { remoteConfig.isMenuOtherTextStyle }
         }
     }
 
@@ -274,7 +274,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
                     ?.replace(fragment = SocialMediaCropFragment.newInstance(imageHolder.image), addToBackStack = true)
             },
         ).apply {
-            isVisible = { true }
+            isVisible = { remoteConfig.isMenuOtherSocialMediaCrop }
         }
     }
 }

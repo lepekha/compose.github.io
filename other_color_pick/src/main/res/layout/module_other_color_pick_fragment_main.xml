@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/theme_bottom_menu_margin">
 
     <FrameLayout
         android:id="@+id/contentImage"
@@ -41,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +89,6 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="@dimen/theme_bottom_menu_margin"
         android:background="?attr/color_3"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

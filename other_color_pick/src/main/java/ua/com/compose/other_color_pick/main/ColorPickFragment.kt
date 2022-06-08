@@ -3,6 +3,7 @@ package ua.com.compose.other_color_pick.main
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.hardware.Camera
 import android.net.Uri
@@ -26,29 +27,25 @@ import ua.com.compose.extension.*
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
+import ua.com.compose.navigator.replace
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentMainBinding
+import ua.com.compose.other_color_pick.di.Scope
+import ua.com.compose.other_color_pick.main.camera.CameraFragment
+import ua.com.compose.other_color_pick.main.image.ImageFragment
+import ua.com.compose.other_color_pick.main.palette.PaletteFragment
 import ua.com.compose.other_color_pick.view.CameraColorPickerPreview
 import ua.com.compose.other_color_pick.view.Cameras
 import ua.com.compose.views.SliderBox
 import ua.com.compose.views.SliderBoxElement
+import java.lang.ref.WeakReference
 
 
-class ColorPickFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelectedListener {
+class ColorPickFragment : BaseMvvmFragment() {
 
     companion object {
 
         private const val BUNDLE_KEY_IMAGE_URI = "BUNDLE_KEY_IMAGE_URI"
-        private const val REQUEST_KEY = "REQUEST_KEY"
-
-        private fun getCameraInstance(): Camera? {
-            var c: Camera? = null
-            try {
-                c = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK)
-            } catch (e: Exception) {
-            }
-            return c
-        }
 
         fun newInstance(uri: Uri?): ColorPickFragment {
             return ColorPickFragment().apply {
@@ -59,45 +56,14 @@ class ColorPickFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSe
         }
     }
 
-    private var mCamera: Camera? = null
-    private var mCameraAsyncTask: CameraAsyncTask? = null
-    private var mCameraPreview: CameraColorPickerPreview? = null
-    var mPreviewContainer: FrameLayout? = null
-
-    private val btnCopy = BottomMenu(iconResId = ua.com.compose.R.drawable.ic_copy) {
-        binding?.textView?.text?.toString()?.let { color ->
-            requireContext().clipboardCopy(color)
-            showAlert(R.string.module_other_color_pick_color_copy)
-        }
-    }
-
-    private val btnGallery = BottomMenu(iconResId = ua.com.compose.R.drawable.ic_gallery){
-    }
-
-    private val btnPaletteAdd = BottomMenu(iconResId = R.drawable.ic_palette_add){
-        viewModule.pressPaletteAdd()
-        showAlert(R.string.module_other_color_pick_color_add_to_pallete)
-    }
-
-    private val btnSwitch = BottomMenu(iconResId = ua.com.compose.R.drawable.ic_switch){
-        viewModule.changeColorType()
-    }
-
-    override fun createBottomMenu(): MutableList<Menu> {
-        return mutableListOf<Menu>().apply {
-            this.add(btnSwitch)
-            this.add(btnCopy)
-            this.add(btnPaletteAdd)
-        }
-    }
-
     private var binding: ModuleOtherColorPickFragmentMainBinding? = null
 
-    private val viewModule: ImageInfoViewModule by viewModel()
+    private val viewModule: ImageInfoViewModule by lazy {
+        Scope.COLOR_PICK.get()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = ModuleOtherColorPickFragmentMainBinding.inflate(inflater)
-        mPreviewContainer = binding?.previewContainer
         return binding?.root
     }
 
@@ -106,69 +72,24 @@ class ColorPickFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSe
         binding = null
     }
 
-    private fun initPallete() {
-        PaletteRvAdapter(
-            onPressCopy = { color ->
-                requireContext().clipboardCopy(color)
-                showAlert(R.string.module_other_color_pick_color_copy)
-            },
-            onPressRemove = {
-                viewModule.pressPaletteRemove(position = it)
-            }
-        ).apply {
-            binding?.lstPalette?.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            binding?.lstPalette?.adapter = this
-            binding?.lstPalette?.setHasFixedSize(true)
-        }
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
         setVisibleBack(true)
-        initPallete()
 
-        val slider = mutableListOf(
-            SliderBoxElement(0, ContextCompat.getDrawable(requireContext(), R.drawable.ic_camera)!!),
-            SliderBoxElement(1, ContextCompat.getDrawable(requireContext(), R.drawable.ic_image)!!),
-            SliderBoxElement(2, ContextCompat.getDrawable(requireContext(), R.drawable.ic_palette)!!)
-        )
-
-        binding?.slider?.setItems(slider)
-        binding?.contentCamera?.isVisible = true
-
-        binding?.slider?.setOnSelectListener(object : SliderBox.OnSelectListener {
-            override fun onSelect(position: Int) {
-                selectScreen(position = position)
-            }
-        })
-
-        viewModule.mainImage.nonNull().observe(this) { bm ->
-            binding?.imgPreview?.let {
-                it.setImageBitmap(bm)
-            }
+        binding?.btnCamera?.setVibrate(EVibrate.BUTTON)
+        binding?.btnCamera?.setOnClickListener {
+            selectScreen(binding?.tabCamera)
         }
 
-        viewModule.paletteColors.nonNull().observe(this) {
-            (binding?.lstPalette?.adapter as? PaletteRvAdapter)?.update(it ?: listOf(), viewModule.colorType)
+        binding?.btnImage?.setVibrate(EVibrate.BUTTON)
+        binding?.btnImage?.setOnClickListener {
+            selectScreen(binding?.tabImage)
         }
 
-        viewModule.changeColor.nonNull().observe(this) { color ->
-            color?.let {
-                binding?.textView?.text = color.second
-                binding?.frameLayout?.setBackgroundColor(color.first)
-                binding?.pointerRing?.background?.setColorFilter(color.first, PorterDuff.Mode.SRC_ATOP)
-            }
-        }
-
-        viewModule.alert.observe(this) {
-            it?.let {
-                showAlert(it)
-            }
-        }
-
-        viewModule.visible.observe(this){
+        binding?.btnPalette?.setVibrate(EVibrate.BUTTON)
+        binding?.btnPalette?.setOnClickListener {
+            selectScreen(binding?.tabPalette)
         }
 
         requestPermissions(
@@ -178,9 +99,11 @@ class ColorPickFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSe
             resultCallback = {
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
-                        val inputUri = arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri
-                        selectScreen(0)
-                        viewModule.onCreate(uri = inputUri)
+                        if((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) != null){
+                            selectScreen(binding?.tabImage)
+                        }else{
+                            selectScreen(binding?.tabCamera)
+                        }
                     }
                     is PermissionResult.PermissionDenied -> {
                         dismiss()
@@ -197,26 +120,21 @@ class ColorPickFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSe
         }
     }
 
-    private fun selectScreen(position: Int) {
-        binding?.slider?.setSelected(position)
-        binding?.contentCamera?.isVisible = false
-        binding?.contentImage?.isVisible = false
-        binding?.contentPalette?.isVisible = false
-        binding?.frameLayout?.isVisible = false
+    private var prevTab: WeakReference<View>? = null
+    private fun selectScreen(tabView: View?) {
+        prevTab?.get()?.toggle()
+        prevTab = WeakReference(tabView)
+        tabView?.toggle()
 
-        when(position) {
-            0 -> {
-                binding?.contentCamera?.isVisible = true
-                cameraStart()
+        when(tabView?.id) {
+            binding?.tabCamera?.id -> {
+                childFragmentManager.replace(CameraFragment.newInstance(), binding?.content?.id ?: -1, addToBackStack = false)
             }
-            1 -> {
-                binding?.contentImage?.isVisible = true
-                cameraStop()
+            binding?.tabImage?.id  -> {
+                childFragmentManager.replace(ImageFragment.newInstance(arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri), binding?.content?.id ?: -1, addToBackStack = false)
             }
-            2 -> {
-                binding?.contentPalette?.isVisible = true
-                viewModule.pressPalette()
-                cameraStop()
+            binding?.tabPalette?.id  -> {
+                childFragmentManager.replace(PaletteFragment.newInstance(), binding?.content?.id ?: -1, addToBackStack = false)
             }
         }
     }
@@ -225,100 +143,9 @@ class ColorPickFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSe
         return false
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    private fun cameraStart() {
-        mCameraAsyncTask = CameraAsyncTask()
-        mCameraAsyncTask?.execute()
-    }
-
-    private fun cameraStop() {
-        mCameraAsyncTask?.cancel(true)
-
-        if (mCamera != null) {
-            mCamera?.stopPreview()
-            mCamera?.setPreviewCallback(null)
-            mCamera?.release()
-            mCamera = null
-        }
-
-        if (mCameraPreview != null) {
-            binding?.previewContainer?.removeView(mCameraPreview)
-        }
-    }
-
-
-    override fun onColorSelected(color: Int) {
-        viewModule.changeColor(color)
-    }
-
-    // class CameraAsyncTask
-    inner class CameraAsyncTask : AsyncTask<Void?, Void?, Camera?>() {
-        /**
-         * The [ViewGroup.LayoutParams] used for adding the preview to its container.
-         */
-         var mPreviewParams: FrameLayout.LayoutParams? = null
-         override fun doInBackground(vararg params: Void?): Camera? {
-            val camera: Camera? = getCameraInstance()
-
-
-                //configure Camera parameters
-                val cameraParameters = camera?.parameters
-
-                //get optimal camera preview size according to the layout used to display it
-                val bestSize: Camera.Size = Cameras.getBestPreviewSize(
-                    cameraParameters?.supportedPreviewSizes,
-                    mPreviewContainer?.getWidth() ?: 0,
-                    mPreviewContainer?.getHeight()?: 0,
-                    true
-                )
-                //set optimal camera preview
-                cameraParameters?.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
-                cameraParameters?.setPreviewSize(bestSize.width, bestSize.height)
-                camera?.parameters = cameraParameters
-
-                //set camera orientation to match with current device orientation
-                Cameras.setCameraDisplayOrientation(requireContext(), camera)
-
-                //get proportional dimension for the layout used to display preview according to the preview size used
-                val adaptedDimension: IntArray = Cameras.getProportionalDimension(
-                    bestSize,
-                    mPreviewContainer?.getWidth() ?: 0,
-                    mPreviewContainer?.getHeight() ?: 0,
-                    true
-                )
-
-                //set up params for the layout used to display the preview
-                mPreviewParams = FrameLayout.LayoutParams(adaptedDimension[0], adaptedDimension[1])
-                mPreviewParams?.gravity = Gravity.CENTER
-            return camera
-        }
-
-        override fun onPostExecute(result: Camera?) {
-            super.onPostExecute(result)
-
-            if (!isCancelled()) {
-                mCamera = result
-                //set up camera preview
-                mCameraPreview = CameraColorPickerPreview(requireContext(), mCamera)
-                mCameraPreview?.setOnColorSelectedListener(this@ColorPickFragment)
-
-                //add camera preview
-                mPreviewContainer?.addView(mCameraPreview, 0, mPreviewParams)
-                binding?.frameLayout?.isVisible = true
-            }
-        }
-
-        override fun onCancelled(camera: Camera?) {
-            super.onCancelled(camera)
-            camera?.release()
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        Scope.COLOR_PICK.close()
     }
 }
 

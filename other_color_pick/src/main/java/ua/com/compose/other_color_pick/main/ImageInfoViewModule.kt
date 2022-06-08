@@ -1,26 +1,22 @@
 package ua.com.compose.other_color_pick.main
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.net.Uri
 import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import ua.com.compose.extension.*
+import java.util.*
 
-enum class EColorType {
-    HEX {
+enum class EColorType(val key: Int) {
+    HEX(key = 0) {
         override fun convertColor(color: Int): String {
             val colorHex = Integer.toHexString(color).substring(2).toUpperCase()
-            return "HEX: $colorHex"
+            return "HEX: #$colorHex"
         }
     },
 
-    RGB {
+    RGB(key = 1) {
         override fun convertColor(color: Int): String {
             val red = Color.red(color)
             val green = Color.green(color)
@@ -29,17 +25,57 @@ enum class EColorType {
         }
     },
 
-    HSV {
+    HSV(key = 2) {
         override fun convertColor(color: Int): String {
             val array = FloatArray(3)
             Color.colorToHSV(color, array)
             return "HSV: ${(array[0]).toInt()}%, ${(array[1] * 360).toInt()}%, ${(array[2] * 360).toInt()}%"
         }
     },
-
-    INT {
+    HSL(key = 3) {
         override fun convertColor(color: Int): String {
-            return color.toString()
+            val red = Color.red(color)
+            val green = Color.green(color)
+            val blue = Color.blue(color)
+
+            val array = FloatArray(3)
+            ColorUtils.RGBToHSL(red, green, blue, array)
+            return "HSL: ${(array[0]).toInt()}%, ${(array[1] * 100).toInt()}%, ${(array[2] * 100).toInt()}%"
+        }
+    },
+    CMYK(key = 4) {
+        override fun convertColor(color: Int): String {
+            val red = Color.red(color)
+            val green = Color.green(color)
+            val blue = Color.blue(color)
+            val black: Int = Math.min(Math.min(255 - red, 255 - green), 255 - blue)
+
+            return if (black != 255) {
+                val cyan: Int = (255 - red - black) / (255 - black)
+                val magenta: Int = (255 - green - black) / (255 - black)
+                val yellow: Int = (255 - blue - black) / (255 - black)
+                intArrayOf(cyan, magenta, yellow, black)
+                "CMYK: ${cyan}%, ${magenta}%, ${yellow}%, ${black}%"
+            } else {
+                val cyan: Int = 255 - red
+                val magenta: Int = 255 - green
+                val yellow: Int = 255 - blue
+                "CMYK: ${cyan}%, ${magenta}%, ${yellow}%, ${black}%"
+            }
+        }
+    },
+    XYZ(key = 5) {
+        override fun convertColor(color: Int): String {
+            val red = Color.red(color)
+            val green = Color.green(color)
+            val blue = Color.blue(color)
+
+            val array = DoubleArray(3)
+            ColorUtils.RGBToXYZ(red, green, blue, array)
+            val x = String.format(Locale.getDefault(), "%.${1}f", array[0])
+            val y = String.format(Locale.getDefault(), "%.${1}f", array[1])
+            val z = String.format(Locale.getDefault(), "%.${1}f", array[2])
+            return "XYZ: $x%, $y%, $z%"
         }
     };
 
@@ -48,74 +84,10 @@ enum class EColorType {
     }
 
     abstract fun convertColor(color: Int): String
-}
-
-class ImageInfoViewModule(private val context: Context): ViewModel()  {
 
     companion object {
-        private const val PREFS_COLOR_PALETTE = "PREFS_COLOR_PALETTE"
+        fun getByKey(key: Int) = values().firstOrNull { it.key == key } ?: HEX
     }
-
-    private var image: Uri? = null
-
-    private var color = Color.WHITE
-    var colorType = EColorType.HEX
-    private var palette = mutableListOf<Int>()
-
-    private val _mainImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
-    val mainImage: LiveData<Bitmap?> = _mainImage
-
-    private val _alert: MutableLiveData<Int?> = MutableLiveData(null)
-    val alert: LiveData<Int?> = _alert
-
-    private val _imageName: MutableLiveData<String?> = MutableLiveData(null)
-    val imageName: LiveData<String?> = _imageName
-
-    private val _imageNameDescription: MutableLiveData<String?> = MutableLiveData(null)
-    val imageNameDescription: LiveData<String?> = _imageNameDescription
-
-    private val _paletteColors: MutableLiveData<List<Int>?> = MutableLiveData(null)
-    val paletteColors: LiveData<List<Int>?> = _paletteColors
-
-    private val _changeColor: MutableLiveData<Pair<Int, String>?> = MutableLiveData(null)
-    val changeColor: LiveData<Pair<Int, String>?> = _changeColor
-
-    private val _visible: MutableLiveData<Boolean> = MutableLiveData(false)
-    val visible: LiveData<Boolean> = _visible
-
-    fun onCreate(uri: Uri?) = viewModelScope.launch {
-        palette = prefs.get(PREFS_COLOR_PALETTE, listOf<String>()).map { it.toInt() }.toMutableList()
-        image = uri?.apply {
-            val bm = context.loadImage(uri)
-            _mainImage.postValue(bm)
-        }
-        _visible.postValue(uri != null)
-    }
-
-    fun changeColor(color: Int) {
-        this.color = color
-        _changeColor.postValue(color to colorType.convertColor(color))
-    }
-
-    fun changeColorType() {
-        colorType = colorType.nextType()
-        _changeColor.postValue(color to colorType.convertColor(color))
-        _paletteColors.postValue(palette)
-    }
-
-    fun pressPalette() = viewModelScope.launch {
-        _paletteColors.postValue(palette)
-    }
-
-    fun pressPaletteAdd() = viewModelScope.launch {
-        palette.add(0, color)
-        prefs.put(PREFS_COLOR_PALETTE, palette.map { it.toString() })
-    }
-
-    fun pressPaletteRemove(position: Int) = viewModelScope.launch {
-        palette.removeAt(position)
-        prefs.put(PREFS_COLOR_PALETTE, palette.map { it.toString() })
-        _paletteColors.postValue(palette)
-    }
-
 }
+
+class ImageInfoViewModule: ViewModel()

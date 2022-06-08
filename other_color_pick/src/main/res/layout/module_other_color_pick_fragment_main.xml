@@ -5,117 +5,154 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/theme_bottom_menu_margin">
+    android:paddingBottom="@dimen/theme_bottom_menu_margin">
 
     <FrameLayout
-        android:id="@+id/contentImage"
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider">
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/contentPalette"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lstPalette"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/contentCamera"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider">
-
-        <FrameLayout
-            android:id="@+id/previewContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:background="#808080">
-
-            <View
-                android:id="@+id/pointerRing"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:background="@drawable/pointer_ring" />
-
-            <View
-                android:id="@+id/activity_main_pointer"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:background="@drawable/pointer" />
-
-        </FrameLayout>
-    </FrameLayout>
-
-    <ua.com.compose.other_color_pick.view.ZoomableImageView
-        android:id="@+id/imgPreview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:visibility="gone" />
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="?attr/color_3"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnImage">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
     </FrameLayout>
 
-    <ua.com.compose.views.SliderBox
-        android:id="@+id/slider"
+    <LinearLayout
+        android:id="@+id/btnCamera"
         android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/btnImage"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </ua.com.compose.views.SliderBox>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <View
+                android:id="@+id/tabCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/module_other_menu_background"
+                android:backgroundTint="?attr/color_8"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_camera"
+                app:tint="?attr/color_9" />
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/module_other_color_pick_camera"
+            android:textColor="?attr/color_9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/btnPalette"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnCamera"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <View
+                android:id="@+id/tabImage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/module_other_menu_background"
+                android:backgroundTint="?attr/color_8"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_image"
+                app:tint="?attr/color_9" />
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/module_other_color_pick_image"
+            android:textColor="?attr/color_9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnPalette"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnImage"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <View
+                android:id="@+id/tabPalette"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/module_other_menu_background"
+                android:backgroundTint="?attr/color_8"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_palette"
+                app:tint="?attr/color_9" />
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/module_other_color_pick_palette"
+            android:textColor="?attr/color_9" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

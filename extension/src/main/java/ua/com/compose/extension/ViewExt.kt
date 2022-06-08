@@ -18,6 +18,17 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Fade
+import androidx.transition.TransitionManager
+
+fun View.toggle(duration: Long = 300L) {
+  Fade().apply {
+    this.duration = duration
+    this.addTarget(this@toggle.id)
+    TransitionManager.beginDelayedTransition(this@toggle.parent as ViewGroup, this)
+  }
+  this.isVisible = !this.isVisible
+}
 
 fun View.animateHeightFromTo(initialHeight: Int, finalHeight: Int, duration: Long) {
   val animator = ValueAnimator.ofInt(initialHeight, finalHeight)

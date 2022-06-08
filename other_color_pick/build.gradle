@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 
@@ -45,6 +46,9 @@ dependencies {
     implementation project(':mvp')
     implementation project(':extension')
     implementation project(':theme')
+    implementation project(':navigator')
+    implementation project(':dialogs')
+    implementation project(':gallery')
     implementation 'com.drewnoakes:metadata-extractor:2.12.0'
 
     // ViewModel
@@ -62,6 +66,8 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 //    implementation files('libs\\metadata-extractor-2.16.0.jar')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

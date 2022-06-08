@@ -1,5 +1,8 @@
 <resources>
-    <string name="module_other_color_pick_fragment_title">Color pick</string>
+    <string name="module_other_color_pick_fragment_title">Color picker</string>
+    <string name="module_other_color_pick_camera">Camera</string>
+    <string name="module_other_color_pick_image">Image</string>
+    <string name="module_other_color_pick_palette">Palette</string>
     <string name="module_other_color_pick_color_copy">Color copied</string>
     <string name="module_other_color_pick_color_add_to_pallete">Color added to palette</string>
 </resources>

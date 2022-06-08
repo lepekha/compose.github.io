@@ -35,7 +35,7 @@
                 app:layout_collapseMode="none">
 
                 <View
-                    android:id="@+id/view"
+                    android:id="@+id/tabImage"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"

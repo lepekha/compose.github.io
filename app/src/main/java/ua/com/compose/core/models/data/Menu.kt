@@ -227,7 +227,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
             name = "OTHER",
             titleResId = R.string.menu_other,
             spanCount = 5,
-            innerMenu = mutableListOf(TEXT_STYLE, SOCIAL_MEDIA_CROP).filter { it.isVisible.invoke() }.toMutableList()
+            innerMenu = mutableListOf(TEXT_STYLE, SOCIAL_MEDIA_CROP, COLOR_PICK).filter { it.isVisible.invoke() }.toMutableList()
         ).apply {
             isVisible = { innerMenu.isNotEmpty() }
         }

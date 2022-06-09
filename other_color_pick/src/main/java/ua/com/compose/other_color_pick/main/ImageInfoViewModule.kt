@@ -30,7 +30,7 @@ enum class EColorType(val key: Int) {
         override fun convertColor(color: Int): String {
             val array = FloatArray(3)
             Color.colorToHSV(color, array)
-            return "HSV: ${(array[0]).toInt()}%, ${(array[1] * 360).toInt()}%, ${(array[2] * 360).toInt()}%"
+            return "HSV: ${(array[0]).toInt()}%, ${(array[1] * 100).toInt()}%, ${(array[2] * 100).toInt()}%"
         }
     },
     HSL(key = 3) {

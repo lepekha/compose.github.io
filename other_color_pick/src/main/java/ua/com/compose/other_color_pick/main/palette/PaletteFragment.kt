@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.dialog.dialogs.DialogConfirmation
@@ -30,8 +29,17 @@ class PaletteFragment : BaseMvvmFragment() {
         viewModule.changeColorType()
     }
 
-    private val btnClearAll = BottomMenu(iconResId = R.drawable.ic_remove_all){
-        viewModule.pressRemoveAll()
+    private val btnClearAll = BottomMenu(iconResId = R.drawable.ic_remove_all) {
+        if((binding?.lstPalette?.adapter?.itemCount ?: 0) > 0) {
+            val request = DialogConfirmation.show(fm = this.childFragmentManager, message = requireContext().getString(R.string.module_other_color_pick_remove_all))
+            this.childFragmentManager.setFragmentResultListener(request, viewLifecycleOwner) { _, bundle ->
+                if(bundle.getBoolean(DialogConfirmation.BUNDLE_KEY_ANSWER)){
+                    viewModule.pressRemoveAll()
+                }
+            }
+        } else {
+            showAlert(R.string.module_other_color_pick_empty)
+        }
     }
 
     override fun createBottomMenu(): MutableList<Menu> {

@@ -19,11 +19,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/placeholder"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_camera"
+            app:tint="?attr/color_1" />
+
         <FrameLayout
             android:id="@+id/previewContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="64dp"
+            android:visibility="invisible"
             tools:background="#808080">
 
             <View
@@ -31,15 +44,17 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:background="@drawable/pointer_ring" />
+                android:background="@drawable/pointer_ring"
+                android:visibility="gone" />
 
             <View
-                android:id="@+id/activity_main_pointer"
+                android:id="@+id/activityMainPointer"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="center"
                 android:alpha="0.5"
-                android:background="@drawable/pointer" />
+                android:background="@drawable/pointer"
+                android:visibility="gone" />
 
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -47,9 +62,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="115dp"
-        android:background="?attr/color_3"
-        android:visibility="visible"
+        android:layout_height="74dp"
+        android:background="@drawable/module_other_card_background"
+        android:backgroundTint="?attr/color_3"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -57,11 +73,11 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             app:cardBackgroundColor="#FFFFFF"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
@@ -69,21 +85,44 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="19sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColor="#FFFFFF"
+                android:textSize="19sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnCopy"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                app:cardBackgroundColor="?attr/color_3"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnRemove"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/module_other_text_style_fragment_text_style_ic_copy"
+                    app:tint="?attr/color_9" />
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

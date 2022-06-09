@@ -20,7 +20,7 @@ class ImageViewModule(val imageUri: ImageUri, private val addColorUseCase: AddCo
 
     private val _changeColor: MutableLiveData<Pair<Int, String>?> = MutableLiveData(null)
     val changeColor: LiveData<Pair<Int, String>?> = _changeColor
-    private var colorType = EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX).key)
+    private var colorType = EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key))
 
     fun changeColor(color: Int) {
         this.color = color

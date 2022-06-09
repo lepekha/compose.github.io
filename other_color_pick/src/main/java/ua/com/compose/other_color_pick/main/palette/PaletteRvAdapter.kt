@@ -52,7 +52,8 @@ class PaletteRvAdapter(private val onPressCopy: (color: String) -> Unit,
 
     inner class ViewHolder(val binding: ModuleOtherColorPickElementPaletteBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: Card.CardColor) {
-            binding.txtColor.text = colorType.convertColor(getTextColor(card.item.color))
+            binding.txtColor.text = colorType.convertColor(card.item.color)
+            binding.txtColor.setTextColor(getTextColor(card.item.color))
             binding.container.setBackgroundColor(card.item.color)
         }
 

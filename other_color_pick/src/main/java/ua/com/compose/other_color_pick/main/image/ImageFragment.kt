@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ua.com.compose.extension.*
 import ua.com.compose.gallery.main.FragmentGallery
+import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
@@ -44,13 +45,6 @@ class ImageFragment : BaseMvvmFragment() {
                     BUNDLE_KEY_IMAGE_URI to uri
                 )
             }
-        }
-    }
-
-    private val btnCopy = BottomMenu(iconResId = ua.com.compose.R.drawable.ic_copy) {
-        binding?.textView?.text?.toString()?.let { color ->
-            requireContext().clipboardCopy(color)
-            showAlert(R.string.module_other_color_pick_color_copy)
         }
     }
 
@@ -88,9 +82,6 @@ class ImageFragment : BaseMvvmFragment() {
     override fun createBottomMenu(): MutableList<Menu> {
         return mutableListOf<Menu>().apply {
             this.add(btnGallery)
-            this.add(btnSwitch)
-            this.add(btnCopy)
-            this.add(btnPaletteAdd)
         }
     }
 
@@ -147,6 +138,7 @@ class ImageFragment : BaseMvvmFragment() {
         viewModule.changeColor.nonNull().observe(this) { color ->
             color?.let {
                 binding?.textView?.text = color.second
+                binding?.textView?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
                 binding?.cardView?.setCardBackgroundColor(color.first)
                 binding?.pointerRing?.background?.setColorFilter(
                     color.first,
@@ -156,6 +148,13 @@ class ImageFragment : BaseMvvmFragment() {
                     if (isDark(color.first)) Color.WHITE else Color.BLACK,
                     PorterDuff.Mode.SRC_ATOP
                 )
+            }
+        }
+
+        binding?.btnCopy?.setOnClickListener {
+            binding?.textView?.text?.toString()?.let { color ->
+                requireContext().clipboardCopy(color)
+                showAlert(R.string.module_other_color_pick_color_copy)
             }
         }
 
@@ -189,6 +188,7 @@ class ImageFragment : BaseMvvmFragment() {
         binding?.activityMainPointer?.isVisible = true
         binding?.placeholder?.isVisible = false
         binding?.frameLayout?.isVisible = true
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnSwitch, btnPaletteAdd))
         binding?.zoomableImageView2?.let {
             viewLifecycleOwner.lifecycleScope.launch {
                 val image = requireContext().loadImage(uri)

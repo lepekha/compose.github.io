@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ua.com.compose.extension.*
 import java.util.*
+import kotlin.math.roundToInt
 
 enum class EColorType(val key: Int) {
     HEX(key = 0) {
@@ -50,18 +51,24 @@ enum class EColorType(val key: Int) {
             val blue = Color.blue(color)
             val black: Int = Math.min(Math.min(255 - red, 255 - green), 255 - blue)
 
-            return if (black != 255) {
-                val cyan: Int = (255 - red - black) / (255 - black)
-                val magenta: Int = (255 - green - black) / (255 - black)
-                val yellow: Int = (255 - blue - black) / (255 - black)
-                intArrayOf(cyan, magenta, yellow, black)
-                "CMYK: ${cyan}%, ${magenta}%, ${yellow}%, ${black}%"
-            } else {
-                val cyan: Int = 255 - red
-                val magenta: Int = 255 - green
-                val yellow: Int = 255 - blue
-                "CMYK: ${cyan}%, ${magenta}%, ${yellow}%, ${black}%"
+            val (cyan, magenta, yellow) = when {
+                black == 255 -> {
+                    Triple(0f, 0f, 0f)
+                }
+                black != 255 -> {
+                    val c = (255f - red - black) / (255 - black)
+                    val m = (255f - green - black) / (255 - black)
+                    val y = (255f - blue - black) / (255 - black)
+                    Triple(c, m, y)
+                }
+                else -> {
+                    val c = 255f - red
+                    val m = 255f - green
+                    val y = 255f - blue
+                    Triple(c, m, y)
+                }
             }
+            return "CMYK: ${(cyan * 100).roundToInt()}%, ${(magenta * 100).roundToInt()}%, ${(yellow * 100).roundToInt()}%, ${black}%"
         }
     },
     XYZ(key = 5) {

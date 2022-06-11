@@ -127,7 +127,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
         ){
-            requestCode = 4
+            requestCode = createID()
             resultCallback = {
                 when(this) {
                     is PermissionResult.PermissionGranted -> {

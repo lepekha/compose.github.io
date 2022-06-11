@@ -12,6 +12,7 @@ enum class ConfigParam(val key: String) {
     MENU_IMAGE_STYLE("menu_image_style"),
     MENU_OTHER_TEXT_STYLE("menu_text_style"),
     MENU_OTHER_SOCIAL_MEDIA_CROP("menu_social_media_crop"),
+    MENU_OTHER_COLOR_PICK("menu_other_color_pick"),
 
     FILTER_CONTRAST("filter_contrast"),
     FILTER_BRIGHTNESS("filter_brightness"),

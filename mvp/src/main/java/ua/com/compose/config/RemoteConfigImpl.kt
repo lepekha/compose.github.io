@@ -1,6 +1,8 @@
 package ua.com.compose.config
 
 class RemoteConfigImpl: RemoteConfigSetup(), IRemoteConfig {
+    override val isMenuOtherColorPick: Boolean
+        get() = read<Boolean>(ConfigParam.MENU_OTHER_COLOR_PICK) ?: true
     override val isMenuOtherSocialMediaCrop: Boolean
         get() = read<Boolean>(ConfigParam.MENU_OTHER_SOCIAL_MEDIA_CROP) ?: true
     override val isMenuOtherTextStyle: Boolean

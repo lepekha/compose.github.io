@@ -95,6 +95,15 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
             }
         }
 
+        binding?.cardView?.setVibrate(EVibrate.BUTTON)
+        binding?.cardView?.setOnClickListener {
+            binding?.textView?.text?.toString()?.let { color ->
+                requireContext().clipboardCopy(color)
+                showAlert(R.string.module_other_color_pick_color_copy)
+            }
+        }
+
+        binding?.btnCopy?.setVibrate(EVibrate.BUTTON)
         binding?.btnCopy?.setOnClickListener {
             binding?.textView?.text?.toString()?.let { color ->
                 requireContext().clipboardCopy(color)

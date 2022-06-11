@@ -259,7 +259,7 @@ class MenuObjects(private val imageHolder: ImageHolder) {
                     ?.replace(fragment = ColorPickFragment.newInstance(imageHolder.image), addToBackStack = true)
             },
         ).apply {
-            isVisible = { true }
+            isVisible = { remoteConfig.isMenuOtherColorPick }
         }
     }
 

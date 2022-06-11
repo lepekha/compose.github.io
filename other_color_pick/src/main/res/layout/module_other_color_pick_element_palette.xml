@@ -49,6 +49,8 @@
             android:layout_marginBottom="6dp"
             app:cardBackgroundColor="?attr/color_2"
             app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnRemove"
             app:layout_constraintTop_toTopOf="parent">
@@ -70,6 +72,8 @@
             android:layout_marginBottom="6dp"
             app:cardBackgroundColor="?attr/color_2"
             app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">

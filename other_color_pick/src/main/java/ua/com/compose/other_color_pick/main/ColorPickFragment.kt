@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -106,10 +107,8 @@ class ColorPickFragment : BaseMvvmFragment() {
                         }
                     }
                     is PermissionResult.PermissionDenied -> {
-                        dismiss()
                     }
                     is PermissionResult.PermissionDeniedPermanently -> {
-                        dismiss()
                     }
                     is PermissionResult.ShowRational -> {
                         //If user denied permission frequently then she/he is not clear about why you are asking this permission.

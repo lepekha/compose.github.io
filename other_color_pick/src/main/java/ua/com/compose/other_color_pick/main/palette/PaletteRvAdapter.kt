@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.setVibrate
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickElementPaletteBinding
 import ua.com.compose.other_color_pick.main.EColorType
 
@@ -26,9 +28,10 @@ class PaletteRvAdapter(private val onPressCopy: (color: String) -> Unit,
     }
 
     fun removeColor(id: Long) {
-        val index = cards.indexOfFirst { it.item.id == id }
-        cards.removeAt(index)
-        notifyItemRemoved(index)
+        cards.indexOfFirst { it.item.id == id }.let { index ->
+            cards.removeAt(index)
+            notifyItemRemoved(index)
+        }
     }
 
     override fun getItemCount() = cards.size
@@ -36,12 +39,18 @@ class PaletteRvAdapter(private val onPressCopy: (color: String) -> Unit,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ModuleOtherColorPickElementPaletteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding).apply {
+            this.binding.container.setVibrate(EVibrate.BUTTON)
+            this.binding.container.setOnClickListener {
+                onPressCopy(this.binding.txtColor.text.toString())
+            }
+            this.binding.btnCopy.setVibrate(EVibrate.BUTTON)
             this.binding.btnCopy.setOnClickListener {
                 onPressCopy(this.binding.txtColor.text.toString())
             }
 
+            this.binding.btnRemove.setVibrate(EVibrate.BUTTON)
             this.binding.btnRemove.setOnClickListener {
-                onPressRemove(cards[adapterPosition].item.id)
+                cards.getOrNull(adapterPosition)?.item?.id?.let(onPressRemove)
             }
         }
     }

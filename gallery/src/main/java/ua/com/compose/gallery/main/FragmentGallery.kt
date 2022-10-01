@@ -123,6 +123,17 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             }
         }
 
+        if(!requireContext().hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || !requireContext().hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            txtFolder.isVisible = false
+            placeholder.setVibrate(EVibrate.BUTTON)
+            placeholder.setOnClickListener {
+                checkPermission()
+            }
+        }
+        checkPermission()
+    }
+
+    private fun checkPermission() {
         requestPermissions(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -131,14 +142,13 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             resultCallback = {
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
+                        txtFolder.isVisible = true
                         presenter.getAllShownImagesPath(getCurrentActivity())
                         initPhotos()
                     }
                     is PermissionResult.PermissionDenied -> {
-                        dismiss()
                     }
                     is PermissionResult.PermissionDeniedPermanently -> {
-                        dismiss()
                     }
                     is PermissionResult.ShowRational -> {
                         //If user denied permission frequently then she/he is not clear about why you are asking this permission.

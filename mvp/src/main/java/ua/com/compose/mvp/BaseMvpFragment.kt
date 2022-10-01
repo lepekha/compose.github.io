@@ -15,7 +15,6 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         super.onViewCreated(view, savedInstanceState)
         presenter.attachView(view = this as V)
         (activity as BaseMvpActivity<*, *>).setupBottomMenu(createBottomMenu())
-        setVisibleBack(true)
     }
 
     override fun showAlert(srtResId: Int) {
@@ -41,10 +40,6 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
 
     override fun setBottomMenuColor(color: Int) {
         (activity as BaseMvpActivity<*, *>).setBottomMenuColor(color)
-    }
-
-    override fun setVisibleBack(isVisible: Boolean) {
-        (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
     }
 
     override fun onDestroyView() {

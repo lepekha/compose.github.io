@@ -1,8 +1,10 @@
 package ua.com.compose.other_color_pick.main.camera
 
+import android.Manifest
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.hardware.Camera
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Gravity
@@ -13,6 +15,8 @@ import android.widget.FrameLayout
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import com.eazypermissions.common.model.PermissionResult
+import com.eazypermissions.dsl.extension.requestPermissions
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.com.compose.extension.*
 import ua.com.compose.mvp.BaseMvpActivity
@@ -22,6 +26,7 @@ import ua.com.compose.mvp.data.Menu
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentCameraBinding
 import ua.com.compose.other_color_pick.di.Scope
+import ua.com.compose.other_color_pick.main.ColorPickFragment
 import ua.com.compose.other_color_pick.view.CameraColorPickerPreview
 import ua.com.compose.other_color_pick.view.Cameras
 
@@ -81,7 +86,6 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
-        setVisibleBack(true)
 
         binding?.frameLayout?.bringToFront()
 
@@ -110,6 +114,14 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
                 showAlert(R.string.module_other_color_pick_color_copy)
             }
         }
+
+        if(!requireContext().hasPermission(permission = Manifest.permission.CAMERA)) {
+            binding?.placeholder?.setVibrate(EVibrate.BUTTON)
+            binding?.placeholder?.setImageResource(R.drawable.module_other_text_style_fragment_text_style_ic_open)
+            binding?.placeholder?.setOnClickListener {
+                checkPermission()
+            }
+        }
     }
 
     private fun isDark(color: Int): Boolean {
@@ -120,11 +132,34 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
         return false
     }
 
+    private fun checkPermission() {
+        requestPermissions(
+            Manifest.permission.CAMERA
+        ){
+            requestCode = 4
+            resultCallback = {
+                when(this) {
+                    is PermissionResult.PermissionGranted -> {
+                        binding?.container?.post {
+                            cameraStart()
+                        }
+                    }
+                    is PermissionResult.PermissionDenied -> {
+                    }
+                    is PermissionResult.PermissionDeniedPermanently -> {
+                    }
+                    is PermissionResult.ShowRational -> {
+                        //If user denied permission frequently then she/he is not clear about why you are asking this permission.
+                        //This is your chance to explain them why you need permission.
+                    }
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        binding?.container?.post {
-            cameraStart()
-        }
+        checkPermission()
     }
 
     override fun onPause() {

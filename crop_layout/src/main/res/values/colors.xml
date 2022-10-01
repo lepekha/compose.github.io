@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="crop_border">#ffffff</color>
-    <color name="crop_touch_point">#323232</color>
-    <color name="crop_touch_active">#2C650F</color>
-    <color name="crop_background">#75000000</color>
-</resources>

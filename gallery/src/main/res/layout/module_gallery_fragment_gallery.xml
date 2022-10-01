@@ -127,12 +127,25 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/color_10"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:id="@+id/placeholder"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="150dp"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/module_gallery_ic_prsmission"
+            app:tint="?attr/color_1" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
@@ -142,7 +155,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="2dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </LinearLayout>
+    </FrameLayout>
 
 
 </LinearLayout>

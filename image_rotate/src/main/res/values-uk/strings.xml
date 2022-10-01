@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="module_image_rotate_fragment_image_rotate_title">Поворот</string>
-    <string name="module_image_rotate_fragment_image_crop_save_ready">Зображення збережено</string>
-</resources>

@@ -11,7 +11,6 @@ abstract class BaseMvvmFragment: AppCompatDialogFragment(), BaseMvpView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as BaseMvpActivity<*, *>).setupBottomMenu(createBottomMenu())
-        setVisibleBack(true)
     }
 
     override fun showAlert(srtResId: Int) {
@@ -29,10 +28,6 @@ abstract class BaseMvvmFragment: AppCompatDialogFragment(), BaseMvpView {
 
     override fun setTitle(title: String, startDrawable: Drawable?) {
         (activity as BaseMvpActivity<*, *>).setTitle(title, startDrawable)
-    }
-
-    override fun setVisibleBack(isVisible: Boolean) {
-        (activity as BaseMvpActivity<*, *>).setVisibleBack(isVisible)
     }
 
     override fun backPress(byBack: Boolean): Boolean {

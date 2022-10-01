@@ -109,7 +109,6 @@ class ImageFragment : BaseMvvmFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
-        setVisibleBack(true)
 
         binding?.zoomableImageView2?.setOnTouchListener { v, event ->
             binding?.zoomableImageView2?.let { view ->

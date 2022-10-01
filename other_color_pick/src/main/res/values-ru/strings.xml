@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="module_other_color_pick_fragment_title">Выбор цвета</string>
+    <string name="module_other_color_pick_fragment_title">Color picker</string>
     <string name="module_other_color_pick_camera">Камера</string>
     <string name="module_other_color_pick_remove_all">Удалить все цвета?</string>
     <string name="module_other_color_pick_empty">Цвета отсутствуют</string>

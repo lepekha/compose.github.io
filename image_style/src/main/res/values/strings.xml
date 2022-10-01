@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="module_image_style_title">Style</string>
-    <string name="module_image_style_share">Share current style</string>
-    <string name="module_image_style_remove">Delete current style?</string>
-    <string name="module_image_style_qr_correct">Style added</string>
-    <string name="module_image_style_qr_wrong">QR-code not from Compos</string>
-    <string name="module_image_style_qr_is_add_style">Add \"%1$s\"?</string>
-</resources>

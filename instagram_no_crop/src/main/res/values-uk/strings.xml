@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="module_instagram_no_crop_fragment_title_crop">Квадрат</string>
-    <string name="module_instagram_no_crop_fragment_no_crop_save_ready">Зображення збережено</string>
-
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_origin">Оригінал</string>
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_free">Вільний</string>
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_1_1">1:1</string>
-</resources>

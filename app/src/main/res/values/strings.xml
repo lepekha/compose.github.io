@@ -1,13 +1,3 @@
 <resources>
-    <string name="app_name">Compose</string>
-    <string name="fragment_title_menu">ompose</string>
-    <string name="menu_instagram">Instagram</string>
-    <string name="menu_image">Image</string>
-    <string name="menu_other">Other</string>
-    <string name="shortcut_long_instagram_planer">Instagram planer</string>
-    <string name="shortcut_long_instagram_crop">Instagram crop</string>
-    <string name="shortcut_long_instagram_grid">Instagram grid</string>
-    <string name="shortcut_short_instagram_planer">Visual</string>
-    <string name="shortcut_short_instagram_crop">Square</string>
-    <string name="shortcut_short_instagram_grid">Grid</string>
+    <string name="app_name">Color piker</string>
 </resources>

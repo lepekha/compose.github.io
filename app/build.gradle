@@ -1,26 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
 
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    packagingOptions {
-        pickFirst 'lib/x86/libc++_shared.so'
-        pickFirst 'lib/x86_64/libc++_shared.so'
-        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
-        pickFirst 'lib/arm64-v8a/libc++_shared.so'
-        pickFirst 'lib/arm64-v8a/libyuv-decoder.so'
-        pickFirst 'lib/x86/libyuv-decoder.so'
-        pickFirst 'lib/armeabi-v7a/libyuv-decoder.so'
-        pickFirst 'lib/x86_64/libyuv-decoder.so'
-    }
-
-
     compileSdkVersion 31
     defaultConfig {
-        applicationId "ua.com.compose"
+        applicationId "ua.com.compose.colorPicker"
         minSdkVersion 24
         versionCode 5
         versionName "1.2.0"
@@ -57,36 +44,21 @@ android {
     }
 
     lintOptions {
-
         checkReleaseBuilds false
-
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':image_filter')
-    implementation project(':image_style')
-    implementation project(':image_crop')
-    implementation project(':instagram_no_crop')
-    implementation project(':instagram_panorama')
-    implementation project(':instagram_grid')
-    implementation project(':instagram_planer')
     implementation project(':mvp')
     implementation project(':navigator')
-    implementation project(':other_text_style')
     implementation project(':gallery')
     implementation project(':extension')
     implementation project(':theme')
     implementation project(':dialogs')
-    implementation project(':image_rotate')
-    implementation project(':image_compress')
     implementation project(':file_storage')
-    implementation project(':other_image_info')
     implementation project(':other_color_pick')
-    implementation project(':other_social_media_crop')
 
-    implementation "com.google.firebase:firebase-analytics:$firebase_version"
     implementation "com.sagar:dslpermission:$dslpermission_version"
     implementation "com.github.madrapps:pikolo:$pikolo_version"
     implementation "androidx.core:core-ktx:$core_ktx_version"

@@ -76,7 +76,6 @@ class ColorPickFragment : BaseMvvmFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
-        setVisibleBack(true)
 
         binding?.btnCamera?.setVibrate(EVibrate.BUTTON)
         binding?.btnCamera?.setOnClickListener {
@@ -92,30 +91,10 @@ class ColorPickFragment : BaseMvvmFragment() {
         binding?.btnPalette?.setOnClickListener {
             selectScreen(binding?.tabPalette)
         }
-
-        requestPermissions(
-            Manifest.permission.CAMERA
-        ){
-            requestCode = 4
-            resultCallback = {
-                when(this) {
-                    is PermissionResult.PermissionGranted -> {
-                        if((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) != null){
-                            selectScreen(binding?.tabImage)
-                        }else{
-                            selectScreen(binding?.tabCamera)
-                        }
-                    }
-                    is PermissionResult.PermissionDenied -> {
-                    }
-                    is PermissionResult.PermissionDeniedPermanently -> {
-                    }
-                    is PermissionResult.ShowRational -> {
-                        //If user denied permission frequently then she/he is not clear about why you are asking this permission.
-                        //This is your chance to explain them why you need permission.
-                    }
-                }
-            }
+        if((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) != null){
+            selectScreen(binding?.tabImage)
+        }else{
+            selectScreen(binding?.tabCamera)
         }
     }
 

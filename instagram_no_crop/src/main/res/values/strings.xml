@@ -1,8 +1,0 @@
-<resources>
-    <string name="module_instagram_no_crop_fragment_title_crop">Square</string>
-    <string name="module_instagram_no_crop_fragment_no_crop_save_ready">Image saved</string>
-
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_origin">Original</string>
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_free">Free</string>
-    <string name="module_instagram_no_crop_fragment_crop_aspect_ratio_1_1">1:1</string>
-</resources>

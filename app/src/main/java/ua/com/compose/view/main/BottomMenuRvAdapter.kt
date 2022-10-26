@@ -13,6 +13,7 @@ import ua.com.compose.extension.setVibrate
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import kotlinx.android.synthetic.main.element_bottom_menu_icon.view.*
+import ua.com.compose.extension.vibrate
 
 
 class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<BottomMenuRvAdapter.ViewHolder>() {
@@ -23,8 +24,8 @@ class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<Bo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_bottom_menu_icon, parent, false)).apply {
-            this.btnMenu.setVibrate(type = EVibrate.BUTTON)
             this.btnMenu.setOnClickListener {
+                this.btnMenu.context.vibrate(EVibrate.BUTTON)
                 (menu[adapterPosition] as? BottomMenu)?.onPress?.invoke()
             }
         }

@@ -7,6 +7,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickElementPaletteBinding
 import ua.com.compose.other_color_pick.main.EColorType
 
@@ -39,17 +40,17 @@ class PaletteRvAdapter(private val onPressCopy: (color: String) -> Unit,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ModuleOtherColorPickElementPaletteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding).apply {
-            this.binding.container.setVibrate(EVibrate.BUTTON)
             this.binding.container.setOnClickListener {
+                this.binding.btnCopy.context.vibrate(EVibrate.BUTTON)
                 onPressCopy(this.binding.txtColor.text.toString())
             }
-            this.binding.btnCopy.setVibrate(EVibrate.BUTTON)
             this.binding.btnCopy.setOnClickListener {
+                this.binding.btnCopy.context.vibrate(EVibrate.BUTTON)
                 onPressCopy(this.binding.txtColor.text.toString())
             }
 
-            this.binding.btnRemove.setVibrate(EVibrate.BUTTON)
             this.binding.btnRemove.setOnClickListener {
+                this.binding.btnCopy.context.vibrate(EVibrate.BUTTON)
                 cards.getOrNull(adapterPosition)?.item?.id?.let(onPressRemove)
             }
         }

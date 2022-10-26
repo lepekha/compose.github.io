@@ -1,5 +1,8 @@
 package ua.com.compose.extension
 
+import android.graphics.Color
+import androidx.annotation.ColorInt
+
 fun String.count(subString: String): Int {
     var count = 0
     var idx = 0
@@ -11,4 +14,13 @@ fun String.count(subString: String): Int {
         }
     }
     return count
+}
+
+@ColorInt
+fun String?.toColor(): Int? {
+    return try {
+        Color.parseColor(this)
+    } catch (e: Exception) {
+        return null
+    }
 }

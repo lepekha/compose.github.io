@@ -77,18 +77,18 @@ class ColorPickFragment : BaseMvvmFragment() {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
 
-        binding?.btnCamera?.setVibrate(EVibrate.BUTTON)
         binding?.btnCamera?.setOnClickListener {
+            requireContext().vibrate(EVibrate.BUTTON)
             selectScreen(binding?.tabCamera)
         }
 
-        binding?.btnImage?.setVibrate(EVibrate.BUTTON)
         binding?.btnImage?.setOnClickListener {
+            requireContext().vibrate(EVibrate.BUTTON)
             selectScreen(binding?.tabImage)
         }
 
-        binding?.btnPalette?.setVibrate(EVibrate.BUTTON)
         binding?.btnPalette?.setOnClickListener {
+            requireContext().vibrate(EVibrate.BUTTON)
             selectScreen(binding?.tabPalette)
         }
         if((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) != null){

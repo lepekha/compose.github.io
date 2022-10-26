@@ -124,9 +124,6 @@ public class ZoomableImageView extends androidx.appcompat.widget.AppCompatImageV
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(5);
-//        canvas.drawCircle(this.width / 2, this.height / 2, 30, paint);
-
-
     }
 
     @Override

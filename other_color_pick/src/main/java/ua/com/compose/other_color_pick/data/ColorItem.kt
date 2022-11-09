@@ -13,4 +13,7 @@ class ColorItem {
 
     @ColumnInfo(name = "color")
     var color: Int = Color.WHITE
+
+    @ColumnInfo(name = "name")
+    var name: String = ""
 }

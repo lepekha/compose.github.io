@@ -4,7 +4,6 @@ import android.Manifest
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.hardware.Camera
-import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Gravity
@@ -17,7 +16,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.extension.*
 import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvvmFragment
@@ -26,7 +25,7 @@ import ua.com.compose.mvp.data.Menu
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentCameraBinding
 import ua.com.compose.other_color_pick.di.Scope
-import ua.com.compose.other_color_pick.main.ColorPickFragment
+import ua.com.compose.other_color_pick.main.EColorType
 import ua.com.compose.other_color_pick.view.CameraColorPickerPreview
 import ua.com.compose.other_color_pick.view.Cameras
 
@@ -59,7 +58,14 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
     }
 
     private val btnSwitch = BottomMenu(iconResId = R.drawable.ic_format_color){
-        viewModule.changeColorType()
+        val key = DialogChip.show(fm = childFragmentManager, list = EColorType.values().map { it.title() }, selected = viewModule.colorType.value?.title() ?: "")
+        childFragmentManager.setFragmentResultListener(
+            key,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
+            viewModule.changeColorType(EColorType.values()[position])
+        }
     }
 
     override fun createBottomMenu(): MutableList<Menu> {
@@ -89,10 +95,20 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
 
         binding?.frameLayout?.bringToFront()
 
+        viewModule.nameColor.nonNull().observe(this) { name ->
+            binding?.txtName?.text = name
+        }
+
+        viewModule.colorType.nonNull().observe(this) { type ->
+            btnSwitch.iconResId = type.iconResId
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnSwitch, btnPaletteAdd))
+        }
+
         viewModule.changeColor.nonNull().observe(this) { color ->
             color?.let {
                 binding?.textView?.text = color.second
                 binding?.textView?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
+                binding?.txtName?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
                 binding?.cardView?.setCardBackgroundColor(color.first)
                 binding?.pointerRing?.background?.setColorFilter(color.first, PorterDuff.Mode.SRC_ATOP)
                 binding?.activityMainPointer?.background?.setColorFilter(if(isDark(color.first)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)

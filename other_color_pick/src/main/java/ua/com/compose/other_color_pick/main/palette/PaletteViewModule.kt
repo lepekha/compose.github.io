@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ua.com.compose.extension.*
 import ua.com.compose.other_color_pick.data.ColorItem
 import ua.com.compose.other_color_pick.data.SharedPreferencesKey
@@ -30,20 +32,20 @@ class PaletteViewModule(private val getAllColorsUseCase: GetAllColorsUseCase,
     private val _placeholderState: MutableLiveData<Boolean> = MutableLiveData(true)
     val placeholderState: LiveData<Boolean> = _placeholderState
 
-    private val _colorType: MutableLiveData<EColorType?> = MutableLiveData(null)
-    val colorType: LiveData<EColorType?> = _colorType
+    private val _colorType: MutableLiveData<EColorType> = MutableLiveData(EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)))
+    val colorType: LiveData<EColorType> = _colorType
 
     fun onCreate() = viewModelScope.launch {
         val items = getAllColorsUseCase.execute().map { Card.CardColor(it) }
-        _colorType.postValue(EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)))
         _paletteColors.postValue(items)
         _placeholderState.postValue(items.isEmpty())
     }
 
-    fun changeColorType() = viewModelScope.launch {
-        val colorType = EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)).nextType()
+    fun changeColorType(colorType: EColorType) = viewModelScope.launch {
         prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = colorType.key)
-        _colorType.postValue(colorType)
+        withContext(Dispatchers.Main) {
+            _colorType.value = colorType
+        }
     }
 
     fun pressColorRemove(id: Long) = viewModelScope.launch {

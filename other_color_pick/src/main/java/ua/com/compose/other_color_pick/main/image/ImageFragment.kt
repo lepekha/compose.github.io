@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.extension.*
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.mvp.BaseMvpActivity
@@ -31,6 +32,9 @@ import ua.com.compose.mvp.data.Menu
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentImageBinding
 import ua.com.compose.other_color_pick.di.Scope
+import ua.com.compose.other_color_pick.main.EColorType
+import kotlin.math.max
+import kotlin.math.min
 
 
 class ImageFragment : BaseMvvmFragment() {
@@ -72,7 +76,14 @@ class ImageFragment : BaseMvvmFragment() {
     }
 
     private val btnSwitch = BottomMenu(iconResId = R.drawable.ic_format_color) {
-        viewModule.changeColorType()
+        val key = DialogChip.show(fm = childFragmentManager, list = EColorType.values().map { it.title() }, selected = viewModule.colorType.value?.title() ?: "")
+        childFragmentManager.setFragmentResultListener(
+            key,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
+            viewModule.changeColorType(EColorType.values()[position])
+        }
     }
 
     private fun openGallery() {
@@ -134,9 +145,19 @@ class ImageFragment : BaseMvvmFragment() {
             }
         }
 
+        viewModule.colorType.nonNull().observe(this) { type ->
+            btnSwitch.iconResId = type.iconResId
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnSwitch, btnPaletteAdd))
+        }
+
+        viewModule.nameColor.nonNull().observe(this) { name ->
+            binding?.txtName?.text = name
+        }
+
         viewModule.changeColor.nonNull().observe(this) { color ->
             color?.let {
                 binding?.textView?.text = color.second
+                binding?.txtName?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
                 binding?.textView?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
                 binding?.cardView?.setCardBackgroundColor(color.first)
                 binding?.pointerRing?.background?.setColorFilter(
@@ -194,6 +215,7 @@ class ImageFragment : BaseMvvmFragment() {
         binding?.pointerRing?.isVisible = true
         binding?.activityMainPointer?.isVisible = true
         binding?.placeholder?.isVisible = false
+        binding?.zoomableImageView2?.setBackgroundResource(R.drawable.ic_background)
         binding?.frameLayout?.isVisible = true
         (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnSwitch, btnPaletteAdd))
         binding?.zoomableImageView2?.let {

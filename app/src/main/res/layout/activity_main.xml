@@ -57,7 +57,7 @@
     <FrameLayout
         android:id="@+id/bottomMenuContainer"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/background_bottom_menu"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,8 +67,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bottomMenu"
             android:layout_width="wrap_content"
-            android:layout_height="55dp"
-            android:layout_gravity="center">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
 
         </androidx.recyclerview.widget.RecyclerView>
     </FrameLayout>

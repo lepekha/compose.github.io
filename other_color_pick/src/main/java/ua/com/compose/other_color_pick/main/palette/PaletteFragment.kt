@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.dialog.dialogs.DialogConfirmation
 import ua.com.compose.extension.*
+import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
@@ -26,7 +28,14 @@ class PaletteFragment : BaseMvvmFragment() {
     }
 
     private val btnSwitch = BottomMenu(iconResId = R.drawable.ic_format_color){
-        viewModule.changeColorType()
+        val key = DialogChip.show(fm = childFragmentManager, list = EColorType.values().map { it.title() }, selected = viewModule.colorType.value?.title() ?: "")
+        childFragmentManager.setFragmentResultListener(
+            key,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
+            viewModule.changeColorType(EColorType.values()[position])
+        }
     }
 
     private val btnClearAll = BottomMenu(iconResId = R.drawable.ic_remove_all) {
@@ -89,6 +98,11 @@ class PaletteFragment : BaseMvvmFragment() {
         viewModule.paletteColors.nonNull().observe(this) {
             (binding?.lstPalette?.adapter as? PaletteRvAdapter)?.update(it ?: listOf())
             binding?.lstPalette?.runLayoutAnimation(anim = R.anim.layout_animation_fall_down)
+        }
+
+        viewModule.colorType.nonNull().observe(this) { type ->
+            btnSwitch.iconResId = type.iconResId
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnSwitch, btnClearAll))
         }
 
         viewModule.placeholderState.nonNull().observe(this) {

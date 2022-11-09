@@ -7,10 +7,10 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "ua.com.compose.colorPicker"
+        applicationId "ua.com.compose.colorpicker.camera.image"
         minSdkVersion 24
-        versionCode 5
-        versionName "1.2.0"
+        versionCode 1
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

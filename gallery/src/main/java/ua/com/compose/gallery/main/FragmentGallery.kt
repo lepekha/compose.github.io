@@ -170,6 +170,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     }
 
     override fun initPhotos() {
+        placeholder.isVisible = false
         txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
         list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
         list.adapter = GalleryPhotoRvAdapter(

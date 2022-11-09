@@ -18,7 +18,7 @@ public class CameraColorPickerPreview extends TextureView implements TextureView
     /**
      * The size of the pointer (in PIXELS).
      */
-    protected static final int POINTER_RADIUS = 5;
+    protected static final int POINTER_RADIUS = 10;
 
     /**
      * The {@link Camera} used for getting a preview frame.
@@ -34,6 +34,7 @@ public class CameraColorPickerPreview extends TextureView implements TextureView
      * An array of 3 integers representing the color being selected.
      */
     protected int[] mSelectedColor;
+    protected int[] mLastSelectedColor;
 
 
     protected OnColorSelectedListener mOnColorSelectedListener;
@@ -52,6 +53,7 @@ public class CameraColorPickerPreview extends TextureView implements TextureView
 
             mPreviewSize = mCamera.getParameters().getPreviewSize();
             mSelectedColor = new int[3];
+            mLastSelectedColor = new int[3];
             // mCamera.unlock();
         }catch (Exception e){
             Log.d(TAG,e.getMessage());
@@ -109,8 +111,22 @@ public class CameraColorPickerPreview extends TextureView implements TextureView
                 }
             }
 
-            mOnColorSelectedListener.onColorSelected(Color.rgb(mSelectedColor[0], mSelectedColor[1], mSelectedColor[2]));
+
+            if(isDiff() || isSame()) {
+                mOnColorSelectedListener.onColorSelected(Color.rgb(mSelectedColor[0], mSelectedColor[1], mSelectedColor[2]));
+                mLastSelectedColor[0] = mSelectedColor[0];
+                mLastSelectedColor[1] = mSelectedColor[1];
+                mLastSelectedColor[2] = mSelectedColor[2];
+            }
         }
+    }
+
+    protected boolean isDiff() {
+        return Math.abs(mSelectedColor[0] - mLastSelectedColor[0]) > 3 || Math.abs(mSelectedColor[1] - mLastSelectedColor[1]) > 3 || Math.abs(mSelectedColor[2] - mLastSelectedColor[2]) > 3;
+    }
+
+    protected boolean isSame() {
+        return mSelectedColor[0] == mLastSelectedColor[0] && mSelectedColor[1] == mLastSelectedColor[1] && mSelectedColor[2] == mLastSelectedColor[2];
     }
 
     protected void addColorFromYUV420(byte[] data, int[] averageColor, int count, int x, int y, int width, int height) {

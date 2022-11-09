@@ -18,11 +18,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
 import io.fotoapparat.Fotoapparat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.androidx.scope.scopeActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.com.compose.extension.*
 import ua.com.compose.mvp.BaseMvvmFragment
@@ -76,6 +80,10 @@ class ColorPickFragment : BaseMvvmFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
+
+
+        ColorNames.init(requireContext())
+
 
         binding?.btnCamera?.setOnClickListener {
             requireContext().vibrate(EVibrate.BUTTON)

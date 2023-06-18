@@ -1,4 +1,4 @@
-package ua.com.compose.other_color_pick.domain
+package ua.com.compose.other_color_pick.domain.dbColorItem
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -7,9 +7,9 @@ import ua.com.compose.other_color_pick.data.ColorItem
 
 class GetAllColorsUseCase(private val database: ColorDatabase) {
 
-    suspend fun execute(): List<ColorItem> {
+    suspend fun execute(palletId: Long): List<ColorItem> {
         return withContext(Dispatchers.IO) {
-            database.colorDao?.getAll()?.sortedByDescending { it.id } ?: listOf()
+            database.colorItemDao?.getAll(palletId = palletId)?.sortedByDescending { it.id } ?: listOf()
         }
     }
 }

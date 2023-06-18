@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ua.com.compose.extension.dp
 import kotlin.math.roundToInt
 
 class SpanningLinearLayoutManager : LinearLayoutManager {

@@ -1,47 +1,86 @@
 package ua.com.compose.view.main
 
-import android.content.res.ColorStateList
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import ua.com.compose.R
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.getColorFromAttr
-import ua.com.compose.extension.setVibrate
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import kotlinx.android.synthetic.main.element_bottom_menu_icon.view.*
+import kotlinx.android.synthetic.main.element_bottom_menu_text.view.txtTitle
 import ua.com.compose.extension.vibrate
+import ua.com.compose.mvp.data.TextMenu
 
 
-class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<BottomMenuRvAdapter.ViewHolder>() {
+class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val VIEW_TYPE_ICON = 0
+    private val VIEW_TYPE_TEXT = 1
 
     override fun getItemCount(): Int {
         return menu.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_bottom_menu_icon, parent, false)).apply {
-            this.btnMenu.setOnClickListener {
-                this.btnMenu.context.vibrate(EVibrate.BUTTON)
-                (menu[adapterPosition] as? BottomMenu)?.onPress?.invoke()
+    override fun getItemViewType(position: Int): Int {
+        return if(menu[position] is BottomMenu) {
+            VIEW_TYPE_ICON
+        } else {
+            VIEW_TYPE_TEXT
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if(viewType == VIEW_TYPE_ICON) {
+            return ButtonViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_bottom_menu_icon, parent, false)).apply {
+                this.btnMenu.setOnClickListener {
+                    this.btnMenu.context.vibrate(EVibrate.BUTTON)
+                    (menu[adapterPosition] as? BottomMenu)?.onPress?.invoke()
+                }
+            }
+        } else {
+            return TextViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.element_bottom_menu_text, parent, false)).apply {
+                this.btnMenu.setOnClickListener {
+                    this.btnMenu.context.vibrate(EVibrate.BUTTON)
+                    (menu[adapterPosition] as? TextMenu)?.onPress?.invoke()
+                }
             }
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = menu[position] as BottomMenu
-        holder.btnMenu.isClickable = item.isEnabled
-        holder.btnIcon.setImageResource(item.iconResId)
-        val iconTintRes = item.iconTintRes ?: R.attr.color_9
-        holder.btnIcon.setImageResource(item.iconResId)
-        holder.btnIcon.setColorFilter(holder.btnMenu.context.getColorFromAttr(iconTintRes))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = menu[position]
+        when {
+            item is BottomMenu -> {
+                (holder as ButtonViewHolder).apply {
+                    holder.btnMenu.isClickable = item.isEnabled
+                    holder.btnIcon.setImageResource(item.iconResId)
+                    val color = item.color ?: holder.btnMenu.context.getColorFromAttr(R.attr.color_9)
+                    holder.btnIcon.setImageResource(item.iconResId)
+                    holder.btnIcon.setColorFilter(color)
+                }
+            }
+            item is TextMenu -> {
+                (holder as TextViewHolder).apply {
+                    holder.btnMenu.isClickable = item.isEnabled
+                    holder.title.text = item.text
+                    val color = item.color ?: holder.btnMenu.context.getColorFromAttr(R.attr.color_9)
+                    holder.title.setTextColor(color)
+                }
+            }
+        }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ButtonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val btnMenu: FrameLayout = view.btnMenu
         val btnIcon: ImageView = view.btnIcon
+    }
+
+    class TextViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val btnMenu: FrameLayout = view.btnMenu
+        val title: TextView = view.txtTitle
     }
 }

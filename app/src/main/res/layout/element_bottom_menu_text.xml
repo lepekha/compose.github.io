@@ -21,12 +21,17 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/btnIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/module_other_text_style_fragment_text_style_ic_copy"
-            app:tint="?attr/color_9" />
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:text="HEX"
+            android:textSize="16sp" />
+
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

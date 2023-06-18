@@ -1,48 +1,26 @@
 package ua.com.compose.other_color_pick.main
 
-import android.Manifest
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.hardware.Camera
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.eazypermissions.common.model.PermissionResult
-import com.eazypermissions.dsl.extension.requestPermissions
-import io.fotoapparat.Fotoapparat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.androidx.scope.scopeActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.fragment.app.activityViewModels
+import ua.com.compose.ColorNames
+import ua.com.compose.EColorType
+import ua.com.compose.ImageInfoViewModule
+import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.extension.*
 import ua.com.compose.mvp.BaseMvvmFragment
-import ua.com.compose.mvp.data.BottomMenu
-import ua.com.compose.mvp.data.Menu
 import ua.com.compose.navigator.replace
 import ua.com.compose.other_color_pick.R
+import ua.com.compose.other_color_pick.data.SharedPreferencesKey
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentMainBinding
 import ua.com.compose.other_color_pick.di.Scope
 import ua.com.compose.other_color_pick.main.camera.CameraFragment
 import ua.com.compose.other_color_pick.main.image.ImageFragment
 import ua.com.compose.other_color_pick.main.palette.PaletteFragment
-import ua.com.compose.other_color_pick.view.CameraColorPickerPreview
-import ua.com.compose.other_color_pick.view.Cameras
-import ua.com.compose.views.SliderBox
-import ua.com.compose.views.SliderBoxElement
 import java.lang.ref.WeakReference
 
 
@@ -63,9 +41,7 @@ class ColorPickFragment : BaseMvvmFragment() {
 
     private var binding: ModuleOtherColorPickFragmentMainBinding? = null
 
-    private val viewModule: ImageInfoViewModule by lazy {
-        Scope.COLOR_PICK.get()
-    }
+    private val viewModule: ColorPickViewModule by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = ModuleOtherColorPickFragmentMainBinding.inflate(inflater)
@@ -79,11 +55,21 @@ class ColorPickFragment : BaseMvvmFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
+        setTitle("")
 
 
         ColorNames.init(requireContext())
 
+        binding?.btnColorType?.setOnClickListener {
+            val key = DialogChip.show(fm = childFragmentManager, list = EColorType.values().map { it.title() }, selected = EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)).title())
+            childFragmentManager.setFragmentResultListener(
+                    key,
+                    viewLifecycleOwner
+            ) { _, bundle ->
+                val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
+                viewModule.changeColorType(colorType = EColorType.values()[position])
+            }
+        }
 
         binding?.btnCamera?.setOnClickListener {
             requireContext().vibrate(EVibrate.BUTTON)
@@ -102,24 +88,33 @@ class ColorPickFragment : BaseMvvmFragment() {
         if((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) != null){
             selectScreen(binding?.tabImage)
         }else{
-            selectScreen(binding?.tabCamera)
+            val panel = EPanel.valueOfKey(prefs.get(key = SharedPreferencesKey.KEY_PANEL_ID, defaultValue = EPanel.IMAGE.id))
+            val view = when(panel) {
+                EPanel.CAMERA -> binding?.tabCamera
+                EPanel.IMAGE -> binding?.tabImage
+                EPanel.PALLETS -> binding?.tabPalette
+            }
+            selectScreen(tabView = view)
         }
     }
 
     private var prevTab: WeakReference<View>? = null
-    private fun selectScreen(tabView: View?) {
+    private fun selectScreen(tabView: View? = null) {
         prevTab?.get()?.toggle()
         prevTab = WeakReference(tabView)
         tabView?.toggle()
 
-        when(tabView?.id) {
-            binding?.tabCamera?.id -> {
+        when {
+            tabView?.id == binding?.tabCamera?.id -> {
+                prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.CAMERA.id)
                 childFragmentManager.replace(CameraFragment.newInstance(), binding?.content?.id ?: -1, addToBackStack = false)
             }
-            binding?.tabImage?.id  -> {
+            tabView?.id == binding?.tabImage?.id-> {
+                prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.IMAGE.id)
                 childFragmentManager.replace(ImageFragment.newInstance(arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri), binding?.content?.id ?: -1, addToBackStack = false)
             }
-            binding?.tabPalette?.id  -> {
+            tabView?.id == binding?.tabPalette?.id  -> {
+                prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.PALLETS.id)
                 childFragmentManager.replace(PaletteFragment.newInstance(), binding?.content?.id ?: -1, addToBackStack = false)
             }
         }

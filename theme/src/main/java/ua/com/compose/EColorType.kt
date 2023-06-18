@@ -1,26 +1,23 @@
-package ua.com.compose.other_color_pick.main
+package ua.com.compose
 
-import android.R.attr.key
 import android.content.Context
 import android.graphics.Color
+import android.graphics.ColorSpace
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import org.json.JSONObject
-import ua.com.compose.other_color_pick.R
 import java.io.IOException
 import java.util.*
 import kotlin.collections.Iterator
 import kotlin.collections.firstOrNull
 import kotlin.collections.set
-import kotlin.collections.sortedMapOf
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 
-enum class EColorType(val key: Int, val iconResId: Int) {
-    HEX(key = 0, iconResId = R.drawable.ic_hex) {
+enum class EColorType(val key: Int) {
+    HEX(key = 0) {
         override fun convertColor(color: Int): String {
             val colorHex = Integer.toHexString(color).substring(2).toUpperCase()
             return "#$colorHex"
@@ -28,25 +25,45 @@ enum class EColorType(val key: Int, val iconResId: Int) {
         override fun title() = "HEX"
     },
 
-    RGB(key = 1, iconResId = R.drawable.ic_rgb) {
+    RGB_DECIMAL(key = 1) {
         override fun convertColor(color: Int): String {
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
             return "$red, $green, $blue"
         }
-        override fun title() = "RGB"
+        override fun title() = "RGB Decimal"
     },
 
-    HSV(key = 2, iconResId = R.drawable.ic_hsv) {
+    BINARY(key = 2) {
+        override fun convertColor(color: Int): String {
+            val red = Color.red(color)
+            val green = Color.green(color)
+            val blue = Color.blue(color)
+            return "${red.toString(2)}, ${green.toString(2)}, ${blue.toString(2)}"
+        }
+        override fun title() = "BINARY"
+    },
+
+    RGB_PERCENT(key = 3) {
+        override fun convertColor(color: Int): String {
+            val red = Color.red(color) * 100.0f / 255.0f
+            val green = Color.green(color) * 100.0f / 255.0f
+            val blue = Color.blue(color) * 100.0f / 255.0f
+            return "${String.format("%.1f", red)}%, ${String.format("%.1f", green)}%, ${String.format("%.1f", blue)}%"
+        }
+        override fun title() = "RGB Percent"
+    },
+
+    HSV(key = 4) {
         override fun convertColor(color: Int): String {
             val array = FloatArray(3)
             Color.colorToHSV(color, array)
-            return "${(array[0]).toInt()}%, ${(array[1] * 100).toInt()}%, ${(array[2] * 100).toInt()}%"
+            return "${String.format("%.1f", array[0])}°, ${String.format("%.1f", (array[1] * 100))}%, ${String.format("%.1f", (array[2] * 100))}%"
         }
         override fun title() = "HSV"
     },
-    HSL(key = 3, iconResId = R.drawable.ic_hsl) {
+    HSL(key = 5) {
         override fun convertColor(color: Int): String {
             val red = Color.red(color)
             val green = Color.green(color)
@@ -54,39 +71,42 @@ enum class EColorType(val key: Int, val iconResId: Int) {
 
             val array = FloatArray(3)
             ColorUtils.RGBToHSL(red, green, blue, array)
-            return "${(array[0]).toInt()}%, ${(array[1] * 100).toInt()}%, ${(array[2] * 100).toInt()}%"
+            return "${String.format("%.1f", array[0])}°, ${String.format("%.1f", (array[1] * 100))}%, ${String.format("%.1f", (array[2] * 100))}%"
         }
         override fun title() = "HSL"
     },
-    CMYK(key = 4, iconResId = R.drawable.ic_cmyk) {
+    CMYK(key = 6) {
         override fun convertColor(color: Int): String {
-            val red = Color.red(color)
-            val green = Color.green(color)
-            val blue = Color.blue(color)
-            val black: Int = Math.min(Math.min(255 - red, 255 - green), 255 - blue)
+            val r = Color.red(color)
+            val g = Color.green(color)
+            val b = Color.blue(color)
 
-            val (cyan, magenta, yellow) = when {
-                black == 255 -> {
-                    Triple(0f, 0f, 0f)
-                }
-                black != 255 -> {
-                    val c = (255f - red - black) / (255 - black)
-                    val m = (255f - green - black) / (255 - black)
-                    val y = (255f - blue - black) / (255 - black)
-                    Triple(c, m, y)
-                }
-                else -> {
-                    val c = 255f - red
-                    val m = 255f - green
-                    val y = 255f - blue
-                    Triple(c, m, y)
-                }
-            }
-            return "${(cyan * 100).roundToInt()}%, ${(magenta * 100).roundToInt()}%, ${(yellow * 100).roundToInt()}%, ${black}%"
+            val rPrime = r / 255f
+            val gPrime = g / 255f
+            val bPrime = b / 255f
+
+            val k = 1f - maxOf(rPrime, gPrime, bPrime)
+            val c = ((1f - rPrime - k) / (1f - k)).takeIf { it.isFinite() } ?: 0f
+            val m = ((1f - gPrime - k) / (1f - k)).takeIf { it.isFinite() } ?: 0f
+            val y = ((1f - bPrime - k) / (1f - k)).takeIf { it.isFinite() } ?: 0f
+            return "${(c * 100).roundToInt()}%, ${(m * 100).roundToInt()}%, ${(y * 100).roundToInt()}%, ${(k * 100).roundToInt()}%"
         }
         override fun title() = "CMYK"
     },
-    XYZ(key = 5, iconResId = R.drawable.ic_xyz) {
+    CIE_LAB(key = 7) {
+        override fun convertColor(color: Int): String {
+            val r = Color.red(color)
+            val g = Color.green(color)
+            val b = Color.blue(color)
+
+            val array = Array(size = 3, init = { 0.0 }).toDoubleArray()
+            ColorUtils.RGBToLAB(r, g, b, array)
+
+            return "${String.format("%.3f", array[0])}, ${String.format("%.3f", array[1])}, ${String.format("%.3f", array[2])}"
+        }
+        override fun title() = "CIE LAB"
+    },
+    XYZ(key = 8) {
         override fun convertColor(color: Int): String {
             val red = Color.red(color)
             val green = Color.green(color)
@@ -94,9 +114,9 @@ enum class EColorType(val key: Int, val iconResId: Int) {
 
             val array = DoubleArray(3)
             ColorUtils.RGBToXYZ(red, green, blue, array)
-            val x = String.format(Locale.getDefault(), "%.${1}f", array[0])
-            val y = String.format(Locale.getDefault(), "%.${1}f", array[1])
-            val z = String.format(Locale.getDefault(), "%.${1}f", array[2])
+            val x = String.format(Locale.getDefault(), "%.3f", array[0])
+            val y = String.format(Locale.getDefault(), "%.3f", array[1])
+            val z = String.format(Locale.getDefault(), "%.3f", array[2])
             return "$x%, $y%, $z%"
         }
         override fun title() = "XYZ"

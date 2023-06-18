@@ -18,11 +18,11 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
 import androidx.core.view.drawToBitmap
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.extension.*
 import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.mvp.BaseMvpActivity
@@ -32,9 +32,8 @@ import ua.com.compose.mvp.data.Menu
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentImageBinding
 import ua.com.compose.other_color_pick.di.Scope
-import ua.com.compose.other_color_pick.main.EColorType
-import kotlin.math.max
-import kotlin.math.min
+import ua.com.compose.EColorType
+import ua.com.compose.other_color_pick.main.ColorPickViewModule
 
 
 class ImageFragment : BaseMvvmFragment() {
@@ -70,19 +69,15 @@ class ImageFragment : BaseMvvmFragment() {
         openGallery()
     }
 
-    private val btnPaletteAdd = BottomMenu(iconResId = R.drawable.ic_palette_add) {
+    private val btnPaletteAdd = BottomMenu(iconResId = R.drawable.ic_add_circle) {
         viewModule.pressPaletteAdd()
         showAlert(R.string.module_other_color_pick_color_add_to_pallete)
     }
 
-    private val btnSwitch = BottomMenu(iconResId = R.drawable.ic_format_color) {
-        val key = DialogChip.show(fm = childFragmentManager, list = EColorType.values().map { it.title() }, selected = viewModule.colorType.value?.title() ?: "")
-        childFragmentManager.setFragmentResultListener(
-            key,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
-            viewModule.changeColorType(EColorType.values()[position])
+    private val btnCopy = BottomMenu(iconResId = R.drawable.ic_copy) {
+        binding?.textView?.text?.toString()?.let { color ->
+            requireContext().clipboardCopy(color)
+            showAlert(R.string.module_other_color_pick_color_copy)
         }
     }
 
@@ -91,9 +86,7 @@ class ImageFragment : BaseMvvmFragment() {
     }
 
     override fun createBottomMenu(): MutableList<Menu> {
-        return mutableListOf<Menu>().apply {
-            this.add(btnGallery)
-        }
+        return mutableListOf<Menu>()
     }
 
     private var binding: ModuleOtherColorPickFragmentImageBinding? = null
@@ -101,6 +94,8 @@ class ImageFragment : BaseMvvmFragment() {
     private val viewModule: ImageViewModule by lazy {
         Scope.COLOR_PICK.get()
     }
+
+    private val mainModule: ColorPickViewModule by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -120,7 +115,6 @@ class ImageFragment : BaseMvvmFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
-
         binding?.zoomableImageView2?.setOnTouchListener { v, event ->
             binding?.zoomableImageView2?.let { view ->
                 detectColor(view)
@@ -145,9 +139,11 @@ class ImageFragment : BaseMvvmFragment() {
             }
         }
 
-        viewModule.colorType.nonNull().observe(this) { type ->
-            btnSwitch.iconResId = type.iconResId
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnSwitch, btnPaletteAdd))
+        mainModule.colorType.nonNull().observe(this) { type ->
+            binding?.pointerRing?.isVisible?.takeIf { it }?.let {
+                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnCopy, btnPaletteAdd))
+            }
+            viewModule.updateColor()
         }
 
         viewModule.nameColor.nonNull().observe(this) { name ->
@@ -155,28 +151,12 @@ class ImageFragment : BaseMvvmFragment() {
         }
 
         viewModule.changeColor.nonNull().observe(this) { color ->
-            color?.let {
-                binding?.textView?.text = color.second
-                binding?.txtName?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
-                binding?.textView?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
-                binding?.cardView?.setCardBackgroundColor(color.first)
-                binding?.pointerRing?.background?.setColorFilter(
-                    color.first,
-                    PorterDuff.Mode.SRC_ATOP
-                )
-                binding?.activityMainPointer?.background?.setColorFilter(
-                    if (isDark(color.first)) Color.WHITE else Color.BLACK,
-                    PorterDuff.Mode.SRC_ATOP
-                )
-            }
-        }
-
-        binding?.cardView?.setVibrate(EVibrate.BUTTON)
-        binding?.cardView?.setOnClickListener {
-            binding?.textView?.text?.toString()?.let { color ->
-                requireContext().clipboardCopy(color)
-                showAlert(R.string.module_other_color_pick_color_copy)
-            }
+            binding?.textView?.text = mainModule.colorType.value?.convertColor(color) ?: ""
+            binding?.txtName?.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
+            binding?.textView?.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
+            binding?.cardView?.setCardBackgroundColor(color)
+            binding?.pointerRing?.background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            binding?.activityMainPointer?.background?.setColorFilter(if (isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
         }
 
         binding?.btnCopy?.setOnClickListener {
@@ -217,7 +197,7 @@ class ImageFragment : BaseMvvmFragment() {
         binding?.placeholder?.isVisible = false
         binding?.zoomableImageView2?.setBackgroundResource(R.drawable.ic_background)
         binding?.frameLayout?.isVisible = true
-        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnSwitch, btnPaletteAdd))
+        (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnCopy, btnPaletteAdd))
         binding?.zoomableImageView2?.let {
             viewLifecycleOwner.lifecycleScope.launch {
                 val image = requireContext().loadImage(uri)

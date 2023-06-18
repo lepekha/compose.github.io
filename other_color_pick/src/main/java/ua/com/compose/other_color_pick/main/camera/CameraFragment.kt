@@ -14,9 +14,9 @@ import android.widget.FrameLayout
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
-import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.extension.*
 import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvvmFragment
@@ -25,7 +25,7 @@ import ua.com.compose.mvp.data.Menu
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentCameraBinding
 import ua.com.compose.other_color_pick.di.Scope
-import ua.com.compose.other_color_pick.main.EColorType
+import ua.com.compose.other_color_pick.main.ColorPickViewModule
 import ua.com.compose.other_color_pick.view.CameraColorPickerPreview
 import ua.com.compose.other_color_pick.view.Cameras
 
@@ -52,19 +52,15 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
     private var mCameraPreview: CameraColorPickerPreview? = null
     var mPreviewContainer: FrameLayout? = null
 
-    private val btnPaletteAdd = BottomMenu(iconResId = R.drawable.ic_palette_add){
+    private val btnPaletteAdd = BottomMenu(iconResId = R.drawable.ic_add_circle){
         viewModule.pressPaletteAdd()
         showAlert(R.string.module_other_color_pick_color_add_to_pallete)
     }
 
-    private val btnSwitch = BottomMenu(iconResId = R.drawable.ic_format_color){
-        val key = DialogChip.show(fm = childFragmentManager, list = EColorType.values().map { it.title() }, selected = viewModule.colorType.value?.title() ?: "")
-        childFragmentManager.setFragmentResultListener(
-            key,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
-            viewModule.changeColorType(EColorType.values()[position])
+    private val btnCopy = BottomMenu(iconResId = R.drawable.ic_copy){
+        binding?.textView?.text?.toString()?.let { color ->
+            requireContext().clipboardCopy(color)
+            showAlert(R.string.module_other_color_pick_color_copy)
         }
     }
 
@@ -77,6 +73,8 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
     private val viewModule: CameraViewModule by lazy {
         Scope.COLOR_PICK.get()
     }
+
+    private val mainModule: ColorPickViewModule by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = ModuleOtherColorPickFragmentCameraBinding.inflate(inflater)
@@ -99,32 +97,22 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
             binding?.txtName?.text = name
         }
 
-        viewModule.colorType.nonNull().observe(this) { type ->
-            btnSwitch.iconResId = type.iconResId
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnSwitch, btnPaletteAdd))
+        mainModule.colorType.nonNull().observe(this) { type ->
+            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnCopy, btnPaletteAdd))
+            viewModule.updateColor()
         }
 
         viewModule.changeColor.nonNull().observe(this) { color ->
-            color?.let {
-                binding?.textView?.text = color.second
-                binding?.textView?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
-                binding?.txtName?.setTextColor( if (isDark(color.first)) Color.WHITE else Color.BLACK)
-                binding?.cardView?.setCardBackgroundColor(color.first)
-                binding?.pointerRing?.background?.setColorFilter(color.first, PorterDuff.Mode.SRC_ATOP)
-                binding?.activityMainPointer?.background?.setColorFilter(if(isDark(color.first)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
-            }
+            binding?.textView?.text = mainModule.colorType.value?.convertColor(color) ?: ""
+            binding?.textView?.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
+            binding?.txtName?.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
+            binding?.cardView?.setCardBackgroundColor(color)
+            binding?.pointerRing?.background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            binding?.activityMainPointer?.background?.setColorFilter(if(isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
         }
 
         binding?.cardView?.setVibrate(EVibrate.BUTTON)
         binding?.cardView?.setOnClickListener {
-            binding?.textView?.text?.toString()?.let { color ->
-                requireContext().clipboardCopy(color)
-                showAlert(R.string.module_other_color_pick_color_copy)
-            }
-        }
-
-        binding?.btnCopy?.setVibrate(EVibrate.BUTTON)
-        binding?.btnCopy?.setOnClickListener {
             binding?.textView?.text?.toString()?.let { color ->
                 requireContext().clipboardCopy(color)
                 showAlert(R.string.module_other_color_pick_color_copy)
@@ -266,7 +254,7 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
                 binding?.previewContainer?.isInvisible = false
                 binding?.activityMainPointer?.isVisible = true
                 binding?.placeholder?.isVisible = false
-                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnSwitch, btnPaletteAdd))
+                (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnCopy, btnPaletteAdd))
             }
         }
 

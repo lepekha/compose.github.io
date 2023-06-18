@@ -4,8 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/theme_bottom_menu_margin">
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtTitle"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        android:singleLine="false"
+        android:text="Color picker"
+        android:textColor="?attr/color_5"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="14dp" />
 
     <FrameLayout
         android:id="@+id/content"
@@ -24,12 +43,11 @@
         android:id="@+id/btnCamera"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@+id/btnImage"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/btnPalette">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -69,12 +87,11 @@
         android:id="@+id/btnImage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@+id/btnPalette"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnCamera"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/btnPalette">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -119,7 +136,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnImage"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -154,5 +171,19 @@
             android:text="@string/module_other_color_pick_palette"
             android:textColor="?attr/color_9" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnColorType"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:cropToPadding="false"
+        android:padding="4dp"
+        android:tint="?attr/color_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
+        app:srcCompat="@drawable/ic_settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

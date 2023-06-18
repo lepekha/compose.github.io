@@ -4,8 +4,11 @@ import androidx.room.*
 
 @Dao
 interface ColorItemDAO {
-    @Query("SELECT * FROM colorItem")
-    fun getAll(): List<ColorItem>
+    @Query("SELECT * FROM colorItem WHERE palletId = :palletId")
+    fun getAll(palletId: Long): List<ColorItem>
+
+    @Query("SELECT * FROM colorItem WHERE palletId = :palletId")
+    fun getAllFromFolder(palletId: Long): List<ColorItem>
 
     @Query("SELECT * FROM colorItem WHERE id = :id")
     fun getById(id: Long): ColorItem?
@@ -22,6 +25,6 @@ interface ColorItemDAO {
     @Query("DELETE FROM colorItem WHERE id = :id")
     fun deleteById(id: Long)
 
-    @Query("DELETE FROM colorItem")
-    fun deleteAll()
+    @Query("DELETE FROM colorItem WHERE palletId = :palletId")
+    fun deleteAll(palletId: Long)
 }

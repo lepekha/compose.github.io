@@ -1,4 +1,4 @@
-package ua.com.compose.dialog.dialogs
+package ua.com.compose.other_color_pick.main.info
 
 import android.app.Dialog
 import android.content.res.ColorStateList

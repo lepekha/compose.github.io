@@ -9,6 +9,7 @@
     <attr name="color_7" format="color"/>
     <attr name="color_8" format="color"/>
     <attr name="color_9" format="color"/>
+    <attr name="color_main_header" format="color"/>
 
     <attr name="color_10" format="color"/>
     <attr name="color_11" format="color"/>

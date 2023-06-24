@@ -30,7 +30,7 @@ enum class EColorType(val key: Int) {
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
-            return "$red, $green, $blue"
+            return "$red $green $blue"
         }
         override fun title() = "RGB Decimal"
     },
@@ -40,7 +40,7 @@ enum class EColorType(val key: Int) {
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
-            return "${red.toString(2)}, ${green.toString(2)}, ${blue.toString(2)}"
+            return "${red.toString(2)} ${green.toString(2)} ${blue.toString(2)}"
         }
         override fun title() = "BINARY"
     },
@@ -50,7 +50,7 @@ enum class EColorType(val key: Int) {
             val red = Color.red(color) * 100.0f / 255.0f
             val green = Color.green(color) * 100.0f / 255.0f
             val blue = Color.blue(color) * 100.0f / 255.0f
-            return "${String.format("%.1f", red)}%, ${String.format("%.1f", green)}%, ${String.format("%.1f", blue)}%"
+            return "${String.format("%.1f", red)}% ${String.format("%.1f", green)}% ${String.format("%.1f", blue)}%"
         }
         override fun title() = "RGB Percent"
     },
@@ -59,7 +59,7 @@ enum class EColorType(val key: Int) {
         override fun convertColor(color: Int): String {
             val array = FloatArray(3)
             Color.colorToHSV(color, array)
-            return "${String.format("%.1f", array[0])}°, ${String.format("%.1f", (array[1] * 100))}%, ${String.format("%.1f", (array[2] * 100))}%"
+            return "${String.format("%.1f", array[0])}° ${String.format("%.1f", (array[1] * 100))}% ${String.format("%.1f", (array[2] * 100))}%"
         }
         override fun title() = "HSV"
     },
@@ -71,7 +71,7 @@ enum class EColorType(val key: Int) {
 
             val array = FloatArray(3)
             ColorUtils.RGBToHSL(red, green, blue, array)
-            return "${String.format("%.1f", array[0])}°, ${String.format("%.1f", (array[1] * 100))}%, ${String.format("%.1f", (array[2] * 100))}%"
+            return "${String.format("%.1f", array[0])}° ${String.format("%.1f", (array[1] * 100))}% ${String.format("%.1f", (array[2] * 100))}%"
         }
         override fun title() = "HSL"
     },
@@ -89,7 +89,7 @@ enum class EColorType(val key: Int) {
             val c = ((1f - rPrime - k) / (1f - k)).takeIf { it.isFinite() } ?: 0f
             val m = ((1f - gPrime - k) / (1f - k)).takeIf { it.isFinite() } ?: 0f
             val y = ((1f - bPrime - k) / (1f - k)).takeIf { it.isFinite() } ?: 0f
-            return "${(c * 100).roundToInt()}%, ${(m * 100).roundToInt()}%, ${(y * 100).roundToInt()}%, ${(k * 100).roundToInt()}%"
+            return "${(c * 100).roundToInt()}% ${(m * 100).roundToInt()}%, ${(y * 100).roundToInt()}% ${(k * 100).roundToInt()}%"
         }
         override fun title() = "CMYK"
     },
@@ -102,7 +102,7 @@ enum class EColorType(val key: Int) {
             val array = Array(size = 3, init = { 0.0 }).toDoubleArray()
             ColorUtils.RGBToLAB(r, g, b, array)
 
-            return "${String.format("%.3f", array[0])}, ${String.format("%.3f", array[1])}, ${String.format("%.3f", array[2])}"
+            return "${String.format("%.3f", array[0])} ${String.format("%.3f", array[1])} ${String.format("%.3f", array[2])}"
         }
         override fun title() = "CIE LAB"
     },
@@ -117,7 +117,7 @@ enum class EColorType(val key: Int) {
             val x = String.format(Locale.getDefault(), "%.3f", array[0])
             val y = String.format(Locale.getDefault(), "%.3f", array[1])
             val z = String.format(Locale.getDefault(), "%.3f", array[2])
-            return "$x%, $y%, $z%"
+            return "$x% $y% $z%"
         }
         override fun title() = "XYZ"
     };

@@ -20,6 +20,7 @@ class ColorGridView @JvmOverloads constructor(
         invalidate() // Оновлюємо вью для перерисування
     }
 
+    private val paint = Paint()
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         if (canvas == null) return
@@ -30,7 +31,7 @@ class ColorGridView @JvmOverloads constructor(
         val squareSize = width / numColors // Розмір кожного квадратика
 
         // Ініціалізуємо фарбу для малювання квадратиків
-        val paint = Paint()
+
         paint.style = Paint.Style.FILL
 
         for (i in 0 until numColors) {

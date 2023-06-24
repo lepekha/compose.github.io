@@ -22,6 +22,7 @@ import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentCameraBinding
 import ua.com.compose.other_color_pick.di.Scope
@@ -30,7 +31,7 @@ import ua.com.compose.other_color_pick.view.CameraColorPickerPreview
 import ua.com.compose.other_color_pick.view.Cameras
 
 
-class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelectedListener {
+class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_pick_fragment_camera), CameraColorPickerPreview.OnColorSelectedListener {
 
     companion object {
         private fun getCameraInstance(): Camera? {
@@ -58,7 +59,7 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
     }
 
     private val btnCopy = BottomMenu(iconResId = R.drawable.ic_copy){
-        binding?.textView?.text?.toString()?.let { color ->
+        binding.textView.text?.toString()?.let { color ->
             requireContext().clipboardCopy(color)
             showAlert(R.string.module_other_color_pick_color_copy)
         }
@@ -68,7 +69,7 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
         return mutableListOf<Menu>()
     }
 
-    private var binding: ModuleOtherColorPickFragmentCameraBinding? = null
+    private val binding by viewBindingWithBinder(ModuleOtherColorPickFragmentCameraBinding::bind)
 
     private val viewModule: CameraViewModule by lazy {
         Scope.COLOR_PICK.get()
@@ -76,25 +77,15 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
 
     private val mainModule: ColorPickViewModule by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = ModuleOtherColorPickFragmentCameraBinding.inflate(inflater)
-        mPreviewContainer = binding?.previewContainer
-        return binding?.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mPreviewContainer = binding.previewContainer
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
 
-        binding?.frameLayout?.bringToFront()
+//        binding.frameLayout.bringToFront()
 
         viewModule.nameColor.nonNull().observe(this) { name ->
-            binding?.txtName?.text = name
+            binding.txtName.text = name
         }
 
         mainModule.colorType.nonNull().observe(this) { type ->
@@ -103,26 +94,26 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
         }
 
         viewModule.changeColor.nonNull().observe(this) { color ->
-            binding?.textView?.text = mainModule.colorType.value?.convertColor(color) ?: ""
-            binding?.textView?.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
-            binding?.txtName?.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
-            binding?.cardView?.setCardBackgroundColor(color)
-            binding?.pointerRing?.background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-            binding?.activityMainPointer?.background?.setColorFilter(if(isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+            binding.textView.text = mainModule.colorType.value?.convertColor(color) ?: ""
+            binding.textView.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
+            binding.txtName.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
+            binding.cardColor.setBackgroundColor(color)
+            binding.pointerRing.background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            binding.activityMainPointer.background?.setColorFilter(if(isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
         }
 
-        binding?.cardView?.setVibrate(EVibrate.BUTTON)
-        binding?.cardView?.setOnClickListener {
-            binding?.textView?.text?.toString()?.let { color ->
+        binding.cardView.setVibrate(EVibrate.BUTTON)
+        binding.cardView.setOnClickListener {
+            binding.textView.text.toString().let { color ->
                 requireContext().clipboardCopy(color)
                 showAlert(R.string.module_other_color_pick_color_copy)
             }
         }
 
         if(!requireContext().hasPermission(permission = Manifest.permission.CAMERA)) {
-            binding?.placeholder?.setVibrate(EVibrate.BUTTON)
-            binding?.placeholder?.setImageResource(R.drawable.module_other_text_style_fragment_text_style_ic_open)
-            binding?.placeholder?.setOnClickListener {
+            binding.placeholder.setVibrate(EVibrate.BUTTON)
+            binding.placeholder.setImageResource(R.drawable.module_other_text_style_fragment_text_style_ic_open)
+            binding.placeholder.setOnClickListener {
                 checkPermission()
             }
         }
@@ -144,7 +135,7 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
             resultCallback = {
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
-                        binding?.container?.post {
+                        binding.container?.post {
                             cameraStart()
                         }
                     }
@@ -187,7 +178,7 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
         }
 
         if (mCameraPreview != null) {
-            binding?.previewContainer?.removeView(mCameraPreview)
+            binding.previewContainer.removeView(mCameraPreview)
         }
     }
 
@@ -249,11 +240,12 @@ class CameraFragment : BaseMvvmFragment(), CameraColorPickerPreview.OnColorSelec
 
                 //add camera preview
                 mPreviewContainer?.addView(mCameraPreview, 0, mPreviewParams)
-                binding?.frameLayout?.isVisible = true
-                binding?.pointerRing?.isVisible = true
-                binding?.previewContainer?.isInvisible = false
-                binding?.activityMainPointer?.isVisible = true
-                binding?.placeholder?.isVisible = false
+                binding.cardView.setMarginBottom(requireContext().navigationBarHeight() + 55.dp.toInt() + 8.dp.toInt())
+                binding.cardView.isVisible = true
+                binding.pointerRing.isVisible = true
+                binding.previewContainer.isInvisible = false
+                binding.activityMainPointer.isVisible = true
+                binding.placeholder.isVisible = false
                 (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnCopy, btnPaletteAdd))
             }
         }

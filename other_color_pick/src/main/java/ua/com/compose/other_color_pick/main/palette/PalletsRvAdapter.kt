@@ -1,9 +1,11 @@
 package ua.com.compose.other_color_pick.main.palette
 
+import android.graphics.Color
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.dp
@@ -29,8 +31,40 @@ class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
     val cards = mutableListOf<Card>()
 
     fun update(newList: List<Card>){
-        cards.clear()
-        cards.addAll(newList)
+//        val diffUtilCallback = DiffUtilCallback(this.cards, newList)
+//        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+        this.cards.clear()
+        this.cards.addAll(newList)
+        notifyDataSetChanged()
+//        diffResult.dispatchUpdatesTo(this)
+    }
+
+    inner class DiffUtilCallback(
+            private val oldList: List<Card>,
+            private val newList: List<Card> ): DiffUtil.Callback() {
+
+        override fun getOldListSize() = oldList.size
+        override fun getNewListSize() = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) : Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+            return if(oldItem is Card.CardPallet && newItem is Card.CardPallet) {
+                oldItem.item.id == newItem.item.id
+            } else {
+                oldItem.hashCode() == newItem.hashCode()
+            }
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+            return if(oldItem is Card.CardPallet && newItem is Card.CardPallet) {
+                oldItem.isCurrent == newItem.isCurrent && oldItem.item.name == newItem.item.name && oldItem.colors.hashCode() == newItem.colors.hashCode()
+            } else {
+                true
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -51,24 +85,23 @@ class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
                         when (dragEvent.action) {
                             DragEvent.ACTION_DRAG_ENTERED -> {
                                 this.binding.root.context.vibrate(EVibrate.BUTTON)
-                                binding.rootCard.strokeWidth = 1.dp.toInt()
+                                binding.rootCard.strokeColor = binding.rootCard.context.getColorFromAttr(R.attr.color_5)
                             }
                             DragEvent.ACTION_DRAG_EXITED -> {
-                                binding.rootCard.strokeWidth = 0.dp.toInt()
+                                binding.rootCard.strokeColor = Color.TRANSPARENT
                             }
                             DragEvent.ACTION_DRAG_STARTED -> {
                                 binding.colorGrid.isVisible = false
                                 binding.container.isVisible = false
                                 binding.placeholder.isVisible = false
+                                binding.rootCard.strokeColor = Color.TRANSPARENT
                                 binding.placeholderAdd.isVisible = true
-
                             }
                             DragEvent.ACTION_DROP -> {
                                 val intent = dragEvent.clipData.getItemAt(0)?.intent ?: return@setOnDragListener false
                                 onPressChangePallet.invoke(intent.getLongExtra(ColorsRvAdapter.CLIP_DATA, -1), (cards[adapterPosition] as Card.CardPallet).item.id)
                             }
                             DragEvent.ACTION_DRAG_ENDED -> {
-                                binding.rootCard.strokeWidth = 0.dp.toInt()
                                 binding.colorGrid.isVisible = true
                                 binding.container.isVisible = true
                                 binding.placeholder.isVisible = true
@@ -120,9 +153,16 @@ class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
 
     inner class ViewHolderPallet(val binding: ModuleOtherColorPickElementPalletBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: Card.CardPallet) {
+            if(card.isCurrent) {
+                binding.txtTitle.setTextColor(binding.rootCard.context.getColorFromAttr(R.attr.color_6))
+                binding.rootCard.strokeColor = binding.rootCard.context.getColorFromAttr(R.attr.color_6)
+            } else {
+                binding.txtTitle.setTextColor(binding.rootCard.context.getColorFromAttr(R.attr.color_9))
+                binding.rootCard.strokeColor = Color.TRANSPARENT
+            }
             binding.txtTitle.text = card.item.name
             binding.colorGrid.setColors(card.colors)
-            binding.btnShare.isVisible = card.isCurrent
+            binding.btnShare.isVisible = card.isCurrent && card.colors.isNotEmpty()
             binding.btnRemove.isVisible = card.isCurrent
         }
     }

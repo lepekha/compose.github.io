@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_night_1">#1B1B1F</color>
+    <color name="color_night_1">#0F0F11</color>
     <color name="color_night_2">#23232B</color>
-    <color name="color_night_3">#303033</color>
-    <color name="color_night_4">#535353</color>
+    <color name="color_night_3">#272931</color>
+    <color name="color_night_4">#272931</color>
     <color name="color_night_5">#FFFFFF</color>
-    <color name="color_night_6">#24457F</color>
+    <color name="color_night_6">#2dbd85</color>
     <color name="color_night_7">#F44336</color>
     <color name="color_night_8">#404758</color>
     <color name="color_night_9">#D6E1FF</color>
 
+    <color name="color_main_header">#30323d</color>
+    <color name="color_main_background">#1b1b1f</color>
+    <color name="color_main_menu_background">#2C2D37</color>
+    <color name="color_main_menu_content">#FFFFFF</color>
+    <color name="color_button_background">#22232a</color>
+
 
     <color name="color_night_10">#31313D</color>
-    <color name="color_night_11">#737373</color>
+    <color name="color_night_11">#272931</color>
     <color name="color_night_12">#FAFAFA</color>
     <color name="color_night_13">#A9A9C1</color>
     <color name="color_night_14">#ACC7FF</color>

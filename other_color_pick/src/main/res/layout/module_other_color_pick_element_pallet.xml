@@ -15,18 +15,21 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
+        android:elevation="6dp"
         app:cardBackgroundColor="?attr/color_10"
         app:cardCornerRadius="10dp"
+        app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="1dp">
 
         <ImageView
             android:id="@+id/placeholder"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:tint="?attr/color_9"
+            android:tint="@color/color_night_8"
             app:srcCompat="@drawable/ic_palette" />
 
         <ImageView
@@ -59,7 +62,7 @@
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="6dp"
                 android:visibility="visible"
-                app:cardBackgroundColor="?attr/color_2"
+                app:cardBackgroundColor="@color/color_button_background"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
@@ -84,14 +87,15 @@
                 android:layout_marginEnd="6dp"
                 android:layout_marginBottom="6dp"
                 android:visibility="visible"
-                app:cardBackgroundColor="?attr/color_2"
+                app:cardBackgroundColor="@color/color_button_background"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btnShare">
+                app:layout_constraintStart_toEndOf="@+id/btnShare"
+                app:layout_goneMarginStart="6dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -115,7 +119,7 @@
         android:gravity="center"
         android:singleLine="true"
         android:textAllCaps="true"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/color_night_6"
         android:visibility="visible"
         app:autoSizeMaxTextSize="16sp"
         app:autoSizeMinTextSize="11sp"

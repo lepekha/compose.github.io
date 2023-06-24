@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 import ua.com.compose.other_color_pick.data.ColorItem
 import ua.com.compose.EColorType
+import ua.com.compose.extension.scrollToTop
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickElementColorBinding
 
 
@@ -28,21 +30,39 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
     val cards = mutableListOf<Card.CardColor>()
     private var colorType = EColorType.HEX
 
-    fun update(newList: List<Card.CardColor>){
-        cards.clear()
-        cards.addAll(newList)
+    fun update(view: RecyclerView? = null, newList: List<Card.CardColor>){
+//        val diffUtilCallback = DiffUtilCallback(this.cards, newList)
+//        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+        this.cards.clear()
+        this.cards.addAll(newList)
+        notifyDataSetChanged()
+//        diffResult.dispatchUpdatesTo(this)
+//        view?.scrollToTop(isSmooth = true)
+    }
+
+    inner class DiffUtilCallback(
+            private val oldList: List<Card.CardColor>,
+            private val newList: List<Card.CardColor> ): DiffUtil.Callback() {
+
+        override fun getOldListSize() = oldList.size
+        override fun getNewListSize() = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) : Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+            return oldItem.item.id == newItem.item.id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+            return oldItem.item.color == newItem.item.color && oldItem.item.name == newItem.item.name
+        }
     }
 
     fun changeColorType(colorType: EColorType) {
         this.colorType = colorType
-        this.notifyDataSetChanged()
-    }
-
-    fun removeColor(id: Long) {
-        cards.indexOfFirst { it.item.id == id }.let { index ->
-            cards.removeAt(index)
-            notifyItemRemoved(index)
-        }
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = cards.size

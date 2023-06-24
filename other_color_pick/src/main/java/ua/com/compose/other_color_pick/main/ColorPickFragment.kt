@@ -13,6 +13,7 @@ import ua.com.compose.ImageInfoViewModule
 import ua.com.compose.dialog.dialogs.DialogChip
 import ua.com.compose.extension.*
 import ua.com.compose.mvp.BaseMvvmFragment
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.replace
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.data.SharedPreferencesKey
@@ -24,7 +25,7 @@ import ua.com.compose.other_color_pick.main.palette.PaletteFragment
 import java.lang.ref.WeakReference
 
 
-class ColorPickFragment : BaseMvvmFragment() {
+class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment_main) {
 
     companion object {
 
@@ -39,19 +40,9 @@ class ColorPickFragment : BaseMvvmFragment() {
         }
     }
 
-    private var binding: ModuleOtherColorPickFragmentMainBinding? = null
+    private val binding by viewBindingWithBinder(ModuleOtherColorPickFragmentMainBinding::bind)
 
     private val viewModule: ColorPickViewModule by activityViewModels()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = ModuleOtherColorPickFragmentMainBinding.inflate(inflater)
-        return binding?.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +51,7 @@ class ColorPickFragment : BaseMvvmFragment() {
 
         ColorNames.init(requireContext())
 
-        binding?.btnColorType?.setOnClickListener {
+        binding.btnColorType.setOnClickListener {
             val key = DialogChip.show(fm = childFragmentManager, list = EColorType.values().map { it.title() }, selected = EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)).title())
             childFragmentManager.setFragmentResultListener(
                     key,
@@ -71,28 +62,28 @@ class ColorPickFragment : BaseMvvmFragment() {
             }
         }
 
-        binding?.btnCamera?.setOnClickListener {
+        binding.btnCamera.setOnClickListener {
             requireContext().vibrate(EVibrate.BUTTON)
-            selectScreen(binding?.tabCamera)
+            selectScreen(binding.tabCamera)
         }
 
-        binding?.btnImage?.setOnClickListener {
+        binding.btnImage.setOnClickListener {
             requireContext().vibrate(EVibrate.BUTTON)
-            selectScreen(binding?.tabImage)
+            selectScreen(binding.tabImage)
         }
 
-        binding?.btnPalette?.setOnClickListener {
+        binding.btnPalette.setOnClickListener {
             requireContext().vibrate(EVibrate.BUTTON)
-            selectScreen(binding?.tabPalette)
+            selectScreen(binding.tabPalette)
         }
         if((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) != null){
-            selectScreen(binding?.tabImage)
+            selectScreen(binding.tabImage)
         }else{
             val panel = EPanel.valueOfKey(prefs.get(key = SharedPreferencesKey.KEY_PANEL_ID, defaultValue = EPanel.IMAGE.id))
             val view = when(panel) {
-                EPanel.CAMERA -> binding?.tabCamera
-                EPanel.IMAGE -> binding?.tabImage
-                EPanel.PALLETS -> binding?.tabPalette
+                EPanel.CAMERA -> binding.tabCamera
+                EPanel.IMAGE -> binding.tabImage
+                EPanel.PALLETS -> binding.tabPalette
             }
             selectScreen(tabView = view)
         }
@@ -105,17 +96,17 @@ class ColorPickFragment : BaseMvvmFragment() {
         tabView?.toggle()
 
         when {
-            tabView?.id == binding?.tabCamera?.id -> {
+            tabView?.id == binding.tabCamera.id -> {
                 prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.CAMERA.id)
-                childFragmentManager.replace(CameraFragment.newInstance(), binding?.content?.id ?: -1, addToBackStack = false)
+                childFragmentManager.replace(CameraFragment.newInstance(), binding.content.id , addToBackStack = false)
             }
-            tabView?.id == binding?.tabImage?.id-> {
+            tabView?.id == binding.tabImage.id-> {
                 prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.IMAGE.id)
                 childFragmentManager.replace(ImageFragment.newInstance(arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri), binding?.content?.id ?: -1, addToBackStack = false)
             }
-            tabView?.id == binding?.tabPalette?.id  -> {
+            tabView?.id == binding.tabPalette.id  -> {
                 prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.PALLETS.id)
-                childFragmentManager.replace(PaletteFragment.newInstance(), binding?.content?.id ?: -1, addToBackStack = false)
+                childFragmentManager.replace(PaletteFragment.newInstance(), binding.content.id, addToBackStack = false)
             }
         }
     }

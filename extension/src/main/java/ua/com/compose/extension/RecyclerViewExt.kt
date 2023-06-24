@@ -10,3 +10,15 @@ fun RecyclerView.runLayoutAnimation(anim: Int) {
         this@runLayoutAnimation.scheduleLayoutAnimation()
     }
 }
+
+fun RecyclerView.scrollToTop(isSmooth: Boolean = false) {
+    val scrollingUp = -1
+    val scrollToNewTop = !this.canScrollVertically(scrollingUp)
+    if (scrollToNewTop) {
+        if(isSmooth) {
+            this.smoothScrollToPosition(0)
+        } else {
+            this.scrollToPosition(0)
+        }
+    }
+}

@@ -13,7 +13,7 @@ object FileStorage {
     private var dir: String = ""
 
     fun init(context: Context) {
-        dir = context.filesDir.path
+        dir = context.cacheDir.path
     }
 
     suspend fun Bitmap.writeToFile(fileName: String, dirName: String? = null, quality: Int = 100): Uri {
@@ -30,13 +30,15 @@ object FileStorage {
         return outputFile.toUri()
     }
 
-    fun writeToFile(fileName: String, data: String, dirName: String? = null) {
+    fun writeToFile(fileName: String, data: String, dirName: String? = null): File? {
         try {
             val dirPath = makeDir(dirName)
             val outputFile = File(dirPath, fileName)
             outputFile.writeText(text = data, charset = Charsets.UTF_8)
+            return outputFile
         } catch (e: IOException) {
         }
+        return null
     }
 
     fun writeToFile(file: File, targetFile: File) {

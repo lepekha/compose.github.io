@@ -13,16 +13,19 @@ import ua.com.compose.other_color_pick.domain.dbColorItem.RemoveAllColorsUseCase
 import ua.com.compose.other_color_pick.domain.dbColorItem.RemoveColorUseCase
 import ua.com.compose.other_color_pick.domain.dbColorItem.UpdateColorUseCase
 import ua.com.compose.ColorNames
+import ua.com.compose.EColorType
 import ua.com.compose.extension.get
 import ua.com.compose.extension.prefs
 import ua.com.compose.extension.put
 import ua.com.compose.other_color_pick.data.ColorPallet
+import ua.com.compose.other_color_pick.data.EPaletteExportScheme
 import ua.com.compose.other_color_pick.data.SharedPreferencesKey
 import ua.com.compose.other_color_pick.domain.dbColorItem.ChangeColorPalletUseCase
 import ua.com.compose.other_color_pick.domain.dbColorPallet.AddPalletUseCase
 import ua.com.compose.other_color_pick.domain.dbColorPallet.GetAllPalletUseCase
 import ua.com.compose.other_color_pick.domain.dbColorPallet.GetPalletUseCase
 import ua.com.compose.other_color_pick.domain.dbColorPallet.RemovePalletUseCase
+import java.io.File
 import java.io.Serializable
 
 sealed class Card {
@@ -43,8 +46,16 @@ class PaletteViewModule(private val getAllPalletUseCase: GetAllPalletUseCase,
                         private val removeAllColorsUseCase: RemoveAllColorsUseCase
 ): ViewModel()  {
 
+    sealed class State {
+        object NONE: State()
+        data class SHARE(val file: File): State()
+    }
+
     private val _colors: MutableLiveData<List<Card.CardColor>?> = MutableLiveData(null)
     val colors: LiveData<List<Card.CardColor>?> = _colors
+
+    private val _state: MutableLiveData<State> = MutableLiveData(State.NONE)
+    val state: LiveData<State> = _state
 
     private val _palettes: MutableLiveData<List<Card.CardPallet>?> = MutableLiveData(null)
     val palettes: LiveData<List<Card.CardPallet>?> = _palettes
@@ -109,10 +120,12 @@ class PaletteViewModule(private val getAllPalletUseCase: GetAllPalletUseCase,
         create()
     }
 
-    fun pressRemoveAll() = viewModelScope.launch {
-//        removeAllColorsUseCase.execute()
-//        _colors.postValue(listOf())
-//        _placeholderState.postValue(true)
+    fun pressExport(pallet: ColorPallet, ePaletteExportScheme: EPaletteExportScheme) = viewModelScope.launch {
+        val colorType = EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key))
+        val colors = getAllColorsUseCase.execute(pallet.id)
+        ePaletteExportScheme.create(palette = pallet.name, colors = colors, colorType = colorType)?.let {
+            _state.postValue(State.SHARE(it))
+        }
     }
 
 }

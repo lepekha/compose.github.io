@@ -1,9 +1,11 @@
 package ua.com.compose.view.main
 
+import android.graphics.Color
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.R
 import ua.com.compose.extension.EVibrate
@@ -58,7 +60,7 @@ class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<Re
                 (holder as ButtonViewHolder).apply {
                     holder.btnMenu.isClickable = item.isEnabled
                     holder.btnIcon.setImageResource(item.iconResId)
-                    val color = item.color ?: holder.btnMenu.context.getColorFromAttr(R.attr.color_9)
+                    val color = item.color ?: holder.btnMenu.context.getColor(R.color.color_main_menu_content)
                     holder.btnIcon.setImageResource(item.iconResId)
                     holder.btnIcon.setColorFilter(color)
                 }

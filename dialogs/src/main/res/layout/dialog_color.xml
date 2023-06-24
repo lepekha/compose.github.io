@@ -14,9 +14,8 @@
         style="@style/EditTextBottomSheet"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif-medium"
         android:imeOptions="actionDone"
         android:inputType="text"
@@ -28,10 +27,10 @@
         android:textColor="?attr/color_2"
         android:textColorHint="?attr/color_2"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        pikolo:layout_constraintEnd_toEndOf="parent"
-        pikolo:layout_constraintStart_toStartOf="parent"
-        pikolo:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtColor" />
 
     <ImageView
         android:id="@+id/icon"
@@ -48,18 +47,20 @@
 
     <TextView
         android:id="@+id/txtColor"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
+        android:text="HEX:"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/edColor"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/edColor"
+        app:layout_constraintEnd_toStartOf="@+id/edColor"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="TextView" />
+        app:layout_constraintTop_toTopOf="@+id/edColor" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
@@ -67,11 +68,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
         android:orientation="horizontal"
         android:paddingTop="16dp"
         android:paddingBottom="24dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btnDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -192,7 +194,7 @@
         android:layout_marginTop="16dp"
         android:nestedScrollingEnabled="true"
         android:padding="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/txtColor"
+        app:layout_constraintBottom_toTopOf="@+id/edColor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
@@ -210,7 +212,7 @@
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1" />
 
-    <ImageView
+    <TextView
         android:id="@+id/imgExample"
         android:layout_width="200dp"
         android:layout_height="200dp"
@@ -218,7 +220,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/module_dialog_color_example"
+        android:background="@drawable/module_dialog_color_example"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:maxLines="2"
+        android:padding="4dp"
+        android:singleLine="false"
+        android:text="Blue"
+        android:textSize="16sp"
         app:cardCornerRadius="200dp"
         app:layout_constraintBottom_toBottomOf="@+id/colorPicker"
         app:layout_constraintEnd_toEndOf="@+id/colorPicker"
@@ -228,23 +237,67 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnDone"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        app:cardBackgroundColor="?attr/color_5"
-        app:cardCornerRadius="28dp"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="?attr/color_6"
+        app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgExample"
-        app:layout_constraintEnd_toEndOf="@+id/imgExample"
-        app:layout_constraintStart_toStartOf="@+id/imgExample"
-        app:layout_constraintTop_toTopOf="@+id/imgExample"
-        app:layout_constraintWidth_percent="0.25">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnCancel"
+        app:layout_constraintWidth_percent="0.3">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_add_fill"
-            app:tint="?attr/color_2" />
+            android:tint="?attr/color_9"
+            app:srcCompat="@drawable/ic_done" />
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnCancel"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="@color/color_button_background"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnDone"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.3">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_close"
+            app:tint="?attr/color_9" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!--    <com.google.android.material.card.MaterialCardView-->
+    <!--        android:id="@+id/btnDone"-->
+    <!--        android:layout_width="80dp"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        app:cardBackgroundColor="?attr/color_2"-->
+    <!--        app:cardCornerRadius="16dp"-->
+    <!--        app:cardElevation="0dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/imgExample"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/imgExample"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/imgExample"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/imgExample"-->
+    <!--        app:layout_constraintWidth_percent="0.25">-->
+
+    <!--        <ImageView-->
+    <!--            android:layout_width="25dp"-->
+    <!--            android:layout_height="25dp"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            app:srcCompat="@drawable/ic_add_fill"-->
+    <!--            app:tint="?attr/color_12" />-->
+    <!--    </com.google.android.material.card.MaterialCardView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

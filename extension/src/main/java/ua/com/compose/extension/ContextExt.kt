@@ -1,6 +1,7 @@
 package ua.com.compose.extension
 
 import android.content.*
+import android.content.res.Resources
 import androidx.core.content.ContextCompat
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -153,6 +154,14 @@ fun Context.vibrate(type: EVibrate){
     }
 }
 
+fun Context.navigationBarHeight(): Int {
+    val resources: Resources = this.getResources()
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (resourceId > 0) {
+        resources.getDimensionPixelSize(resourceId) + 10.dp.toInt()
+    } else 0
+}
+
 fun Context.createInstagramIntent(uri: Uri) {
     val share = Intent(Intent.ACTION_SEND).apply {
         this.type = "image/*"
@@ -172,6 +181,17 @@ fun Context.createImageIntent(uri: Uri) {
         this.putExtra(Intent.EXTRA_STREAM, uri)
     }
     startActivity(Intent.createChooser(share, "Share to"))
+}
+
+fun Context.shareFile(file: File) {
+    val uri = FileProvider.getUriForFile(this, "ua.com.compose.colorpiker.fileprovider", file)
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = "*/*"
+    intent.clipData = ClipData.newRawUri("", uri)
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    intent.putExtra(Intent.EXTRA_STREAM, uri)
+
+    this.startActivity(Intent.createChooser(intent, "Share Color Palette"))
 }
 
 fun Context.saveBitmap(bitmap: Bitmap, prefix: String = "", quality: Int = 100, sizePercent: Int = 100) {

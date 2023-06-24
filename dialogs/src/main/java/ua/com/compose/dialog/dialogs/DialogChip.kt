@@ -26,6 +26,8 @@ import ua.com.compose.extension.dp
 import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.extension.sp
 import kotlinx.android.synthetic.main.dialog_list.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.navigator.remove
 import java.util.ArrayList
 
@@ -79,7 +81,11 @@ class DialogChip : BottomSheetDialogFragment() {
         arguments?.getStringArray(BUNDLE_KEY_LIST)?.forEachIndexed { index, it ->
             val chip = Chip(context).apply {
                 this.text = it
-                this.chipBackgroundColor = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_12))
+                if(selected == it) {
+                    this.chipBackgroundColor = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_6))
+                } else {
+                    this.chipBackgroundColor = ColorStateList.valueOf(view.context.getColorFromAttr(R.attr.color_12))
+                }
                 this.isCheckable = true
                 this.id = index
                 this.isChipIconVisible = selected == it
@@ -96,6 +102,7 @@ class DialogChip : BottomSheetDialogFragment() {
         }
 
         chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            chipGroup.context.vibrate(EVibrate.BUTTON)
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(
                     BUNDLE_KEY_ANSWER_POSITION to checkedId,
                     BUNDLE_KEY_ANSWER_NAME to (group.get(checkedId) as Chip).text)

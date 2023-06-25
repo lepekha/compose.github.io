@@ -1,6 +1,7 @@
 package ua.com.compose.other_color_pick.main.camera
 
 import android.Manifest
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.hardware.Camera
@@ -27,6 +28,7 @@ import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentCameraBinding
 import ua.com.compose.other_color_pick.di.Scope
 import ua.com.compose.other_color_pick.main.ColorPickViewModule
+import ua.com.compose.other_color_pick.main.info.ColorInfoFragment
 import ua.com.compose.other_color_pick.view.CameraColorPickerPreview
 import ua.com.compose.other_color_pick.view.Cameras
 
@@ -82,8 +84,6 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
         mPreviewContainer = binding.previewContainer
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
 
-//        binding.frameLayout.bringToFront()
-
         viewModule.nameColor.nonNull().observe(this) { name ->
             binding.txtName.text = name
         }
@@ -94,20 +94,18 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
         }
 
         viewModule.changeColor.nonNull().observe(this) { color ->
-            binding.textView.text = mainModule.colorType.value?.convertColor(color) ?: ""
+            binding.textView.text = mainModule.colorType.value?.convertColor(color, withSeparator = ",") ?: ""
             binding.textView.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.txtName.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.cardColor.setBackgroundColor(color)
+            binding.imgInfo.imageTintList = ColorStateList.valueOf(if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.pointerRing.background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
             binding.activityMainPointer.background?.setColorFilter(if(isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
         }
 
         binding.cardView.setVibrate(EVibrate.BUTTON)
         binding.cardView.setOnClickListener {
-            binding.textView.text.toString().let { color ->
-                requireContext().clipboardCopy(color)
-                showAlert(R.string.module_other_color_pick_color_copy)
-            }
+            ColorInfoFragment.show(childFragmentManager, color = viewModule.color)
         }
 
         if(!requireContext().hasPermission(permission = Manifest.permission.CAMERA)) {

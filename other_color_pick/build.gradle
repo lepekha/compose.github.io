@@ -73,6 +73,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation 'androidx.palette:palette-ktx:1.0.0'
 //    implementation files('libs\\metadata-extractor-2.16.0.jar')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

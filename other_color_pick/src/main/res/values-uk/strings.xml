@@ -11,4 +11,13 @@
     <string name="module_other_color_pick_palette">Палітра</string>
     <string name="module_other_color_pick_color_copy">Колір скопійовано</string>
     <string name="module_other_color_pick_color_add_to_pallete">Колір додано до палітри</string>
+    <string name="module_other_color_pick_shades">Негативні відтінки</string>
+    <string name="module_other_color_pick_tints">Позитивні відтінки</string>
+    <string name="module_other_color_pick_triadic_colors">Триадні кольори</string>
+    <string name="module_other_color_pick_analogous_colors">Аналогічні кольори</string>
+    <string name="module_other_color_pick_monochromatic_colors">Монохромні кольори</string>
+    <string name="module_other_color_pick_complementary_color">Комплементарні кольори</string>
+    <string name="module_other_color_pick_tones">Тон кольору</string>
+    <string name="module_other_color_pick_tetradic_color">Тетрадні кольори</string>
+
 </resources>

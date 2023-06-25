@@ -93,6 +93,10 @@ class PaletteViewModule(private val getAllPalletUseCase: GetAllPalletUseCase,
         create()
     }
 
+    fun pressUpdatePalette() = viewModelScope.launch {
+        create()
+    }
+
     fun pressNewPallet(name: String) = viewModelScope.launch {
         palletId = addPalletUseCase.execute(name)
         prefs.put(key = SharedPreferencesKey.KEY_PALLET_ID, value = palletId)

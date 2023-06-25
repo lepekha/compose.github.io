@@ -94,6 +94,11 @@ class DialogColor : BottomSheetDialogFragment()  {
             }
             val color = Color.parseColor("#$hex")
             colorPicker.setColor(color)
+            if(ColorUtils.calculateLuminance(color) < 0.5) {
+                imgExample.setTextColor(Color.WHITE)
+            } else {
+                imgExample.setTextColor(Color.BLACK)
+            }
             imgExample.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
             imgExample.backgroundTintList = ColorStateList.valueOf(color)
             imgExample.tag = color
@@ -103,9 +108,13 @@ class DialogColor : BottomSheetDialogFragment()  {
             override fun onColorSelected(color: Int) {
                 imgExample.tag = color
                 imgExample.backgroundTintList = ColorStateList.valueOf(color)
+                if(ColorUtils.calculateLuminance(color) < 0.5) {
+                    imgExample.setTextColor(Color.WHITE)
+                } else {
+                    imgExample.setTextColor(Color.BLACK)
+                }
                 imgExample.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
                 edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
-//                txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
             }
         })
 
@@ -166,5 +175,10 @@ class DialogColor : BottomSheetDialogFragment()  {
         imgExample.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
         imgExample.backgroundTintList = ColorStateList.valueOf(color)
         imgExample.tag = color
+        if(ColorUtils.calculateLuminance(color) < 0.5) {
+            imgExample.setTextColor(Color.WHITE)
+        } else {
+            imgExample.setTextColor(Color.BLACK)
+        }
     }
 }

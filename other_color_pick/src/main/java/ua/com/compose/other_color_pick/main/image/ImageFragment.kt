@@ -2,6 +2,7 @@ package ua.com.compose.other_color_pick.main.image
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -32,10 +33,9 @@ import ua.com.compose.mvp.data.Menu
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentImageBinding
 import ua.com.compose.other_color_pick.di.Scope
-import ua.com.compose.EColorType
 import ua.com.compose.mvp.data.viewBindingWithBinder
-import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentCameraBinding
 import ua.com.compose.other_color_pick.main.ColorPickViewModule
+import ua.com.compose.other_color_pick.main.info.ColorInfoFragment
 
 
 class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment_image) {
@@ -139,12 +139,17 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         }
 
         viewModule.changeColor.nonNull().observe(this) { color ->
-            binding.textView.text = mainModule.colorType.value?.convertColor(color) ?: ""
+            binding.textView.text = mainModule.colorType.value?.convertColor(color, withSeparator = ",") ?: ""
+            binding.imgInfo.imageTintList = ColorStateList.valueOf(if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.txtName.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.textView.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.cardView.setCardBackgroundColor(color)
             binding.pointerRing.background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
             binding.activityMainPointer.background.setColorFilter(if (isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+        }
+
+        binding.cardView.setOnClickListener {
+            ColorInfoFragment.show(childFragmentManager, color = viewModule.color)
         }
 
         binding.btnCopy.setOnClickListener {

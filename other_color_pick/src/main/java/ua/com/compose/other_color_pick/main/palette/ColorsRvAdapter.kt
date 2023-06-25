@@ -2,6 +2,7 @@ package ua.com.compose.other_color_pick.main.palette
 
 import android.content.ClipData
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickElementCo
 
 class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
                       private val onPressColorTune: (item: ColorItem) -> Unit,
+                      private val onPressItem: (item: ColorItem) -> Unit,
                       private val onPressRemove: (id: Long) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -71,8 +73,8 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
         val binding = ModuleOtherColorPickElementColorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding).apply {
             this.binding.container.setOnClickListener {
-                this.binding.btnCopy.context.vibrate(EVibrate.BUTTON)
-                onPressCopy(cards[adapterPosition].item)
+                this.binding.container.context.vibrate(EVibrate.BUTTON)
+                onPressItem(cards[adapterPosition].item)
             }
 
             this.binding.btnCopy.setOnClickListener {
@@ -114,14 +116,11 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
     inner class ViewHolder(val binding: ModuleOtherColorPickElementColorBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: Card.CardColor) {
             binding.txtName.text = card.item.name
-            binding.txtColor.text = colorType.convertColor(card.item.color)
-            binding.txtColor.setTextColor(getTextColor(card.item.color))
-            binding.txtName.setTextColor(getTextColor(card.item.color))
-            binding.container.setBackgroundColor(card.item.color)
-        }
-
-        private fun getTextColor(color: Int): Int {
-            return if(ColorUtils.calculateLuminance(color) < 0.5) Color.WHITE else Color.BLACK
+            binding.txtColor.text = colorType.convertColor(card.item.color, withSeparator = ",")
+            binding.txtColor.setTextColor(Color.WHITE)
+            binding.imgInfo.imageTintList = ColorStateList.valueOf(if (ColorUtils.calculateLuminance(card.item.color) < 0.5) Color.WHITE else Color.BLACK)
+            binding.txtName.setTextColor(Color.WHITE)
+            binding.imgColor.setCardBackgroundColor(card.item.color)
         }
     }
 }

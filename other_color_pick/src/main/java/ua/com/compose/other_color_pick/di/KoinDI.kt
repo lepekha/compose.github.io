@@ -1,5 +1,6 @@
 package ua.com.compose.other_color_pick.di
 
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,6 +22,7 @@ import ua.com.compose.other_color_pick.main.ColorPickViewModule
 import ua.com.compose.other_color_pick.main.camera.CameraViewModule
 import ua.com.compose.other_color_pick.main.image.ImageUri
 import ua.com.compose.other_color_pick.main.image.ImageViewModule
+import ua.com.compose.other_color_pick.main.info.ColorInfoViewModel
 import ua.com.compose.other_color_pick.main.palette.PaletteViewModule
 
 
@@ -45,6 +47,7 @@ val otherColorPickModule = module {
         scoped { GetPalletUseCase(database = get()) }
         scoped { GetAllPalletUseCase(database = get()) }
         scoped { ChangeColorPalletUseCase(database = get()) }
+        viewModel { ColorInfoViewModel(context = androidContext(), addColorUseCase = get()) }
         viewModel { ColorPickViewModule() }
         viewModel { ImageInfoViewModule() }
         viewModel { PaletteViewModule(changeColorPalletUseCase = get(), getPalletUseCase = get(), removePalletUseCase = get(), getAllPalletUseCase = get(), addPalletUseCase = get(), getAllColorsUseCase = get(), removeColorUseCase = get(), updateColorUseCase = get(), addColorUseCase = get(), removeAllColorsUseCase = get()) }

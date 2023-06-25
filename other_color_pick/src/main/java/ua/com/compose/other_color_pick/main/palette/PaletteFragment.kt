@@ -34,6 +34,7 @@ import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentP
 import ua.com.compose.other_color_pick.di.Scope
 import ua.com.compose.other_color_pick.main.ColorPickViewModule
 import ua.com.compose.other_color_pick.main.defaultPaletteName
+import ua.com.compose.other_color_pick.main.info.ColorInfoFragment
 
 
 class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment_palette) {
@@ -74,9 +75,12 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
     private fun initColors() {
         ColorsRvAdapter(
             onPressCopy = { item ->
-                val color = mainModule.colorType.value?.convertColor(item.color) ?: ""
+                val color = mainModule.colorType.value?.convertColor(item.color, withSeparator = ",") ?: ""
                 requireContext().clipboardCopy(color)
                 showAlert(R.string.module_other_color_pick_color_copy)
+            },
+            onPressItem = { item ->
+                ColorInfoFragment.show(childFragmentManager, color = item.color)
             },
             onPressColorTune = { item ->
                 val key = DialogColor.show(fm = childFragmentManager, color = item.color)
@@ -141,6 +145,13 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
         super.onViewCreated(view, savedInstanceState)
         initPallets()
         initColors()
+
+        childFragmentManager.setFragmentResultListener(
+                ColorInfoFragment.REQUEST_KEY,
+                viewLifecycleOwner
+        ) { _, bundle ->
+            viewModule.pressUpdatePalette()
+        }
 
         viewModule.colors.nonNull().observe(this) {
             (binding.lstColors.adapter as? ColorsRvAdapter)?.update(binding.lstColors, it ?: listOf())

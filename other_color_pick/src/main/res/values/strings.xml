@@ -10,4 +10,12 @@
     <string name="module_other_color_pick_palette">Palette</string>
     <string name="module_other_color_pick_color_copy">Color copied</string>
     <string name="module_other_color_pick_color_add_to_pallete">Color added to palette</string>
+    <string name="module_other_color_pick_shades">Shades</string>
+    <string name="module_other_color_pick_tints">Tints</string>
+    <string name="module_other_color_pick_triadic_colors">Triadic colors</string>
+    <string name="module_other_color_pick_analogous_colors">Analogous colors</string>
+    <string name="module_other_color_pick_monochromatic_colors">Monochromatic colors</string>
+    <string name="module_other_color_pick_complementary_color">Complementary colors</string>
+    <string name="module_other_color_pick_tones">Tones</string>
+    <string name="module_other_color_pick_tetradic_color">Tetradic colors</string>
 </resources>

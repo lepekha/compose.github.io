@@ -13,7 +13,7 @@ import ua.com.compose.other_color_pick.main.ColorPickViewModule
 
 class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel()  {
 
-    private var color = Color.WHITE
+    var color = Color.WHITE
     private var name = ""
 
     private val _changeColor: MutableLiveData<Int> = MutableLiveData(null)

@@ -7,6 +7,8 @@ import android.hardware.Camera;
 import android.util.Log;
 import android.view.TextureView;
 
+import ua.com.compose.extension.NumberExtKt;
+
 
 public class CameraColorPickerPreview extends TextureView implements TextureView.SurfaceTextureListener, Camera.PreviewCallback {
 
@@ -18,7 +20,7 @@ public class CameraColorPickerPreview extends TextureView implements TextureView
     /**
      * The size of the pointer (in PIXELS).
      */
-    protected static final int POINTER_RADIUS = 10;
+    protected static final int POINTER_RADIUS = 4;
 
     /**
      * The {@link Camera} used for getting a preview frame.
@@ -106,7 +108,7 @@ public class CameraColorPickerPreview extends TextureView implements TextureView
             for (int i = 0; i <= POINTER_RADIUS; i++) {
                 for (int j = 0; j <= POINTER_RADIUS; j++) {
                     addColorFromYUV420(data, mSelectedColor, (i * POINTER_RADIUS + j + 1),
-                            (midX - POINTER_RADIUS) + i, (midY - POINTER_RADIUS) + j,
+                            (midX - POINTER_RADIUS / 2) + i, (midY - POINTER_RADIUS / 2) + j,
                             mPreviewSize.width, mPreviewSize.height);
                 }
             }

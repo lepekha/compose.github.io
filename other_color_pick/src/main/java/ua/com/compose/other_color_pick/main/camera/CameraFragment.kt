@@ -101,6 +101,7 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
             binding.imgInfo.imageTintList = ColorStateList.valueOf(if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.pointerRing.background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
             binding.activityMainPointer.background?.setColorFilter(if(isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+            binding.pointerRing2.background?.setColorFilter(if(isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
         }
 
         binding.cardView.setVibrate(EVibrate.BUTTON)
@@ -241,6 +242,7 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
                 binding.cardView.setMarginBottom(requireContext().navigationBarHeight() + 55.dp.toInt() + 8.dp.toInt())
                 binding.cardView.isVisible = true
                 binding.pointerRing.isVisible = true
+                binding.pointerRing2.isVisible = true
                 binding.previewContainer.isInvisible = false
                 binding.activityMainPointer.isVisible = true
                 binding.placeholder.isVisible = false

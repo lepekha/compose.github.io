@@ -146,6 +146,7 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
             binding.cardView.setCardBackgroundColor(color)
             binding.pointerRing.background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
             binding.activityMainPointer.background.setColorFilter(if (isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+            binding.pointerRing2.background.setColorFilter(if (isDark(color)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
         }
 
         binding.cardView.setOnClickListener {
@@ -186,6 +187,7 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
 
     private fun showImage(uri: Uri) {
         binding.pointerRing.isVisible = true
+        binding.pointerRing2.isVisible = true
         binding.activityMainPointer.isVisible = true
         binding.placeholder.isVisible = false
         binding.zoomableImageView2.setBackgroundResource(R.drawable.ic_background)

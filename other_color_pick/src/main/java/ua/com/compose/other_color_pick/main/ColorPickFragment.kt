@@ -94,17 +94,22 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
         prevTab?.get()?.toggle()
         prevTab = WeakReference(tabView)
         tabView?.toggle()
-
+        binding.imgCamera.setImageResource(R.drawable.ic_camera)
+        binding.imgImage.setImageResource(R.drawable.ic_image)
+        binding.imgPalette.setImageResource(R.drawable.ic_palette)
         when {
             tabView?.id == binding.tabCamera.id -> {
+                binding.imgCamera.setImageResource(R.drawable.ic_camera_fill)
                 prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.CAMERA.id)
                 childFragmentManager.replace(CameraFragment.newInstance(), binding.content.id , addToBackStack = false)
             }
             tabView?.id == binding.tabImage.id-> {
+                binding.imgImage.setImageResource(R.drawable.ic_image_fill)
                 prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.IMAGE.id)
                 childFragmentManager.replace(ImageFragment.newInstance(arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri), binding?.content?.id ?: -1, addToBackStack = false)
             }
             tabView?.id == binding.tabPalette.id  -> {
+                binding.imgPalette.setImageResource(R.drawable.ic_palette_fill)
                 prefs.put(key = SharedPreferencesKey.KEY_PANEL_ID, value = EPanel.PALLETS.id)
                 childFragmentManager.replace(PaletteFragment.newInstance(), binding.content.id, addToBackStack = false)
             }

@@ -106,6 +106,7 @@ class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
                                 binding.container.isVisible = true
                                 binding.placeholder.isVisible = true
                                 binding.placeholderAdd.isVisible = false
+                                notifyDataSetChanged()
                             }
                         }
                         true

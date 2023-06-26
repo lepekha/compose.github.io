@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.ceil
+import kotlin.math.floor
 
 class ColorGridView @JvmOverloads constructor(
     context: Context,
@@ -28,7 +30,7 @@ class ColorGridView @JvmOverloads constructor(
         val numColors = colors.size
         if (numColors == 0) return
 
-        val squareSize = width / numColors // Розмір кожного квадратика
+        val squareSize = width.toFloat() / numColors // Розмір кожного квадратика
 
         // Ініціалізуємо фарбу для малювання квадратиків
 
@@ -36,9 +38,9 @@ class ColorGridView @JvmOverloads constructor(
 
         for (i in 0 until numColors) {
             paint.color = colors[i]
-            val left = i * squareSize
+            val left = floor(i * squareSize)
             val top = 0
-            val right = left + squareSize
+            val right = ceil(left + squareSize)
             val bottom = height
             canvas.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), paint)
         }

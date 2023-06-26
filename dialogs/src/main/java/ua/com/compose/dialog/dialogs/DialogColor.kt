@@ -95,11 +95,11 @@ class DialogColor : BottomSheetDialogFragment()  {
             val color = Color.parseColor("#$hex")
             colorPicker.setColor(color)
             if(ColorUtils.calculateLuminance(color) < 0.5) {
-                imgExample.setTextColor(Color.WHITE)
+                txtColor.setTextColor(Color.WHITE)
             } else {
-                imgExample.setTextColor(Color.BLACK)
+                txtColor.setTextColor(Color.BLACK)
             }
-            imgExample.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+            txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
             imgExample.backgroundTintList = ColorStateList.valueOf(color)
             imgExample.tag = color
         }
@@ -109,11 +109,11 @@ class DialogColor : BottomSheetDialogFragment()  {
                 imgExample.tag = color
                 imgExample.backgroundTintList = ColorStateList.valueOf(color)
                 if(ColorUtils.calculateLuminance(color) < 0.5) {
-                    imgExample.setTextColor(Color.WHITE)
+                    txtColor.setTextColor(Color.WHITE)
                 } else {
-                    imgExample.setTextColor(Color.BLACK)
+                    txtColor.setTextColor(Color.BLACK)
                 }
-                imgExample.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+                txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
                 edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
             }
         })
@@ -172,13 +172,13 @@ class DialogColor : BottomSheetDialogFragment()  {
     private fun setColor(color: Int, colorType: EColorType){
         colorPicker.setColor(color)
         edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
-        imgExample.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+        txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
         imgExample.backgroundTintList = ColorStateList.valueOf(color)
         imgExample.tag = color
         if(ColorUtils.calculateLuminance(color) < 0.5) {
-            imgExample.setTextColor(Color.WHITE)
+            txtColor.setTextColor(Color.WHITE)
         } else {
-            imgExample.setTextColor(Color.BLACK)
+            txtColor.setTextColor(Color.BLACK)
         }
     }
 }

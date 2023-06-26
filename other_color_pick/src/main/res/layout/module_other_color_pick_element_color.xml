@@ -10,7 +10,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
-    app:cardBackgroundColor="@color/color_main_background"
+    app:cardBackgroundColor="#00000000"
     app:cardCornerRadius="10dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@color/color_main_background"
         tools:background="?android:attr/selectableItemBackgroundBorderless">
 
         <com.google.android.material.card.MaterialCardView
@@ -35,7 +35,7 @@
             app:cardMaxElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

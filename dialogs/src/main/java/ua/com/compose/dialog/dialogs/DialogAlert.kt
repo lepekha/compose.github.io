@@ -11,10 +11,11 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.dialog_alert.*
 import ua.com.compose.dialog.R
+import ua.com.compose.dialog.databinding.DialogAlertBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.mvp.data.viewBindingWithBinder
 
 
 class DialogAlert : BottomSheetDialogFragment() {
@@ -37,6 +38,8 @@ class DialogAlert : BottomSheetDialogFragment() {
         }
     }
 
+    private val binding by viewBindingWithBinder(DialogAlertBinding::bind)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_alert, container, false)
     }
@@ -56,10 +59,10 @@ class DialogAlert : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtMessage.text = arguments?.getString(BUNDLE_KEY_MESSAGE) ?: ""
+        binding.txtMessage.text = arguments?.getString(BUNDLE_KEY_MESSAGE) ?: ""
 
-        btnDone.setVibrate(EVibrate.BUTTON)
-        btnDone.setOnClickListener {
+        binding.btnDone.setVibrate(EVibrate.BUTTON)
+        binding.btnDone.setOnClickListener {
             dismiss()
         }
     }

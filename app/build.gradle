@@ -2,10 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'kotlin-android-extensions'
-
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     defaultConfig {
         applicationId "ua.com.compose.colorpicker.camera.image"
         minSdkVersion 24
@@ -43,6 +41,10 @@ android {
         jvmTarget = '1.8'
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     lintOptions {
         checkReleaseBuilds false
     }
@@ -75,6 +77,9 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "androidx.core:core-splashscreen:1.0.0-beta01"
     implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
+    implementation 'com.google.android.play:review:2.0.1'
+    implementation 'com.google.android.play:review-ktx:2.0.1'
+
 
     implementation 'org.jsoup:jsoup:1.11.3'
     testImplementation 'junit:junit:4.12'

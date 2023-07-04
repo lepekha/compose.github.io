@@ -19,17 +19,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.dialog.R
-import kotlinx.android.synthetic.main.dialog_confirmation.*
-import kotlinx.android.synthetic.main.dialog_confirmation.btnCancel
-import kotlinx.android.synthetic.main.dialog_confirmation.btnDone
-import kotlinx.android.synthetic.main.dialog_image.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.scope.lifecycleScope
 import ua.com.compose.dialog.DialogManager
+import ua.com.compose.dialog.databinding.DialogConfirmationBinding
+import ua.com.compose.dialog.databinding.DialogImageBinding
 import ua.com.compose.extension.*
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.remove
 
 
@@ -57,6 +56,8 @@ class DialogImage : BottomSheetDialogFragment() {
         }
     }
 
+    private val binding by viewBindingWithBinder(DialogImageBinding::bind)
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
             this.behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -77,10 +78,10 @@ class DialogImage : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtMessage2.isVisible = false
+        binding.txtMessage2.isVisible = false
         arguments?.takeIf { it.containsKey(BUNDLE_KEY_MESSAGE) }?.getString(BUNDLE_KEY_MESSAGE)?.let {
-            txtMessage2.isVisible = true
-            txtMessage2.text = it
+            binding.txtMessage2.isVisible = true
+            binding.txtMessage2.text = it
         }
 
         (arguments?.getParcelable<Uri>(BUNDLE_KEY_URI))?.let {
@@ -88,32 +89,26 @@ class DialogImage : BottomSheetDialogFragment() {
                 .load(it)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(imageView)
+                .into(binding.imageView)
         }
 
-        btnShare.setVibrate(EVibrate.BUTTON)
-        btnShare.setOnClickListener {
+        binding.btnShare.setVibrate(EVibrate.BUTTON)
+        binding.btnShare.setOnClickListener {
             (arguments?.getParcelable<Uri>(BUNDLE_KEY_URI))?.let {
-                val loader = DialogManager.createLoad {}
                 GlobalScope.launch(Dispatchers.IO) {
                     context?.createImageIntent(it)
-                    withContext(Dispatchers.Main) {
-                        loader.closeDialog()
-                    }
                 }
             }
         }
 
-        btnLoad.setVibrate(EVibrate.BUTTON)
-        btnLoad.setOnClickListener {
+        binding.btnLoad.setVibrate(EVibrate.BUTTON)
+        binding.btnLoad.setOnClickListener {
             val context = context ?: return@setOnClickListener
             (arguments?.getParcelable<Uri>(BUNDLE_KEY_URI))?.let {
-                val loader = DialogManager.createLoad {}
                 GlobalScope.launch(Dispatchers.IO) {
                     val bitmap = context.loadImage(it)
                     context.saveBitmap(bitmap)
                     withContext(Dispatchers.Main) {
-                        loader.closeDialog()
                         context.let { it.toast(it.getString(R.string.module_dialog_save_ready)) }
                     }
                 }

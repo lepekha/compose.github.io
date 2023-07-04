@@ -11,7 +11,6 @@ import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.module_gallery_element_gallery_images.view.*
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 import ua.com.compose.gallery.R
@@ -113,7 +112,7 @@ class GalleryPhotoRvAdapter(val context: Context, val images: MutableList<Uri>, 
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imgView: ImageView = view.imgView
-        val badge: TextView = view.badge
+        val imgView: ImageView = view.findViewById(R.id.imgView)
+        val badge: TextView = view.findViewById(R.id.badge)
     }
 }

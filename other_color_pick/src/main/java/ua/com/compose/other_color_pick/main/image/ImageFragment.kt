@@ -14,6 +14,10 @@ import android.os.Handler
 import android.os.Looper
 import android.view.*
 import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.Companion.isPhotoPickerAvailable
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
@@ -84,7 +88,11 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
     }
 
     private fun openGallery() {
-        FragmentGallery.show(fm = childFragmentManager, isMultiSelect = false)
+        if(isPhotoPickerAvailable(requireContext())) {
+            pickMedia?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        } else {
+            FragmentGallery.show(fm = childFragmentManager, isMultiSelect = false)
+        }
     }
 
     override fun createBottomMenu(): MutableList<Menu> {
@@ -98,11 +106,13 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
     }
 
     private val mainModule: ColorPickViewModule by activityViewModels()
+    private var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
+
         binding.zoomableImageView2.setOnTouchListener { v, event ->
             binding.zoomableImageView2.let { view ->
                 detectColor(view)
@@ -116,29 +126,18 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
             openGallery()
         }
 
-        childFragmentManager.setFragmentResultListener(
-            FragmentGallery.REQUEST_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>().firstOrNull()?.let { uri ->
-                viewModule.imageUri.uri = uri
-                arguments?.putAll(bundleOf(BUNDLE_KEY_IMAGE_URI to uri))
-                showImage(uri)
-            }
-        }
-
-        mainModule.colorType.nonNull().observe(this) { type ->
+        mainModule.colorType.nonNull().observe(viewLifecycleOwner) { type ->
             binding.pointerRing.isVisible.takeIf { it }?.let {
                 (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnGallery, btnCopy, btnPaletteAdd))
             }
             viewModule.updateColor()
         }
 
-        viewModule.nameColor.nonNull().observe(this) { name ->
+        viewModule.nameColor.nonNull().observe(viewLifecycleOwner) { name ->
             binding.txtName.text = name
         }
 
-        viewModule.changeColor.nonNull().observe(this) { color ->
+        viewModule.changeColor.nonNull().observe(viewLifecycleOwner) { color ->
             binding.textView.text = mainModule.colorType.value?.convertColor(color, withSeparator = ",") ?: ""
             binding.imgInfo.imageTintList = ColorStateList.valueOf(if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.txtName.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
@@ -153,15 +152,29 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
             ColorInfoFragment.show(childFragmentManager, color = viewModule.color)
         }
 
-        binding.btnCopy.setOnClickListener {
-            binding.textView.text.toString().let { color ->
-                requireContext().clipboardCopy(color)
-                showAlert(R.string.module_other_color_pick_color_copy)
-            }
-        }
-
         ((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) ?: viewModule.imageUri.uri)?.let { uri ->
             showImage(uri)
+        }
+
+        if(isPhotoPickerAvailable(requireContext())) {
+            pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    viewModule.imageUri.uri = uri
+                    arguments?.putAll(bundleOf(BUNDLE_KEY_IMAGE_URI to uri))
+                    showImage(uri)
+                }
+            }
+        } else {
+            childFragmentManager.setFragmentResultListener(
+                    FragmentGallery.REQUEST_KEY,
+                    viewLifecycleOwner
+            ) { _, bundle ->
+                (bundle.getSerializable(FragmentGallery.BUNDLE_KEY_IMAGES) as List<*>).filterIsInstance<Uri>().firstOrNull()?.let { uri ->
+                    viewModule.imageUri.uri = uri
+                    arguments?.putAll(bundleOf(BUNDLE_KEY_IMAGE_URI to uri))
+                    showImage(uri)
+                }
+            }
         }
     }
 

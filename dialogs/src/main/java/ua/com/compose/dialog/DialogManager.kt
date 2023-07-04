@@ -10,10 +10,4 @@ object DialogManager {
     fun init(context: WeakReference<Context?>){
         mContext = context
     }
-
-    fun createLoad(init: DialogLoad.() -> Unit): IDialog {
-        return DialogLoad(init).apply {
-            this.showDialog(mContext)
-        }
-    }
 }

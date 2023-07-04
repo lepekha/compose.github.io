@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -84,16 +85,15 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
         mPreviewContainer = binding.previewContainer
         setTitle(requireContext().getString(R.string.module_other_color_pick_fragment_title))
 
-        viewModule.nameColor.nonNull().observe(this) { name ->
+        viewModule.nameColor.nonNull().observe(viewLifecycleOwner) { name ->
             binding.txtName.text = name
         }
 
-        mainModule.colorType.nonNull().observe(this) { type ->
-            (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf(btnCopy, btnPaletteAdd))
+        mainModule.colorType.nonNull().observe(viewLifecycleOwner) { type ->
             viewModule.updateColor()
         }
 
-        viewModule.changeColor.nonNull().observe(this) { color ->
+        viewModule.changeColor.nonNull().observe(viewLifecycleOwner) { color ->
             binding.textView.text = mainModule.colorType.value?.convertColor(color, withSeparator = ",") ?: ""
             binding.textView.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.txtName.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
@@ -110,11 +110,13 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
         }
 
         if(!requireContext().hasPermission(permission = Manifest.permission.CAMERA)) {
+            binding.placeholder.isVisible = true
             binding.placeholder.setVibrate(EVibrate.BUTTON)
-            binding.placeholder.setImageResource(R.drawable.module_other_text_style_fragment_text_style_ic_open)
+            binding.imgPlaceholder.setImageResource(R.drawable.module_other_text_style_fragment_text_style_ic_open)
             binding.placeholder.setOnClickListener {
                 checkPermission()
             }
+            checkPermission()
         }
     }
 
@@ -134,9 +136,7 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
             resultCallback = {
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
-                        binding.container?.post {
-                            cameraStart()
-                        }
+                        binding.container.doOnLayout { cameraStart() }
                     }
                     is PermissionResult.PermissionDenied -> {
                     }
@@ -153,7 +153,9 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
 
     override fun onResume() {
         super.onResume()
-        checkPermission()
+        if(requireContext().hasPermission(permission = Manifest.permission.CAMERA)) {
+            binding.container.doOnLayout { cameraStart() }
+        }
     }
 
     override fun onPause() {

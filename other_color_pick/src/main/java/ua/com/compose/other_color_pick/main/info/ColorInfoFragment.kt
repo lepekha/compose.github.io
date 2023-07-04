@@ -8,20 +8,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import ua.com.compose.dialog.dialogs.DialogColor
 import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.remove
 import ua.com.compose.other_color_pick.R
 import ua.com.compose.other_color_pick.databinding.ModuleOtherColorPickFragmentColorInfoBinding
 import ua.com.compose.other_color_pick.di.Scope
-import ua.com.compose.other_color_pick.main.palette.PaletteViewModule
 
 
 class ColorInfoFragment : BottomSheetDialogFragment()  {

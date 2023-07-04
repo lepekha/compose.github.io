@@ -4,7 +4,9 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputFilter
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +18,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
-import kotlinx.android.synthetic.main.dialog_color.*
 import ua.com.compose.ColorNames
 import ua.com.compose.EColorType
 import ua.com.compose.dialog.R
+import ua.com.compose.dialog.databinding.DialogColorBinding
 import ua.com.compose.extension.*
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.remove
 import java.util.Locale
 
@@ -52,6 +55,7 @@ class DialogColor : BottomSheetDialogFragment()  {
         }
     }
 
+    private val binding by viewBindingWithBinder(DialogColorBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,76 +90,89 @@ class DialogColor : BottomSheetDialogFragment()  {
             }
             null
         }
-        edColor.filters = arrayOf<InputFilter>(alphaNumericFilter, InputFilter.LengthFilter(6))
-        edColor.onTextChangedListener {
-            var hex = it
-            repeat(6 - it.count()) {
-                hex = "0$hex"
+        binding.edColor.filters = arrayOf<InputFilter>(alphaNumericFilter, InputFilter.LengthFilter(6))
+
+        val watcher = object : TextWatcher {
+            override fun afterTextChanged(p0: Editable) {
+                // not used in this extension
             }
-            val color = Color.parseColor("#$hex")
-            colorPicker.setColor(color)
-            if(ColorUtils.calculateLuminance(color) < 0.5) {
-                txtColor.setTextColor(Color.WHITE)
-            } else {
-                txtColor.setTextColor(Color.BLACK)
+
+            override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {
+                // not used in this extension
             }
-            txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
-            imgExample.backgroundTintList = ColorStateList.valueOf(color)
-            imgExample.tag = color
+
+            override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {
+                var hex = p0.toString()
+                repeat(6 - hex.count()) {
+                    hex = "0$hex"
+                }
+                val color = Color.parseColor("#$hex")
+                binding.colorPicker.setColor(color)
+                if(ColorUtils.calculateLuminance(color) < 0.5) {
+                    binding.txtColor.setTextColor(Color.WHITE)
+                } else {
+                    binding.txtColor.setTextColor(Color.BLACK)
+                }
+                binding.txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+                binding.imgExample.backgroundTintList = ColorStateList.valueOf(color)
+                binding.imgExample.tag = color
+            }
         }
 
-        colorPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
+        binding.colorPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
             override fun onColorSelected(color: Int) {
-                imgExample.tag = color
-                imgExample.backgroundTintList = ColorStateList.valueOf(color)
+                binding.imgExample.tag = color
+                binding.imgExample.backgroundTintList = ColorStateList.valueOf(color)
                 if(ColorUtils.calculateLuminance(color) < 0.5) {
-                    txtColor.setTextColor(Color.WHITE)
+                    binding.txtColor.setTextColor(Color.WHITE)
                 } else {
-                    txtColor.setTextColor(Color.BLACK)
+                    binding.txtColor.setTextColor(Color.BLACK)
                 }
-                txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
-                edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
+                binding.txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+                binding.edColor.removeTextChangedListener(watcher)
+                binding.edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
+                binding.edColor.addTextChangedListener(watcher)
             }
         })
 
-        btnColor0.setVibrate(EVibrate.BUTTON)
-        btnColor0.setOnClickListener {
+        binding.btnColor0.setVibrate(EVibrate.BUTTON)
+        binding.btnColor0.setOnClickListener {
             setColor(Color.parseColor(it.contentDescription.toString()), colorType)
         }
 
-        btnColor1.setVibrate(EVibrate.BUTTON)
-        btnColor1.setOnClickListener {
+        binding.btnColor1.setVibrate(EVibrate.BUTTON)
+        binding.btnColor1.setOnClickListener {
             setColor(Color.parseColor(it.contentDescription.toString()), colorType)
         }
 
-        btnColor2.setVibrate(EVibrate.BUTTON)
-        btnColor2.setOnClickListener {
+        binding.btnColor2.setVibrate(EVibrate.BUTTON)
+        binding.btnColor2.setOnClickListener {
             setColor(Color.parseColor(it.contentDescription.toString()), colorType)
         }
 
-        btnColor3.setVibrate(EVibrate.BUTTON)
-        btnColor3.setOnClickListener {
+        binding.btnColor3.setVibrate(EVibrate.BUTTON)
+        binding.btnColor3.setOnClickListener {
             setColor(Color.parseColor(it.contentDescription.toString()), colorType)
         }
 
-        btnColor4.setVibrate(EVibrate.BUTTON)
-        btnColor4.setOnClickListener {
+        binding.btnColor4.setVibrate(EVibrate.BUTTON)
+        binding.btnColor4.setOnClickListener {
             setColor(Color.parseColor(it.contentDescription.toString()), colorType)
         }
 
-        btnColor5.setVibrate(EVibrate.BUTTON)
-        btnColor5.setOnClickListener {
+        binding.btnColor5.setVibrate(EVibrate.BUTTON)
+        binding.btnColor5.setOnClickListener {
             setColor(Color.parseColor(it.contentDescription.toString()), colorType)
         }
 
-        btnColor6.setVibrate(EVibrate.BUTTON)
-        btnColor6.setOnClickListener {
+        binding.btnColor6.setVibrate(EVibrate.BUTTON)
+        binding.btnColor6.setOnClickListener {
             setColor(Color.parseColor(it.contentDescription.toString()), colorType)
         }
 
-        btnDone.setVibrate(EVibrate.BUTTON)
-        btnDone.setOnClickListener {
-            val color = imgExample.tag as Int
+        binding.btnDone.setVibrate(EVibrate.BUTTON)
+        binding.btnDone.setOnClickListener {
+            val color = binding.imgExample.tag as Int
             if(color != Color.BLACK && color != Color.WHITE){
                 prefs.put(PREF_KEY_COLOR, color)
             }
@@ -163,22 +180,22 @@ class DialogColor : BottomSheetDialogFragment()  {
             dismiss()
         }
 
-        btnCancel.setVibrate(EVibrate.BUTTON)
-        btnCancel.setOnClickListener {
+        binding.btnCancel.setVibrate(EVibrate.BUTTON)
+        binding.btnCancel.setOnClickListener {
             dismiss()
         }
     }
 
     private fun setColor(color: Int, colorType: EColorType){
-        colorPicker.setColor(color)
-        edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
-        txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
-        imgExample.backgroundTintList = ColorStateList.valueOf(color)
-        imgExample.tag = color
+        binding.colorPicker.setColor(color)
+        binding.edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
+        binding.txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+        binding.imgExample.backgroundTintList = ColorStateList.valueOf(color)
+        binding.imgExample.tag = color
         if(ColorUtils.calculateLuminance(color) < 0.5) {
-            txtColor.setTextColor(Color.WHITE)
+            binding.txtColor.setTextColor(Color.WHITE)
         } else {
-            txtColor.setTextColor(Color.BLACK)
+            binding.txtColor.setTextColor(Color.BLACK)
         }
     }
 }

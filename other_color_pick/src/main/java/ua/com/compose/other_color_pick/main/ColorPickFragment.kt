@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import ua.com.compose.ColorNames
 import ua.com.compose.EColorType
@@ -91,9 +92,9 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
 
     private var prevTab: WeakReference<View>? = null
     private fun selectScreen(tabView: View? = null) {
-        prevTab?.get()?.toggle()
+        prevTab?.get()?.let { it.isVisible = !it.isVisible  }
         prevTab = WeakReference(tabView)
-        tabView?.toggle()
+        tabView?.let { it.isVisible = !it.isVisible }
         binding.imgCamera.setImageResource(R.drawable.ic_camera)
         binding.imgImage.setImageResource(R.drawable.ic_image)
         binding.imgPalette.setImageResource(R.drawable.ic_palette)

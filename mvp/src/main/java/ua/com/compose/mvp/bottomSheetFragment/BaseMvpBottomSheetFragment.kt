@@ -8,7 +8,7 @@ import ua.com.compose.mvp.BaseMvpActivity
 import ua.com.compose.mvp.BaseMvpPresenterImpl
 import ua.com.compose.mvp.BaseMvpView
 
-abstract class BaseMvpBottomSheetFragment<in V : BaseMvpDialogView, out T : BaseMvpDialogPresenter<V>> : BottomSheetDialogFragment(), BaseMvpDialogView {
+abstract class BaseMvpBottomSheetFragment<in V : BaseMvpDialogView, out T : BaseMvpDialogPresenter<V>>(): BottomSheetDialogFragment(), BaseMvpDialogView {
 
     protected abstract val presenter: T
     private var view: BaseMvpActivity<BaseMvpView, BaseMvpPresenterImpl<BaseMvpView>>? = null

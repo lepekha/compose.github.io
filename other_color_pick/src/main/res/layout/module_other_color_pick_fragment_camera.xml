@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="visible"
-        app:cardBackgroundColor="?attr/color_2"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,24 +19,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/placeholder"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/cardView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_camera"
-            app:tint="?attr/color_1" />
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/color_button_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/imgPlaceholder"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_camera"
+                app:tint="?attr/color_9" />
+        </com.google.android.material.card.MaterialCardView>
 
         <FrameLayout
             android:id="@+id/previewContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible"
-            tools:background="#808080"
+            tools:background="@android:color/transparent"
             tools:visibility="visible">
 
             <View
@@ -80,6 +90,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="90dp"
         android:elevation="6dp"
+        android:visibility="gone"
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
         app:cardMaxElevation="6dp"
@@ -87,7 +98,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/color_main_menu_background"
-        app:strokeWidth="3dp">
+        app:strokeWidth="3dp"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardColor"
@@ -141,30 +153,6 @@
                 app:layout_constraintVertical_chainStyle="packed" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnCopy"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="6dp"
-            android:layout_marginBottom="6dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="?attr/color_3"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnRemove"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/module_other_text_style_fragment_text_style_ic_copy"
-                app:tint="?attr/color_9" />
-        </com.google.android.material.card.MaterialCardView>
     </com.google.android.material.card.MaterialCardView>
 
 

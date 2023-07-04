@@ -13,9 +13,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.dialog.R
-import kotlinx.android.synthetic.main.dialog_confirmation.*
+import ua.com.compose.dialog.databinding.DialogConfirmationBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.remove
 
 
@@ -42,6 +43,8 @@ class DialogConfirmation : BottomSheetDialogFragment() {
         }
     }
 
+    private val binding by viewBindingWithBinder(DialogConfirmationBinding::bind)
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
             this.setCancelable(false)
@@ -61,17 +64,17 @@ class DialogConfirmation : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtMessage.text = arguments?.getString(BUNDLE_KEY_MESSAGE) ?: ""
+        binding.txtMessage.text = arguments?.getString(BUNDLE_KEY_MESSAGE) ?: ""
 
-        btnCancel.setVibrate(EVibrate.BUTTON)
-        btnCancel.setOnClickListener {
+        binding.btnCancel.setVibrate(EVibrate.BUTTON)
+        binding.btnCancel.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY)
                     ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_ANSWER to false))
             dismiss()
         }
 
-        btnDone.setVibrate(EVibrate.BUTTON)
-        btnDone.setOnClickListener {
+        binding.btnDone.setVibrate(EVibrate.BUTTON)
+        binding.btnDone.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY)
                     ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_ANSWER to true))
             dismiss()

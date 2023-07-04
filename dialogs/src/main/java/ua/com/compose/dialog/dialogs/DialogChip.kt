@@ -25,9 +25,11 @@ import ua.com.compose.dialog.R
 import ua.com.compose.extension.dp
 import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.extension.sp
-import kotlinx.android.synthetic.main.dialog_list.*
+import ua.com.compose.dialog.databinding.DialogAlertBinding
+import ua.com.compose.dialog.databinding.DialogListBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.remove
 import java.util.ArrayList
 
@@ -57,6 +59,8 @@ class DialogChip : BottomSheetDialogFragment() {
             return requestKey
         }
     }
+
+    private val binding by viewBindingWithBinder(DialogListBinding::bind)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_list, container, false)
@@ -98,11 +102,11 @@ class DialogChip : BottomSheetDialogFragment() {
                 this.ellipsize = TextUtils.TruncateAt.END
             }
 
-            chipGroup.addView(chip)
+            binding.chipGroup.addView(chip)
         }
 
-        chipGroup.setOnCheckedChangeListener { group, checkedId ->
-            chipGroup.context.vibrate(EVibrate.BUTTON)
+        binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            binding.chipGroup.context.vibrate(EVibrate.BUTTON)
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(
                     BUNDLE_KEY_ANSWER_POSITION to checkedId,
                     BUNDLE_KEY_ANSWER_NAME to (group.get(checkedId) as Chip).text)

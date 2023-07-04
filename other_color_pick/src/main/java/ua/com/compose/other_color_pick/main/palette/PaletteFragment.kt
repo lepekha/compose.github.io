@@ -153,7 +153,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
             viewModule.pressUpdatePalette()
         }
 
-        viewModule.colors.nonNull().observe(this) {
+        viewModule.colors.nonNull().observe(viewLifecycleOwner) {
             (binding.lstColors.adapter as? ColorsRvAdapter)?.update(binding.lstColors, it ?: listOf())
             binding.btnAddColor.isVisible = (it?.isEmpty() ?: true) && (binding.imgPlaceholder.isVisible == false)
             if(it?.isNotEmpty() == true) {
@@ -165,7 +165,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
 //            binding?.lstPalette?.runLayoutAnimation(anim = R.anim.layout_animation_fall_down)
         }
 
-        viewModule.palettes.nonNull().observe(this) {
+        viewModule.palettes.nonNull().observe(viewLifecycleOwner) {
             val pallets = mutableListOf<Card>().apply {
                 this.addAll(it ?: listOf())
             }
@@ -177,11 +177,11 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
             (binding.lstPallets.adapter as? PalletsRvAdapter)?.update(pallets)
         }
 
-        mainModule.colorType.nonNull().observe(this) {
+        mainModule.colorType.nonNull().observe(viewLifecycleOwner) {
             (binding.lstColors.adapter as? ColorsRvAdapter)?.changeColorType(it)
         }
 
-        viewModule.state.nonNull().observe(this) {
+        viewModule.state.nonNull().observe(viewLifecycleOwner) {
             if(it is PaletteViewModule.State.SHARE) {
                 requireActivity().shareFile(it.file)
             }

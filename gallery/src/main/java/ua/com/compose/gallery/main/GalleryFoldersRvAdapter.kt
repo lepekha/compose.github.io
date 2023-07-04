@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.module_gallery_element_gallery_folder.view.*
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
 import ua.com.compose.gallery.R
@@ -40,9 +39,9 @@ class GalleryFoldersRvAdapter(private val folders: List<ImageFolder>, val onPres
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val container: ConstraintLayout = view.container
-        val imgPhoto: ImageView = view.imgPhoto
-        val txtName: TextView = view.txtName
-        val txtCount: TextView = view.txtCount
+        val container: ConstraintLayout = view.findViewById(R.id.container)
+        val imgPhoto: ImageView = view.findViewById(R.id.imgPhoto)
+        val txtName: TextView = view.findViewById(R.id.txtName)
+        val txtCount: TextView = view.findViewById(R.id.txtCount)
     }
 }

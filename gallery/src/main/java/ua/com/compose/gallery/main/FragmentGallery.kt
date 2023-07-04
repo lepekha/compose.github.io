@@ -10,11 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.AppCompatDrawableManager
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.core.view.marginTop
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,12 +24,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
 import ua.com.compose.gallery.R
-import kotlinx.android.synthetic.main.module_gallery_fragment_gallery.*
-import kotlinx.android.synthetic.main.module_gallery_fragment_gallery.list
-import kotlinx.android.synthetic.main.module_gallery_fragment_gallery_content.*
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import ua.com.compose.extension.*
+import ua.com.compose.gallery.databinding.ModuleGalleryFragmentGalleryBinding
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.remove
 
 
@@ -69,6 +65,8 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         return inflater.inflate(R.layout.module_gallery_fragment_gallery, container, false)
     }
 
+    private val binding by viewBindingWithBinder(ModuleGalleryFragmentGalleryBinding::bind)
+
     override fun backPress() {
         dismiss()
     }
@@ -99,24 +97,24 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         dialog?.setOnShowListener { dialog ->
             val bottomSheetInternal = (dialog as BottomSheetDialog).findViewById<View>(R.id.design_bottom_sheet)
             bottomSheetInternal?.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
-            list?.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
+            binding.list?.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
         }
 
         presenter.onCreate(isMultiSelect = arguments?.getBoolean(BUNDLE_KEY_MULTI_SELECT) ?: false)
 
-        btnClearAll.setVibrate(EVibrate.BUTTON)
-        btnClearAll.setOnClickListener {
+        binding.btnClearAll.setVibrate(EVibrate.BUTTON)
+        binding.btnClearAll.setOnClickListener {
             presenter.pressClear()
         }
 
-        btnAddImages.setVibrate(EVibrate.BUTTON)
-        btnAddImages.setOnClickListener {
+        binding.btnAddImages.setVibrate(EVibrate.BUTTON)
+        binding.btnAddImages.setOnClickListener {
             presenter.addImage()
         }
 
-        txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
-        txtFolder.setOnClickListener {
-            if(list.adapter is GalleryFoldersRvAdapter){
+        binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
+        binding.txtFolder.setOnClickListener {
+            if(binding.list.adapter is GalleryFoldersRvAdapter){
                 initPhotos()
             }else{
                 initFolders()
@@ -124,9 +122,9 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         }
 
         if(!requireContext().hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || !requireContext().hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            txtFolder.isVisible = false
-            placeholder.setVibrate(EVibrate.BUTTON)
-            placeholder.setOnClickListener {
+            binding.txtFolder.isVisible = false
+            binding.placeholder.setVibrate(EVibrate.BUTTON)
+            binding.placeholder.setOnClickListener {
                 checkPermission()
             }
         }
@@ -142,7 +140,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             resultCallback = {
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
-                        txtFolder.isVisible = true
+                        binding.txtFolder.isVisible = true
                         presenter.getAllShownImagesPath(getCurrentActivity())
                         initPhotos()
                     }
@@ -160,9 +158,9 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     }
 
     override fun initFolders() {
-        txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_less), null)
-        list.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.VERTICAL, false)
-        list.adapter = GalleryFoldersRvAdapter(
+        binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_less), null)
+        binding.list.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.VERTICAL, false)
+        binding.list.adapter = GalleryFoldersRvAdapter(
             presenter.folders,
         ){
             presenter.pressFolder(it)
@@ -170,10 +168,10 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     }
 
     override fun initPhotos() {
-        placeholder.isVisible = false
-        txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
-        list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
-        list.adapter = GalleryPhotoRvAdapter(
+        binding.placeholder.isVisible = false
+        binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
+        binding.list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
+        binding.list.adapter = GalleryPhotoRvAdapter(
             requireContext(),
             presenter.images,
             presenter.selectedImages,
@@ -181,32 +179,32 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 presenter.pressImage(uri = uri, isMultiSelect = isLongPress)
             },
             onUpdateBadge = {
-                list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_BADGE)
+                binding.list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_BADGE)
             }
         )
     }
 
     override fun setFolderName(value: String) {
-        txtFolder.text = value
+        binding.txtFolder.text = value
     }
 
     override fun clearSelect(){
-        list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_CLEAR_SELECT)
+        binding.list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_CLEAR_SELECT)
     }
 
     override fun setVisibleButtons(isVisible: Boolean) {
-        if(buttonContainer.isVisible != isVisible){
+        if(binding.buttonContainer.isVisible != isVisible){
             if(isVisible){
-                btnAddImages.scaleX = 0f
-                btnAddImages.scaleY = 0f
+                binding.btnAddImages.scaleX = 0f
+                binding.btnAddImages.scaleY = 0f
 
-                btnClearAll.scaleX = 0f
-                btnClearAll.scaleY = 0f
-                buttonContainer.isVisible = isVisible
-                btnAddImages.animateScale(toScale = 1f)
-                btnClearAll.animateScale(toScale = 1f)
+                binding.btnClearAll.scaleX = 0f
+                binding.btnClearAll.scaleY = 0f
+                binding.buttonContainer.isVisible = isVisible
+                binding.btnAddImages.animateScale(toScale = 1f)
+                binding.btnClearAll.animateScale(toScale = 1f)
             }else{
-                buttonContainer.isVisible = isVisible
+                binding.buttonContainer.isVisible = isVisible
             }
         }
     }
@@ -218,7 +216,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     }
 
     override fun updateAllList(){
-        list.adapter?.notifyDataSetChanged()
+        binding.list.adapter?.notifyDataSetChanged()
     }
 
 }

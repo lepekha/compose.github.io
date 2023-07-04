@@ -12,8 +12,6 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
-import kotlinx.android.synthetic.main.element_bottom_menu_icon.view.*
-import kotlinx.android.synthetic.main.element_bottom_menu_text.view.txtTitle
 import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.data.TextMenu
 
@@ -77,12 +75,12 @@ class BottomMenuRvAdapter(var menu: MutableList<Menu>) : RecyclerView.Adapter<Re
     }
 
     class ButtonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val btnMenu: FrameLayout = view.btnMenu
-        val btnIcon: ImageView = view.btnIcon
+        val btnMenu: FrameLayout = view.findViewById(R.id.btnMenu)
+        val btnIcon: ImageView = view.findViewById(R.id.btnIcon)
     }
 
     class TextViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val btnMenu: FrameLayout = view.btnMenu
-        val title: TextView = view.txtTitle
+        val btnMenu: FrameLayout = view.findViewById(R.id.btnMenu)
+        val title: TextView = view.findViewById(R.id.txtTitle)
     }
 }

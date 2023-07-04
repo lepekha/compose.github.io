@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -13,8 +12,9 @@ import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.dialog.R
-import kotlinx.android.synthetic.main.dialog_input.*
+import ua.com.compose.dialog.databinding.DialogInputBinding
 import ua.com.compose.extension.*
+import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.navigator.remove
 
 
@@ -47,6 +47,8 @@ class DialogInput : BottomSheetDialogFragment() {
         }
     }
 
+    private val binding by viewBindingWithBinder(DialogInputBinding::bind)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_input, container, false)
     }
@@ -67,37 +69,37 @@ class DialogInput : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.getString(BUNDLE_KEY_TITLE)?.let {
-            txtMessage.text = it
+            binding.txtMessage.text = it
         }
-        editText.hint = arguments?.getString(BUNDLE_KEY_HINT) ?: ""
-        editText.isSingleLine = arguments?.getBoolean(BUNDLE_KEY_SINGLE_LINE, false) ?: false
+        binding.editText.hint = arguments?.getString(BUNDLE_KEY_HINT) ?: ""
+        binding.editText.isSingleLine = arguments?.getBoolean(BUNDLE_KEY_SINGLE_LINE, false) ?: false
 
-        editText.onTextChangedListener {
-            btnCopy.isVisible = it.isNotEmpty()
-            btnDone.isVisible = it.isNotEmpty() || it.isNotBlank()
+        binding.editText.onTextChangedListener {
+            binding.btnCopy.isVisible = it.isNotEmpty()
+            binding.btnDone.isVisible = it.isNotEmpty() || it.isNotBlank()
         }
 
-        btnCancel.setVibrate(EVibrate.BUTTON)
-        btnCancel.setOnClickListener {
+        binding.btnCancel.setVibrate(EVibrate.BUTTON)
+        binding.btnCancel.setOnClickListener {
             setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf())
             dismiss()
         }
 
-        btnCopy.setVibrate(EVibrate.BUTTON)
-        btnCopy.setOnClickListener {
-            editText.text.clear()
+        binding.btnCopy.setVibrate(EVibrate.BUTTON)
+        binding.btnCopy.setOnClickListener {
+            binding.editText.text.clear()
         }
 
-        btnDone.setVibrate(EVibrate.BUTTON)
-        btnDone.setOnClickListener {
-            setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to editText.text.toString()))
+        binding.btnDone.setVibrate(EVibrate.BUTTON)
+        binding.btnDone.setOnClickListener {
+            setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: BUNDLE_KEY_REQUEST_KEY, bundleOf(BUNDLE_KEY_INPUT_MESSAGE to binding.editText.text.toString()))
             dismiss()
         }
 
-        btnDone.isVisible = false
+        binding.btnDone.isVisible = false
         arguments?.getString(BUNDLE_KEY_TEXT)?.let {
-            editText.setText(it)
-            btnDone.isVisible = it.isNotEmpty() || it.isNotBlank()
+            binding.editText.setText(it)
+            binding.btnDone.isVisible = it.isNotEmpty() || it.isNotBlank()
         }
     }
 

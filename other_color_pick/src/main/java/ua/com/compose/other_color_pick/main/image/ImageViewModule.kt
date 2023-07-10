@@ -34,6 +34,6 @@ class ImageViewModule(val imageUri: ImageUri,
     }
 
     fun pressPaletteAdd() = viewModelScope.launch {
-        addColorUseCase.execute(color, name)
+        addColorUseCase.execute(color)
     }
 }

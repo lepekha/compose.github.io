@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "colorItem")
+@Entity(tableName = "colors")
 class ColorItem {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -13,9 +13,6 @@ class ColorItem {
 
     @ColumnInfo(name = "color")
     var color: Int = Color.WHITE
-
-    @ColumnInfo(name = "name")
-    var name: String = ""
 
     @ColumnInfo(name = "palletId")
     var palletId: Long = 0

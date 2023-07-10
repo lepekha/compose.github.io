@@ -17,7 +17,7 @@ class AddColorUseCase(private val addPalletUseCase: AddPalletUseCase,
                       private val getPalletUseCase: GetPalletUseCase,
                       private val database: ColorDatabase) {
 
-    suspend fun execute(color: Int, name: String) {
+    suspend fun execute(color: Int) {
         return withContext(Dispatchers.IO) {
             var palletId = prefs.get(key = SharedPreferencesKey.KEY_PALLET_ID, defaultValue = ColorPallet.DEFAULT_ID)
             palletId = getPalletUseCase.execute(palletId)?.id ?: kotlin.run {
@@ -28,7 +28,6 @@ class AddColorUseCase(private val addPalletUseCase: AddPalletUseCase,
 
             database.colorItemDao?.insert(ColorItem().apply {
                 this.color = color
-                this.name = name
                 this.palletId = palletId
             })
         }

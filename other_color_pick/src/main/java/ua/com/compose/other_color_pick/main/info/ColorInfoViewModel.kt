@@ -207,7 +207,6 @@ class ColorInfoViewModel(val context: Context,
     }
 
     fun pressPaletteAdd(color: Int) = viewModelScope.launch {
-        val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
-        addColorUseCase.execute(color, name)
+        addColorUseCase.execute(color)
     }
 }

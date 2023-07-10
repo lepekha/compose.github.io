@@ -12,5 +12,5 @@ fun Context.defaultPaletteName(withIncrement: Boolean = true): String {
     if(withIncrement) {
         prefs.put(key = SharedPreferencesKey.KEY_PALLET_NUMBER, value = ++number)
     }
-    return this.getString(R.string.module_other_color_pick_pallet) + " " + number
+    return this.getString(R.string.module_other_color_pick_pallet) + "_" + number
 }

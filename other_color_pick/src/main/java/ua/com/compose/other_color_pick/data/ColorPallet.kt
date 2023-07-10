@@ -4,11 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "colorPallet")
+@Entity(tableName = "pallets")
 class ColorPallet {
 
     companion object {
-        const val DEFAULT_ID = 0L
+        const val DEFAULT_ID = 1L
     }
 
     @PrimaryKey(autoGenerate = true)

@@ -77,6 +77,7 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
 
     private val btnPaletteAdd = BottomMenu(iconResId = R.drawable.ic_add_circle) {
         viewModule.pressPaletteAdd()
+        requireActivity().createReview()
         showAlert(R.string.module_other_color_pick_color_add_to_pallete)
     }
 

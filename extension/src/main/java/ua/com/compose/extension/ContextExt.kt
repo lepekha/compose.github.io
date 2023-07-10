@@ -1,5 +1,6 @@
 package ua.com.compose.extension
 
+import android.app.Activity
 import android.content.*
 import android.content.res.Resources
 import androidx.core.content.ContextCompat
@@ -18,11 +19,28 @@ import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
+import com.google.android.play.core.review.ReviewManagerFactory
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.concurrent.thread
 
 lateinit var prefs: SharedPreferences
+
+fun Activity.createReview() {
+    val key = "ReviewManagerFactory"
+    var number = prefs.get(key = key, defaultValue = 1)
+    prefs.put(key = key, value = ++number)
+
+    if(number % 20 == 0) {
+        val manager = ReviewManagerFactory.create(this)
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                manager.launchReviewFlow(this, task.result)
+            }
+        }
+    }
+}
 
 fun Context.appVersion(): Long {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

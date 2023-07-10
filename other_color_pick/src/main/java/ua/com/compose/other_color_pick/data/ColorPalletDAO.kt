@@ -4,10 +4,10 @@ import androidx.room.*
 
 @Dao
 interface ColorPalletDAO {
-    @Query("SELECT * FROM colorPallet")
+    @Query("SELECT * FROM pallets")
     fun getAll(): List<ColorPallet>
 
-    @Query("SELECT * FROM colorPallet WHERE id = :id")
+    @Query("SELECT * FROM pallets WHERE id = :id")
     fun getById(id: Long): ColorPallet?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -19,9 +19,9 @@ interface ColorPalletDAO {
     @Update
     fun update(color: ColorPallet)
 
-    @Query("DELETE FROM colorPallet WHERE id = :id")
+    @Query("DELETE FROM pallets WHERE id = :id")
     fun deleteById(id: Long)
 
-    @Query("DELETE FROM colorPallet")
+    @Query("DELETE FROM pallets")
     fun deleteAll()
 }

@@ -82,14 +82,12 @@ class PaletteViewModule(private val getAllPalletUseCase: GetAllPalletUseCase,
     }
 
     fun pressChangeColor(id: Long, color: Int) = viewModelScope.launch {
-        val colorName = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
-        updateColorUseCase.execute(id = id, color = color, name = colorName)
+        updateColorUseCase.execute(id = id, color = color)
         create()
     }
 
     fun pressAddColor(color: Int) = viewModelScope.launch {
-        val colorName = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
-        addColorUseCase.execute(color, colorName)
+        addColorUseCase.execute(color)
         create()
     }
 

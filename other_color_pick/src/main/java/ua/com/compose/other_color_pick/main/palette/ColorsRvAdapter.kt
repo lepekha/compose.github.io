@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ua.com.compose.ColorNames
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 import ua.com.compose.other_color_pick.data.ColorItem
@@ -58,7 +59,7 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem = oldList[oldItemPosition]
             val newItem = newList[newItemPosition]
-            return oldItem.item.color == newItem.item.color && oldItem.item.name == newItem.item.name
+            return oldItem.item.color == newItem.item.color
         }
     }
 
@@ -115,7 +116,8 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
 
     inner class ViewHolder(val binding: ModuleOtherColorPickElementColorBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: Card.CardColor) {
-            binding.txtName.text = card.item.name
+            val hex = "#${Integer.toHexString(card.item.color).substring(2).toLowerCase()}"
+            binding.txtName.text = ColorNames.getColorName(hex)
             binding.txtColor.text = colorType.convertColor(card.item.color, withSeparator = ",")
             binding.txtColor.setTextColor(Color.WHITE)
             binding.imgInfo.imageTintList = ColorStateList.valueOf(if (ColorUtils.calculateLuminance(card.item.color) < 0.5) Color.WHITE else Color.BLACK)

@@ -12,6 +12,7 @@ import ua.com.compose.dialog.dialogs.DialogColor
 import ua.com.compose.dialog.dialogs.DialogConfirmation
 import ua.com.compose.dialog.dialogs.DialogInput
 import ua.com.compose.extension.clipboardCopy
+import ua.com.compose.extension.createReview
 import ua.com.compose.extension.dp
 import ua.com.compose.extension.get
 import ua.com.compose.extension.navigationBarHeight
@@ -57,6 +58,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
         ) { _, bundle ->
             val color = bundle.getInt(DialogColor.BUNDLE_KEY_ANSWER_COLOR)
             viewModule.pressAddColor(color = color)
+            requireActivity().createReview()
         }
     }
 
@@ -131,7 +133,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
     }
 
     private fun pressPaletteShare(pallet: ColorPallet) {
-        val key = DialogChip.show(fm = childFragmentManager, list = EPaletteExportScheme.values().map { it.name })
+        val key = DialogChip.show(fm = childFragmentManager, list = EPaletteExportScheme.values().map { it.title })
         childFragmentManager.setFragmentResultListener(
                 key,
                 viewLifecycleOwner
@@ -162,7 +164,6 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
             } else {
                 (activity as BaseMvpActivity<*, *>).setupBottomMenu(mutableListOf())
             }
-//            binding?.lstPalette?.runLayoutAnimation(anim = R.anim.layout_animation_fall_down)
         }
 
         viewModule.palettes.nonNull().observe(viewLifecycleOwner) {

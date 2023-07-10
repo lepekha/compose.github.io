@@ -34,7 +34,7 @@ class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel(
     }
 
     fun pressPaletteAdd() = viewModelScope.launch {
-        addColorUseCase.execute(color, name)
+        addColorUseCase.execute(color)
     }
 
 }

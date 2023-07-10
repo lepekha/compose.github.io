@@ -6,11 +6,10 @@ import ua.com.compose.other_color_pick.data.ColorDatabase
 
 class UpdateColorUseCase(private val database: ColorDatabase) {
 
-    suspend fun execute(id: Long, color: Int, name: String) {
+    suspend fun execute(id: Long, color: Int) {
         return withContext(Dispatchers.IO) {
             database.colorItemDao?.getById(id)?.let {
                 it.color = color
-                it.name = name
                 database.colorItemDao.update(it)
             }
         }

@@ -130,6 +130,8 @@ enum class EColorType(val key: Int) {
     }
 }
 
+fun Int.colorName() = "≈${ColorNames.getColorName("#" + Integer.toHexString(this).substring(2).lowercase(Locale.getDefault()))}"
+
 object ColorNames {
     private val colors: NavigableMap<Int, String> = TreeMap(compareBy { it })
 

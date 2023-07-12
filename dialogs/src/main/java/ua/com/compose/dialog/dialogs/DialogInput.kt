@@ -99,6 +99,7 @@ class DialogInput : BottomSheetDialogFragment() {
         binding.btnDone.isVisible = false
         arguments?.getString(BUNDLE_KEY_TEXT)?.let {
             binding.editText.setText(it)
+            binding.editText.setSelection(binding.editText.length())
             binding.btnDone.isVisible = it.isNotEmpty() || it.isNotBlank()
         }
     }

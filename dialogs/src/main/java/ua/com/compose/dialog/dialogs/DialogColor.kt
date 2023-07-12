@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
 import ua.com.compose.ColorNames
 import ua.com.compose.EColorType
+import ua.com.compose.colorName
 import ua.com.compose.dialog.R
 import ua.com.compose.dialog.databinding.DialogColorBinding
 import ua.com.compose.extension.*
@@ -74,7 +75,6 @@ class DialogColor : BottomSheetDialogFragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val colorType = (arguments?.getSerializable(BUNDLE_KEY_COLOR_TYPE) as? EColorType) ?: EColorType.HEX
 
         (arguments?.getInt(BUNDLE_KEY_INPUT_COLOR, prefs.get(PREF_KEY_COLOR, Color.GREEN)))?.let { color ->
@@ -113,7 +113,7 @@ class DialogColor : BottomSheetDialogFragment()  {
                 } else {
                     binding.txtColor.setTextColor(Color.BLACK)
                 }
-                binding.txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+                binding.txtColor.text = color.colorName()
                 binding.imgExample.backgroundTintList = ColorStateList.valueOf(color)
                 binding.imgExample.tag = color
             }
@@ -128,9 +128,10 @@ class DialogColor : BottomSheetDialogFragment()  {
                 } else {
                     binding.txtColor.setTextColor(Color.BLACK)
                 }
-                binding.txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+                binding.txtColor.text = color.colorName()
                 binding.edColor.removeTextChangedListener(watcher)
                 binding.edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
+                binding.edColor.setSelection(binding.edColor.length())
                 binding.edColor.addTextChangedListener(watcher)
             }
         })
@@ -189,7 +190,7 @@ class DialogColor : BottomSheetDialogFragment()  {
     private fun setColor(color: Int, colorType: EColorType){
         binding.colorPicker.setColor(color)
         binding.edColor.setText(Integer.toHexString(color).substring(2).uppercase(Locale.getDefault()))
-        binding.txtColor.text = "≈${ColorNames.getColorName("#" + Integer.toHexString(color).substring(2).lowercase(Locale.getDefault()))}"
+        binding.txtColor.text = color.colorName()
         binding.imgExample.backgroundTintList = ColorStateList.valueOf(color)
         binding.imgExample.tag = color
         if(ColorUtils.calculateLuminance(color) < 0.5) {

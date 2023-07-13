@@ -15,9 +15,10 @@ enum class EPaletteExportScheme(val title: String) {
             val builder = buildString {
                 colors.forEach {
                     val hex = "#${Integer.toHexString(it.color).substring(2).toLowerCase()}"
-                    appendLine(colorType.convertColor(it.color))
+                    append(colorType.convertColor(it.color))
                     append(" ")
                     append(ColorNames.getColorName(hex))
+                    appendLine()
                 }
             }
             return FileStorage.writeToFile("$palette.txt", builder)
@@ -90,7 +91,7 @@ enum class EPaletteExportScheme(val title: String) {
                     appendLine()
                 }
             }
-            return FileStorage.writeToFile("$palette.yaml", builder)
+            return FileStorage.writeToFile("$palette.toml", builder)
         }
     },
     GPL(title = ".gpl") {

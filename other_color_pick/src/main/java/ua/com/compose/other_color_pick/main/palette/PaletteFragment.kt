@@ -172,6 +172,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
             }
             binding.divider.isVisible = !pallets.isEmpty()
             binding.lstPallets.isVisible = !pallets.isEmpty()
+            binding.lstColors.isVisible = !pallets.isEmpty()
             binding.imgPlaceholder.isVisible = pallets.isEmpty()
             if(pallets.isNotEmpty()) {
                 pallets.add(0, Card.CardButton(iconResId = R.drawable.ic_palette_add))

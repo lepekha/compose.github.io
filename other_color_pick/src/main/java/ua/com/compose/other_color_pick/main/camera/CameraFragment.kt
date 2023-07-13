@@ -8,7 +8,6 @@ import android.hardware.Camera
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -210,7 +209,13 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
                     true
                 )
                 //set optimal camera preview
-                cameraParameters?.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+             val focusModes: List<String> = cameraParameters?.getSupportedFocusModes() ?: listOf()
+             if(focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)){
+                 cameraParameters?.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+             } else if(focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)){
+                     cameraParameters?.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                 }
+
                 cameraParameters?.setPreviewSize(bestSize.width, bestSize.height)
                 camera?.parameters = cameraParameters
 

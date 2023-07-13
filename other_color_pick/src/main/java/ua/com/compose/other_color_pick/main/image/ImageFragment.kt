@@ -71,7 +71,7 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         }, Handler(Looper.getMainLooper()))
     }
 
-    private val btnGallery = BottomMenu(iconResId = ua.com.compose.R.drawable.ic_gallery) {
+    private val btnGallery = BottomMenu(iconResId = ua.com.compose.theme.R.drawable.ic_gallery) {
         openGallery()
     }
 

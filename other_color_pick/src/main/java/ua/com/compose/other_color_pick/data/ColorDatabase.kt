@@ -15,8 +15,8 @@ class ColorDatabase(context: Context) {
                 val date = java.text.DateFormat.getDateInstance(2, Locale.getDefault()).format(Date())
                 database.execSQL("CREATE TABLE IF NOT EXISTS `colors` (`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `color` INTEGER NOT NULL, `palletId` INTEGER NOT NULL)")
                 database.execSQL("CREATE TABLE IF NOT EXISTS `pallets` (`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)")
-                database.execSQL("INSERT INTO colors (id, color, palletId) SELECT id, color, 0 FROM colorItem")
-                database.execSQL("INSERT INTO pallets (id, name) VALUES (${0}, '${date}')")
+                database.execSQL("INSERT INTO colors (id, color, palletId) SELECT id, color, ${ColorPallet.DEFAULT_ID} FROM colorItem")
+                database.execSQL("INSERT INTO pallets (id, name) VALUES (${ColorPallet.DEFAULT_ID}, '${date}')")
                 database.execSQL("DROP TABLE colorItem");
             }
         }

@@ -64,7 +64,7 @@ class PaletteViewModule(private val getAllPalletUseCase: GetAllPalletUseCase,
 
     fun init() = viewModelScope.launch {
         val pallets = getAllPalletUseCase.execute()
-        palletId = prefs.get(key = SharedPreferencesKey.KEY_PALLET_ID, defaultValue = pallets.lastOrNull()?.id ?: 0L)
+        palletId = prefs.get(key = SharedPreferencesKey.KEY_PALLET_ID, defaultValue = pallets.lastOrNull()?.id ?: ColorPallet.DEFAULT_ID)
         create()
     }
 

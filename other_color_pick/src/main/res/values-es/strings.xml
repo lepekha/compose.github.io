@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_other_color_pick_remove_all">¿Eliminar todos los colores?</string>
+    <string name="module_other_color_pick_remove_pallet">¿Eliminar paleta de colores?</string>
+    <string name="module_other_color_pick_pallet_name">Nombre de la paleta de colores</string>
+    <string name="module_other_color_pick_pallet">Paleta</string>
+    <string name="module_other_color_pick_camera">Cámara</string>
+    <string name="module_other_color_pick_empty">Colores faltantes</string>
+    <string name="module_other_color_pick_image">Imagen</string>
+    <string name="module_other_color_pick_palette">Paleta</string>
+    <string name="module_other_color_pick_color_copy">Color copiado</string>
+    <string name="module_other_color_pick_color_add_to_pallete">Color agregado a la paleta</string>
+    <string name="module_other_color_pick_shades">Sombras</string>
+    <string name="module_other_color_pick_tints">Matices</string>
+    <string name="module_other_color_pick_triadic_colors">Colores tríadicos</string>
+    <string name="module_other_color_pick_analogous_colors">Colores análogos</string>
+    <string name="module_other_color_pick_monochromatic_colors">Colores monocromáticos</string>
+    <string name="module_other_color_pick_complementary_color">Colores complementarios</string>
+    <string name="module_other_color_pick_tones">Tonos</string>
+    <string name="module_other_color_pick_tetradic_color">Colores tetradic</string>
+
+</resources>

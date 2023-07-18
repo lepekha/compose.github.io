@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="module_other_color_pick_fragment_title">Color picker</string>
     <string name="module_other_color_pick_camera">Камера</string>
     <string name="module_other_color_pick_remove_pallet">Видалити палітру кольорів?</string>
     <string name="module_other_color_pick_pallet_name">Назва палітри кольорів</string>

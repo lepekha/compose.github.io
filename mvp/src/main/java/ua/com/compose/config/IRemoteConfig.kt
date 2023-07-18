@@ -3,31 +3,7 @@ package ua.com.compose.config
 lateinit var remoteConfig: IRemoteConfig
 
 interface IRemoteConfig {
-    val isMenuOtherColorPick: Boolean
-    val isMenuOtherSocialMediaCrop: Boolean
-    val isMenuOtherTextStyle: Boolean
-    val isMenuImageFilter: Boolean
-    val isMenuImageStyle: Boolean
-    val isMenuImageCrop: Boolean
-    val isMenuImageRotate: Boolean
-    val isMenuImageCompress: Boolean
-    val isMenuInstagramPlaner: Boolean
-    val isMenuInstagramNoCrop: Boolean
-    val isMenuInstagramGrid: Boolean
-    val isMenuInstagramPanorama: Boolean
-
-    val isFilterContrast: Boolean
-    val isFilterBrightness: Boolean
-    val isFilterSaturation: Boolean
-    val isFilterVibrance: Boolean
-    val isFilterExposure: Boolean
-    val isFilterTemperature: Boolean
-    val isFilterGamma: Boolean
-    val isFilterRGB: Boolean
-    val isFilterSharpen: Boolean
-    val isFilterVignette: Boolean
-    val isFilterBlackAndWhite: Boolean
-    val isFilterShadow: Boolean
-    val isFilterUV: Boolean
-    val isFilterSepia: Boolean
+    val isMenuPhoto: Boolean
+    val isMenuImage: Boolean
+    val isMenuPalette: Boolean
 }

@@ -29,7 +29,6 @@ import org.koin.core.qualifier.named
 import ua.com.compose.extension.*
 import ua.com.compose.gallery.databinding.ModuleGalleryFragmentGalleryBinding
 import ua.com.compose.mvp.data.viewBindingWithBinder
-import ua.com.compose.navigator.remove
 
 
 class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery>(), ViewGallery {
@@ -141,7 +140,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
                         binding.txtFolder.isVisible = true
-                        presenter.getAllShownImagesPath(getCurrentActivity())
+                        presenter.getAllShownImagesPath(requireActivity())
                         initPhotos()
                     }
                     is PermissionResult.PermissionDenied -> {
@@ -159,7 +158,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
     override fun initFolders() {
         binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_less), null)
-        binding.list.layoutManager = LinearLayoutManager(getCurrentContext(), RecyclerView.VERTICAL, false)
+        binding.list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.list.adapter = GalleryFoldersRvAdapter(
             presenter.folders,
         ){
@@ -170,7 +169,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     override fun initPhotos() {
         binding.placeholder.isVisible = false
         binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
-        binding.list.layoutManager = GridLayoutManager(getCurrentContext(),3, RecyclerView.VERTICAL, false)
+        binding.list.layoutManager = GridLayoutManager(requireContext(),3, RecyclerView.VERTICAL, false)
         binding.list.adapter = GalleryPhotoRvAdapter(
             requireContext(),
             presenter.images,

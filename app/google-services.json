@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "884762851653",
+    "project_id": "color-picker-49493",
+    "storage_bucket": "color-picker-49493.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884762851653:android:4eab26507dd6597f21e62c",
+        "android_client_info": {
+          "package_name": "ua.com.compose.colorpicker.camera.image"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884762851653-20pfe3mshld33au0t2rt3d6fu2ts1qnl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWOkVwyLEQY4PNER70trLAVIWaX8jBee8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884762851653-20pfe3mshld33au0t2rt3d6fu2ts1qnl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

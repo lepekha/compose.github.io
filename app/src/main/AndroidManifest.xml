@@ -60,7 +60,7 @@
 
 
         <activity
-            android:name=".view.main.MainActivity"
+            android:name=".MainActivity"
             android:launchMode="singleInstance"
             android:exported = "true"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"

@@ -14,48 +14,11 @@ abstract class BaseMvpFragment<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.attachView(view = this as V)
-        (activity as BaseMvpActivity<*, *>).setupBottomMenu(createBottomMenu())
-    }
-
-    override fun showAlert(srtResId: Int) {
-        (activity as BaseMvpActivity<*, *>).showAlert(srtResId)
-    }
-
-    override fun getCurrentContext(): Context {
-        return (activity as BaseMvpActivity<*, *>).getCurrentContext()
-    }
-
-
-    override fun getCurrentActivity(): androidx.fragment.app.FragmentActivity {
-        return (activity as BaseMvpActivity<*, *>).getCurrentActivity()
-    }
-
-    override fun setTitle(title: String, startDrawable: Drawable?) {
-        (activity as BaseMvpActivity<*, *>).setTitle(title, startDrawable)
-    }
-
-    override fun setVisibleBottomMenu(isVisible: Boolean) {
-        (activity as BaseMvpActivity<*, *>).setVisibleBottomMenu(isVisible)
-    }
-
-    override fun setBottomMenuColor(color: Int) {
-        (activity as BaseMvpActivity<*, *>).setBottomMenuColor(color)
+        (activity as BaseMvpView).setupBottomMenu(createBottomMenu())
     }
 
     override fun onDestroyView() {
         presenter.detachView()
         super.onDestroyView()
-    }
-
-    override fun backPress(byBack: Boolean): Boolean {
-        return false
-    }
-
-    override fun updateBottomMenu() {
-        (activity as BaseMvpActivity<*, *>).updateBottomMenu()
-    }
-
-    override fun backToMain() {
-        (activity as BaseMvpActivity<*, *>).backToMain()
     }
 }

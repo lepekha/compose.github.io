@@ -10,10 +10,6 @@ open class BaseMvpPresenterImpl<V : BaseMvpView> : BaseMvpPresenter<V>, Coroutin
     private var job = Job()
     override val coroutineContext: CoroutineContext = job + Dispatchers.IO
 
-    override fun onBackPress() {
-        this.view?.getCurrentActivity()?.onBackPressed()
-    }
-
     protected var view: V? = null
 
     /**

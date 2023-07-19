@@ -8,23 +8,9 @@ import ua.com.compose.mvp.data.Menu
 
 interface BaseMvpView {
 
-    fun getCurrentContext(): Context
+    fun setupBottomMenu(menu: MutableList<Menu>) {
 
-    fun getCurrentActivity(): androidx.fragment.app.FragmentActivity
-
-    fun showAlert(@StringRes srtResId: Int)
-
-    fun setTitle(title: String, startDrawable: Drawable? = null)
-
-    fun backPress(byBack: Boolean) : Boolean
+    }
 
     fun createBottomMenu(): MutableList<Menu> = mutableListOf()
-
-    fun setBottomMenuColor(color: Int)
-
-    fun setVisibleBottomMenu(isVisible: Boolean)
-
-    fun updateBottomMenu()
-
-    fun backToMain()
 }

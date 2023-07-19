@@ -18,14 +18,6 @@ abstract class BaseMvpBottomSheetFragment<in V : BaseMvpDialogView, out T : Base
         presenter.attachView(view = this as V)
     }
 
-    override fun getCurrentContext(): Context {
-        return (activity as BaseMvpActivity<*, *>).getCurrentContext()
-    }
-
-    override fun getCurrentActivity(): androidx.fragment.app.FragmentActivity {
-        return (activity as BaseMvpActivity<*, *>).getCurrentActivity()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         presenter.detachView()

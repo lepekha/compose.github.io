@@ -15,20 +15,6 @@ abstract class BaseMvpActivity<in V : BaseMvpView, out T : BaseMvpPresenter<V>> 
         presenter.attachView(view = this as V)
     }
 
-    override fun getCurrentContext(): Context = this
-
-    override fun showAlert(srtResId: Int) {
-        //TODO alert
-    }
-
-    override fun getCurrentActivity(): androidx.fragment.app.FragmentActivity {
-        return this
-    }
-
-    abstract fun isVisibleBottomMenu(): Boolean
-
-    abstract fun setupBottomMenu(menu: MutableList<Menu>)
-
     override fun onDestroy() {
         super.onDestroy()
         presenter.detachView()

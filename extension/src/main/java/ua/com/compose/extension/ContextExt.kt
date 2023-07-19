@@ -6,6 +6,7 @@ import android.content.res.Resources
 import androidx.core.content.ContextCompat
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -17,14 +18,50 @@ import android.provider.MediaStore
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
+import androidx.annotation.StringRes
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import com.google.android.play.core.review.ReviewManagerFactory
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import kotlin.concurrent.thread
 
 lateinit var prefs: SharedPreferences
+
+fun Context.writeToFile(fileName: String, data: String): File? {
+    try {
+        val outputFile = File(this.cacheDir.path, fileName)
+        outputFile.writeText(text = data, charset = Charsets.UTF_8)
+        return outputFile
+    } catch (e: IOException) {
+    }
+    return null
+}
+
+fun Context.showToast(@StringRes resId: Int) {
+    Toast.makeText(this, this.getString(resId), Toast.LENGTH_SHORT).show()
+}
+
+fun Activity.statusBarHeight(): Int {
+    val rectangle = Rect()
+    val window = this.window
+    window.decorView.getWindowVisibleDisplayFrame(rectangle)
+    val statusBarHeight = rectangle.top
+    val resourceId = this.resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        return this.resources.getDimensionPixelSize(resourceId)
+    }
+    return statusBarHeight
+}
+
+fun Context.navigationBarHeight(): Int {
+    val resources: Resources = this.getResources()
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (resourceId > 0) {
+        resources.getDimensionPixelSize(resourceId) + 10.dp.toInt()
+    } else 0
+}
 
 fun Activity.createReview() {
     val key = "ReviewManagerFactory"
@@ -39,14 +76,6 @@ fun Activity.createReview() {
                 manager.launchReviewFlow(this, task.result)
             }
         }
-    }
-}
-
-fun Context.appVersion(): Long {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        this.packageManager.getPackageInfo(this.packageName, 0).longVersionCode
-    }else{
-        this.packageManager.getPackageInfo(this.packageName, 0).versionCode.toLong()
     }
 }
 
@@ -65,19 +94,6 @@ fun Context.clipboardCopy(text: String){
     clipboard.setPrimaryClip(clip)
 }
 
-fun Context.getDiagonalInches(): Double {
-    val metrics = this.resources.displayMetrics
-    val yInches = metrics.heightPixels / metrics.densityDpi.toFloat()
-    val xInches = metrics.widthPixels / metrics.densityDpi.toFloat()
-    return Math.sqrt((xInches * xInches + yInches * yInches).toDouble())
-}
-
-fun Context.getFloat(resId: Int): Float {
-    val outValue = TypedValue()
-    resources.getValue(resId, outValue, true)
-    return outValue.float
-}
-
 fun Context.getColorFromAttr(
         @AttrRes attrColor: Int,
         typedValue: TypedValue = TypedValue(),
@@ -85,61 +101,6 @@ fun Context.getColorFromAttr(
 ): Int {
     theme.resolveAttribute(attrColor, typedValue, resolveRefs)
     return typedValue.data
-}
-
-fun Context.getResIdFromAttr(
-        @AttrRes attr: Int,
-        typedValue: TypedValue = TypedValue(),
-        resolveRefs: Boolean = true
-): Int {
-    theme.resolveAttribute(attr, typedValue, resolveRefs)
-    return typedValue.resourceId
-}
-
-fun Context.getDrawableFromAttr(
-        @AttrRes attr: Int
-): Drawable? {
-    val attrs = intArrayOf(attr)
-    val typedArray = theme.obtainStyledAttributes(attrs)
-    return typedArray.getDrawable(0)
-}
-
-fun Context.getDimensionFromAttr(
-        @AttrRes attr: Int
-): Float? {
-    val attrs = intArrayOf(attr)
-    val typedArray = theme.obtainStyledAttributes(attrs)
-    return typedArray.getDimension(0, 0f)
-}
-
-fun Context.openUrl(urlString: String) {
-    val url = if (!urlString.startsWith("http://") && !urlString.startsWith("https://")) {
-        "http://$urlString"
-    } else {
-        urlString
-    }
-
-    val browserIntent = Intent(Intent.ACTION_VIEW)
-    browserIntent.data = Uri.parse(url)
-    browserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    try {
-        startActivity(browserIntent)
-    } catch (e: Exception) {
-    }
-}
-
-fun Context.openAppInPlayStore() {
-    val appPackageName = packageName
-    try {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName"))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
-    } catch (e: android.content.ActivityNotFoundException) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName"))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
-    }
-
 }
 
 @Suppress("DEPRECATION")
@@ -170,25 +131,6 @@ fun Context.vibrate(type: EVibrate){
     } else {
         vibrator.vibrate(type.long)
     }
-}
-
-fun Context.navigationBarHeight(): Int {
-    val resources: Resources = this.getResources()
-    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    return if (resourceId > 0) {
-        resources.getDimensionPixelSize(resourceId) + 10.dp.toInt()
-    } else 0
-}
-
-fun Context.createInstagramIntent(uri: Uri) {
-    val share = Intent(Intent.ACTION_SEND).apply {
-        this.type = "image/*"
-        this.clipData = ClipData.newRawUri("", uri)
-        this.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        this.putExtra(Intent.EXTRA_STREAM, uri)
-        this.setPackage("com.instagram.android")
-    }
-    startActivity(Intent.createChooser(share, "Share to"))
 }
 
 fun Context.createImageIntent(uri: Uri) {

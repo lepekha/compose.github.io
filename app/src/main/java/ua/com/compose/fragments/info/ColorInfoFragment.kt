@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ua.com.compose.mvp.data.viewBindingWithBinder
 import ua.com.compose.R
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentColorInfoBinding
+import ua.com.compose.mvp.data.viewBindingWithBinder
 
 
 class ColorInfoFragment : BottomSheetDialogFragment()  {

@@ -19,10 +19,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import ua.com.compose.R
 import ua.com.compose.databinding.DialogListBinding
-import ua.com.compose.extension.getColorFromAttr
-import ua.com.compose.extension.sp
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.extension.remove
+import ua.com.compose.extension.sp
 import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.data.viewBindingWithBinder
 

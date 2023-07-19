@@ -6,14 +6,23 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import ua.com.compose.data.ColorNames
-import ua.com.compose.data.EColorType
 import ua.com.compose.R
 import ua.com.compose.Settings
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.Event
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
+import ua.com.compose.data.ColorNames
+import ua.com.compose.data.EColorType
 import ua.com.compose.data.SharedPreferencesKey
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentMainBinding
 import ua.com.compose.dialogs.DialogChip
-import ua.com.compose.extension.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.get
+import ua.com.compose.extension.prefs
+import ua.com.compose.extension.put
+import ua.com.compose.extension.replace
+import ua.com.compose.extension.vibrate
 import ua.com.compose.fragments.camera.CameraFragment
 import ua.com.compose.fragments.image.ImageFragment
 import ua.com.compose.fragments.palette.PaletteFragment
@@ -44,7 +53,9 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ColorNames.init(requireContext())
+        analytics.send(Event(key = Analytics.Event.COLOR_TYPE, params = arrayOf("color_type" to Settings.colorType.title())))
         binding.btnColorType.setOnClickListener {
+            analytics.send(SimpleEvent(key = Analytics.Event.OPEN_SETTINGS))
             val key = DialogChip.show(fm = childFragmentManager, list = EColorType.visibleValues().map { it.title() }, selected = Settings.colorType.title())
             childFragmentManager.setFragmentResultListener(
                     key,

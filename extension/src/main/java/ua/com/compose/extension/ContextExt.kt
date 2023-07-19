@@ -3,15 +3,12 @@ package ua.com.compose.extension
 import android.app.Activity
 import android.content.*
 import android.content.res.Resources
-import androidx.core.content.ContextCompat
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.Rect
-import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.provider.MediaStore
@@ -19,13 +16,12 @@ import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
-import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.play.core.review.ReviewManagerFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import kotlin.concurrent.thread
 
 lateinit var prefs: SharedPreferences
 

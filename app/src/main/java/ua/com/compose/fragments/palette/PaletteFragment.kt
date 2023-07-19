@@ -7,6 +7,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ua.com.compose.R
+import ua.com.compose.Settings
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
+import ua.com.compose.data.ColorPallet
+import ua.com.compose.data.EPaletteExportScheme
+import ua.com.compose.databinding.ModuleOtherColorPickFragmentPaletteBinding
 import ua.com.compose.dialogs.DialogChip
 import ua.com.compose.dialogs.DialogColor
 import ua.com.compose.dialogs.DialogConfirmation
@@ -18,19 +26,14 @@ import ua.com.compose.extension.navigationBarHeight
 import ua.com.compose.extension.nonNull
 import ua.com.compose.extension.setPaddingBottom
 import ua.com.compose.extension.shareFile
+import ua.com.compose.extension.showToast
+import ua.com.compose.fragments.ColorPickViewModule
+import ua.com.compose.fragments.info.ColorInfoFragment
+import ua.com.compose.mvp.BaseMvpView
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.mvp.data.viewBindingWithBinder
-import ua.com.compose.R
-import ua.com.compose.data.ColorPallet
-import ua.com.compose.data.EPaletteExportScheme
-import ua.com.compose.databinding.ModuleOtherColorPickFragmentPaletteBinding
-import ua.com.compose.fragments.ColorPickViewModule
-import ua.com.compose.Settings
-import ua.com.compose.extension.showToast
-import ua.com.compose.fragments.info.ColorInfoFragment
-import ua.com.compose.mvp.BaseMvpView
 
 
 class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment_palette) {
@@ -71,6 +74,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
         ColorsRvAdapter(
             onPressCopy = { item ->
                 val color = mainModule.colorType.value?.convertColor(item.color, withSeparator = ",") ?: ""
+                analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY))
                 requireContext().clipboardCopy(color)
                 requireContext().showToast(R.string.module_other_color_pick_color_copy)
             },

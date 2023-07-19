@@ -13,7 +13,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ua.com.compose.R
 import ua.com.compose.databinding.DialogInputBinding
-import ua.com.compose.extension.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.onTextChangedListener
+import ua.com.compose.extension.remove
+import ua.com.compose.extension.setVibrate
 import ua.com.compose.mvp.data.viewBindingWithBinder
 
 

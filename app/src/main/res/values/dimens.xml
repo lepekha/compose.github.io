@@ -1,5 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="menu_button_radius">2dp</dimen>
-    <integer name="orientation">0</integer>
-</resources>
+<resources></resources>

@@ -4,8 +4,6 @@
     <string name="module_other_color_pick_remove_pallet">Удалить цветовую палитру?</string>
     <string name="module_other_color_pick_pallet_name">Название цветовой палитры</string>
     <string name="module_other_color_pick_pallet">Палитра</string>
-    <string name="module_other_color_pick_remove_all">Удалить все цвета?</string>
-    <string name="module_other_color_pick_empty">Цвета отсутствуют</string>
     <string name="module_other_color_pick_image">Изображение</string>
     <string name="module_other_color_pick_palette">Палитра</string>
     <string name="module_other_color_pick_color_copy">Цвет скопирован</string>
@@ -18,6 +16,5 @@
     <string name="module_other_color_pick_complementary_color">Комплементарные цвета</string>
     <string name="module_other_color_pick_tones">Тон цвета</string>
     <string name="module_other_color_pick_tetradic_color">Тетрадные цвета</string>
-    <string name="module_dialog_save_ready">Изображение сохранено</string>
 
 </resources>

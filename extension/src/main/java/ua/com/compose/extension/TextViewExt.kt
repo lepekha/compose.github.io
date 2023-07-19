@@ -1,20 +1,16 @@
 package ua.com.compose.extension
 
-import android.content.Context
 import android.graphics.Paint
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
-import android.text.style.UnderlineSpan
-import android.util.TypedValue
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.doOnLayout
-import androidx.core.widget.TextViewCompat
-import java.lang.ref.WeakReference
 
 fun TextView.changeTextAnimate(text: String){
     val anim = AlphaAnimation(1.0f, 0.0f)

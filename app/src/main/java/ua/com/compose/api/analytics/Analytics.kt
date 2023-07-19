@@ -6,14 +6,22 @@ lateinit var analytics: Analytics
 
 interface Analytics {
 
-    interface Event {
-        companion object {
-            const val IMAGE_SAVE = "image_save"
-            const val IMAGE_SHARE = "image_share"
-            const val MAIN_MENU = "main_menu"
-            const val FILTER_NAME = "filters"
-            const val CROP_NAME = "crop_name"
-        }
+    object Event {
+        val COLOR_TYPE = "COLOR_TYPE"
+        val COLOR_COPY = "COLOR_COPY"
+        val COLOR_DRAG_AND_DROP = "COLOR_DRAG_AND_DROP"
+
+        val OPEN_SETTINGS = "OPEN_SETTINGS"
+        val OPEN_PALETTE_EXPORT = "OPEN_PALETTE_EXPORT"
+        val OPEN_NEW_GALLERY = "OPEN_NEW_GALLERY"
+        val OPEN_OLD_GALLERY = "OPEN_OLD_GALLERY"
+
+        val CREATE_PALETTE = "CREATE_PALETTE"
+
+        val CREATE_COLOR_CAMERA = "CREATE_COLOR_FROM_CAMERA"
+        val CREATE_COLOR_IMAGE = "CREATE_COLOR_FROM_IMAGE"
+        val CREATE_COLOR_PALETTE = "CREATE_COLOR_FROM_PALETTE"
+        val CREATE_COLOR_FROM_INFO = "CREATE_COLOR_FROM_INFO"
     }
 
     fun send(event: AnalyticsEvent)

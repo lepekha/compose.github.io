@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.getColorFromAttr
-import ua.com.compose.extension.vibrate
 import ua.com.compose.R
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.databinding.ModuleOtherColorPickElementButtonBinding
 import ua.com.compose.databinding.ModuleOtherColorPickElementPalletBinding
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.getColorFromAttr
+import ua.com.compose.extension.vibrate
 
 
 class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
@@ -30,40 +30,9 @@ class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
     val cards = mutableListOf<Card>()
 
     fun update(newList: List<Card>){
-//        val diffUtilCallback = DiffUtilCallback(this.cards, newList)
-//        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
         this.cards.clear()
         this.cards.addAll(newList)
         notifyDataSetChanged()
-//        diffResult.dispatchUpdatesTo(this)
-    }
-
-    inner class DiffUtilCallback(
-            private val oldList: List<Card>,
-            private val newList: List<Card> ): DiffUtil.Callback() {
-
-        override fun getOldListSize() = oldList.size
-        override fun getNewListSize() = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) : Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-            return if(oldItem is Card.CardPallet && newItem is Card.CardPallet) {
-                oldItem.item.id == newItem.item.id
-            } else {
-                oldItem.hashCode() == newItem.hashCode()
-            }
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-            return if(oldItem is Card.CardPallet && newItem is Card.CardPallet) {
-                oldItem.isCurrent == newItem.isCurrent && oldItem.item.name == newItem.item.name && oldItem.colors.hashCode() == newItem.colors.hashCode()
-            } else {
-                true
-            }
-        }
     }
 
     override fun getItemViewType(position: Int): Int {

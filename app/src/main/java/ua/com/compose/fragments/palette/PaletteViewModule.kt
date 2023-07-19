@@ -7,20 +7,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ua.com.compose.Settings
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.Event
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.ColorItem
+import ua.com.compose.data.ColorPallet
+import ua.com.compose.data.EPaletteExportScheme
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
+import ua.com.compose.domain.dbColorItem.ChangeColorPalletUseCase
 import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase
 import ua.com.compose.domain.dbColorItem.RemoveAllColorsUseCase
 import ua.com.compose.domain.dbColorItem.RemoveColorUseCase
 import ua.com.compose.domain.dbColorItem.UpdateColorUseCase
-import ua.com.compose.data.ColorPallet
-import ua.com.compose.data.EPaletteExportScheme
-import ua.com.compose.domain.dbColorItem.ChangeColorPalletUseCase
 import ua.com.compose.domain.dbColorPallet.AddPalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetAllPalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
-import ua.com.compose.Settings
 import java.io.File
 
 sealed class Card {
@@ -81,6 +85,7 @@ class PaletteViewModule(private val context: Context,
     }
 
     fun pressAddColor(color: Int) = viewModelScope.launch {
+        analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_PALETTE))
         addColorUseCase.execute(color)
         create()
     }
@@ -109,6 +114,7 @@ class PaletteViewModule(private val context: Context,
     }
 
     fun pressChangePallet(colorId: Long, palletId: Long) = viewModelScope.launch {
+        analytics.send(SimpleEvent(key = Analytics.Event.COLOR_DRAG_AND_DROP))
         changeColorPalletUseCase.execute(colorId, palletId)
         create()
     }
@@ -116,6 +122,7 @@ class PaletteViewModule(private val context: Context,
     fun pressExport(pallet: ColorPallet, ePaletteExportScheme: EPaletteExportScheme) = viewModelScope.launch {
         val colorType = Settings.colorType
         val colors = getAllColorsUseCase.execute(pallet.id)
+        analytics.send(Event(key = Analytics.Event.OPEN_PALETTE_EXPORT, params = arrayOf("type" to ePaletteExportScheme.title)))
         ePaletteExportScheme.create(context = context, palette = pallet.name, colors = colors, colorType = colorType)?.let {
             _state.postValue(State.SHARE(it))
         }

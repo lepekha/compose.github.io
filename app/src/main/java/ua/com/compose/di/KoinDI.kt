@@ -3,8 +3,8 @@ package ua.com.compose.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import ua.com.compose.data.ImageInfoViewModule
 import ua.com.compose.data.ColorDatabase
+import ua.com.compose.data.ImageInfoViewModule
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.domain.dbColorItem.ChangeColorPalletUseCase
 import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="BottomMenu" parent="Theme.Compose">
         <item name="android:background">@drawable/background_bottom_menu</item>

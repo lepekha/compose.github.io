@@ -18,11 +18,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
+import ua.com.compose.R
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.colorName
-import ua.com.compose.R
 import ua.com.compose.databinding.DialogColorBinding
-import ua.com.compose.extension.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.get
+import ua.com.compose.extension.prefs
+import ua.com.compose.extension.put
+import ua.com.compose.extension.remove
+import ua.com.compose.extension.setVibrate
 import ua.com.compose.mvp.data.viewBindingWithBinder
 import java.util.Locale
 

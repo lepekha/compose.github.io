@@ -8,8 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ua.com.compose.Settings
-import ua.com.compose.data.EColorType
 import ua.com.compose.api.config.remoteConfig
+import ua.com.compose.data.EColorType
 
 enum class EPanel(val id: Int) {
     CAMERA(id = 0) {

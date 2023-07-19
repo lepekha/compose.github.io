@@ -11,12 +11,12 @@ import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ua.com.compose.data.ColorItem
 import ua.com.compose.data.ColorNames
+import ua.com.compose.data.EColorType
+import ua.com.compose.databinding.ModuleOtherColorPickElementColorBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
-import ua.com.compose.data.EColorType
-import ua.com.compose.data.ColorItem
-import ua.com.compose.databinding.ModuleOtherColorPickElementColorBinding
 
 
 class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,

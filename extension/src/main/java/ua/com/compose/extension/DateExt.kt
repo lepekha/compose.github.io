@@ -6,7 +6,10 @@ package ua.com.compose.extension
 
 import android.text.format.DateUtils
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 enum class DatePattern(val pattern: String) {

@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import org.json.JSONObject
 import ua.com.compose.api.config.remoteConfig
 import java.io.IOException
-import java.util.*
-import kotlin.collections.Iterator
-import kotlin.collections.firstOrNull
+import java.util.Locale
+import java.util.NavigableMap
+import java.util.TreeMap
 import kotlin.collections.set
 import kotlin.math.roundToInt
 

@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import ua.com.compose.mvp.bottomSheetFragment.BaseMvpDialogPresenterImpl
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ua.com.compose.gallery.R
-import java.io.File
+import ua.com.compose.mvp.bottomSheetFragment.BaseMvpDialogPresenterImpl
 
 class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGallery>() {
 

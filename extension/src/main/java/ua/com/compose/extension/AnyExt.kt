@@ -3,7 +3,8 @@ package ua.com.compose.extension
 import android.content.Context
 import android.content.pm.PackageManager
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 fun createID(): Int {
     val now = Date()

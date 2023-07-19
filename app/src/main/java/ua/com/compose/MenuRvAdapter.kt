@@ -1,15 +1,17 @@
 package ua.com.compose
 
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.getColorFromAttr
+import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
-import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.data.TextMenu
 
 

@@ -2,11 +2,11 @@ package ua.com.compose.domain.dbColorItem
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ua.com.compose.Settings
 import ua.com.compose.data.ColorDatabase
 import ua.com.compose.data.ColorItem
 import ua.com.compose.domain.dbColorPallet.AddPalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
-import ua.com.compose.Settings
 
 class AddColorUseCase(private val addPalletUseCase: AddPalletUseCase,
                       private val getPalletUseCase: GetPalletUseCase,

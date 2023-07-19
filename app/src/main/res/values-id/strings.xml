@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="module_other_color_pick_remove_all">Hapus semua warna?</string>
     <string name="module_other_color_pick_remove_pallet">Hapus palet warna?</string>
     <string name="module_other_color_pick_pallet_name">Nama palet warna</string>
     <string name="module_other_color_pick_pallet">Palet</string>
     <string name="module_other_color_pick_camera">Kamera</string>
-    <string name="module_other_color_pick_empty">Warna hilang</string>
     <string name="module_other_color_pick_image">Gambar</string>
     <string name="module_other_color_pick_palette">Palet</string>
     <string name="module_other_color_pick_color_copy">Warna disalin</string>

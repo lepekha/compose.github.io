@@ -4,16 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
-import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import java.io.File
-import java.io.FileOutputStream
-import java.util.*
 import kotlin.math.roundToInt
 
 fun Bitmap.resizeImage(

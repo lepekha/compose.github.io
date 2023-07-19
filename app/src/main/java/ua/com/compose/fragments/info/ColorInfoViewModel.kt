@@ -11,11 +11,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
 import kotlinx.coroutines.launch
+import ua.com.compose.R
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.ColorNames
 import ua.com.compose.data.EColorType
-import ua.com.compose.extension.dp
-import ua.com.compose.R
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
+import ua.com.compose.extension.dp
 
 class ColorInfoViewModel(val context: Context,
                          private val addColorUseCase: AddColorUseCase): ViewModel() {
@@ -207,6 +210,7 @@ class ColorInfoViewModel(val context: Context,
     }
 
     fun pressPaletteAdd(color: Int) = viewModelScope.launch {
+        analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_FROM_INFO))
         addColorUseCase.execute(color)
     }
 }

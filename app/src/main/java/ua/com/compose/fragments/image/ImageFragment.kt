@@ -29,16 +29,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ua.com.compose.R
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
+import ua.com.compose.databinding.ModuleOtherColorPickFragmentImageBinding
 import ua.com.compose.extension.*
+import ua.com.compose.fragments.ColorPickViewModule
+import ua.com.compose.fragments.info.ColorInfoFragment
 import ua.com.compose.gallery.main.FragmentGallery
+import ua.com.compose.mvp.BaseMvpView
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
-import ua.com.compose.R
-import ua.com.compose.databinding.ModuleOtherColorPickFragmentImageBinding
-import ua.com.compose.fragments.ColorPickViewModule
-import ua.com.compose.fragments.info.ColorInfoFragment
-import ua.com.compose.mvp.BaseMvpView
 import ua.com.compose.mvp.data.viewBindingWithBinder
 
 
@@ -83,6 +86,7 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
 
     private val btnCopy = BottomMenu(iconResId = R.drawable.ic_copy) {
         binding.textView.text?.toString()?.let { color ->
+            analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY))
             requireContext().clipboardCopy(color)
             requireContext().showToast(R.string.module_other_color_pick_color_copy)
         }
@@ -90,8 +94,10 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
 
     private fun openGallery() {
         if(isPhotoPickerAvailable(requireContext())) {
+            analytics.send(SimpleEvent(key = Analytics.Event.OPEN_NEW_GALLERY))
             pickMedia?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         } else {
+            analytics.send(SimpleEvent(key = Analytics.Event.OPEN_OLD_GALLERY))
             FragmentGallery.show(fm = childFragmentManager, isMultiSelect = false)
         }
     }

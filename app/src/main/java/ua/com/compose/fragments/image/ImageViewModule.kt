@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.ColorNames
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 
@@ -33,6 +36,7 @@ class ImageViewModule(val imageUri: ImageUri,
     }
 
     fun pressPaletteAdd() = viewModelScope.launch {
+        analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_IMAGE))
         addColorUseCase.execute(color)
     }
 }

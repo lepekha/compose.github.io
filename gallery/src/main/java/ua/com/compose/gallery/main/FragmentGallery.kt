@@ -3,7 +3,6 @@ package ua.com.compose.gallery.main
 import android.Manifest
 import android.app.Dialog
 import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,12 +21,18 @@ import com.eazypermissions.dsl.extension.requestPermissions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import ua.com.compose.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
-import ua.com.compose.gallery.R
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
-import ua.com.compose.extension.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.animateScale
+import ua.com.compose.extension.createID
+import ua.com.compose.extension.hasPermission
+import ua.com.compose.extension.remove
+import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.updateVisibleItem
+import ua.com.compose.gallery.R
 import ua.com.compose.gallery.databinding.ModuleGalleryFragmentGalleryBinding
+import ua.com.compose.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
 import ua.com.compose.mvp.data.viewBindingWithBinder
 
 

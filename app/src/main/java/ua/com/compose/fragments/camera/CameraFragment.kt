@@ -19,18 +19,30 @@ import androidx.fragment.app.activityViewModels
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ua.com.compose.R
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
+import ua.com.compose.customView.CameraColorPickerPreview
+import ua.com.compose.customView.Cameras
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentCameraBinding
-import ua.com.compose.extension.*
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.clipboardCopy
+import ua.com.compose.extension.createReview
+import ua.com.compose.extension.dp
+import ua.com.compose.extension.hasPermission
+import ua.com.compose.extension.navigationBarHeight
+import ua.com.compose.extension.nonNull
+import ua.com.compose.extension.setMarginBottom
+import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.showToast
 import ua.com.compose.fragments.ColorPickViewModule
 import ua.com.compose.fragments.info.ColorInfoFragment
+import ua.com.compose.mvp.BaseMvpView
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.mvp.data.viewBindingWithBinder
-import ua.com.compose.R
-import ua.com.compose.mvp.BaseMvpView
-import ua.com.compose.customView.CameraColorPickerPreview
-import ua.com.compose.customView.Cameras
 
 
 class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_pick_fragment_camera), CameraColorPickerPreview.OnColorSelectedListener {
@@ -63,6 +75,7 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
 
     private val btnCopy = BottomMenu(iconResId = R.drawable.ic_copy){
         binding.textView.text?.toString()?.let { color ->
+            analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY))
             requireContext().clipboardCopy(color)
             requireContext().showToast(R.string.module_other_color_pick_color_copy)
         }

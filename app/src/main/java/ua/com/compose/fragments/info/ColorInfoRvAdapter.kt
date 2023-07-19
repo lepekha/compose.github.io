@@ -9,13 +9,16 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
-import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.clipboardCopy
-import ua.com.compose.extension.vibrate
 import ua.com.compose.R
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.databinding.ModuleOtherColorPickElementColorInfoColorBinding
 import ua.com.compose.databinding.ModuleOtherColorPickElementColorInfoColorsBinding
 import ua.com.compose.databinding.ModuleOtherColorPickElementColorInfoKeyTextBinding
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.clipboardCopy
+import ua.com.compose.extension.vibrate
 
 
 class ColorInfoRvAdapter(
@@ -71,6 +74,7 @@ class ColorInfoRvAdapter(
                 val binding = ModuleOtherColorPickElementColorInfoKeyTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return ViewHolderKeyText(binding).apply {
                     binding.container.setOnClickListener {
+                        analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY))
                         binding.container.context.clipboardCopy(binding.txtValue.text.toString())
                         Toast.makeText(binding.container.context, binding.container.context.getString(R.string.module_other_color_pick_color_copy), Toast.LENGTH_SHORT).show()
                     }

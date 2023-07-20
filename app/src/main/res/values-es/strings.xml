@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Selector de colores</string>
+
     <string name="module_other_color_pick_remove_pallet">¿Eliminar paleta de colores?</string>
     <string name="module_other_color_pick_pallet_name">Nombre de la paleta de colores</string>
     <string name="module_other_color_pick_pallet">Paleta</string>

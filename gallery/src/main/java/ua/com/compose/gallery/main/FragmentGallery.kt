@@ -3,6 +3,7 @@ package ua.com.compose.gallery.main
 import android.Manifest
 import android.app.Dialog
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ import ua.com.compose.gallery.R
 import ua.com.compose.gallery.databinding.ModuleGalleryFragmentGalleryBinding
 import ua.com.compose.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
 import ua.com.compose.mvp.data.viewBindingWithBinder
+import java.lang.ref.WeakReference
 
 
 class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery>(), ViewGallery {
@@ -136,10 +138,13 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     }
 
     private fun checkPermission() {
-        requestPermissions(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        ){
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+        } else {
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        requestPermissions(permissions = permissions) {
             requestCode = createID()
             resultCallback = {
                 when(this) {
@@ -153,8 +158,6 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                     is PermissionResult.PermissionDeniedPermanently -> {
                     }
                     is PermissionResult.ShowRational -> {
-                        //If user denied permission frequently then she/he is not clear about why you are asking this permission.
-                        //This is your chance to explain them why you need permission.
                     }
                 }
             }
@@ -172,6 +175,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     }
 
     override fun initPhotos() {
+        val weakList =  WeakReference(binding.list)
         binding.placeholder.isVisible = false
         binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
         binding.list.layoutManager = GridLayoutManager(requireContext(),3, RecyclerView.VERTICAL, false)
@@ -183,7 +187,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 presenter.pressImage(uri = uri, isMultiSelect = isLongPress)
             },
             onUpdateBadge = {
-                binding.list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_BADGE)
+                weakList.get()?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_BADGE)
             }
         )
     }

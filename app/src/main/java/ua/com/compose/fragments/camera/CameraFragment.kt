@@ -18,7 +18,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
+import org.koin.android.ext.android.get
+import org.koin.androidx.scope.requireScopeActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ua.com.compose.MainActivity
 import ua.com.compose.R
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
@@ -87,7 +90,9 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
 
     private val binding by viewBindingWithBinder(ModuleOtherColorPickFragmentCameraBinding::bind)
 
-    private val viewModule by viewModel<CameraViewModule>()
+    private val viewModule: CameraViewModule by lazy {
+        requireScopeActivity<MainActivity>().get()
+    }
 
     private val mainModule: ColorPickViewModule by activityViewModels()
 

@@ -28,7 +28,14 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.get
+import org.koin.androidx.scope.ScopeActivity
+import org.koin.androidx.scope.requireScopeActivity
+import org.koin.androidx.scope.scopeActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.scope.viewModel
+import org.koin.core.scope.get
+import ua.com.compose.MainActivity
 import ua.com.compose.R
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
@@ -108,7 +115,9 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
 
     private val binding by viewBindingWithBinder(ModuleOtherColorPickFragmentImageBinding::bind)
 
-    private val viewModule by viewModel<ImageViewModule>()
+    private val viewModule: ImageViewModule by lazy {
+        requireScopeActivity<MainActivity>().get()
+    }
 
     private val mainModule: ColorPickViewModule by activityViewModels()
     private var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null

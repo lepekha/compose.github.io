@@ -174,5 +174,3 @@ object ColorNames {
 
 
 }
-
-class ImageInfoViewModule(): ViewModel()

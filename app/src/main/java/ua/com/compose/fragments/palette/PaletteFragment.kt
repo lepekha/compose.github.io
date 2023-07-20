@@ -6,7 +6,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.koin.android.ext.android.get
+import org.koin.androidx.scope.requireScopeActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ua.com.compose.MainActivity
 import ua.com.compose.R
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
@@ -66,7 +69,9 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
 
     private val binding by viewBindingWithBinder(ModuleOtherColorPickFragmentPaletteBinding::bind)
 
-    private val viewModule by viewModel<PaletteViewModule>()
+    private val viewModule: PaletteViewModule by lazy {
+        requireScopeActivity<MainActivity>().get()
+    }
 
     private val mainModule: ColorPickViewModule by activityViewModels()
 

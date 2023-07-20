@@ -9,20 +9,13 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_CLIPS" />
     <uses-permission android:name="android.permission.READ_CLIPS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE " />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE " />
     <uses-permission android:name="android.permission.WRITE_CLIPS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
     <uses-feature android:name="android.hardware.camera" android:required="false"  />
-
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:required="true" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:required="true" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:requestLegacyExternalStorage="true"

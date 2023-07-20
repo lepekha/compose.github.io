@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.android.ext.android.get
+import org.koin.androidx.scope.requireScopeActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ua.com.compose.MainActivity
 import ua.com.compose.R
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentColorInfoBinding
 import ua.com.compose.mvp.data.viewBindingWithBinder
@@ -40,7 +43,9 @@ class ColorInfoFragment : BottomSheetDialogFragment()  {
 
     private val binding by viewBindingWithBinder(ModuleOtherColorPickFragmentColorInfoBinding::bind)
 
-    private val viewModule by viewModel<ColorInfoViewModel>()
+    private val viewModule: ColorInfoViewModel by lazy {
+        requireScopeActivity<MainActivity>().get()
+    }
 
     private val adapter by lazy {
         ColorInfoRvAdapter(

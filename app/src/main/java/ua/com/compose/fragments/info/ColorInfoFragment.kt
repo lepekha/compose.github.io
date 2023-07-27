@@ -18,6 +18,9 @@ import org.koin.androidx.scope.requireScopeActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.com.compose.MainActivity
 import ua.com.compose.R
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentColorInfoBinding
 import ua.com.compose.mvp.data.viewBindingWithBinder
 
@@ -78,7 +81,7 @@ class ColorInfoFragment : BottomSheetDialogFragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        analytics.send(SimpleEvent(key = Analytics.Event.OPEN_INFO))
         viewModule.items.observe(viewLifecycleOwner) {
             adapter.update(it)
         }

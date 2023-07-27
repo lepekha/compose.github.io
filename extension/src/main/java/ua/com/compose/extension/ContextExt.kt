@@ -22,6 +22,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Exception
 
 lateinit var prefs: SharedPreferences
 
@@ -85,9 +86,17 @@ fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this
 }
 
 fun Context.clipboardCopy(text: String){
-    val clipboard: ClipboardManager = ContextCompat.getSystemService(this, ClipboardManager::class.java) as ClipboardManager
-    val clip: ClipData = ClipData.newPlainText("Compose", text)
-    clipboard.setPrimaryClip(clip)
+    try {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip: ClipData = ClipData.newPlainText("ColorPicker", text)
+        clipboard.setPrimaryClip(clip)
+    } catch (e: Exception)  {
+        try {
+            val clipboard: ClipboardManager = ContextCompat.getSystemService(this, ClipboardManager::class.java) as ClipboardManager
+            val clip: ClipData = ClipData.newPlainText("Compose", text)
+            clipboard.setPrimaryClip(clip)
+        } catch (e: Exception) {}
+    }
 }
 
 fun Context.getColorFromAttr(

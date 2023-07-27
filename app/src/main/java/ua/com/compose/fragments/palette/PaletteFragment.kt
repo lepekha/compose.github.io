@@ -79,7 +79,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
         ColorsRvAdapter(
             onPressCopy = { item ->
                 val color = mainModule.colorType.value?.convertColor(item.color, withSeparator = ",") ?: ""
-                analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY))
+                analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_PALETTE))
                 requireContext().clipboardCopy(color)
                 requireContext().showToast(R.string.module_other_color_pick_color_copy)
             },

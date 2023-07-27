@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Selettore di colori</string>
+    <string name="module_other_color_pick_remove_pallet">Rimuovere la tavolozza dei colori?</string>
+    <string name="module_other_color_pick_pallet_name">Il nome della tavolozza dei colori</string>
+    <string name="module_other_color_pick_pallet">Tavolozza</string>
+    <string name="module_other_color_pick_camera">Fotocamera</string>
+    <string name="module_other_color_pick_image">Immagine</string>
+    <string name="module_other_color_pick_palette">Tavolozza</string>
+    <string name="module_other_color_pick_color_copy">Colore copiato</string>
+    <string name="module_other_color_pick_color_add_to_pallete">Colore aggiunto alla tavolozza</string>
+    <string name="module_other_color_pick_shades">Ombreggiature</string>
+    <string name="module_other_color_pick_tints">Tonalità</string>
+    <string name="module_other_color_pick_triadic_colors">Colori triadici</string>
+    <string name="module_other_color_pick_analogous_colors">Colori analoghi</string>
+    <string name="module_other_color_pick_monochromatic_colors">Colori monocromatici</string>
+    <string name="module_other_color_pick_complementary_color">Colori complementari</string>
+    <string name="module_other_color_pick_tones">Tonalità</string>
+    <string name="module_other_color_pick_tetradic_color">Colori tetradici</string>
+</resources>

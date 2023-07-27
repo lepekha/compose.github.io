@@ -8,9 +8,13 @@ interface Analytics {
 
     object Event {
         val COLOR_TYPE = "COLOR_TYPE"
-        val COLOR_COPY = "COLOR_COPY"
+        val COLOR_COPY_CAMERA = "COLOR_COPY_CAMERA"
+        val COLOR_COPY_IMAGE = "COLOR_COPY_IMAGE"
+        val COLOR_COPY_PALETTE = "COLOR_COPY_PALETTE"
+        val COLOR_COPY_INFO = "COLOR_COPY_INFO"
         val COLOR_DRAG_AND_DROP = "COLOR_DRAG_AND_DROP"
 
+        val OPEN_INFO = "OPEN_INFO"
         val OPEN_SETTINGS = "OPEN_SETTINGS"
         val OPEN_PALETTE_EXPORT = "OPEN_PALETTE_EXPORT"
         val OPEN_NEW_GALLERY = "OPEN_NEW_GALLERY"

@@ -78,7 +78,7 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
 
     private val btnCopy = BottomMenu(iconResId = R.drawable.ic_copy){
         binding.textView.text?.toString()?.let { color ->
-            analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY))
+            analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
             requireContext().clipboardCopy(color)
             requireContext().showToast(R.string.module_other_color_pick_color_copy)
         }

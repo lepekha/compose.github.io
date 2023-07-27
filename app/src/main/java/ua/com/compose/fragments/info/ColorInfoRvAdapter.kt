@@ -74,7 +74,7 @@ class ColorInfoRvAdapter(
                 val binding = ModuleOtherColorPickElementColorInfoKeyTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return ViewHolderKeyText(binding).apply {
                     binding.container.setOnClickListener {
-                        analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY))
+                        analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_INFO))
                         binding.container.context.clipboardCopy(binding.txtValue.text.toString())
                         Toast.makeText(binding.container.context, binding.container.context.getString(R.string.module_other_color_pick_color_copy), Toast.LENGTH_SHORT).show()
                     }

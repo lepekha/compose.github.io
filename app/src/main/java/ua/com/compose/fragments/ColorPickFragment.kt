@@ -53,7 +53,6 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ColorNames.init(requireContext())
-        analytics.send(Event(key = Analytics.Event.COLOR_TYPE, params = arrayOf("color_type" to Settings.colorType.title())))
         binding.btnColorType.setOnClickListener {
             analytics.send(SimpleEvent(key = Analytics.Event.OPEN_SETTINGS))
             val key = DialogChip.show(fm = childFragmentManager, list = EColorType.visibleValues().map { it.title() }, selected = Settings.colorType.title())
@@ -63,6 +62,7 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
             ) { _, bundle ->
                 val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
                 viewModule.changeColorType(colorType = EColorType.visibleValues()[position])
+                analytics.send(Event(key = Analytics.Event.COLOR_TYPE, params = arrayOf("color_type" to EColorType.visibleValues()[position].title())))
             }
         }
 

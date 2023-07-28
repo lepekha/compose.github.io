@@ -1,27 +1,45 @@
-package ua.com.compose.gallery.main
+package ua.com.compose.fragments.gallery
 
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import ua.com.compose.gallery.R
-import ua.com.compose.mvp.bottomSheetFragment.BaseMvpDialogPresenterImpl
 
-class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGallery>() {
+class GalleryViewModel(val context: Context) : ViewModel() {
 
-    val images = mutableListOf<Uri>()
-    val folders = mutableListOf<ImageFolder>()
+    sealed class State {
+        object NONE: State()
+        object INIT_IMAGES: State()
+        object INIT_FOLDERS: State()
+        object CLEAR_SELECT: State()
+        object BACK_PRESS: State()
+        data class FOLDER_NAME(val name: String): State()
+        data class VISIBLE_BUTTON(val isVisible: Boolean): State()
+    }
+
+    private val _images: MutableLiveData<List<Uri>> = MutableLiveData(listOf())
+    val images: LiveData<List<Uri>> = _images
+
+    private val _folders: MutableLiveData<List<ImageFolder>> = MutableLiveData(listOf())
+    val folders: LiveData<List<ImageFolder>> = _folders
+
+    private val _state: MutableLiveData<GalleryViewModel.State> = MutableLiveData(GalleryViewModel.State.NONE)
+    val state: LiveData<GalleryViewModel.State> = _state
+
+    var folderForImages = mutableListOf<ImageFolder>()
     val selectedImages = mutableListOf<Uri>()
     var doneImages = mutableListOf<Uri>()
     private var _multiSelect = false
     var isMultiSelect: Boolean = false
         set(value) {
             field = value && _multiSelect
-            view?.setVisibleButtons(field)
+            _state.value = State.VISIBLE_BUTTON(field)
         }
         get() = field && _multiSelect
 
@@ -46,15 +64,14 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
     }
 
     fun pressFolder(value: ImageFolder){
-        images.clear()
-        images.addAll(value.images)
-        view?.setFolderName(value.name)
-        view?.initPhotos()
+        _state.value = State.FOLDER_NAME(name = value.name)
+        _state.value = State.INIT_IMAGES
+        _images.postValue(value.images)
     }
 
     fun getAllShownImagesPath(activity: Activity)= CoroutineScope(Dispatchers.IO).launch {
         val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val allDirName = context.getString(R.string.module_gallery_fragment_all)
+        val allDirName = "All"
         val imageFolders = mutableMapOf<String, ImageFolder>().apply {
             this[allDirName] = ImageFolder().apply {
                 this.name = allDirName
@@ -79,37 +96,30 @@ class PresenterGallery(val context: Context) : BaseMvpDialogPresenterImpl<ViewGa
             cursor.close()
         }
 
-        folders.clear()
-        folders.addAll(imageFolders.values)
-//        imageFolders.values.onEach { it.images.reverse() }
 
-//        val allFolder = ImageFolder().apply {
-//            this.name = context.getString(R.string.module_gallery_fragment_all)
-//            imageFolders.values.forEach {
-//                this.images.addAll(it.images)
-//            }
-//        }
-//        folders.sortBy { it.name }
-//        folders.add(0, allFolder)
-        images.addAll(folders[0].images)
-        withContext(Dispatchers.Main){
-            view?.updateAllList()
-        }
+        folderForImages.clear()
+        folderForImages.addAll(imageFolders.values)
+        _images.postValue(folderForImages[0].images)
+    }
+
+    fun pressFolderName() {
+        _state.value = State.INIT_FOLDERS
+        _folders.postValue(folderForImages)
     }
 
     fun pressClear(){
         selectedImages.clear()
         isMultiSelect = false
-        view?.clearSelect()
+        _state.value = State.CLEAR_SELECT
     }
 
     fun addImage(){
         doneImages = selectedImages
-        view?.backPress()
+        _state.value = State.BACK_PRESS
     }
 }
 
-class ImageFolder{
+class ImageFolder {
     var name: String = ""
     val images: MutableList<Uri> = mutableListOf()
 }

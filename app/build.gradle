@@ -55,8 +55,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':mvp')
-    implementation project(':gallery')
-    implementation project(':extension')
     implementation project(':theme')
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -87,6 +85,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'androidx.palette:palette-ktx:1.0.0'
+    implementation "com.github.skydoves:balloon:1.5.4"
 
     implementation 'org.jsoup:jsoup:1.11.3'
     testImplementation 'junit:junit:4.12'

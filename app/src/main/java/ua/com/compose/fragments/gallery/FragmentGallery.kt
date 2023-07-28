@@ -1,4 +1,4 @@
-package ua.com.compose.gallery.main
+package ua.com.compose.fragments.gallery
 
 import android.Manifest
 import android.app.Dialog
@@ -22,8 +22,11 @@ import com.eazypermissions.dsl.extension.requestPermissions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.koin.android.ext.android.getKoin
-import org.koin.core.qualifier.named
+import org.koin.android.ext.android.get
+import org.koin.androidx.scope.requireScopeActivity
+import ua.com.compose.MainActivity
+import ua.com.compose.R
+import ua.com.compose.databinding.ModuleGalleryFragmentGalleryBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.animateScale
 import ua.com.compose.extension.createID
@@ -31,14 +34,11 @@ import ua.com.compose.extension.hasPermission
 import ua.com.compose.extension.remove
 import ua.com.compose.extension.setVibrate
 import ua.com.compose.extension.updateVisibleItem
-import ua.com.compose.gallery.R
-import ua.com.compose.gallery.databinding.ModuleGalleryFragmentGalleryBinding
-import ua.com.compose.mvp.bottomSheetFragment.BaseMvpBottomSheetFragment
 import ua.com.compose.mvp.data.viewBindingWithBinder
 import java.lang.ref.WeakReference
 
 
-class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery>(), ViewGallery {
+class FragmentGallery : BottomSheetDialogFragment() {
 
     companion object {
 
@@ -61,10 +61,8 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         }
     }
 
-    override val presenter: PresenterGallery by lazy {
-        val scope = getKoin().getOrCreateScope(
-                "gallery", named("gallery"))
-        scope.get()
+    private val viewModel: GalleryViewModel  by lazy {
+        requireScopeActivity<MainActivity>().get()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -72,10 +70,6 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
     }
 
     private val binding by viewBindingWithBinder(ModuleGalleryFragmentGalleryBinding::bind)
-
-    override fun backPress() {
-        dismiss()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,25 +100,57 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
             binding.list?.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
         }
 
-        presenter.onCreate(isMultiSelect = arguments?.getBoolean(BUNDLE_KEY_MULTI_SELECT) ?: false)
+        viewModel.onCreate(isMultiSelect = arguments?.getBoolean(BUNDLE_KEY_MULTI_SELECT) ?: false)
 
         binding.btnClearAll.setVibrate(EVibrate.BUTTON)
         binding.btnClearAll.setOnClickListener {
-            presenter.pressClear()
+            viewModel.pressClear()
         }
 
         binding.btnAddImages.setVibrate(EVibrate.BUTTON)
         binding.btnAddImages.setOnClickListener {
-            presenter.addImage()
+            viewModel.addImage()
         }
 
         binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
         binding.txtFolder.setOnClickListener {
-            if(binding.list.adapter is GalleryFoldersRvAdapter){
-                initPhotos()
-            }else{
-                initFolders()
+            viewModel.pressFolderName()
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) {
+            when(it) {
+                is GalleryViewModel.State.INIT_FOLDERS -> {
+                    initFolders()
+                }
+                is GalleryViewModel.State.INIT_IMAGES -> {
+                    initPhotos()
+                }
+                is GalleryViewModel.State.CLEAR_SELECT -> {
+                    clearSelect()
+                }
+                is GalleryViewModel.State.FOLDER_NAME -> {
+                    setFolderName(it.name)
+                }
+                is GalleryViewModel.State.BACK_PRESS -> {
+                    dismiss()
+                }
+                is GalleryViewModel.State.VISIBLE_BUTTON -> {
+                    setVisibleButtons(it.isVisible)
+                }
+                else -> {
+
+                }
             }
+        }
+
+        viewModel.images.observe(viewLifecycleOwner) {
+            (binding.list.adapter as? GalleryPhotoRvAdapter)?.images = it
+            binding.list.adapter?.notifyDataSetChanged()
+        }
+
+        viewModel.folders.observe(viewLifecycleOwner) {
+            (binding.list.adapter as? GalleryFoldersRvAdapter)?.folders = it
+            binding.list.adapter?.notifyDataSetChanged()
         }
 
         if(!requireContext().hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || !requireContext().hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -150,7 +176,7 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
                         binding.txtFolder.isVisible = true
-                        presenter.getAllShownImagesPath(requireActivity())
+                        viewModel.getAllShownImagesPath(requireActivity())
                         initPhotos()
                     }
                     is PermissionResult.PermissionDenied -> {
@@ -164,27 +190,24 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         }
     }
 
-    override fun initFolders() {
+    fun initFolders() {
         binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_less), null)
         binding.list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        binding.list.adapter = GalleryFoldersRvAdapter(
-            presenter.folders,
-        ){
-            presenter.pressFolder(it)
+        binding.list.adapter = GalleryFoldersRvAdapter {
+            viewModel.pressFolder(it)
         }
     }
 
-    override fun initPhotos() {
+    fun initPhotos() {
         val weakList =  WeakReference(binding.list)
         binding.placeholder.isVisible = false
         binding.txtFolder.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more), null)
         binding.list.layoutManager = GridLayoutManager(requireContext(),3, RecyclerView.VERTICAL, false)
         binding.list.adapter = GalleryPhotoRvAdapter(
             requireContext(),
-            presenter.images,
-            presenter.selectedImages,
+            selectedImage = viewModel.selectedImages,
             onPress = { uri, isLongPress ->
-                presenter.pressImage(uri = uri, isMultiSelect = isLongPress)
+                viewModel.pressImage(uri = uri, isMultiSelect = isLongPress)
             },
             onUpdateBadge = {
                 weakList.get()?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_BADGE)
@@ -192,15 +215,15 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
         )
     }
 
-    override fun setFolderName(value: String) {
+    fun setFolderName(value: String) {
         binding.txtFolder.text = value
     }
 
-    override fun clearSelect(){
+    fun clearSelect(){
         binding.list?.updateVisibleItem(GalleryPhotoRvAdapter.CHANGE_CLEAR_SELECT)
     }
 
-    override fun setVisibleButtons(isVisible: Boolean) {
+    fun setVisibleButtons(isVisible: Boolean) {
         if(binding.buttonContainer.isVisible != isVisible){
             if(isVisible){
                 binding.btnAddImages.scaleX = 0f
@@ -219,12 +242,6 @@ class FragmentGallery : BaseMvpBottomSheetFragment<ViewGallery, PresenterGallery
 
     override fun onDestroy() {
         super.onDestroy()
-        setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to presenter.doneImages))
-        getKoin().getScope("gallery").close()
+        setFragmentResult(arguments?.getString(BUNDLE_KEY_REQUEST_KEY) ?: REQUEST_KEY, bundleOf(BUNDLE_KEY_IMAGES to viewModel.doneImages))
     }
-
-    override fun updateAllList(){
-        binding.list.adapter?.notifyDataSetChanged()
-    }
-
 }

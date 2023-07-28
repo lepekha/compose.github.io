@@ -40,7 +40,7 @@
             android:paddingTop="10dp"
             android:paddingEnd="50dp"
             android:paddingBottom="10dp"
-            android:text="@string/module_gallery_fragment_all"
+            android:text="All"
             android:textAllCaps="true"
             android:textColor="?attr/color_5"
             android:textSize="16sp"

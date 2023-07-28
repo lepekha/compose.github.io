@@ -3,7 +3,6 @@ package ua.com.compose.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import org.koin.dsl.scoped
 import ua.com.compose.MainActivity
 import ua.com.compose.data.ColorDatabase
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
@@ -18,6 +17,7 @@ import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.fragments.ColorPickViewModule
 import ua.com.compose.fragments.camera.CameraViewModule
+import ua.com.compose.fragments.gallery.GalleryViewModel
 import ua.com.compose.fragments.image.ImageUri
 import ua.com.compose.fragments.image.ImageViewModule
 import ua.com.compose.fragments.info.ColorInfoViewModel
@@ -37,6 +37,7 @@ val appModule = module {
         scoped { GetPalletUseCase(database = get()) }
         scoped { GetAllPalletUseCase(database = get()) }
         scoped { ChangeColorPalletUseCase(database = get()) }
+        viewModel { GalleryViewModel(context = get()) }
         viewModel { ColorInfoViewModel(context = androidContext(), addColorUseCase = get()) }
         viewModel { ColorPickViewModule() }
         viewModel { PaletteViewModule(context = androidContext(), changeColorPalletUseCase = get(), getPalletUseCase = get(), removePalletUseCase = get(), getAllPalletUseCase = get(), addPalletUseCase = get(), getAllColorsUseCase = get(), removeColorUseCase = get(), updateColorUseCase = get(), addColorUseCase = get(), removeAllColorsUseCase = get()) }

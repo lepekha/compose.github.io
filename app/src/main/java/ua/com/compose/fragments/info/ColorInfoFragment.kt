@@ -75,7 +75,6 @@ class ColorInfoFragment : BottomSheetDialogFragment()  {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-//        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         return dialog
     }
 

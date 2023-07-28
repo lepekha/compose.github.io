@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="SpinnerFolders">
-        <item name="android:textColor">?attr/color_6</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-</resources>

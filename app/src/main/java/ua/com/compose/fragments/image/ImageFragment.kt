@@ -43,8 +43,8 @@ import ua.com.compose.api.analytics.analytics
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentImageBinding
 import ua.com.compose.extension.*
 import ua.com.compose.fragments.ColorPickViewModule
+import ua.com.compose.fragments.gallery.FragmentGallery
 import ua.com.compose.fragments.info.ColorInfoFragment
-import ua.com.compose.gallery.main.FragmentGallery
 import ua.com.compose.mvp.BaseMvpView
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu

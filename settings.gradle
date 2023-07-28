@@ -1,5 +1,3 @@
 include ':theme'
-include ':extension'
-include ':gallery'
 include ':mvp'
 include ':app'

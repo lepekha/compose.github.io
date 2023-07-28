@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Matrix
 import android.view.MotionEvent
 import android.view.View
@@ -17,11 +18,36 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Fade
 import androidx.transition.TransitionManager
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+import ua.com.compose.R
+
+fun View.showTooltip(text: String) {
+  Balloon.Builder(context)
+    .setWidth(BalloonSizeSpec.WRAP)
+    .setHeight(BalloonSizeSpec.WRAP)
+    .setText(text)
+    .setTextColorResource(R.color.color_night_5)
+    .setTextSize(15f)
+    .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+    .setArrowSize(10)
+    .setArrowPosition(0.5f)
+    .setPadding(12)
+    .setCornerRadius(8f)
+    .setBackgroundColorResource(R.color.color_night_6)
+    .setBalloonAnimation(BalloonAnimation.ELASTIC)
+    .setLifecycleOwner(this.findViewTreeLifecycleOwner())
+    .build()
+    .showAlignTop(this)
+}
 
 fun View.hideKeyboard(): Boolean {
   try {

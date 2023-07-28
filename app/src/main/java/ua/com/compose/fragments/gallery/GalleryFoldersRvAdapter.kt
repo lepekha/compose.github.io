@@ -1,4 +1,4 @@
-package ua.com.compose.gallery.main
+package ua.com.compose.fragments.gallery
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +10,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import ua.com.compose.R
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
-import ua.com.compose.gallery.R
 
 
-class GalleryFoldersRvAdapter(private val folders: List<ImageFolder>, val onPress: (value: ImageFolder) -> Unit) : RecyclerView.Adapter<GalleryFoldersRvAdapter.ViewHolder>() {
+class GalleryFoldersRvAdapter(var folders: List<ImageFolder> = listOf(), val onPress: (value: ImageFolder) -> Unit) : RecyclerView.Adapter<GalleryFoldersRvAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return folders.size

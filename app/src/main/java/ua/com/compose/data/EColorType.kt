@@ -3,6 +3,7 @@ package ua.com.compose.data
 import android.content.Context
 import android.graphics.Color
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.luminance
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.ViewModel
 import org.json.JSONObject
@@ -128,6 +129,14 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "XYZ"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeXYZ
+    },
+    LUMINANCE(key = 9) {
+        override fun convertColor(color: Int, withSeparator: String): String {
+            val value = color.luminance * 100
+            return String.format("%.2f", value) + "%"
+        }
+        override fun title() = "Luminance"
+        override fun isVisible(): Boolean = true
     };
 
     abstract fun convertColor(color: Int, withSeparator: String = ""): String

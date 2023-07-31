@@ -35,33 +35,33 @@ class ColorInfoViewModel(val context: Context,
         val colors = EColorType.visibleValues().map { ColorInfo.TitleText(title = it.title(), text = it.convertColor(color, withSeparator = ",")) }
         items.addAll(colors)
 
-        shadesOf(startColor = color, endColor = Color.BLACK).takeIf { it.isNotEmpty() }?.let {
+        shadesOf(startColor = color, endColor = Color.BLACK).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_shades), colors = it))
         }
 
-        tintsOf(startColor = color, endColor = Color.WHITE).takeIf { it.isNotEmpty() }?.let {
+        tintsOf(startColor = color, endColor = Color.WHITE).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_tints), colors = it))
         }
-        toneOf(baseColor = color).takeIf { it.isNotEmpty() }?.let {
+        toneOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_tones), colors = it))
         }
-        tetradicOf(baseColor = color).takeIf { it.isNotEmpty() }?.let {
+        tetradicOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_tetradic_color), colors = it))
         }
 
-        triadicOf(baseColor = color).takeIf { it.isNotEmpty() }?.let {
+        triadicOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_triadic_colors), colors = it))
         }
 
-        analogousOf(baseColor = color).takeIf { it.isNotEmpty() }?.let {
+        analogousOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_analogous_colors), colors = it))
         }
 
-        monochromaticOf(baseColor = color).takeIf { it.isNotEmpty() }?.let {
+        monochromaticOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_monochromatic_colors), colors = it))
         }
 
-        complementaryOf(baseColor = color).takeIf { it.isNotEmpty() }?.let {
+        complementaryOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
             items.add(ColorInfo.Colors(title = context.getString(R.string.module_other_color_pick_complementary_color), colors = it))
         }
 
@@ -194,7 +194,7 @@ class ColorInfoViewModel(val context: Context,
             val shade = ColorUtils.blendARGB(startColor, endColor, i.toFloat() / (shadesCount - 1))
             shades.add(shade)
         }
-         return shades
+        return shades
     }
 
     private fun tintsOf(startColor: Int, endColor: Int): List<Int> {

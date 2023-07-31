@@ -125,7 +125,6 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.zoomableImageView2.setOnTouchListener { v, event ->
             binding.zoomableImageView2.let { view ->
                 detectColor(view)
@@ -211,23 +210,43 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         return ColorUtils.calculateLuminance(color) < 0.5
     }
 
-    private fun showImage(uri: Uri) {
+    private fun visible() {
         binding.pointerRing.isVisible = true
         binding.pointerRing2.isVisible = true
         binding.activityMainPointer.isVisible = true
         binding.placeholder.isVisible = false
+        binding.zoomableImageView2.isVisible = true
         binding.zoomableImageView2.setBackgroundResource(R.drawable.ic_background)
         binding.cardView.setMarginBottom(requireContext().navigationBarHeight() + 55.dp.toInt() + 8.dp.toInt())
         binding.cardView.isVisible = true
         (activity as BaseMvpView).setupBottomMenu(mutableListOf(btnGallery, btnCopy, btnPaletteAdd))
+    }
+
+    private fun invisible() {
+        binding.pointerRing.isVisible = false
+        binding.pointerRing2.isVisible = false
+        binding.activityMainPointer.isVisible = false
+        binding.placeholder.isVisible = true
+        binding.zoomableImageView2.isVisible = false
+        binding.cardView.isVisible = false
+        (activity as BaseMvpView).setupBottomMenu(mutableListOf())
+    }
+
+    private fun showImage(uri: Uri) {
         binding.zoomableImageView2.let {
             viewLifecycleOwner.lifecycleScope.launch {
-                val image = requireContext().loadImage(uri)
-                withContext(Dispatchers.Main) {
-                    it.setImageBitmap(image)
-                    it.post {
-                        detectColor(it)
+                try {
+                    val image = requireContext().loadImage(uri)
+                    withContext(Dispatchers.Main) {
+                        visible()
+                        it.setImageBitmap(image)
+                        it.post {
+                            detectColor(it)
+                        }
                     }
+                } catch (e: Exception) {
+                    viewModule.imageUri.uri = null
+                    invisible()
                 }
             }
         }

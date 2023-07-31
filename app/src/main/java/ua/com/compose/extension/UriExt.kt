@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import java.io.File
 
 fun Uri.getPath(context: Context): String? {
     val projection = arrayOf<String>(MediaStore.Images.Media.DATA)

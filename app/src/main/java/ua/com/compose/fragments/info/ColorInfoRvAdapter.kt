@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.R
@@ -18,6 +19,8 @@ import ua.com.compose.databinding.ModuleOtherColorPickElementColorInfoColorsBind
 import ua.com.compose.databinding.ModuleOtherColorPickElementColorInfoKeyTextBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
+import ua.com.compose.extension.dp
+import ua.com.compose.extension.setMarginLeft
 import ua.com.compose.extension.vibrate
 
 
@@ -100,14 +103,18 @@ class ColorInfoRvAdapter(
         fun bind(item: ColorInfo.Colors, pressAddToPalette: (value: Int) -> Unit) {
             binding.txtTitle.text = item.title
             binding.lstColors.removeAllViews()
-            item.colors.map { color ->
-                val view = View(binding.root.context).apply {
+            item.colors.mapIndexed { index, color ->
+                val view = CardView(binding.root.context).apply {
                     layoutParams = LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             1.0f
                     )
-                    setBackgroundColor(color)
+                    if(index > 0) {
+                        setMarginLeft(3.dp.toInt())
+                    }
+                    radius = 6.dp
+                    setCardBackgroundColor(color)
                 }
                 view.setOnClickListener {
                     view.context.vibrate(EVibrate.BUTTON)

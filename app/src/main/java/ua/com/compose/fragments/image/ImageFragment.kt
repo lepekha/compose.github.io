@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Rect
@@ -25,6 +26,8 @@ import androidx.core.view.drawToBitmap
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +43,7 @@ import ua.com.compose.R
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
+import ua.com.compose.customView.ZoomableImageView
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentImageBinding
 import ua.com.compose.extension.*
 import ua.com.compose.fragments.ColorPickViewModule
@@ -50,6 +54,7 @@ import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.mvp.data.viewBindingWithBinder
+import java.io.ByteArrayOutputStream
 
 
 class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment_image) {
@@ -122,15 +127,10 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
     private val mainModule: ColorPickViewModule by activityViewModels()
     private var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.zoomableImageView2.setOnTouchListener { v, event ->
-            binding.zoomableImageView2.let { view ->
-                detectColor(view)
-            }
-            binding.zoomableImageView2.onTouch(view, event)
-            true
+        binding.zoomableImageView2.setMyListener {
+            detectColor(binding.zoomableImageView2)
         }
 
         binding.placeholder.setVibrate(EVibrate.BUTTON)
@@ -190,7 +190,12 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         }
     }
 
-    private fun detectColor(view: ImageView) {
+    override fun onDestroyView() {
+        binding.zoomableImageView2.setMyListener(null)
+        super.onDestroyView()
+    }
+
+    private fun detectColor(view: ImageView) = try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getBitmapFormView(view, requireActivity()) {
                 it.getPixel(view.width / 2, view.height / 2).let {
@@ -199,11 +204,11 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
             }
         } else {
             view.drawToBitmap().getPixel(view.width / 2, view.height / 2).let {
-                try {
                     viewModule.changeColor(color = it)
-                } catch (e: Exception){ }
             }
         }
+    } catch (e: Exception){
+
     }
 
     private fun isDark(color: Int): Boolean {
@@ -216,7 +221,8 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         binding.activityMainPointer.isVisible = true
         binding.placeholder.isVisible = false
         binding.zoomableImageView2.isVisible = true
-        binding.zoomableImageView2.setBackgroundResource(R.drawable.ic_background)
+        binding.zoomableImageContainer.isVisible = true
+        binding.zoomableImageContainer.setBackgroundResource(R.drawable.ic_background)
         binding.cardView.setMarginBottom(requireContext().navigationBarHeight() + 55.dp.toInt() + 8.dp.toInt())
         binding.cardView.isVisible = true
         (activity as BaseMvpView).setupBottomMenu(mutableListOf(btnGallery, btnCopy, btnPaletteAdd))
@@ -228,25 +234,30 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         binding.activityMainPointer.isVisible = false
         binding.placeholder.isVisible = true
         binding.zoomableImageView2.isVisible = false
+        binding.zoomableImageContainer.isVisible = false
         binding.cardView.isVisible = false
         (activity as BaseMvpView).setupBottomMenu(mutableListOf())
     }
 
     private fun showImage(uri: Uri) {
         binding.zoomableImageView2.let {
-            viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val image = requireContext().loadImage(uri)
                     withContext(Dispatchers.Main) {
                         visible()
-                        it.setImageBitmap(image)
-                        it.post {
-                            detectColor(it)
-                        }
+                        Glide.with(requireContext())
+                            .asBitmap()
+                            .load(uri)
+                            .centerInside()
+                            .thumbnail(0.1f)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(it)
                     }
                 } catch (e: Exception) {
                     viewModule.imageUri.uri = null
-                    invisible()
+                    withContext(Dispatchers.Main) {
+                        invisible()
+                    }
                 }
             }
         }

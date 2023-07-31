@@ -7,10 +7,14 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 public class ZoomableImageView extends androidx.appcompat.widget.AppCompatImageView {
     Matrix matrix = new Matrix();
@@ -47,7 +51,20 @@ public class ZoomableImageView extends androidx.appcompat.widget.AppCompatImageV
         setScaleType(ScaleType.MATRIX);
     }
 
-    public void onTouch(View v, MotionEvent event) {
+    public interface DetectColorListener{
+        void detectColor();
+    };
+
+    public DetectColorListener listener;
+
+    // Other class members and methods...
+
+    public void setMyListener(DetectColorListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
 
         matrix.getValues(m);
@@ -112,24 +129,39 @@ public class ZoomableImageView extends androidx.appcompat.widget.AppCompatImageV
         }
         setImageMatrix(matrix);
         invalidate();
-    };
+        return super.onTouchEvent(event);
+    }
 
     Paint paint = new Paint();
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (listener != null) {
+            listener.detectColor();
+        }
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(5);
     }
 
     @Override
+    public void setImageDrawable(@Nullable Drawable drawable) {
+        super.setImageDrawable(drawable);
+        if(drawable != null) {
+            bmWidth = ((BitmapDrawable) drawable).getBounds().width();
+            bmHeight = ((BitmapDrawable) drawable).getBounds().height();
+        }
+    }
+
+    @Override
     public void setImageBitmap(Bitmap bm)
     {
         super.setImageBitmap(bm);
-        bmWidth = bm.getWidth();
-        bmHeight = bm.getHeight();
+        if(bm != null) {
+            bmWidth = bm.getWidth();
+            bmHeight = bm.getHeight();
+        }
     }
 
     public void setMaxZoom(float x)
@@ -212,6 +244,8 @@ public class ZoomableImageView extends androidx.appcompat.widget.AppCompatImageV
             return true;
         }
     }
+
+
 
     @Override
     protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)

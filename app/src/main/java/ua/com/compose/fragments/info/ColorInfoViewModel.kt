@@ -19,6 +19,7 @@ import ua.com.compose.data.ColorNames
 import ua.com.compose.data.EColorType
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.extension.dp
+import java.lang.Exception
 
 class ColorInfoViewModel(val context: Context,
                          private val addColorUseCase: AddColorUseCase): ViewModel() {
@@ -68,8 +69,8 @@ class ColorInfoViewModel(val context: Context,
         _items.postValue(items)
     }
 
-    private fun triadicOf(baseColor: Int): List<Int> {
-        val palette = Palette.from(ColorDrawable(baseColor).toBitmap(1.dp.toInt(),1.dp.toInt())).generate()
+    private fun triadicOf(baseColor: Int): List<Int>  = try {
+        val palette = Palette.from(ColorDrawable(baseColor).toBitmap(10, 10)).generate()
         val triadicColors = ArrayList<Int>()
         val triadicColorCount = 3
         if (palette.swatches.isNotEmpty()) {
@@ -85,12 +86,15 @@ class ColorInfoViewModel(val context: Context,
 
                 for (i in 0 until triadicColorCount) {
                     val triadicHue = (hue + i * 120) % 360
-                    val triadicColor = ColorUtils.HSLToColor(floatArrayOf(triadicHue, hsl[1], hsl[2]))
+                    val triadicColor =
+                        ColorUtils.HSLToColor(floatArrayOf(triadicHue, hsl[1], hsl[2]))
                     triadicColors.add(triadicColor)
                 }
             }
         }
-        return triadicColors
+        triadicColors
+    } catch (e: Exception) {
+        listOf()
     }
 
     private fun tetradicOf(baseColor: Int): List<Int> {
@@ -125,8 +129,8 @@ class ColorInfoViewModel(val context: Context,
         return toneColors
     }
 
-    private fun analogousOf(baseColor: Int): List<Int> {
-        val palette = Palette.from(ColorDrawable(baseColor).toBitmap(1.dp.toInt(),1.dp.toInt())).generate()
+    private fun analogousOf(baseColor: Int): List<Int> = try {
+        val palette = Palette.from(ColorDrawable(baseColor).toBitmap(10,10)).generate()
         val analogousColors = ArrayList<Int>()
         val analogousColorCount = 6
 
@@ -148,7 +152,9 @@ class ColorInfoViewModel(val context: Context,
                 }
             }
         }
-        return analogousColors
+        analogousColors
+    } catch (e: Exception) {
+        listOf()
     }
 
     private fun monochromaticOf(baseColor: Int): List<Int> {

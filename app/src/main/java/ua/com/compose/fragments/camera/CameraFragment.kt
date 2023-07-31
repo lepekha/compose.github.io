@@ -4,13 +4,15 @@ import android.Manifest
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.hardware.Camera
-import android.os.AsyncTask
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
@@ -20,14 +22,11 @@ import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.requireScopeActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.com.compose.MainActivity
 import ua.com.compose.R
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
-import ua.com.compose.customView.CameraColorPickerPreview
-import ua.com.compose.customView.Cameras
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentCameraBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
@@ -46,29 +45,20 @@ import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.mvp.data.viewBindingWithBinder
+import java.nio.ByteBuffer
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
-class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_pick_fragment_camera), CameraColorPickerPreview.OnColorSelectedListener {
-
+class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_pick_fragment_camera) {
     companion object {
-        private fun getCameraInstance(): Camera? {
-            var c: Camera? = null
-            try {
-                c = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK)
-            } catch (e: Exception) {
-            }
-            return c
-        }
-
         fun newInstance(): CameraFragment {
             return CameraFragment()
         }
     }
+    private var imageCapture: ImageCapture? = null
 
-    private var mCamera: Camera? = null
-    private var mCameraAsyncTask: CameraAsyncTask? = null
-    private var mCameraPreview: CameraColorPickerPreview? = null
-    var mPreviewContainer: FrameLayout? = null
+    private lateinit var cameraExecutor: ExecutorService
 
     private val btnPaletteAdd = BottomMenu(iconResId = R.drawable.ic_add_circle){
         viewModule.pressPaletteAdd()
@@ -98,7 +88,7 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mPreviewContainer = binding.previewContainer
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
         viewModule.nameColor.nonNull().observe(viewLifecycleOwner) { name ->
             binding.txtName.text = name
@@ -132,6 +122,8 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
                 checkPermission()
             }
             checkPermission()
+        } else {
+            binding.container.doOnLayout { startCamera() }
         }
     }
 
@@ -147,7 +139,7 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
             resultCallback = {
                 when(this) {
                     is PermissionResult.PermissionGranted -> {
-                        binding.container.doOnLayout { cameraStart() }
+                        binding.container.doOnLayout { startCamera() }
                     }
                     is PermissionResult.PermissionDenied -> {
                     }
@@ -162,102 +154,37 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(requireContext().hasPermission(permission = Manifest.permission.CAMERA)) {
-            binding.container.doOnLayout { cameraStart() }
-        }
-    }
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireActivity())
 
-    override fun onPause() {
-        super.onPause()
-        cameraStop()
-    }
+        cameraProviderFuture.addListener({
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-    private fun cameraStart() {
-        mCameraAsyncTask = CameraAsyncTask()
-        mCameraAsyncTask?.execute()
-    }
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                }
 
-    private fun cameraStop() {
-        mCameraAsyncTask?.cancel(true)
+            imageCapture = ImageCapture.Builder()
+                .build()
 
-        if (mCamera != null) {
-            mCamera?.stopPreview()
-            mCamera?.setPreviewCallback(null)
-            mCamera?.release()
-            mCamera = null
-        }
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also {
+                    it.setAnalyzer(cameraExecutor, ColorAnalyzer { color ->
+                        viewModule.changeColor(color = color)
+                    })
+                }
 
-        if (mCameraPreview != null) {
-            binding.previewContainer.removeView(mCameraPreview)
-        }
-    }
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-
-    override fun onColorSelected(color: Int) {
-        viewModule.changeColor(color)
-    }
-
-    // class CameraAsyncTask
-    inner class CameraAsyncTask : AsyncTask<Void?, Void?, Camera?>() {
-        /**
-         * The [ViewGroup.LayoutParams] used for adding the preview to its container.
-         */
-         var mPreviewParams: FrameLayout.LayoutParams? = null
-         override fun doInBackground(vararg params: Void?): Camera? {
-            val camera: Camera? = getCameraInstance()
-
-
-                //configure Camera parameters
-                val cameraParameters = camera?.parameters
-
-                //get optimal camera preview size according to the layout used to display it
-                val bestSize: Camera.Size = Cameras.getBestPreviewSize(
-                    cameraParameters?.supportedPreviewSizes,
-                    mPreviewContainer?.getWidth() ?: 0,
-                    mPreviewContainer?.getHeight()?: 0,
-                    true
-                )
-                //set optimal camera preview
-             val focusModes: List<String> = cameraParameters?.getSupportedFocusModes() ?: listOf()
-             if(focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)){
-                 cameraParameters?.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-             } else if(focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)){
-                     cameraParameters?.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                 }
-
-                cameraParameters?.setPreviewSize(bestSize.width, bestSize.height)
-                camera?.parameters = cameraParameters
-
-                //set camera orientation to match with current device orientation
-                Cameras.setCameraDisplayOrientation(requireContext(), camera)
-
-                //get proportional dimension for the layout used to display preview according to the preview size used
-                val adaptedDimension: IntArray = Cameras.getProportionalDimension(
-                    bestSize,
-                    mPreviewContainer?.getWidth() ?: 0,
-                    mPreviewContainer?.getHeight() ?: 0,
-                    true
-                )
-
-                //set up params for the layout used to display the preview
-                mPreviewParams = FrameLayout.LayoutParams(adaptedDimension[0], adaptedDimension[1])
-                mPreviewParams?.gravity = Gravity.CENTER
-            return camera
-        }
-
-        override fun onPostExecute(result: Camera?) {
-            super.onPostExecute(result)
-
-            if (!isCancelled()) {
-                mCamera = result
-                //set up camera preview
-                mCameraPreview = CameraColorPickerPreview(requireContext(), mCamera)
-                mCameraPreview?.setOnColorSelectedListener(this@CameraFragment)
-
-                //add camera preview
-                mPreviewContainer?.addView(mCameraPreview, 0, mPreviewParams)
+            try {
                 binding.cardView.setMarginBottom(requireContext().navigationBarHeight() + 55.dp.toInt() + 8.dp.toInt())
                 binding.cardView.isVisible = true
                 binding.pointerRing.isVisible = true
@@ -266,13 +193,85 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
                 binding.activityMainPointer.isVisible = true
                 binding.placeholder.isVisible = false
                 (activity as BaseMvpView).setupBottomMenu(mutableListOf(btnCopy, btnPaletteAdd))
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageCapture, imageAnalyzer)
+
+            } catch(exc: Exception) {
             }
+
+        }, ContextCompat.getMainExecutor(requireActivity()))
+    }
+
+    private class ColorAnalyzer(private val listener: (value: Int) -> Unit) : ImageAnalysis.Analyzer {
+        private var lastTotalRed = 0
+        private var lastTotalGreen = 0
+        private var lastTotalBlue = 0
+
+        private fun ByteBuffer.toByteArray(): ByteArray {
+            rewind()
+            val data = ByteArray(remaining())
+            get(data)
+            return data
         }
 
-        override fun onCancelled(camera: Camera?) {
-            super.onCancelled(camera)
-            camera?.release()
+        override fun analyze(image: ImageProxy) {
+            val imageWidth = image.width
+            val imageHeight = image.height
+
+            // Задати розмір області центру
+            val centerSize = 2
+
+            // Знайти початкові координати області центру
+            val centerX = imageWidth / 2 - centerSize / 2
+            val centerY = imageHeight / 2 - centerSize / 2
+
+            // Отримати пікселі зображення з ImageProxy
+            val buffer = image.planes[0].buffer
+            val pixels = buffer.toByteArray()
+
+            // Зберігати суми каналів кольорів для всіх пікселів у центральній області
+            var totalRed = 0
+            var totalGreen = 0
+            var totalBlue = 0
+
+            // Перебрати всі пікселі у центральній області і додати значення каналів кольору до сум
+            for (y in centerY until centerY + centerSize) {
+                for (x in centerX until centerX + centerSize) {
+                    val pixelOffset = (y * imageWidth + x) * 4
+                    val red = pixels[pixelOffset].toInt() and 0xFF
+                    val green = pixels[pixelOffset + 1].toInt() and 0xFF
+                    val blue = pixels[pixelOffset + 2].toInt() and 0xFF
+
+                    totalRed += red
+                    totalGreen += green
+                    totalBlue += blue
+                }
+            }
+
+            // Обчислити середнє значення кольору для червоного, зеленого та синього каналів
+            val averageRed = totalRed / (centerSize * centerSize)
+            val averageGreen = totalGreen / (centerSize * centerSize)
+            val averageBlue = totalBlue / (centerSize * centerSize)
+
+            if(Math.abs(averageRed - lastTotalRed) > 3 || Math.abs(averageBlue - lastTotalBlue) > 3 || Math.abs(averageGreen - lastTotalGreen) > 3) {
+                lastTotalRed = averageRed
+                lastTotalGreen = averageGreen
+                lastTotalBlue = averageBlue
+            }
+            // Створити колір із середніми значеннями каналів RGB
+            val averageColor = Color.rgb(lastTotalRed, lastTotalGreen, lastTotalBlue)
+            listener(averageColor)
+            image.close()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 }
 

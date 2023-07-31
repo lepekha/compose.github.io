@@ -22,7 +22,6 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
 
 lateinit var prefs: SharedPreferences
 
@@ -74,6 +73,14 @@ fun Activity.createReview() {
             }
         }
     }
+}
+
+fun Context.screenWidth(): Int {
+    return Resources.getSystem().displayMetrics.widthPixels
+}
+
+fun Context.screenHeight(): Int {
+    return Resources.getSystem().displayMetrics.heightPixels
 }
 
 suspend fun Context.loadImage(uri: Uri) = when {

@@ -2,6 +2,7 @@ package ua.com.compose.fragments.image
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.view.*
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
@@ -29,6 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
@@ -104,6 +107,8 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         }
     }
 
+    private var throttleLatestColor: ((Unit) -> Unit)? = null
+
     private fun openGallery() {
         if(isPhotoPickerAvailable(requireContext())) {
             analytics.send(SimpleEvent(key = Analytics.Event.OPEN_NEW_GALLERY))
@@ -129,8 +134,16 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        throttleLatestColor = throttleLatest(
+            100L,
+            viewLifecycleOwner.lifecycleScope
+        ) {
+            detectColor(view = binding.zoomableImageView2)
+        }
+
         binding.zoomableImageView2.setMyListener {
-            detectColor(binding.zoomableImageView2)
+           throttleLatestColor?.invoke(Unit)
         }
 
         binding.placeholder.setVibrate(EVibrate.BUTTON)
@@ -192,6 +205,7 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
 
     override fun onDestroyView() {
         binding.zoomableImageView2.setMyListener(null)
+        throttleLatestColor = null
         super.onDestroyView()
     }
 

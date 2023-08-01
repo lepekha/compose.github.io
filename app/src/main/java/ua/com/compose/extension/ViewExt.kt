@@ -42,6 +42,7 @@ fun View.showTooltip(text: String) {
     .setArrowPosition(0.5f)
     .setPadding(12)
     .setCornerRadius(8f)
+    .setAutoDismissDuration(5000)
     .setBackgroundColorResource(R.color.color_night_6)
     .setBalloonAnimation(BalloonAnimation.ELASTIC)
     .setLifecycleOwner(this.findViewTreeLifecycleOwner())

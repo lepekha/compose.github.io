@@ -17,4 +17,5 @@
     <string name="module_other_color_pick_complementary_color">Kolory komplementarne</string>
     <string name="module_other_color_pick_tones">Tony</string>
     <string name="module_other_color_pick_tetradic_color">Kolory tetradyczne</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Naciśnij i przytrzymaj, aby przenieść kolor do innej palety kolorów</string>
 </resources>

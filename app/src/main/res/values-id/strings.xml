@@ -18,4 +18,5 @@
     <string name="module_other_color_pick_complementary_color">Warna komplementer</string>
     <string name="module_other_color_pick_tones">Tona</string>
     <string name="module_other_color_pick_tetradic_color">Warna tetradik</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Tahan lama untuk memindahkan warna ke palet warna lain</string>
 </resources>

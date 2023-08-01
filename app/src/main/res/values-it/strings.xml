@@ -17,4 +17,5 @@
     <string name="module_other_color_pick_complementary_color">Colori complementari</string>
     <string name="module_other_color_pick_tones">Tonalità</string>
     <string name="module_other_color_pick_tetradic_color">Colori tetradici</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Tieni premuto per spostare il colore in un\'altra tavolozza</string>
 </resources>

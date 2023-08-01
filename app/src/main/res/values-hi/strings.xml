@@ -17,4 +17,5 @@
     <string name="module_other_color_pick_complementary_color">पूरक रंग</string>
     <string name="module_other_color_pick_tones">टोन्स</string>
     <string name="module_other_color_pick_tetradic_color">चतुर्भुजीय रंग</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">दूसरी पैलेट में रंग को खींचने के लिए लंबे समय तक दबाएं</string>
 </resources>

@@ -18,4 +18,5 @@
     <string name="module_other_color_pick_complementary_color">Комплементарні кольори</string>
     <string name="module_other_color_pick_tones">Тон кольору</string>
     <string name="module_other_color_pick_tetradic_color">Тетрадні кольори</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Натисніть і утримуйте, щоб перемістити колір до іншої палітри кольорів</string>
 </resources>

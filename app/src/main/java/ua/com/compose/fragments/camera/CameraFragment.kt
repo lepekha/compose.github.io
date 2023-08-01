@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
+import kotlinx.coroutines.CoroutineScope
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.requireScopeActivity
 import ua.com.compose.MainActivity
@@ -38,6 +39,7 @@ import ua.com.compose.extension.nonNull
 import ua.com.compose.extension.setMarginBottom
 import ua.com.compose.extension.setVibrate
 import ua.com.compose.extension.showToast
+import ua.com.compose.extension.throttleLatest
 import ua.com.compose.fragments.ColorPickViewModule
 import ua.com.compose.fragments.info.ColorInfoFragment
 import ua.com.compose.mvp.BaseMvpView

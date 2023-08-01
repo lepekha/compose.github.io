@@ -18,4 +18,5 @@
     <string name="module_other_color_pick_complementary_color">互补色</string>
     <string name="module_other_color_pick_tones">色调</string>
     <string name="module_other_color_pick_tetradic_color">四色组合</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">长按并拖动以将颜色移至另一个调色板</string>
 </resources>

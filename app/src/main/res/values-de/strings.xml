@@ -18,4 +18,5 @@
     <string name="module_other_color_pick_complementary_color">Komplementärfarben</string>
     <string name="module_other_color_pick_tones">Töne</string>
     <string name="module_other_color_pick_tetradic_color">Vierfarben</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Lange drücken, um die Farbe in eine andere Farbpalette zu verschieben</string>
 </resources>

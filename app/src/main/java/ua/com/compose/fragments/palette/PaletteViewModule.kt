@@ -49,6 +49,7 @@ class PaletteViewModule(private val context: Context,
     sealed class State {
         object NONE: State()
         data class SHARE(val file: File): State()
+        object CREATE_PALETTE: State()
     }
 
     private val _colors: MutableLiveData<List<Card.CardColor>?> = MutableLiveData(null)
@@ -94,9 +95,20 @@ class PaletteViewModule(private val context: Context,
         create()
     }
 
-    fun pressNewPallet(name: String) = viewModelScope.launch {
-        Settings.paletteID = addPalletUseCase.execute(name)
+    fun pressCreatePalletConfirm(name: String) = viewModelScope.launch {
+        val newPaletteId = addPalletUseCase.execute(name)
+        val colorId = movedColorId
+        if(colorId != null) {
+            changeColorPalletUseCase.execute(colorId, newPaletteId)
+            movedColorId = null
+        } else {
+            Settings.paletteID = newPaletteId
+        }
         create()
+    }
+
+    fun pressCreatePalletDiscard() {
+        movedColorId = null
     }
 
     fun pressPallet(id: Long) = viewModelScope.launch {
@@ -113,9 +125,15 @@ class PaletteViewModule(private val context: Context,
         create()
     }
 
-    fun pressChangePallet(colorId: Long, palletId: Long) = viewModelScope.launch {
+    private var movedColorId: Long? = null
+    fun pressDropColorToPallet(colorId: Long, palletId: Long?) = viewModelScope.launch {
         analytics.send(SimpleEvent(key = Analytics.Event.COLOR_DRAG_AND_DROP))
-        changeColorPalletUseCase.execute(colorId, palletId)
+        if(palletId == null) {
+            movedColorId = colorId
+            _state.postValue(State.CREATE_PALETTE)
+        } else {
+            changeColorPalletUseCase.execute(colorId, palletId)
+        }
         create()
     }
 

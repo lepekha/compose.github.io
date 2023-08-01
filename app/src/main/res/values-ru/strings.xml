@@ -18,5 +18,5 @@
     <string name="module_other_color_pick_complementary_color">Комплементарные цвета</string>
     <string name="module_other_color_pick_tones">Тон цвета</string>
     <string name="module_other_color_pick_tetradic_color">Тетрадные цвета</string>
-
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Нажмите и удерживайте, чтобы переместить цвет в другую палитру</string>
 </resources>

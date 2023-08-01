@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.requireScopeActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.com.compose.MainActivity
 import ua.com.compose.R
 import ua.com.compose.Settings
@@ -126,7 +125,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
                     pressPaletteShare(it)
                 },
                 onPressChangePallet = { colorId, palletId ->
-                    viewModule.pressChangePallet(colorId, palletId)
+                    viewModule.pressDropColorToPallet(colorId, palletId)
                 }
         ).apply {
             binding.lstPallets.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -158,7 +157,7 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
         }
 
         viewModule.colors.nonNull().observe(viewLifecycleOwner) {
-            (binding.lstColors.adapter as? ColorsRvAdapter)?.update(binding.lstColors, it ?: listOf())
+            (binding.lstColors.adapter as? ColorsRvAdapter)?.update(it ?: listOf())
             binding.btnAddColor.isVisible = (it?.isEmpty() ?: true) && (binding.imgPlaceholder.isVisible == false)
             if(it?.isNotEmpty() == true) {
                 binding.lstColors.setPaddingBottom(requireContext().navigationBarHeight() + 55.dp.toInt() + 8.dp.toInt())
@@ -187,8 +186,14 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
         }
 
         viewModule.state.nonNull().observe(viewLifecycleOwner) {
-            if(it is PaletteViewModule.State.SHARE) {
-                requireActivity().shareFile(it.file)
+            when(it) {
+                is PaletteViewModule.State.SHARE -> {
+                    requireActivity().shareFile(it.file)
+                }
+                is PaletteViewModule.State.CREATE_PALETTE -> {
+                    createPallet()
+                }
+                else -> {}
             }
         }
 
@@ -211,7 +216,9 @@ class PaletteFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragme
                 if(Settings.defaultPaletteName(requireContext(), withIncrement = false) == message) {
                     Settings.defaultPaletteName(requireContext(), withIncrement = true)
                 }
-                viewModule.pressNewPallet(name = message)
+                viewModule.pressCreatePalletConfirm(name = message)
+            } else {
+                viewModule.pressCreatePalletDiscard()
             }
         }
     }

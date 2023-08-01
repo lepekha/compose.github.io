@@ -18,4 +18,5 @@
     <string name="module_other_color_pick_complementary_color">Tamamlayıcı renkler</string>
     <string name="module_other_color_pick_tones">Tonlar</string>
     <string name="module_other_color_pick_tetradic_color">Dört renkli</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Rengi başka bir renk paletine taşımak için uzun basın</string>
 </resources>

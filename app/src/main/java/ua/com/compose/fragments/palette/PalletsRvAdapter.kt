@@ -12,13 +12,14 @@ import ua.com.compose.data.ColorPallet
 import ua.com.compose.databinding.ModuleOtherColorPickElementButtonBinding
 import ua.com.compose.databinding.ModuleOtherColorPickElementPalletBinding
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.dp
 import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.extension.vibrate
 
 
 class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
                        private val onPressAddPallet: () -> Unit,
-                       private val onPressChangePallet: (colorId: Long, palletId: Long) -> Unit,
+                       private val onPressChangePallet: (colorId: Long, palletId: Long?) -> Unit,
                        private val onPressRemove: (item: ColorPallet) -> Unit,
                        private val onPressShare: (item: ColorPallet) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -98,6 +99,33 @@ class PalletsRvAdapter(private val onPressItem: (item: ColorPallet) -> Unit,
             else -> {
                 val binding = ModuleOtherColorPickElementButtonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return ViewHolderButton(binding).apply {
+                    binding.root.setOnDragListener { _, dragEvent ->
+                        when (dragEvent.action) {
+                            DragEvent.ACTION_DRAG_ENTERED -> {
+                                this.binding.root.context.vibrate(EVibrate.BUTTON)
+                                binding.btnAddPallet.strokeWidth = 1.dp.toInt()
+                                binding.btnAddPallet.strokeColor = binding.btnAddPallet.context.getColorFromAttr(R.attr.color_5)
+                            }
+                            DragEvent.ACTION_DRAG_EXITED -> {
+                                binding.btnAddPallet.strokeColor = Color.TRANSPARENT
+                            }
+                            DragEvent.ACTION_DRAG_STARTED -> {
+                                binding.icon.setImageResource(R.drawable.ic_add_fill)
+                                binding.btnAddPallet.strokeColor = Color.TRANSPARENT
+                            }
+                            DragEvent.ACTION_DROP -> {
+                                val intent = dragEvent.clipData.getItemAt(0)?.intent ?: return@setOnDragListener false
+                                onPressChangePallet.invoke(intent.getLongExtra(ColorsRvAdapter.CLIP_DATA, -1), null)
+                            }
+                            DragEvent.ACTION_DRAG_ENDED -> {
+                                binding.btnAddPallet.strokeWidth = 0
+                                binding.icon.setImageResource(R.drawable.ic_palette_add)
+                                notifyDataSetChanged()
+                            }
+                        }
+                        true
+                    }
+
                     binding.root.setOnClickListener {
                         this.binding.root.context.vibrate(EVibrate.BUTTON)
                         onPressAddPallet.invoke()

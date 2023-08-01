@@ -9,13 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ua.com.compose.R
+import ua.com.compose.api.tooltips.ETooltipKey
 import ua.com.compose.data.ColorItem
 import ua.com.compose.data.ColorNames
 import ua.com.compose.data.EColorType
 import ua.com.compose.databinding.ModuleOtherColorPickElementColorBinding
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.prefs
+import ua.com.compose.extension.showTooltip
 import ua.com.compose.extension.vibrate
 
 
@@ -32,34 +37,10 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
     val cards = mutableListOf<Card.CardColor>()
     private var colorType = EColorType.HEX
 
-    fun update(view: RecyclerView? = null, newList: List<Card.CardColor>){
-//        val diffUtilCallback = DiffUtilCallback(this.cards, newList)
-//        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+    fun update(newList: List<Card.CardColor>){
         this.cards.clear()
         this.cards.addAll(newList)
         notifyDataSetChanged()
-//        diffResult.dispatchUpdatesTo(this)
-//        view?.scrollToTop(isSmooth = true)
-    }
-
-    inner class DiffUtilCallback(
-            private val oldList: List<Card.CardColor>,
-            private val newList: List<Card.CardColor> ): DiffUtil.Callback() {
-
-        override fun getOldListSize() = oldList.size
-        override fun getNewListSize() = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) : Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-            return oldItem.item.id == newItem.item.id
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-            return oldItem.item.color == newItem.item.color
-        }
     }
 
     fun changeColorType(colorType: EColorType) {
@@ -122,6 +103,13 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
             binding.imgInfo.imageTintList = ColorStateList.valueOf(if (ColorUtils.calculateLuminance(card.item.color) < 0.5) Color.WHITE else Color.BLACK)
             binding.txtName.setTextColor(Color.WHITE)
             binding.imgColor.setCardBackgroundColor(card.item.color)
+
+            if(ETooltipKey.PALETTE_DRAG_AND_DROP.isShow() && adapterPosition == 2) {
+                ETooltipKey.PALETTE_DRAG_AND_DROP.confirm()
+                binding.root.doOnLayout {
+                    it.showTooltip(it.context.getString(R.string.module_other_color_pick_tooltip_drag_and_drop))
+                }
+            }
         }
     }
 }

@@ -17,4 +17,5 @@
     <string name="module_other_color_pick_complementary_color">Complementaire kleuren</string>
     <string name="module_other_color_pick_tones">Tinten</string>
     <string name="module_other_color_pick_tetradic_color">Tetradische kleuren</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">Houd lang ingedrukt om de kleur naar een ander kleurenpalet te verplaatsen</string>
 </resources>

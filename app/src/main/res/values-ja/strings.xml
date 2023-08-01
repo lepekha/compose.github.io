@@ -18,4 +18,5 @@
     <string name="module_other_color_pick_complementary_color">補色</string>
     <string name="module_other_color_pick_tones">トーン</string>
     <string name="module_other_color_pick_tetradic_color">四つの色</string>
+    <string name="module_other_color_pick_tooltip_drag_and_drop">別のカラーパレットに色を移動するには長押ししてください</string>
 </resources>

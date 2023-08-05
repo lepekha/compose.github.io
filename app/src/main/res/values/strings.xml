@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Color picker</string>
 
+    <string name="module_other_color_pick_setting_color_type">Default color type</string>
+    <string name="module_other_color_pick_long_press_copy">Single press - add to the palette, long press - copy</string>
     <string name="module_other_color_pick_remove_pallet">Remove color palette?</string>
     <string name="module_other_color_pick_pallet_name">The name of the color palette</string>
     <string name="module_other_color_pick_pallet">Palette</string>

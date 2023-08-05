@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Renk Seçici</string>
 
+    <string name="module_other_color_pick_setting_color_type">Varsayılan renk türü</string>
+    <string name="module_other_color_pick_long_press_copy">Tek dokunuş - palete ekle, uzun dokunuş - kopyala</string>
     <string name="module_other_color_pick_remove_pallet">Renk paletini kaldırsın mı?</string>
     <string name="module_other_color_pick_pallet_name">Renk paleti adı</string>
     <string name="module_other_color_pick_pallet">Palet</string>

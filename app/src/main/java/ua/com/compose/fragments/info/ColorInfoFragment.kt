@@ -18,10 +18,14 @@ import org.koin.androidx.scope.requireScopeActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.com.compose.MainActivity
 import ua.com.compose.R
+import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentColorInfoBinding
+import ua.com.compose.extension.clipboardCopy
+import ua.com.compose.extension.createReview
+import ua.com.compose.extension.showToast
 import ua.com.compose.mvp.data.viewBindingWithBinder
 
 
@@ -53,9 +57,15 @@ class ColorInfoFragment : BottomSheetDialogFragment()  {
     private val adapter by lazy {
         ColorInfoRvAdapter(
                 pressAddToPalette = {
+                    requireActivity().createReview()
                     viewModule.pressPaletteAdd(it)
                     setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_UPDATE_PALETTE to true))
                     Toast.makeText(requireContext(), requireContext().getString(R.string.module_other_color_pick_color_add_to_pallete), Toast.LENGTH_SHORT).show()
+                },
+                pressCopy = {
+                    analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_INFO))
+                    requireContext().clipboardCopy(Settings.colorType.convertColor(it, ","))
+                    requireContext().showToast(R.string.module_other_color_pick_color_copy)
                 }
         ).apply {
             binding.lstInfo.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -66,7 +76,7 @@ class ColorInfoFragment : BottomSheetDialogFragment()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+        setStyle(STYLE_NORMAL, R.style.FragmentBottomSheetDialogTheme)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

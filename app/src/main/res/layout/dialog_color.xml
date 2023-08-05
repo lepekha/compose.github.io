@@ -1,311 +1,318 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:pikolo="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="@drawable/background_bottom_sheet">
-
-
+    app:cardCornerRadius="25dp"
+    app:cardBackgroundColor="@color/color_main_header">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+        xmlns:pikolo="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="24dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/btnDone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/btnColor0"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:contentDescription="#000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnColor1"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#000000"
-            pikolo:srcCompat="@drawable/module_dialog_dot" />
-
-        <ImageView
-            android:id="@+id/btnColor1"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:contentDescription="#FF5252"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnColor2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnColor0"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#FF5252"
-            pikolo:srcCompat="@drawable/module_dialog_dot" />
-
-        <ImageView
-            android:id="@+id/btnColor2"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:contentDescription="#FFC400"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnColor3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnColor1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#FFC400"
-            pikolo:srcCompat="@drawable/module_dialog_dot" />
-
-        <ImageView
-            android:id="@+id/btnColor3"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:contentDescription="#06E576"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnColor4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnColor2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#06E576"
-            pikolo:srcCompat="@drawable/module_dialog_dot" />
-
-        <ImageView
-            android:id="@+id/btnColor4"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:contentDescription="#06B0FF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnColor5"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnColor3"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#06B0FF"
-            pikolo:srcCompat="@drawable/module_dialog_dot" />
-
-        <ImageView
-            android:id="@+id/btnColor5"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:contentDescription="#D501F9"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnColor6"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnColor4"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#D501F9"
-            pikolo:srcCompat="@drawable/module_dialog_dot" />
-
-        <ImageView
-            android:id="@+id/btnColor6"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:contentDescription="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnColor5"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#FFFFFF"
-            pikolo:srcCompat="@drawable/module_dialog_dot" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="40dp"
-        android:layout_height="6dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_bottom_sheet_swipe"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
 
-    <com.madrapps.pikolo.HSLColorPicker
-        android:id="@+id/colorPicker"
-        android:layout_width="0dp"
-        android:layout_height="350dp"
-        android:layout_marginTop="16dp"
-        android:nestedScrollingEnabled="true"
-        android:padding="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        pikolo:arc_length="110"
-        pikolo:hue_arc_width="10dp"
-        pikolo:hue_start_angle="30"
-        pikolo:lightness_arc_width="10dp"
-        pikolo:lightness_indicator_stroke_width="0dp"
-        pikolo:lightness_start_angle="270"
-        pikolo:radius_offset="20dp"
-        pikolo:saturation_arc_width="10dp"
-        pikolo:saturation_start_angle="150"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/imgExample"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/module_dialog_color_example"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center"
-        android:maxLines="2"
-        android:padding="4dp"
-        android:singleLine="false"
-        android:textSize="16sp"
-        app:cardCornerRadius="200dp"
-        app:layout_constraintBottom_toBottomOf="@+id/colorPicker"
-        app:layout_constraintEnd_toEndOf="@+id/colorPicker"
-        app:layout_constraintStart_toStartOf="@+id/colorPicker"
-        app:layout_constraintTop_toTopOf="@+id/colorPicker"
-        tools:ignore="ContentDescription">
-
-        <TextView
-            android:id="@+id/txtColor"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:paddingBottom="24dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/btnDone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/btnColor0"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:contentDescription="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnColor1"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#000000"
+                pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+            <ImageView
+                android:id="@+id/btnColor1"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:contentDescription="#FF5252"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnColor2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnColor0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#FF5252"
+                pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+            <ImageView
+                android:id="@+id/btnColor2"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:contentDescription="#FFC400"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnColor3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnColor1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#FFC400"
+                pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+            <ImageView
+                android:id="@+id/btnColor3"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:contentDescription="#06E576"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnColor4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnColor2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#06E576"
+                pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+            <ImageView
+                android:id="@+id/btnColor4"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:contentDescription="#06B0FF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnColor5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnColor3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#06B0FF"
+                pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+            <ImageView
+                android:id="@+id/btnColor5"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:contentDescription="#D501F9"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnColor6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnColor4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#D501F9"
+                pikolo:srcCompat="@drawable/module_dialog_dot" />
+
+            <ImageView
+                android:id="@+id/btnColor6"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:contentDescription="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnColor5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#FFFFFF"
+                pikolo:srcCompat="@drawable/module_dialog_dot" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="40dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_bottom_sheet_swipe"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.madrapps.pikolo.HSLColorPicker
+            android:id="@+id/colorPicker"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:layout_marginTop="16dp"
+            android:nestedScrollingEnabled="true"
+            android:padding="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            pikolo:arc_length="110"
+            pikolo:hue_arc_width="10dp"
+            pikolo:hue_start_angle="30"
+            pikolo:lightness_arc_width="10dp"
+            pikolo:lightness_indicator_stroke_width="0dp"
+            pikolo:lightness_start_angle="270"
+            pikolo:radius_offset="20dp"
+            pikolo:saturation_arc_width="10dp"
+            pikolo:saturation_start_angle="150"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/imgExample"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/module_dialog_color_example"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:maxLines="2"
             android:padding="4dp"
             android:singleLine="false"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/edColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="ContentDescription"
-            tools:text="Dark blue" />
+            app:cardCornerRadius="200dp"
+            app:layout_constraintBottom_toBottomOf="@+id/colorPicker"
+            app:layout_constraintEnd_toEndOf="@+id/colorPicker"
+            app:layout_constraintStart_toStartOf="@+id/colorPicker"
+            app:layout_constraintTop_toTopOf="@+id/colorPicker"
+            tools:ignore="ContentDescription">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edColor"
-            style="@style/EditTextBottomSheet"
+            <TextView
+                android:id="@+id/txtColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:maxLines="2"
+                android:padding="4dp"
+                android:singleLine="false"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/edColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription"
+                tools:text="Dark blue" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edColor"
+                style="@style/EditTextBottomSheet"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="50dp"
+                android:backgroundTint="?attr/color_10"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:imeOptions="actionDone"
+                android:inputType="textNoSuggestions"
+                android:lines="1"
+                android:maxLength="6"
+                android:paddingStart="55dp"
+                android:paddingEnd="40dp"
+                android:textAlignment="center"
+                android:textColor="?attr/color_5"
+                android:textColorHint="?attr/color_5"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/edColor"
+                app:layout_constraintStart_toStartOf="@+id/edColor"
+                app:layout_constraintTop_toTopOf="@+id/edColor"
+                app:srcCompat="@drawable/ic_text_fields"
+                app:tint="?attr/color_9" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnDone"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="50dp"
-            android:backgroundTint="?attr/color_10"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:imeOptions="actionDone"
-            android:inputType="textNoSuggestions"
-            android:lines="1"
-            android:maxLength="6"
-            android:paddingStart="55dp"
-            android:paddingEnd="40dp"
-            android:textAlignment="center"
-            android:textColor="?attr/color_5"
-            android:textColorHint="?attr/color_5"
-            android:textSize="18sp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
+            app:cardBackgroundColor="?attr/color_6"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnCancel">
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="8dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/edColor"
-            app:layout_constraintStart_toStartOf="@+id/edColor"
-            app:layout_constraintTop_toTopOf="@+id/edColor"
-            app:srcCompat="@drawable/ic_text_fields"
-            app:tint="?attr/color_9" />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:tint="?attr/color_10"
+                app:srcCompat="@drawable/ic_done" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            app:cardBackgroundColor="@color/color_button_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnDone"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_close"
+                app:tint="?attr/color_9" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!--    <com.google.android.material.card.MaterialCardView-->
+        <!--        android:id="@+id/btnDone"-->
+        <!--        android:layout_width="80dp"-->
+        <!--        android:layout_height="50dp"-->
+        <!--        app:cardBackgroundColor="?attr/color_2"-->
+        <!--        app:cardCornerRadius="16dp"-->
+        <!--        app:cardElevation="0dp"-->
+        <!--        app:layout_constraintBottom_toBottomOf="@+id/imgExample"-->
+        <!--        app:layout_constraintEnd_toEndOf="@+id/imgExample"-->
+        <!--        app:layout_constraintStart_toStartOf="@+id/imgExample"-->
+        <!--        app:layout_constraintTop_toTopOf="@+id/imgExample"-->
+        <!--        app:layout_constraintWidth_percent="0.25">-->
+
+        <!--        <ImageView-->
+        <!--            android:layout_width="25dp"-->
+        <!--            android:layout_height="25dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            app:srcCompat="@drawable/ic_add_fill"-->
+        <!--            app:tint="?attr/color_12" />-->
+        <!--    </com.google.android.material.card.MaterialCardView>-->
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btnDone"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="32dp"
-        app:cardBackgroundColor="?attr/color_6"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCancel"
-        app:layout_constraintWidth_percent="0.3">
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:tint="?attr/color_9"
-            app:srcCompat="@drawable/ic_done" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btnCancel"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="32dp"
-        app:cardBackgroundColor="@color/color_button_background"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnDone"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.3">
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_close"
-            app:tint="?attr/color_9" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!--    <com.google.android.material.card.MaterialCardView-->
-    <!--        android:id="@+id/btnDone"-->
-    <!--        android:layout_width="80dp"-->
-    <!--        android:layout_height="50dp"-->
-    <!--        app:cardBackgroundColor="?attr/color_2"-->
-    <!--        app:cardCornerRadius="16dp"-->
-    <!--        app:cardElevation="0dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/imgExample"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/imgExample"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/imgExample"-->
-    <!--        app:layout_constraintTop_toTopOf="@+id/imgExample"-->
-    <!--        app:layout_constraintWidth_percent="0.25">-->
-
-    <!--        <ImageView-->
-    <!--            android:layout_width="25dp"-->
-    <!--            android:layout_height="25dp"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            app:srcCompat="@drawable/ic_add_fill"-->
-    <!--            app:tint="?attr/color_12" />-->
-    <!--    </com.google.android.material.card.MaterialCardView>-->
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

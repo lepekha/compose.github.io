@@ -28,6 +28,7 @@ import ua.com.compose.extension.prefs
 import ua.com.compose.extension.put
 import ua.com.compose.extension.remove
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.data.viewBindingWithBinder
 import java.util.Locale
 
@@ -63,7 +64,7 @@ class DialogColor : BottomSheetDialogFragment()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+        setStyle(STYLE_NORMAL, R.style.DialogBottomSheetDialogTheme)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

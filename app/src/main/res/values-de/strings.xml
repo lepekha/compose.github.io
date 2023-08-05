@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Farbwähler</string>
 
+    <string name="module_other_color_pick_setting_color_type">Standardfarbtyp</string>
+    <string name="module_other_color_pick_long_press_copy">Einzelklick - zur Palette hinzufügen, langer Klick - kopieren</string>
     <string name="module_other_color_pick_remove_pallet">Farbpalette entfernen?</string>
     <string name="module_other_color_pick_pallet_name">Name der Farbpalette</string>
     <string name="module_other_color_pick_pallet">Palette</string>

@@ -1,11 +1,8 @@
 package ua.com.compose.fragments.image
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Rect
@@ -14,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.view.*
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
@@ -30,23 +26,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
-import org.koin.androidx.scope.ScopeActivity
 import org.koin.androidx.scope.requireScopeActivity
-import org.koin.androidx.scope.scopeActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.androidx.viewmodel.scope.viewModel
-import org.koin.core.scope.get
 import ua.com.compose.MainActivity
 import ua.com.compose.R
+import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
-import ua.com.compose.customView.ZoomableImageView
 import ua.com.compose.databinding.ModuleOtherColorPickFragmentImageBinding
 import ua.com.compose.extension.*
 import ua.com.compose.fragments.ColorPickViewModule
@@ -57,7 +44,6 @@ import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.BottomMenu
 import ua.com.compose.mvp.data.Menu
 import ua.com.compose.mvp.data.viewBindingWithBinder
-import java.io.ByteArrayOutputStream
 
 
 class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment_image) {
@@ -151,11 +137,10 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
             openGallery()
         }
 
-        mainModule.colorType.nonNull().observe(viewLifecycleOwner) { type ->
-            binding.pointerRing.isVisible.takeIf { it }?.let {
-                (activity as BaseMvpView).setupBottomMenu(mutableListOf(btnGallery, btnCopy, btnPaletteAdd))
+        mainModule.state.nonNull().observe(viewLifecycleOwner) {
+            if(it == ColorPickViewModule.State.UPDATE_SETTINGS) {
+                viewModule.updateColor()
             }
-            viewModule.updateColor()
         }
 
         viewModule.nameColor.nonNull().observe(viewLifecycleOwner) { name ->
@@ -163,7 +148,7 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
         }
 
         viewModule.changeColor.nonNull().observe(viewLifecycleOwner) { color ->
-            binding.textView.text = mainModule.colorType.value?.convertColor(color, withSeparator = ",") ?: ""
+            binding.textView.text = Settings.colorType.convertColor(color, withSeparator = ",") ?: ""
             binding.imgInfo.imageTintList = ColorStateList.valueOf(if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.txtName.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.textView.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
@@ -254,27 +239,20 @@ class ImageFragment : BaseMvvmFragment(R.layout.module_other_color_pick_fragment
     }
 
     private fun showImage(uri: Uri) {
-        binding.zoomableImageView2.let {
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                try {
-                    withContext(Dispatchers.Main) {
-                        visible()
-                        Glide.with(requireContext())
-                            .asBitmap()
-                            .load(uri)
-                            .centerInside()
-                            .thumbnail(0.1f)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .into(it)
-                    }
-                } catch (e: Exception) {
-                    viewModule.imageUri.uri = null
-                    withContext(Dispatchers.Main) {
-                        invisible()
-                    }
-                }
-            }
+        try {
+            visible()
+            Glide.with(requireContext())
+                .asBitmap()
+                .load(uri)
+                .centerInside()
+                .thumbnail(0.1f)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(binding.zoomableImageView2)
+        } catch (e: Exception) {
+            viewModule.imageUri.uri = null
+            invisible()
         }
+
     }
 }
 

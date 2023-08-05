@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kleurkiezer</string>
+    <string name="module_other_color_pick_setting_color_type">Standaard kleurtype</string>
+    <string name="module_other_color_pick_long_press_copy">Enkele tik - toevoegen aan het palet, lange tik - kopiëren</string>
     <string name="module_other_color_pick_remove_pallet">Kleurpalet verwijderen?</string>
     <string name="module_other_color_pick_pallet_name">De naam van het kleurenpalet</string>
     <string name="module_other_color_pick_pallet">Palet</string>

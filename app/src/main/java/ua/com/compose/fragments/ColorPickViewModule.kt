@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ua.com.compose.Settings
 import ua.com.compose.api.config.remoteConfig
 import ua.com.compose.data.EColorType
 
@@ -30,13 +29,15 @@ enum class EPanel(val id: Int) {
 
 class ColorPickViewModule: ViewModel()  {
 
-    private val _colorType: MutableLiveData<EColorType> = MutableLiveData(Settings.colorType)
-    val colorType: LiveData<EColorType> = _colorType
+    sealed class State {
+        object NONE: State()
+        object UPDATE_SETTINGS: State()
+    }
 
-    fun changeColorType(colorType: EColorType) = viewModelScope.launch {
-        Settings.colorType = colorType
-        withContext(Dispatchers.Main) {
-            _colorType.value = colorType
-        }
+    private val _state: MutableLiveData<State> = MutableLiveData(State.NONE)
+    val state: LiveData<State> = _state
+
+    fun changeSettings() = viewModelScope.launch {
+        _state.postValue(State.UPDATE_SETTINGS)
     }
 }

@@ -13,6 +13,7 @@ import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ua.com.compose.R
+import ua.com.compose.Settings
 import ua.com.compose.api.tooltips.ETooltipKey
 import ua.com.compose.data.ColorItem
 import ua.com.compose.data.ColorNames
@@ -35,7 +36,7 @@ class ColorsRvAdapter(private val onPressCopy: (item: ColorItem) -> Unit,
     }
 
     val cards = mutableListOf<Card.CardColor>()
-    private var colorType = EColorType.HEX
+    private var colorType = Settings.colorType
 
     fun update(newList: List<Card.CardColor>){
         this.cards.clear()

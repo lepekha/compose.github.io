@@ -22,6 +22,7 @@ import ua.com.compose.fragments.image.ImageUri
 import ua.com.compose.fragments.image.ImageViewModule
 import ua.com.compose.fragments.info.ColorInfoViewModel
 import ua.com.compose.fragments.palette.PaletteViewModule
+import ua.com.compose.fragments.settings.SettingsViewModel
 
 val appModule = module {
     scope<MainActivity> {
@@ -37,6 +38,7 @@ val appModule = module {
         scoped { GetPalletUseCase(database = get()) }
         scoped { GetAllPalletUseCase(database = get()) }
         scoped { ChangeColorPalletUseCase(database = get()) }
+        viewModel { SettingsViewModel() }
         viewModel { GalleryViewModel(context = get()) }
         viewModel { ColorInfoViewModel(context = androidContext(), addColorUseCase = get()) }
         viewModel { ColorPickViewModule() }

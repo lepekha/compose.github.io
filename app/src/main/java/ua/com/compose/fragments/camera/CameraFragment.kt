@@ -20,11 +20,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.dsl.extension.requestPermissions
-import kotlinx.coroutines.CoroutineScope
 import org.koin.android.ext.android.get
 import org.koin.androidx.scope.requireScopeActivity
 import ua.com.compose.MainActivity
 import ua.com.compose.R
+import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
@@ -39,7 +39,6 @@ import ua.com.compose.extension.nonNull
 import ua.com.compose.extension.setMarginBottom
 import ua.com.compose.extension.setVibrate
 import ua.com.compose.extension.showToast
-import ua.com.compose.extension.throttleLatest
 import ua.com.compose.fragments.ColorPickViewModule
 import ua.com.compose.fragments.info.ColorInfoFragment
 import ua.com.compose.mvp.BaseMvpView
@@ -96,12 +95,14 @@ class CameraFragment : BaseMvvmFragment(layoutId = R.layout.module_other_color_p
             binding.txtName.text = name
         }
 
-        mainModule.colorType.nonNull().observe(viewLifecycleOwner) { type ->
-            viewModule.updateColor()
+        mainModule.state.nonNull().observe(viewLifecycleOwner) {
+            if(it == ColorPickViewModule.State.UPDATE_SETTINGS) {
+                viewModule.updateColor()
+            }
         }
 
         viewModule.changeColor.nonNull().observe(viewLifecycleOwner) { color ->
-            binding.textView.text = mainModule.colorType.value?.convertColor(color, withSeparator = ",") ?: ""
+            binding.textView.text = Settings.colorType.convertColor(color, withSeparator = ",")
             binding.textView.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.txtName.setTextColor( if (isDark(color)) Color.WHITE else Color.BLACK)
             binding.cardColor.setBackgroundColor(color)

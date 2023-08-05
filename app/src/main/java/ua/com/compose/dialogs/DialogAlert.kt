@@ -13,6 +13,7 @@ import ua.com.compose.R
 import ua.com.compose.databinding.DialogAlertBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.data.viewBindingWithBinder
 
 
@@ -44,13 +45,11 @@ class DialogAlert : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.DialogBottomSheetDialogTheme)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
-            this.setCancelable(false)
-            this.setCanceledOnTouchOutside(false)
         }
     }
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Wybierak kolorów</string>
+    <string name="module_other_color_pick_setting_color_type">Domyślny typ koloru</string>
+    <string name="module_other_color_pick_long_press_copy">Jedno kliknięcie - dodaj do palety, przytrzymaj - kopiuj</string>
     <string name="module_other_color_pick_remove_pallet">Usunąć paletę kolorów?</string>
     <string name="module_other_color_pick_pallet_name">Nazwa palety kolorów</string>
     <string name="module_other_color_pick_pallet">Paleta</string>

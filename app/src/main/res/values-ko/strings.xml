@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">색상 선택기</string>
+    <string name="module_other_color_pick_setting_color_type">기본 색상 유형</string>
+    <string name="module_other_color_pick_long_press_copy">한 번 클릭 - 팔레트에 추가, 길게 누르기 - 복사</string>
     <string name="module_other_color_pick_remove_pallet">색상 팔레트 삭제?</string>
     <string name="module_other_color_pick_pallet_name">색상 팔레트 이름</string>
     <string name="module_other_color_pick_pallet">팔레트</string>

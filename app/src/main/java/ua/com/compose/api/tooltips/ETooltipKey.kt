@@ -11,6 +11,14 @@ enum class ETooltipKey(private val key: String) {
         override fun confirm() {
             prefs.put(PALETTE_DRAG_AND_DROP.key, false)
         }
+    },
+    COLOR_INFO_LONG_PRESS(key = "COLOR_INFO_LONG_PRESS") {
+        override fun isShow(): Boolean {
+            return prefs.getBoolean(COLOR_INFO_LONG_PRESS.key, true)
+        }
+        override fun confirm() {
+            prefs.put(COLOR_INFO_LONG_PRESS.key, false)
+        }
     };
 
     abstract fun isShow(): Boolean

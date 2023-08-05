@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -15,6 +16,7 @@ import ua.com.compose.databinding.DialogConfirmationBinding
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.remove
 import ua.com.compose.extension.setVibrate
+import ua.com.compose.extension.vibrate
 import ua.com.compose.mvp.data.viewBindingWithBinder
 
 
@@ -45,8 +47,6 @@ class DialogConfirmation : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
-            this.setCancelable(false)
-            this.setCanceledOnTouchOutside(false)
         }
     }
 
@@ -56,12 +56,11 @@ class DialogConfirmation : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.DialogBottomSheetDialogTheme)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.txtMessage.text = arguments?.getString(BUNDLE_KEY_MESSAGE) ?: ""
 
         binding.btnCancel.setVibrate(EVibrate.BUTTON)

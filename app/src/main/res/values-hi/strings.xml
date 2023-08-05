@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">रंग चयनकर्ता</string>
+    <string name="module_other_color_pick_setting_color_type">डिफ़ॉल्ट रंग प्रकार</string>
+    <string name="module_other_color_pick_long_press_copy">एकल दबाव - पैलेट में जोड़ें, लंबा दबाना - कॉपी करें</string>
     <string name="module_other_color_pick_remove_pallet">रंग पैलेट हटाएं?</string>
     <string name="module_other_color_pick_pallet_name">रंग पैलेट का नाम</string>
     <string name="module_other_color_pick_pallet">पैलेट</string>

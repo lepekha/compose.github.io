@@ -7,7 +7,7 @@ lateinit var analytics: Analytics
 interface Analytics {
 
     object Event {
-        val COLOR_TYPE = "COLOR_TYPE"
+        val APP_SETTINGS = "APP_SETTINGS"
         val COLOR_COPY_CAMERA = "COLOR_COPY_CAMERA"
         val COLOR_COPY_IMAGE = "COLOR_COPY_IMAGE"
         val COLOR_COPY_PALETTE = "COLOR_COPY_PALETTE"

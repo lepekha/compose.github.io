@@ -7,10 +7,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import ua.com.compose.R
-import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.Event
-import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.ColorNames
 import ua.com.compose.data.EColorType
@@ -26,6 +24,7 @@ import ua.com.compose.extension.vibrate
 import ua.com.compose.fragments.camera.CameraFragment
 import ua.com.compose.fragments.image.ImageFragment
 import ua.com.compose.fragments.palette.PaletteFragment
+import ua.com.compose.fragments.settings.SettingsFragment
 import ua.com.compose.mvp.BaseMvvmFragment
 import ua.com.compose.mvp.data.viewBindingWithBinder
 import java.lang.ref.WeakReference
@@ -54,15 +53,14 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
         super.onViewCreated(view, savedInstanceState)
         ColorNames.init(requireContext())
         binding.btnColorType.setOnClickListener {
-            analytics.send(SimpleEvent(key = Analytics.Event.OPEN_SETTINGS))
-            val key = DialogChip.show(fm = childFragmentManager, list = EColorType.visibleValues().map { it.title() }, selected = Settings.colorType.title())
+            requireContext().vibrate(EVibrate.BUTTON)
+            val key = SettingsFragment.show(fm = childFragmentManager)
+
             childFragmentManager.setFragmentResultListener(
                     key,
                     viewLifecycleOwner
             ) { _, bundle ->
-                val position = bundle.getInt(DialogChip.BUNDLE_KEY_ANSWER_POSITION, -1)
-                viewModule.changeColorType(colorType = EColorType.visibleValues()[position])
-                analytics.send(Event(key = Analytics.Event.COLOR_TYPE, params = arrayOf("color_type" to EColorType.visibleValues()[position].title())))
+                viewModule.changeSettings()
             }
         }
 

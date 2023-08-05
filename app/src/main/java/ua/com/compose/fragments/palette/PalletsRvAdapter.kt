@@ -12,6 +12,7 @@ import ua.com.compose.data.ColorPallet
 import ua.com.compose.databinding.ModuleOtherColorPickElementButtonBinding
 import ua.com.compose.databinding.ModuleOtherColorPickElementPalletBinding
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.colorToMonochrome
 import ua.com.compose.extension.dp
 import ua.com.compose.extension.getColorFromAttr
 import ua.com.compose.extension.vibrate

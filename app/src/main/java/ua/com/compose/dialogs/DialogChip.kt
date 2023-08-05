@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,19 +32,25 @@ class DialogChip : BottomSheetDialogFragment() {
 
     companion object {
 
+        const val BUTTON_NONE = 0
+        const val BUTTON_DONE = 1
+        const val BUTTON_CANCEL = 2
+
         const val TAG = "DialogChipTag"
         private const val BUNDLE_KEY_LIST = "BUNDLE_KEY_LIST"
         private const val BUNDLE_KEY_SELECTED = "BUNDLE_KEY_SELECTED"
         const val BUNDLE_KEY_ANSWER_POSITION = "BUNDLE_KEY_ANSWER_POSITION"
         const val BUNDLE_KEY_ANSWER_NAME = "BUNDLE_KEY_ANSWER_NAME"
         private const val BUNDLE_KEY_REQUEST_KEY = "BUNDLE_KEY_REQUEST_KEY"
+        private const val BUNDLE_KEY_BUTTON = "BUNDLE_KEY_BUTTON"
 
-        fun show(fm: FragmentManager, list: List<String>, selected: String = ""): String {
+        fun show(fm: FragmentManager, list: List<String>, selected: String = "", buttonStatus: Int = BUTTON_NONE): String {
             val requestKey = System.currentTimeMillis().toString()
             val fragment = DialogChip().apply {
                 this.arguments = bundleOf(
                         BUNDLE_KEY_REQUEST_KEY to requestKey,
                         BUNDLE_KEY_SELECTED to selected,
+                        BUNDLE_KEY_BUTTON to buttonStatus,
                         BUNDLE_KEY_LIST to list.toTypedArray()
                 )
             }
@@ -61,7 +68,7 @@ class DialogChip : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.DialogBottomSheetDialogTheme)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -74,6 +81,20 @@ class DialogChip : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val selected = arguments?.getString(BUNDLE_KEY_SELECTED)
+        val btnStatus = arguments?.getInt(BUNDLE_KEY_BUTTON) ?: BUTTON_NONE
+
+        binding.btnDone.isVisible = btnStatus == BUTTON_DONE
+        binding.btnCancel.isVisible = btnStatus == BUTTON_CANCEL
+
+        binding.btnDone.setOnClickListener {
+            view.context.vibrate(EVibrate.BUTTON)
+            dismiss()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            view.context.vibrate(EVibrate.BUTTON)
+            dismiss()
+        }
 
         arguments?.getStringArray(BUNDLE_KEY_LIST)?.forEachIndexed { index, it ->
             val chip = Chip(context).apply {

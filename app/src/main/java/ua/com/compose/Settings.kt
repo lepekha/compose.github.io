@@ -18,6 +18,14 @@ object Settings {
             prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = value.key)
         }
 
+    var dialogColorInputType: EColorType
+        get() {
+            return EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, defaultValue = EColorType.HEX.key)).takeIf { it.isVisible() } ?: EColorType.HEX
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, value = value.key)
+        }
+
     var paletteID: Long
         get() {
             return prefs.get(key = SharedPreferencesKey.KEY_PALLET_ID, defaultValue = ColorPallet.DEFAULT_ID)

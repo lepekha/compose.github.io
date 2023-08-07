@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Selettore di colori</string>
+    <string name="module_other_color_pick_press_open_info">Clicca per aprire le informazioni sul colore</string>
     <string name="module_other_color_pick_setting_color_type">Tipo di colore predefinito</string>
     <string name="module_other_color_pick_long_press_copy">Clic singolo - aggiungi alla tavolozza, clic lungo - copia</string>
     <string name="module_other_color_pick_remove_pallet">Rimuovere la tavolozza dei colori?</string>

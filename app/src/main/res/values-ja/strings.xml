@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">カラーピッカー</string>
-
+    <string name="module_other_color_pick_press_open_info">カラー情報を開くにはクリック</string>
     <string name="module_other_color_pick_setting_color_type">デフォルトの色の種類</string>
     <string name="module_other_color_pick_long_press_copy">シングルプレス - パレットに追加、長押し - コピー</string>
     <string name="module_other_color_pick_remove_pallet">カラーパレットを削除しますか？</string>

@@ -58,7 +58,7 @@
             android:name=".MainActivity"
             android:launchMode="singleInstance"
             android:exported = "true"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:windowSoftInputMode="adjustPan|stateHidden|stateAlwaysHidden"
             android:screenOrientation="portrait">
             <intent-filter
                 android:icon="@mipmap/ic_launcher"

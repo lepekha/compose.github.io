@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Renk Seçici</string>
-
+    <string name="module_other_color_pick_press_open_info">Renk bilgisini açmak için tıklayın</string>
     <string name="module_other_color_pick_setting_color_type">Varsayılan renk türü</string>
     <string name="module_other_color_pick_long_press_copy">Tek dokunuş - palete ekle, uzun dokunuş - kopyala</string>
     <string name="module_other_color_pick_remove_pallet">Renk paletini kaldırsın mı?</string>

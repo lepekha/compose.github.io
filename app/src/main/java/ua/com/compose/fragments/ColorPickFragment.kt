@@ -66,19 +66,16 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
 
         binding.btnCamera.isVisible = EPanel.CAMERA.isVisible()
         binding.btnCamera.setOnClickListener {
-            requireContext().vibrate(EVibrate.BUTTON)
             selectScreen(binding.tabCamera)
         }
 
         binding.btnImage.isVisible = EPanel.IMAGE.isVisible()
         binding.btnImage.setOnClickListener {
-            requireContext().vibrate(EVibrate.BUTTON)
             selectScreen(binding.tabImage)
         }
 
         binding.btnPalette.isVisible = EPanel.PALLETS.isVisible()
         binding.btnPalette.setOnClickListener {
-            requireContext().vibrate(EVibrate.BUTTON)
             selectScreen(binding.tabPalette)
         }
         if((arguments?.getParcelable(BUNDLE_KEY_IMAGE_URI) as? Uri) != null && EPanel.IMAGE.isVisible()){
@@ -97,6 +94,8 @@ class ColorPickFragment : BaseMvvmFragment(R.layout.module_other_color_pick_frag
 
     private var prevTab: WeakReference<View>? = null
     private fun selectScreen(tabView: View? = null) {
+        if(prevTab?.get() == tabView) return
+        requireContext().vibrate(EVibrate.BUTTON)
         prevTab?.get()?.let { it.isVisible = !it.isVisible  }
         prevTab = WeakReference(tabView)
         tabView?.let { it.isVisible = !it.isVisible }

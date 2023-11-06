@@ -81,3 +81,23 @@
 -keep class * extends androidx.room.RoomDatabase
 -keep @androidx.room.Entity class *
 -dontwarn androidx.room.paging.**
+
+# Play Core Proguard Rules: Play In-app Review
+-keep class com.google.android.play.core.review.ReviewManager {
+  public com.google.android.play.core.tasks.Task requestReviewFlow();
+  public com.google.android.play.core.tasks.Task launchReviewFlow(android.app.Activity, com.google.android.play.core.review.ReviewInfo);
+}
+
+-keepnames class com.google.android.play.core.review.ReviewInfo
+
+-keep class com.google.android.play.core.review.ReviewManagerFactory {
+  <init>();
+
+  public static com.google.android.play.core.review.ReviewManager create(android.content.Context);
+}
+
+-keep class com.google.android.play.core.review.testing.FakeReviewManager {
+  public <init>(android.content.Context);
+  public com.google.android.play.core.tasks.Task requestReviewFlow();
+  public com.google.android.play.core.tasks.Task launchReviewFlow(android.app.Activity, com.google.android.play.core.review.ReviewInfo);
+}

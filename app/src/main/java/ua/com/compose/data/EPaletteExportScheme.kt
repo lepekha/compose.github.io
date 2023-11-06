@@ -15,7 +15,7 @@ enum class EPaletteExportScheme(val title: String) {
             val builder = buildString {
                 colors.forEach {
                     val hex = "#${Integer.toHexString(it.color).substring(2).toLowerCase()}"
-                    append(colorType.convertColor(it.color))
+                    append(colorType.colorToString(it.color))
                     append(" ")
                     append(ColorNames.getColorName(hex))
                     appendLine()
@@ -32,7 +32,7 @@ enum class EPaletteExportScheme(val title: String) {
             colors.forEach {
                 val jsonObject = JSONObject()
                 jsonObject.put("name", ColorNames.getColorName("#"+Integer.toHexString(it.color).substring(2).toLowerCase()))
-                jsonObject.put("color", colorType.convertColor(it.color))
+                jsonObject.put("color", colorType.colorToString(it.color))
                 jsonArray.put(jsonObject)
             }
 
@@ -48,7 +48,7 @@ enum class EPaletteExportScheme(val title: String) {
                 appendLine("<resources>")
                 colors.forEach {
                     val hex = "#${Integer.toHexString(it.color).substring(2).toLowerCase()}"
-                    appendLine("    <color name=\"${ColorNames.getColorName(hex)}\">${colorType.convertColor(it.color)}</color>")
+                    appendLine("    <color name=\"${ColorNames.getColorName(hex)}\">${colorType.colorToString(it.color)}</color>")
                 }
                 appendLine("</resources>")
             }
@@ -61,7 +61,7 @@ enum class EPaletteExportScheme(val title: String) {
                 appendLine("name,color")
                 colors.forEach {
                     val hex = "#${Integer.toHexString(it.color).substring(2).toLowerCase()}"
-                    appendLine("${ColorNames.getColorName(hex)},${colorType.convertColor(it.color)}")
+                    appendLine("${ColorNames.getColorName(hex)},${colorType.colorToString(it.color)}")
                 }
             }
             return context.writeToFile("$palette.csv", builder)
@@ -74,7 +74,7 @@ enum class EPaletteExportScheme(val title: String) {
                 colors.forEach {
                     val hex = "#${Integer.toHexString(it.color).substring(2).toLowerCase()}"
                     appendLine("- name: \"${ColorNames.getColorName(hex)}\"")
-                    appendLine("color: \"${colorType.convertColor(it.color)}\"")
+                    appendLine("color: \"${colorType.colorToString(it.color)}\"")
                 }
             }
             return context.writeToFile("$palette.yaml", builder)
@@ -87,7 +87,7 @@ enum class EPaletteExportScheme(val title: String) {
                     appendLine("[[resources]]")
                     val hex = "#${Integer.toHexString(it.color).substring(2).toLowerCase()}"
                     appendLine("name = \"${ColorNames.getColorName(hex)}\"")
-                    appendLine("color = \"${colorType.convertColor(it.color)}\"")
+                    appendLine("color = \"${colorType.colorToString(it.color)}\"")
                     appendLine()
                 }
             }

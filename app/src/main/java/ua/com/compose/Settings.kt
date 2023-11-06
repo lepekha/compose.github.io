@@ -1,14 +1,24 @@
 package ua.com.compose
 
 import android.content.Context
+import android.graphics.Color
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.SharedPreferencesKey
 import ua.com.compose.extension.get
 import ua.com.compose.extension.prefs
 import ua.com.compose.extension.put
+import ua.com.compose.screens.EPanel
 
 object Settings {
+
+    var vibration: Boolean
+        get() {
+            return prefs.get(key = SharedPreferencesKey.KEY_VIBRATION, defaultValue = true)
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_VIBRATION, value = value)
+        }
 
     var colorType: EColorType
         get() {
@@ -16,6 +26,14 @@ object Settings {
         }
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = value.key)
+        }
+
+    var startScreen: EPanel
+        get() {
+            return EPanel.valueOfKey(prefs.get(key = SharedPreferencesKey.KEY_START_SCREEN, defaultValue = EPanel.PALLETS.id))
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_START_SCREEN, value = value.id)
         }
 
     var dialogColorInputType: EColorType
@@ -41,4 +59,10 @@ object Settings {
         }
         return context.getString(R.string.module_other_color_pick_pallet) + "_" + number
     }
+
+    var lastColor: Int = prefs.get(key = SharedPreferencesKey.KEY_LAST_COLOR, defaultValue = Color.parseColor("#2EAAB4"))
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_LAST_COLOR, value = value)
+            field = value
+        }
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sélecteur de couleurs</string>
-
-    <string name="module_other_color_pick_setting_color_type">Type de couleur par défaut</string>
+    <string name="module_other_color_pick_setting_vibration">Vibration</string>
+    <string name="module_other_color_pick_setting_language">Langue</string>
+    <string name="module_other_color_pick_setting_color_type">Type de couleur</string>
     <string name="module_other_color_pick_press_open_info">Cliquez pour ouvrir les informations sur la couleur</string>
     <string name="module_other_color_pick_long_press_copy">Appui simple : ajouter à la palette, appui long : copier</string>
     <string name="module_other_color_pick_remove_pallet">Supprimer la palette de couleurs ?</string>

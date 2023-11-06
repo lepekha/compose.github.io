@@ -2,9 +2,9 @@
 
 buildscript {
     ext.firebase_version = '20.1.0'
-    ext.kotlin_version = '1.8.20'
+    ext.kotlin_version = '1.9.0'
     ext.gson_version = '2.9.0'
-    ext.koin_version = '3.1.2'
+    ext.koin_version = '3.5.0'
     ext.room_version = "2.4.2"
     ext.cardview_version = '1.0.0'
     ext.dslpermission_version = "2.0.3"

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Color picker</string>
+    <string name="module_other_color_pick_setting_vibration">Вибрация</string>
+    <string name="module_other_color_pick_setting_language">Язык</string>
+    <string name="module_other_color_pick_setting_color_type">Тип цвета</string>
     <string name="module_other_color_pick_press_open_info">Нажмите, чтобы открыть информацию о цвете</string>
-    <string name="module_other_color_pick_setting_color_type">Тип цвета по умолчанию</string>
     <string name="module_other_color_pick_long_press_copy">Одиночное касание - добавить в палитру, удержание - копировать</string>
     <string name="module_other_color_pick_camera">Камера</string>
     <string name="module_other_color_pick_remove_pallet">Удалить цветовую палитру?</string>

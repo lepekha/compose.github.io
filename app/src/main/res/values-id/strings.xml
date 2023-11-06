@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pemilih Warna</string>
+    <string name="module_other_color_pick_setting_vibration">Getaran</string>
+    <string name="module_other_color_pick_setting_language">Bahasa</string>
+    <string name="module_other_color_pick_setting_color_type">Jenis Warna</string>
     <string name="module_other_color_pick_press_open_info">Klik untuk membuka informasi warna</string>
-    <string name="module_other_color_pick_setting_color_type">Tipe warna default</string>
     <string name="module_other_color_pick_long_press_copy">Tekan sekali - tambahkan ke palet, tekan lama - salin</string>
     <string name="module_other_color_pick_remove_pallet">Hapus palet warna?</string>
     <string name="module_other_color_pick_pallet_name">Nama palet warna</string>

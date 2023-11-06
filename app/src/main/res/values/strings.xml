@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Color picker</string>
 
-    <string name="module_other_color_pick_setting_color_type">Default color type</string>
+    <string name="module_other_color_pick_setting_vibration">Vibration</string>
+    <string name="module_other_color_pick_setting_language">Language</string>
+    <string name="module_other_color_pick_setting_color_type">Color type</string>
     <string name="module_other_color_pick_press_open_info">Click to open color information</string>
     <string name="module_other_color_pick_long_press_copy">Single press - add to the palette, long press - copy</string>
     <string name="module_other_color_pick_remove_pallet">Remove color palette?</string>

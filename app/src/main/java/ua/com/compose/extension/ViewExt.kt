@@ -56,6 +56,7 @@ fun View.hideKeyboard(): Boolean {
     return inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
   } catch (ignored: RuntimeException) {
   }
+  this.clearFocus()
   return false
 }
 
@@ -88,7 +89,7 @@ fun View.setVibrate(type: EVibrate) {
   }else{
     this.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
-        this.context.vibrate(type = type)
+        this.vibrate(type = type)
       }
       false
     }

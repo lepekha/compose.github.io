@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Color picker</string>
-
-    <string name="module_other_color_pick_setting_color_type">Тип кольору за замовчуванням</string>
+    <string name="module_other_color_pick_setting_vibration">Вібрація</string>
+    <string name="module_other_color_pick_setting_language">Мова</string>
+    <string name="module_other_color_pick_setting_color_type">Тип кольору</string>
     <string name="module_other_color_pick_press_open_info">Натисніть щоб відкрити інформацію про колір</string>
     <string name="module_other_color_pick_long_press_copy">Одиночне натискання - додати до палітри, довге натискання - копіювати</string>
     <string name="module_other_color_pick_camera">Камера</string>

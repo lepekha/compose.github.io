@@ -5,7 +5,6 @@ import android.graphics.Color
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.luminance
 import androidx.core.graphics.toColorInt
-import androidx.lifecycle.ViewModel
 import org.json.JSONObject
 import ua.com.compose.api.config.remoteConfig
 import java.io.IOException
@@ -13,12 +12,18 @@ import java.util.Locale
 import java.util.NavigableMap
 import java.util.TreeMap
 import kotlin.collections.set
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 
 enum class EColorType(val key: Int) {
     HEX(key = 0) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            var hex = value.replace("#", "")
+            repeat(6 - hex.count()) { hex = "0$hex" }
+            return Color.parseColor("#$hex")
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val colorHex = Integer.toHexString(color).substring(2).toUpperCase()
             return "#$colorHex"
         }
@@ -27,7 +32,14 @@ enum class EColorType(val key: Int) {
     },
 
     RGB_DECIMAL(key = 1) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            val args = value.split(" ")
+            val r = min((args.getOrNull(0) ?: "0").toIntOrNull() ?: 0, 255)
+            val g = min((args.getOrNull(1) ?: "0").toIntOrNull() ?: 0, 255)
+            val b = min((args.getOrNull(2) ?: "0").toIntOrNull() ?: 0, 255)
+            return Color.rgb(r,g,b)
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
@@ -38,7 +50,14 @@ enum class EColorType(val key: Int) {
     },
 
     RGB_PERCENT(key = 3) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            val args = value.split(" ")
+            val r = ((args.getOrNull(0) ?: "0").toIntOrNull() ?: 100) * 255 / 100
+            val g = ((args.getOrNull(1) ?: "0").toIntOrNull() ?: 100) * 255 / 100
+            val b = ((args.getOrNull(2) ?: "0").toIntOrNull() ?: 100) * 255 / 100
+            return Color.rgb(r,g,b)
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color) * 100.0f / 255.0f
             val green = Color.green(color) * 100.0f / 255.0f
             val blue = Color.blue(color) * 100.0f / 255.0f
@@ -49,7 +68,11 @@ enum class EColorType(val key: Int) {
     },
 
     BINARY(key = 2) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            val array = value.split(" ").toTypedArray()
+            return Color.rgb(array[0].toInt(2), array[1].toInt(2), array[2].toInt(2))
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
@@ -60,7 +83,12 @@ enum class EColorType(val key: Int) {
     },
 
     HSV(key = 4) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            val array = value.split(" ").map { it.toFloatOrNull() ?: 0f }.toFloatArray()
+            return Color.HSVToColor(array)
+        }
+
+        override fun colorToString(color: Int, withSeparator: String): String {
             val array = FloatArray(3)
             Color.colorToHSV(color, array)
             return "${String.format("%.1f", array[0])}°$withSeparator ${String.format("%.1f", (array[1] * 100))}%$withSeparator ${String.format("%.1f", (array[2] * 100))}%"
@@ -69,7 +97,11 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHSV
     },
     HSL(key = 5) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            val array = value.split(" ").map { it.toFloatOrNull() ?: 0f }.toFloatArray()
+            return ColorUtils.HSLToColor(array)
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
@@ -82,7 +114,10 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHSL
     },
     CMYK(key = 6) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            return Color.WHITE
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val r = Color.red(color)
             val g = Color.green(color)
             val b = Color.blue(color)
@@ -101,7 +136,11 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = remoteConfig.showColorTypeCMYK
     },
     CIE_LAB(key = 7) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            val array = value.split(" ").map { it.toDoubleOrNull() ?: 0.0 }
+            return ColorUtils.LABToColor(array[0], array[1], array[2])
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val r = Color.red(color)
             val g = Color.green(color)
             val b = Color.blue(color)
@@ -115,7 +154,11 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = remoteConfig.showColorTypeCIELAB
     },
     XYZ(key = 8) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            val array = value.split(" ").map { it.toDoubleOrNull() ?: 0.0 }
+            return ColorUtils.XYZToColor(array[0], array[1], array[2])
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
@@ -131,7 +174,10 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = remoteConfig.showColorTypeXYZ
     },
     LUMINANCE(key = 9) {
-        override fun convertColor(color: Int, withSeparator: String): String {
+        override fun stringToColor(value: String): Int {
+            return Color.WHITE
+        }
+        override fun colorToString(color: Int, withSeparator: String): String {
             val value = color.luminance * 100
             return String.format("%.2f", value) + "%"
         }
@@ -139,7 +185,8 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = true
     };
 
-    abstract fun convertColor(color: Int, withSeparator: String = ""): String
+    abstract fun colorToString(color: Int, withSeparator: String = ""): String
+    abstract fun stringToColor(value: String): Int
     abstract fun title(): String
     abstract fun isVisible(): Boolean
 

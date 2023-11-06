@@ -37,19 +37,20 @@
         <item name="bottomSheetStyle">@style/FragmentBottomSheetStyle</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:navigationBarColor">?attr/color_10</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <style name="DialogBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
-        <item name="behavior_peekHeight">500dp</item>
+        <item name="behavior_fitToContents">true</item>
+        <item name="behavior_skipCollapsed">true</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
     </style>
 
     <style name="FragmentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
-        <item name="behavior_peekHeight">500dp</item>
+        <item name="behavior_fitToContents">true</item>
+        <item name="behavior_skipCollapsed">true</item>
     </style>
 
     <style name="CustomSeekBar" parent="Widget.MaterialComponents.Slider">
@@ -91,6 +92,15 @@
         <item name="iconTint">?attr/color_10</item>
         <item name="strokeColor">?attr/color_12</item>
         <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="SliderColorType">
+        <item name="sbSelectedTextColor">@color/color_button_background</item>
+        <item name="sbUnselectedTextColor">@color/color_night_5</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:background">@drawable/background_color_type</item>
+        <item name="sbActiveTabDrawable">@drawable/background_color_type_button</item>
+        <item name="sbTextSize">15sp</item>
     </style>
 
 </resources>

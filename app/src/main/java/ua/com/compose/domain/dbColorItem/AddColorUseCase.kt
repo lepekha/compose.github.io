@@ -15,11 +15,11 @@ class AddColorUseCase(private val addPalletUseCase: AddPalletUseCase,
     suspend fun execute(color: Int) {
         return withContext(Dispatchers.IO) {
             var palletId = Settings.paletteID
-            palletId = getPalletUseCase.execute(palletId)?.id ?: kotlin.run {
-                val id = addPalletUseCase.execute()
-                Settings.paletteID = id
-                id
-            }
+//            palletId = getPalletUseCase.execute(palletId)?.id ?: kotlin.run {
+//                val id = addPalletUseCase.execute()
+//                Settings.paletteID = id
+//                id
+//            }
 
             database.colorItemDao?.insert(ColorItem().apply {
                 this.color = color

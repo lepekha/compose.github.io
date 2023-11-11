@@ -13,14 +13,18 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -29,12 +33,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -48,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -66,6 +73,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
+import ua.com.compose.composable.BottomSheet
 import ua.com.compose.data.ColorNames
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
@@ -80,114 +88,144 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val items by viewModule.items.observeAsState(listOf())
     val view = LocalView.current
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(key1 = viewModule) {
         viewModule.create(color)
     }
 
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-        windowInsets = WindowInsets(0, 0, 0, 0),
-        containerColor = Color.Transparent,
-        dragHandle = null,
-    ) {
+    BottomSheet(sheetState = sheetState, onDismissRequest = onDismissRequest) {
 
-        Box(modifier = Modifier
-            .fillMaxHeight()
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .fillMaxWidth()
-            .background(
-                colorResource(id = R.color.color_main_header),
-                shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
-            )) {
-            val colorCopyText = stringResource(id = R.string.module_other_color_pick_color_add_to_pallete)
+        val colorCopyText = stringResource(id = R.string.module_other_color_pick_color_add_to_pallete)
 
-            LazyColumn(
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 0.dp),
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .padding(top = 16.dp)
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .fillMaxWidth()
+        LazyColumn(
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .wrapContentHeight()
+                .windowInsetsPadding(WindowInsets.navigationBars)
+                .fillMaxWidth()
+        ) {
+            items(
+                items = items
             ) {
-                items(
-                    items = items
-                ) {
-                    when(it){
-                        is ColorInfoItem.Color -> {
-
-                            Card(elevation =  CardDefaults.cardElevation(2.dp), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color(it.color)), modifier = Modifier
-                                .height(70.dp)
-                                .fillMaxWidth()) {
-                                Box(modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(5.dp), contentAlignment = Alignment.TopEnd) {
-                                    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                                        val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(it.color).substring(2).toLowerCase())}"
-                                        Text(text = name, color = it.color.visibleColor(), fontSize = 16.sp, fontWeight = FontWeight(700))
-                                    }
-                                }
-                            }
-                            Spacer(modifier = Modifier
+                when (it) {
+                    is ColorInfoItem.Color -> {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .height(60.dp)
+                                .background(Color(it.color), RoundedCornerShape(16.dp))
                                 .fillMaxWidth()
-                                .height(16.dp))
+                                .padding(top = 5.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
+                        ) {
+                            val name = "≈${
+                                ColorNames.getColorName(
+                                    "#" + Integer.toHexString(it.color).substring(2).toLowerCase()
+                                )
+                            }"
+                            Text(
+                                text = name,
+                                color = it.color.visibleColor(),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight(700)
+                            )
                         }
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(16.dp)
+                        )
+                    }
 
-                        is ColorInfoItem.Text -> {
-                            Row(modifier = Modifier
+                    is ColorInfoItem.Text -> {
+                        Row(
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
-                                .padding(top = 3.dp, bottom = 3.dp)
+                                .padding(top = 2.dp, bottom = 2.dp)
                                 .clickable {
                                     view.vibrate(type = EVibrate.BUTTON)
                                     context.clipboardCopy(it.value)
                                     context.showToast(R.string.module_other_color_pick_color_copy)
                                 },
-                                verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = it.title, textAlign = TextAlign.Start, color = colorResource(id = R.color.color_night_5), modifier = Modifier.wrapContentWidth(), fontSize = 14.sp, fontWeight = FontWeight(500))
-                                Text(text = it.value, textAlign = TextAlign.End, color = colorResource(id = R.color.color_night_5), modifier = Modifier.fillMaxWidth(), fontSize = 16.sp, fontWeight = FontWeight(600))
-                            }
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = it.title,
+                                textAlign = TextAlign.Start,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.wrapContentWidth(),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight(500)
+                            )
+                            Text(
+                                text = it.value,
+                                textAlign = TextAlign.End,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(600)
+                            )
                         }
+                    }
 
-                        is ColorInfoItem.Colors -> {
-                            Column(modifier = Modifier
+                    is ColorInfoItem.Colors -> {
+                        Column(
+                            modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 16.dp)) {
-                                Text(text = it.title, textAlign = TextAlign.Start, color = colorResource(id = R.color.color_night_5), modifier = Modifier
+                                .padding(top = 16.dp)
+                        ) {
+                            Text(
+                                text = it.title,
+                                textAlign = TextAlign.Start,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier
                                     .wrapContentWidth()
-                                    .padding(bottom = 6.dp), fontSize = 14.sp, fontWeight = FontWeight(500))
+                                    .padding(bottom = 4.dp),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(500)
+                            )
 
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    it.colors.forEach { color ->
-                                        var visibleIcon by remember { mutableStateOf(false) }
-                                        FilledTonalIconButton(shape = RoundedCornerShape(2.dp), modifier = Modifier
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                it.colors.forEach { color ->
+                                    var visibleIcon by remember { mutableStateOf(false) }
+                                    FilledTonalIconButton(
+                                        shape = RoundedCornerShape(2.dp), modifier = Modifier
                                             .weight(1f)
                                             .padding(start = 2.dp, end = 2.dp)
                                             .height(50.dp), onClick = {
-                                                view.vibrate(type = EVibrate.BUTTON)
-                                                viewModule.pressPaletteAdd(color)
-                                                Toast.makeText(context, colorCopyText, Toast.LENGTH_SHORT).show()
-                                                visibleIcon = true
+                                            view.vibrate(type = EVibrate.BUTTON)
+                                            viewModule.pressPaletteAdd(color)
+                                            Toast.makeText(
+                                                context,
+                                                colorCopyText,
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            visibleIcon = true
                                         },
-                                            colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = Color(color))) {
-                                            Box(modifier = Modifier
+                                        colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                            containerColor = Color(color)
+                                        )
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
                                                 .fillMaxSize(),
-                                                contentAlignment = Alignment.Center) {
+                                            contentAlignment = Alignment.Center
+                                        ) {
 
-                                                androidx.compose.animation.AnimatedVisibility(
-                                                    visible = visibleIcon,
-                                                    enter = fadeIn(animationSpec = tween(500)),
-                                                    exit = fadeOut(animationSpec = tween(500))
-                                                ) {
-                                                    Icon(
-                                                        modifier = Modifier.fillMaxSize(0.50f).aspectRatio(1f, true),
-                                                        painter = painterResource(id = R.drawable.ic_done),
-                                                        tint = color.visibleColor(),
-                                                        contentDescription = null
-                                                    )
-                                                }
+                                            androidx.compose.animation.AnimatedVisibility(
+                                                visible = visibleIcon,
+                                                enter = fadeIn(animationSpec = tween(500)),
+                                                exit = fadeOut(animationSpec = tween(500))
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier
+                                                        .fillMaxSize(0.50f)
+                                                        .aspectRatio(1f, true),
+                                                    painter = painterResource(id = R.drawable.ic_done),
+                                                    tint = color.visibleColor(),
+                                                    contentDescription = null
+                                                )
                                             }
                                         }
                                     }
@@ -198,6 +236,5 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
                 }
             }
         }
-
     }
 }

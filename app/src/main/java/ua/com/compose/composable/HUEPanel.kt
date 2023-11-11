@@ -37,10 +37,20 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.toColorInt
 import androidx.core.graphics.toRect
 import androidx.core.graphics.withClip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ua.com.compose.data.ColorNames
+import java.util.Arrays
+import java.util.NavigableMap
+import java.util.NavigableSet
+import java.util.TreeMap
+import java.util.TreeSet
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import android.graphics.Color as AndroidColor
 
 @Composable
@@ -126,13 +136,15 @@ fun HueBar(
 }
 
 fun IntArray.findClosestIndexTo(target: Int): Int {
-    var closestIndex = 0
-    var closestDiff = Int.MAX_VALUE
+    val sorted = this.sortedDescending()
 
-    for (i in indices) {
-        val diff = Math.abs(this[i] - target)
-        if (diff < closestDiff) {
-            closestDiff = diff
+    var closestIndex = 0
+    var previousDiff = Int.MAX_VALUE
+
+    for (i in this.indices) {
+        val diff = abs(this[i] - target)
+        if (diff < previousDiff) {
+            previousDiff = diff
             closestIndex = i
         }
     }

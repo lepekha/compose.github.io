@@ -19,6 +19,8 @@ enum class EPanel(val id: Int, val titleResId: Int, val iconResId: Int, val icon
         override fun isVisible(): Boolean = remoteConfig.showPanelPalette
     };
 
+    fun routWithParams(vararg param: String) = this.rout + param.joinToString(separator = "/", prefix = "/")
+
     abstract fun isVisible(): Boolean
     companion object {
         fun valueOfKey(id: Int) = values().firstOrNull { id == it.id } ?: IMAGE

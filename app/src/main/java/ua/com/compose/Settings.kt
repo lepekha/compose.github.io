@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.data.EColorType
+import ua.com.compose.data.ETheme
 import ua.com.compose.data.SharedPreferencesKey
 import ua.com.compose.extension.get
 import ua.com.compose.extension.prefs
@@ -26,6 +27,14 @@ object Settings {
         }
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = value.key)
+        }
+
+    var theme: ETheme
+        get() {
+            return ETheme.getByKey(prefs.get(key = SharedPreferencesKey.KEY_THEME, defaultValue = ETheme.NIGHT.key))
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_THEME, value = value.key)
         }
 
     var startScreen: EPanel

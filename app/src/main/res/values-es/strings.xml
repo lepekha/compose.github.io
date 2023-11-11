@@ -7,7 +7,7 @@
     <string name="module_other_color_pick_press_open_info">Haz clic para ver información del color</string>
     <string name="module_other_color_pick_long_press_copy">Clic simple: agregar a la paleta; clic largo: copiar</string>
     <string name="module_other_color_pick_remove_pallet">¿Eliminar paleta de colores?</string>
-    <string name="module_other_color_pick_pallet_name">Nombre de la paleta de colores</string>
+    <string name="module_other_color_pick_pallet_name">Назва</string>
     <string name="module_other_color_pick_pallet">Paleta</string>
     <string name="module_other_color_pick_camera">Cámara</string>
     <string name="module_other_color_pick_image">Imagen</string>

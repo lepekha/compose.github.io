@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +27,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -32,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,8 +57,10 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.Settings
+import ua.com.compose.composable.BottomSheet
 import ua.com.compose.composable.DialogAccentButton
 import ua.com.compose.data.ELanguage
+import ua.com.compose.data.ETheme
 import ua.com.compose.dialogs.ChipItem
 import ua.com.compose.dialogs.DialogChoise
 import ua.com.compose.extension.EVibrate
@@ -62,11 +68,9 @@ import ua.com.compose.extension.vibrate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun SettingsScreen(onDismissRequest: () -> Unit) {
-    val viewModule: SettingsViewModel = koinViewModel()
-    val scope = rememberCoroutineScope()
-    val colorTypes by viewModule.colorTypes
-    val colorType by viewModule.colorType
+fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
+    val colorTypes by viewModel.colorTypes
+    val colorType by viewModel.colorType
 
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -81,7 +85,7 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
     var stateLanguage: Boolean by remember { mutableStateOf(false) }
     if(stateLanguage) {
         DialogChoise(
-            items = ELanguage.values().map { ChipItem(title = it.title, obj = it, icon = painterResource(id = it.flagRes), isSelect = it == appLocale) },
+            items = ELanguage.values().sortedBy { it.title }.map { ChipItem(title = it.title, obj = it, icon = painterResource(id = it.flagRes), isSelect = it == appLocale) },
             onDone = {
                 appLocale = it
                 val locale: LocaleListCompat = LocaleListCompat.forLanguageTags(it.value)
@@ -91,30 +95,27 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
         )
     }
 
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-        windowInsets = WindowInsets(0, 0, 0, 0),
-        containerColor = Color.Transparent,
-        dragHandle = null,
-    ) {
+    var stateTheme: Boolean by remember { mutableStateOf(false) }
+    if(stateTheme) {
+        DialogChoise(
+            items = ETheme.visibleValues().map { ChipItem(title = stringResource(id = it.strRes), obj = it, isSelect = Settings.theme == it) },
+            onDone = {
+                viewModel.changeTheme(it)
+            },
+            onDismissRequest = { stateTheme = false }
+        )
+    }
+    val containerBackground = MaterialTheme.colorScheme.surfaceContainerLow
 
-        Box(modifier = Modifier
-            .wrapContentHeight()
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .fillMaxWidth()
-            .background(
-                colorResource(id = R.color.color_main_header),
-                shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
-            )) {
+    BottomSheet(sheetState = sheetState, onDismissRequest = onDismissRequest) {
             Column(modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
-                .padding(16.dp)) {
+                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)) {
 
                 Column(modifier = Modifier
                     .background(
-                        color = colorResource(id = R.color.color_main_background),
+                        color = containerBackground,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .fillMaxWidth()
@@ -122,7 +123,7 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
 
                     Text(text = stringResource(id = R.string.module_other_color_pick_setting_color_type),
                         textAlign = TextAlign.Start,
-                        color = colorResource(id = R.color.color_night_5),
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
                         fontWeight = FontWeight(500))
 
@@ -133,17 +134,20 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
                             FilterChip(
                                 selected = it == colorType,
                                 border = null,
+                                shape = RoundedCornerShape(6.dp),
                                 modifier = Modifier.padding(start = 4.dp, end = 4.dp),
                                 colors = FilterChipDefaults.filterChipColors(
-                                    containerColor = colorResource(id = R.color.color_night_5),
-                                    selectedContainerColor = colorResource(id = R.color.color_night_6)
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                    labelColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
                                 ),
                                 onClick = {
                                     view.vibrate(EVibrate.BUTTON)
-                                    viewModule.changeColorType(it)
+                                    viewModel.changeColorType(it)
                                 },
                                 label = {
-                                    Text(text = it.title(), color = colorResource(id = R.color.color_night_2), fontSize = 16.sp)
+                                    Text(text = it.title(), fontSize = 16.sp)
                                 }
                             )
                         }
@@ -157,21 +161,57 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
                     onClick = {
                         stateLanguage = true
                         view.vibrate(EVibrate.BUTTON) },
-                    colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = colorResource(id = R.color.color_main_background)),
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
                     shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier.fillMaxWidth().height(60.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp)) {
                         val currentLocale = LocalConfiguration.current.locales.get(0).language
                         Text(text = stringResource(id = R.string.module_other_color_pick_setting_language),
                             textAlign = TextAlign.Start,
-                            color = colorResource(id = R.color.color_night_5),
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp,
                             fontWeight = FontWeight(500))
 
                         Text(text = appLocale?.title ?: currentLocale,
                             textAlign = TextAlign.End,
-                            color = colorResource(id = R.color.color_night_6),
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight(700),
+                            modifier = Modifier
+                                .weight(1f))
+                    }
+                }
+
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FilledTonalIconButton(
+                    onClick = {
+                        stateTheme = true
+                        view.vibrate(EVibrate.BUTTON) },
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp)) {
+                        Text(text = stringResource(id = R.string.module_other_color_pick_theme),
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight(500))
+
+                        Text(text = stringResource(id = theme.strRes),
+                            textAlign = TextAlign.End,
+                            color = MaterialTheme.colorScheme.primary,
                             fontSize = 22.sp,
                             fontWeight = FontWeight(700),
                             modifier = Modifier
@@ -184,7 +224,7 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
                 
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                     .background(
-                        color = colorResource(id = R.color.color_main_background),
+                        color = containerBackground,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .fillMaxWidth()
@@ -192,7 +232,7 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
                     .padding(start = 16.dp, end = 16.dp)) {
                     Text(text = stringResource(id = R.string.module_other_color_pick_setting_vibration),
                         textAlign = TextAlign.Start,
-                        color = colorResource(id = R.color.color_night_5),
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
                         fontWeight = FontWeight(500),
                         modifier = Modifier.weight(1f))
@@ -202,31 +242,16 @@ fun SettingsScreen(onDismissRequest: () -> Unit) {
                         onCheckedChange = {
                             view.vibrate(EVibrate.BUTTON)
                             state = it
-                            viewModule.changeVibration(it)
+                            viewModel.changeVibration(it)
                                           }, colors = SwitchDefaults.colors(
-                        checkedThumbColor = colorResource(id = R.color.color_night_5),
-                        uncheckedThumbColor = colorResource(id = R.color.color_night_5),
-                        checkedTrackColor = colorResource(id = R.color.color_night_6),
-                        uncheckedTrackColor = colorResource(id = R.color.color_night_8),
-                        uncheckedBorderColor = colorResource(id = R.color.color_night_8),
+                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                        uncheckedBorderColor = MaterialTheme.colorScheme.surfaceVariant,
                     ))
                 }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                DialogAccentButton(painter = painterResource(id = R.drawable.ic_done), modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)) {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            onDismissRequest.invoke()
-                        }
-                    }
-                }
-
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
-
-    }
 }

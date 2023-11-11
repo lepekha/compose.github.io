@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,11 +35,9 @@ import ua.com.compose.R
 @Composable
 fun RowScope.IconItem(painter: Painter, click: () -> Unit) {
     FilledTonalIconButton(
-        colors = IconButtonColors(
+        colors = IconButtonDefaults.filledTonalIconButtonColors(
             containerColor = Color.Transparent,
-            contentColor = colorResource(id = R.color.color_night_9),
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = colorResource(id = R.color.color_night_9)
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
         modifier = Modifier.weight(1f, true).fillMaxHeight(),
         onClick = click,
@@ -48,7 +49,7 @@ fun RowScope.IconItem(painter: Painter, click: () -> Unit) {
 @Composable
 fun Menu(content: @Composable RowScope.() -> Unit) {
     Card(colors = CardDefaults.cardColors(
-        containerColor = colorResource(id = R.color.color_main_menu_background)
+        containerColor = MaterialTheme.colorScheme.secondaryContainer
     ),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(

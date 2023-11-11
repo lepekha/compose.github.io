@@ -2,18 +2,22 @@ package ua.com.compose.data
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
+import androidx.compose.ui.util.fastSumBy
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.luminance
-import androidx.core.graphics.toColorInt
+import net.sf.javaml.core.kdtree.KDTree
 import org.json.JSONObject
 import ua.com.compose.api.config.remoteConfig
 import java.io.IOException
 import java.util.Locale
-import java.util.NavigableMap
-import java.util.TreeMap
 import kotlin.collections.set
+import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
+import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
 
 
 enum class EColorType(val key: Int) {
@@ -199,7 +203,9 @@ enum class EColorType(val key: Int) {
 fun Int.colorName() = "≈${ColorNames.getColorName("#" + Integer.toHexString(this).substring(2).lowercase(Locale.getDefault()))}"
 
 object ColorNames {
-    private val colors: NavigableMap<Int, String> = TreeMap(compareBy { it })
+    private val cacheColors = mutableMapOf<String, String>()
+    private val colors = mutableMapOf<RGB, String>()
+    private val tree = KDTree(3)
 
     fun init(context: Context) {
         val obj: JSONObject?
@@ -209,7 +215,9 @@ object ColorNames {
             while (keysItr.hasNext()) {
                 val key = keysItr.next()
                 val value = obj.get(key).toString()
-                colors[value.toColorInt()] = key
+                val color = hexToRGB(value)
+                colors[color] = key
+                tree.insert(color.pointsDouble, key)
             }
         } catch (ioException: IOException) {
             ioException.printStackTrace()
@@ -217,16 +225,27 @@ object ColorNames {
     }
 
     fun getColorName(hex: String): String {
-        val color = hex.toColorInt()
-        if(colors.containsKey(color)) return colors[color] ?: ""
-        val before = colors.floorKey(color) ?: return ""
-        val after = colors.ceilingKey(color) ?: return ""
-        val resultKey = if ((color - before < after - color
-                    || after - color < 0)
-            && color - before > 0
-        ) before else after
-        return colors[resultKey] ?: ""
+        cacheColors[hex]?.let {
+            return it
+        }
+        val targetColor = hexToRGB(hex)
+        colors[targetColor]?.let {
+            return it
+        }
+        val color = tree.nearest(targetColor.pointsDouble) as String
+        cacheColors[hex] = color
+        return color
     }
 
+    data class RGB(val r: Float, val g: Float, val b: Float) {
+        val pointsDouble = doubleArrayOf(r.toDouble(),g.toDouble(),b.toDouble())
+    }
 
+    private fun hexToRGB(hex: String): RGB {
+        val color = Integer.parseInt(hex.substring(1), 16)
+        val red = (color shr 16) and 0xFF
+        val green = (color shr 8) and 0xFF
+        val blue = color and 0xFF
+        return RGB(red.toFloat(), green.toFloat(), blue.toFloat())
+    }
 }

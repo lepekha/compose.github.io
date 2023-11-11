@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -21,13 +23,11 @@ import ua.com.compose.R
 fun DialogAccentButton(painter: Painter, modifier: Modifier, onClick: () -> Unit) {
     FilledTonalIconButton(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(50.dp),
         modifier = modifier,
-        colors = IconButtonColors(
-            containerColor = colorResource(id = R.color.color_night_6),
-            contentColor = colorResource(id = R.color.color_night_10),
-            disabledContainerColor = colorResource(id = R.color.color_button_background),
-            disabledContentColor = colorResource(id = R.color.color_night_9)
+        colors = IconButtonDefaults.filledTonalIconButtonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
         Icon(
@@ -42,13 +42,11 @@ fun DialogAccentButton(painter: Painter, modifier: Modifier, onClick: () -> Unit
 fun DialogButton(painter: Painter, modifier: Modifier, onClick: () -> Unit) {
     FilledTonalIconButton(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(50.dp),
         modifier = modifier,
-        colors = IconButtonColors(
-            containerColor = colorResource(id = R.color.color_button_background),
-            contentColor = colorResource(id = R.color.color_night_9),
-            disabledContainerColor = colorResource(id = R.color.color_button_background),
-            disabledContentColor = colorResource(id = R.color.color_night_9)
+        colors = IconButtonDefaults.filledTonalIconButtonColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     ) {
         Icon(

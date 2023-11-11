@@ -8,7 +8,7 @@
     <string name="module_other_color_pick_long_press_copy">Одиночное касание - добавить в палитру, удержание - копировать</string>
     <string name="module_other_color_pick_camera">Камера</string>
     <string name="module_other_color_pick_remove_pallet">Удалить цветовую палитру?</string>
-    <string name="module_other_color_pick_pallet_name">Название цветовой палитры</string>
+    <string name="module_other_color_pick_pallet_name">Назва</string>
     <string name="module_other_color_pick_pallet">Палитра</string>
     <string name="module_other_color_pick_image">Изображение</string>
     <string name="module_other_color_pick_palette">Палитра</string>

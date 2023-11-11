@@ -1,11 +1,13 @@
 package ua.com.compose.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ColorPalletDAO {
-    @Query("SELECT * FROM pallets")
-    fun getAll(): List<ColorPallet>
+    @Query("SELECT * FROM pallets ORDER BY id DESC")
+    fun getAll(): Flow<List<ColorPallet>>
 
     @Query("SELECT * FROM pallets WHERE id = :id")
     fun getById(id: Long): ColorPallet?

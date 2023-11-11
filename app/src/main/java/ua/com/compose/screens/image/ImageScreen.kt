@@ -8,7 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.PixelCopy
+import android.view.RoundedCorner
 import android.view.View
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -25,6 +27,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -38,6 +42,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
@@ -48,6 +53,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -64,6 +70,7 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.findActivity
 import ua.com.compose.extension.imageBitmap
 import ua.com.compose.extension.vibrate
+import ua.com.compose.screens.EPanel
 import ua.com.compose.screens.info.InfoScreen
 import java.lang.Float
 import kotlin.math.roundToInt
@@ -84,12 +91,11 @@ fun View.bitmapFormView(activity: Activity, result: (bmp: Bitmap) -> Unit) {
 }
 
 @Composable
-fun ImageScreen(viewModule: ImageViewModule) {
+fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
 
     val activity = LocalContext.current.findActivity()
     val view = LocalView.current
-
-    var photoUri: Uri? by remember { mutableStateOf(null) }
+    var photoUri: Uri? by remember { mutableStateOf(uri?.let { Uri.decode(it).toUri() }) }
     var imageLoadState: AsyncImagePainter.State by remember { mutableStateOf(AsyncImagePainter.State.Empty) }
     var positionInRoot by remember { mutableStateOf(Offset.Zero) }
 
@@ -140,8 +146,8 @@ fun ImageScreen(viewModule: ImageViewModule) {
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-
             IconButton(
+                shape = RoundedCornerShape(25.dp),
                 painter = painterResource(R.drawable.ic_gallery),
                 modifier = Modifier.size(100.dp)
             ) {

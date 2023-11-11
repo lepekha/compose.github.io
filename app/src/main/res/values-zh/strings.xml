@@ -7,7 +7,7 @@
     <string name="module_other_color_pick_long_press_copy">单击-添加到调色板，长按-复制</string>
     <string name="module_other_color_pick_press_open_info">点击以查看颜色信息</string>
     <string name="module_other_color_pick_remove_pallet">删除颜色调色板？</string>
-    <string name="module_other_color_pick_pallet_name">颜色调色板名称</string>
+    <string name="module_other_color_pick_pallet_name">Назва</string>
     <string name="module_other_color_pick_pallet">调色板</string>
     <string name="module_other_color_pick_camera">相机</string>
     <string name="module_other_color_pick_image">图片</string>

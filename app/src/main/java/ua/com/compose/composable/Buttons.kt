@@ -19,6 +19,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -28,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -58,17 +61,15 @@ fun BottomSheet(onDismiss: () -> Unit) {
 }
 
 @Composable
-fun IconButton(painter: Painter, modifier: Modifier, click: () -> Unit) {
+fun IconButton(painter: Painter, shape: Shape? = null, modifier: Modifier, click: () -> Unit) {
     FilledTonalIconButton(
-        colors = IconButtonColors(
-            containerColor = colorResource(id = R.color.color_button_background),
-            contentColor = colorResource(id = R.color.color_night_9),
-            disabledContainerColor = colorResource(id = R.color.color_button_background),
-            disabledContentColor = colorResource(id = R.color.color_night_9)
+        colors = IconButtonDefaults.filledTonalIconButtonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
         modifier = modifier,
         onClick = click,
-        shape = RoundedCornerShape(corner = CornerSize(6.dp))) {
+        shape = shape ?: RoundedCornerShape(corner = CornerSize(6.dp))) {
 
         Icon(painter = painter, modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
     }

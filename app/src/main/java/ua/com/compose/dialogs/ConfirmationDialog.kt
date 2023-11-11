@@ -1,11 +1,13 @@
 package ua.com.compose.dialogs
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -14,10 +16,13 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -29,60 +34,55 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
 import ua.com.compose.R
 import ua.com.compose.composable.DialogAccentButton
 import ua.com.compose.composable.DialogBottomSheet
 import ua.com.compose.composable.DialogButton
+import ua.com.compose.composable.DialogConfirmButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogConfirmation(text: String, onDone: () -> Unit, onDismissRequest: () -> Unit) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
-
     DialogBottomSheet(
         onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
     ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .wrapContentHeight()
-                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+                    .padding(top = 24.dp, bottom = 8.dp)
             ) {
                 Text(
                     text = text,
                     textAlign = TextAlign.Center,
-                    color = colorResource(id = R.color.color_night_5),
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight(600),
-                    modifier = Modifier.padding(start = 36.dp, end = 36.dp)
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight(400),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp)
                 )
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 20.dp, top = 40.dp)
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .padding(end = 8.dp, top = 30.dp)
+                        .fillMaxWidth()
                 ) {
-
-                    DialogButton(painter = painterResource(id = R.drawable.ic_close), modifier = Modifier.weight(1f).padding(start = 16.dp, end = 8.dp).height(50.dp)) {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                onDismissRequest.invoke()
-                            }
-                        }
+                    DialogConfirmButton(text = stringResource(id = R.string.module_other_color_pick_cancel)) {
+                        onDismissRequest.invoke()
                     }
-
-                    DialogAccentButton(painter = painterResource(id = R.drawable.ic_done), modifier = Modifier.weight(1f).padding(start = 8.dp, end = 16.dp).height(50.dp)) {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                onDone.invoke()
-                                onDismissRequest.invoke()
-                            }
-                        }
+                    DialogConfirmButton(text = stringResource(id = R.string.module_other_color_pick_ok)) {
+                        onDone.invoke()
+                        onDismissRequest.invoke()
                     }
                 }
         }

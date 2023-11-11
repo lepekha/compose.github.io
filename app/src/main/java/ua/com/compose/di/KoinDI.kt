@@ -39,6 +39,7 @@ val appModule = module {
     viewModel {
         PaletteViewModule(
             context = androidContext(),
+            database = get(),
             changeColorPalletUseCase = get(),
             getPalletUseCase = get(),
             removePalletUseCase = get(),

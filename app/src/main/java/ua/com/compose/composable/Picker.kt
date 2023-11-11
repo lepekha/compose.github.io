@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -68,27 +70,28 @@ fun ColorPickerInfo(color: Int, click: () -> Unit) {
     val borderColor = color.visibleColor()
 
 
-    FilledTonalIconButton(onClick = click, shape = RoundedCornerShape(16.dp), modifier = Modifier.height(60.dp).fillMaxWidth().border(BorderStroke(width = 2.dp, colorResource(id = R.color.color_main_menu_background)), RoundedCornerShape(16.dp))) {
-        Card(colors = CardDefaults.cardColors(containerColor = Color(color)),
-            border = BorderStroke(width = 2.dp, colorResource(id = R.color.color_main_menu_background))
-        ) {
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(5.dp), contentAlignment = Alignment.TopEnd) {
-                Image(
-                    alignment = Alignment.Center,
-                    painter = painterResource(id = R.drawable.ic_info),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(borderColor),
-                    modifier = Modifier
-                        .size(24.dp)
-                        .alpha(0.5f)
-                )
-                Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
-                    Text(text = Settings.colorType.colorToString(color = color), color = borderColor, fontSize = 18.sp, fontWeight = FontWeight(700))
-                    Text(text = name, color = borderColor, fontSize = 14.sp, fontWeight = FontWeight(600))
-                }
+    FilledTonalIconButton(
+        onClick = click,
+        colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = Color(color)),
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.height(60.dp).fillMaxWidth().border(BorderStroke(width = 2.dp, MaterialTheme.colorScheme.secondaryContainer), RoundedCornerShape(16.dp))
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(5.dp), contentAlignment = Alignment.TopEnd) {
+            Image(
+                alignment = Alignment.Center,
+                painter = painterResource(id = R.drawable.ic_info),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(borderColor),
+                modifier = Modifier
+                    .size(24.dp)
+                    .alpha(0.5f)
+            )
+            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
+                Text(text = Settings.colorType.colorToString(color = color), color = borderColor, fontSize = 18.sp, fontWeight = FontWeight(700))
+                Text(text = name, color = borderColor, fontSize = 14.sp, fontWeight = FontWeight(600))
             }
         }
     }

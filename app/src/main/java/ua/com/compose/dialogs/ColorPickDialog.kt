@@ -33,9 +33,11 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -54,6 +56,7 @@ import androidx.core.graphics.ColorUtils
 import kotlinx.coroutines.launch
 import ua.com.compose.R
 import ua.com.compose.Settings
+import ua.com.compose.composable.BottomSheet
 import ua.com.compose.composable.ColorPickerInfo
 import ua.com.compose.composable.DialogAccentButton
 import ua.com.compose.composable.DialogBottomSheet
@@ -63,6 +66,7 @@ import ua.com.compose.composable.SatValPanel
 import ua.com.compose.data.ColorNames
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
+import ua.com.compose.screens.info.InfoScreen
 import android.graphics.Color as AndroidColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,10 +75,14 @@ fun DialogColorPick(color: Color = Color.Gray, onDone: (color: Color) -> Unit, o
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
-    DialogBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-    ) {
+    var stateInfoColor: Int? by remember { mutableStateOf(null) }
+    stateInfoColor?.let {
+        InfoScreen(color = it) {
+            stateInfoColor = null
+        }
+    }
+
+    BottomSheet(sheetState = sheetState, onDismissRequest = onDismissRequest) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -105,8 +113,9 @@ fun DialogColorPick(color: Color = Color.Gray, onDone: (color: Color) -> Unit, o
                             .height(60.dp)
                             .fillMaxWidth(), onClick = {
                             view.vibrate(EVibrate.BUTTON)
+                            stateInfoColor = color
                         }) {
-                            Box() {
+                            Box {
                                 Box(modifier = Modifier
                                     .fillMaxSize()
                                     .padding(5.dp), contentAlignment = Alignment.TopEnd) {

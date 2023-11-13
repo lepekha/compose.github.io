@@ -1,3 +1,2 @@
-include ':theme'
 include ':mvp'
 include ':app'

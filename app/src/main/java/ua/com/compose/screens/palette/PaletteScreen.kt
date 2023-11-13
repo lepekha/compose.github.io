@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -57,6 +58,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransfer
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -72,6 +74,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.ColorUtils
@@ -89,6 +92,7 @@ import ua.com.compose.dialogs.DialogColorPick
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.nonScaledSp
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
 import kotlin.math.ceil
@@ -419,74 +423,62 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                             }
                                             .animateItemPlacement(),
                                         shape = RoundedCornerShape(10.dp)) {
-                                        Row {
-                                            Card(
-                                                colors = CardDefaults.cardColors(
-                                                    containerColor = Color(colorItem.color)
-                                                ),
-                                                modifier = Modifier
-                                                    .fillMaxHeight()
-                                                    .aspectRatio(1f)
-                                                    .padding(4.dp)
-                                                    .fillMaxSize(),
-                                                shape = RoundedCornerShape(8.dp),
-                                            ) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .fillMaxSize()
-                                                        .padding(2.dp),
-                                                    contentAlignment = Alignment.TopEnd
-                                                ) {
-                                                    Image(
-                                                        alignment = Alignment.Center,
-                                                        painter = painterResource(id = R.drawable.ic_info),
-                                                        contentDescription = null,
-                                                        colorFilter = ColorFilter.tint(
-                                                            color = if (ColorUtils.calculateLuminance(colorItem.color) < 0.5) Color.White else Color.Black
-                                                        ),
-                                                        modifier = Modifier
-                                                            .size(18.dp)
-                                                            .alpha(0.6f)
-                                                    )
-                                                }
-                                            }
+                                        Row(modifier = Modifier.wrapContentHeight(), verticalAlignment = Alignment.CenterVertically) {
 
                                             Box(
                                                 modifier = Modifier
+                                                    .padding(4.dp)
                                                     .fillMaxHeight()
-                                                    .padding(start = 4.dp)
-                                                    .weight(1f)
+                                                    .aspectRatio(1f, true)
+                                                    .clip(RoundedCornerShape(8.dp))
+                                                    .background(Color(colorItem.color)),
+                                                contentAlignment = Alignment.TopEnd
                                             ) {
-                                                Column(
-                                                    modifier = Modifier.fillMaxSize(),
+                                                Image(
+                                                    alignment = Alignment.Center,
+                                                    painter = painterResource(id = R.drawable.ic_info),
+                                                    contentDescription = null,
+                                                    colorFilter = ColorFilter.tint(
+                                                        color = if (ColorUtils.calculateLuminance(colorItem.color) < 0.5) Color.White else Color.Black
+                                                    ),
+                                                    modifier = Modifier
+                                                        .size(18.dp)
+                                                        .alpha(0.6f)
+                                                )
+                                            }
+
+                                            Column(
+                                                    modifier = Modifier
+                                                        .wrapContentHeight()
+                                                        .padding(start = 4.dp)
+                                                        .weight(1f),
                                                     verticalArrangement = Arrangement.Center
                                                 ) {
-                                                    val hex = "#${
-                                                        Integer.toHexString(colorItem.color)
-                                                            .substring(2).toLowerCase()
-                                                    }"
+                                                    val hex = "#${Integer.toHexString(colorItem.color).substring(2).lowercase()}"
                                                     Text(
                                                         text = Settings.colorType.colorToString(colorItem.color, withSeparator = ","),
                                                         color = MaterialTheme.colorScheme.onSurface,
-                                                        fontSize = 16.sp,
+                                                        fontSize = 16.sp.nonScaledSp,
+                                                        lineHeight = 17.sp.nonScaledSp,
                                                         maxLines = 2,
                                                         overflow = TextOverflow.Ellipsis,
                                                         fontWeight = FontWeight(700)
                                                     )
                                                     Text(
                                                         text = ColorNames.getColorName(hex),
-                                                        fontSize = 14.sp,
+                                                        fontSize = 14.sp.nonScaledSp,
+                                                        lineHeight = 15.sp.nonScaledSp,
                                                         maxLines = 1,
+                                                        modifier = Modifier.padding(top = 4.dp),
                                                         color = MaterialTheme.colorScheme.onSurface
                                                     )
                                                 }
-                                            }
 
                                             Row(
                                                 modifier = Modifier
                                                     .fillMaxHeight()
                                                     .wrapContentWidth()
-                                                    .padding(end = 4.dp),
+                                                    .padding(end = 4.dp, top = 8.dp, bottom = 8.dp),
                                                 horizontalArrangement = Arrangement.Center,
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {

@@ -12,8 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -24,19 +27,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun createID(): Int {
-    val now = Date()
-    return SimpleDateFormat("ddHHmmss", Locale.getDefault()).format(now).toInt()
-}
-
-@Composable
-fun imageBitmap(@DrawableRes id: Int, option: BitmapFactory.Options? = null): Bitmap {
-    return BitmapFactory.decodeResource(
-        LocalContext.current.resources,
-        R.drawable.ic_background_pattern,
-        option
-    )
-}
+val TextUnit.nonScaledSp
+    @Composable
+    get() = (this.value / LocalDensity.current.fontScale).sp
 
 fun Context.hasPermission(permission: String): Boolean {
     val res: Int = this.checkCallingOrSelfPermission(permission)
@@ -48,17 +41,23 @@ fun Int.visibleColor(): Color {
 }
 
 fun <T> throttleLatest(
+    withFirst: Boolean = false,
     intervalMs: Long = 300L,
     coroutineScope: CoroutineScope,
     destinationFunction: (T) -> Unit
 ): (T) -> Unit {
+    var _withFirst = withFirst
     var throttleJob: Job? = null
     var latestParam: T
     return { param: T ->
         latestParam = param
         if (throttleJob?.isCompleted != false) {
             throttleJob = coroutineScope.launch {
-                delay(intervalMs)
+                if(_withFirst) {
+                    _withFirst = false
+                } else {
+                    delay(intervalMs)
+                }
                 latestParam.let(destinationFunction)
             }
         }

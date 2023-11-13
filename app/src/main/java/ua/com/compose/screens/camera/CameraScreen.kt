@@ -1,6 +1,7 @@
 package ua.com.compose.screens.camera
 
 import android.Manifest
+import android.view.View
 import androidx.camera.core.CameraSelector
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
@@ -19,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import ua.com.compose.R
+import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
@@ -45,6 +48,7 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.createVideoCaptureUseCase
 import ua.com.compose.extension.showToast
+import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
 import java.util.concurrent.ExecutorService
@@ -66,13 +70,15 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
         mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA)
     }
 
+    val scope = rememberCoroutineScope()
+
     LaunchedEffect(previewView) {
         context.createVideoCaptureUseCase(
             executors = cameraExecutor,
             lifecycleOwner = lifecycleOwner,
             cameraSelector = cameraSelector.value,
             previewView = previewView,
-            analyzed = ColorAnalyzer {
+            analyzed = ColorAnalyzer(scope = scope) {
                 viewModule.changeColor(it)
             }
         )
@@ -123,20 +129,20 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
             )
         }
 
-        val color = viewModule.changeColor.observeAsState()
+        val state by viewModule.colorState.observeAsState()
 
         AnimatedVisibility(
-            visible = color.value != null,
+            visible = state != null,
             enter = fadeIn(animationSpec = tween(300)),
             exit = fadeOut(animationSpec = tween(300))
         ) {
-            color.value?.let {
-                ColorPickerRing(color = it)
+            state?.let { state ->
+                ColorPickerRing(color = state.color)
                 Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 90.dp)) {
                     val view = LocalView.current
-                    ColorPickerInfo(color = it) {
+                    ColorPickerInfo(state = state) {
                         view.vibrate(EVibrate.BUTTON)
-                        stateInfoColor = it
+                        stateInfoColor = state.color
                     }
                 }
 
@@ -146,12 +152,12 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
                         IconItem(painter = painterResource(id = R.drawable.ic_copy)) {
                             view.vibrate(EVibrate.BUTTON)
                             analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
-                            context.clipboardCopy(it.toString())
+                            context.clipboardCopy(state.typeValue)
                             context.showToast(R.string.module_other_color_pick_color_copy)
                         }
                         IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
                             view.vibrate(EVibrate.BUTTON)
-                            viewModule.pressPaletteAdd()
+                            viewModule.pressPaletteAdd(state.color)
                             context.showToast(R.string.module_other_color_pick_color_add_to_pallete)
                         }
                     }

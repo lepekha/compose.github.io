@@ -65,14 +65,17 @@ fun ColorPickerRing(modifier: Modifier = Modifier, color: Int) {
     }
 }
 
+
+data class ColorState(val color: Int, val name: String, val typeValue: String)
+
 @Composable
-fun ColorPickerInfo(color: Int, click: () -> Unit) {
-    val borderColor = color.visibleColor()
+fun ColorPickerInfo(state: ColorState, click: () -> Unit) {
+    val borderColor = state.color.visibleColor()
 
 
     FilledTonalIconButton(
         onClick = click,
-        colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = Color(color)),
+        colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = Color(state.color)),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.height(60.dp).fillMaxWidth().border(BorderStroke(width = 2.dp, MaterialTheme.colorScheme.secondaryContainer), RoundedCornerShape(16.dp))
     ) {
@@ -89,9 +92,8 @@ fun ColorPickerInfo(color: Int, click: () -> Unit) {
                     .alpha(0.5f)
             )
             Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
-                Text(text = Settings.colorType.colorToString(color = color), color = borderColor, fontSize = 18.sp, fontWeight = FontWeight(700))
-                Text(text = name, color = borderColor, fontSize = 14.sp, fontWeight = FontWeight(600))
+                Text(text = state.typeValue, color = borderColor, fontSize = 18.sp, lineHeight = 19.sp, fontWeight = FontWeight(700))
+                Text(text = state.name, color = borderColor, fontSize = 14.sp, lineHeight = 15.sp, fontWeight = FontWeight(600))
             }
         }
     }

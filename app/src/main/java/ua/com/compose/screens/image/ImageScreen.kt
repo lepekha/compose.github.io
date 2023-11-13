@@ -29,17 +29,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.Shape
@@ -52,12 +58,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.minus
 import androidx.compose.ui.zIndex
 import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
+import androidx.lifecycle.lifecycleScope
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import kotlinx.coroutines.GlobalScope
 import ua.com.compose.R
+import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
@@ -67,12 +77,14 @@ import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
 import ua.com.compose.composable.Menu
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.findActivity
-import ua.com.compose.extension.imageBitmap
+import ua.com.compose.extension.showToast
+import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
-import ua.com.compose.screens.EPanel
 import ua.com.compose.screens.info.InfoScreen
 import java.lang.Float
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 
@@ -92,16 +104,42 @@ fun View.bitmapFormView(activity: Activity, result: (bmp: Bitmap) -> Unit) {
 
 @Composable
 fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
-
     val activity = LocalContext.current.findActivity()
     val view = LocalView.current
-    var photoUri: Uri? by remember { mutableStateOf(uri?.let { Uri.decode(it).toUri() }) }
+    uri?.let { Settings.lastUri = Uri.decode(it).toUri() }
+    var photoUri: Uri? by remember { mutableStateOf(Settings.lastUri) }
     var imageLoadState: AsyncImagePainter.State by remember { mutableStateOf(AsyncImagePainter.State.Empty) }
     var positionInRoot by remember { mutableStateOf(Offset.Zero) }
+
+    val scope = rememberCoroutineScope()
 
     var size by remember { mutableStateOf(Size.Zero) }
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
+
+    fun generatePixel(view: View) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                view.bitmapFormView(activity) {
+                    viewModule.changeColor(it.getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt()))
+                }
+            } else {
+                view.drawToBitmap().getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt()).let {
+                    viewModule.changeColor(it)
+                }
+            }
+        } catch (_: Exception) { }
+    }
+
+    val throttleLatest: ((View) -> Unit) = remember {
+        throttleLatest(
+            withFirst = true,
+            intervalMs = 100,
+            coroutineScope = scope
+        ) {
+            generatePixel(it)
+        }
+    }
 
     val state = rememberTransformableState { zoomChange, offsetChange, _ ->
         scale = Float.max(1f, scale * zoomChange)
@@ -128,6 +166,7 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if(uri != null) {
             photoUri = uri
+            Settings.lastUri = uri
             size = Size.Zero
             scale = 1f
             offset = Offset.Zero
@@ -157,46 +196,32 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
         }
     } else {
         Box(modifier = Modifier.fillMaxSize()) {
-            val color = viewModule.changeColor.observeAsState()
-
-            val background = imageBitmap(id = R.drawable.ic_background_pattern, option = BitmapFactory.Options().apply {
-                this.inPreferredConfig = Bitmap.Config.ARGB_8888
-                this.outHeight = 15.dp.value.toInt()
-                this.outWidth = 15.dp.value.toInt()
-            }).asImageBitmap()
-
+            val color1 = MaterialTheme.colorScheme.surfaceContainer
+            val color2 = MaterialTheme.colorScheme.surfaceContainerHigh
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        ShaderBrush(
-                            ImageShader(
-                                background,
-                                TileMode.Repeated,
-                                TileMode.Repeated
-                            )
-                        )
-                    )
+                    .drawBehind {
+                        val _size = Size(20.dp.toPx(), 20.dp.toPx())
+                        val countH = ceil(this.size.height / _size.height).toInt()
+                        val countW = ceil(this.size.width / _size.width).toInt()
+                        var _offset = Offset(0f, 0f)
+                        repeat(countH) { h ->
+                            repeat(countW) { w ->
+                                val _color = if ((h + w) % 2 == 0) color1 else color2
+                                drawRect(color = _color, topLeft = _offset, size = _size)
+                                _offset = _offset.copy(x = _offset.x + _size.width, y = _offset.y)
+                            }
+                            _offset = _offset.copy(x = 0f, y = _offset.y + _size.height)
+                        }
+                    }
             ) {
                 if(photoUri != null) {
 
                     if(imageLoadState is AsyncImagePainter.State.Success) {
-
-                        val view = LocalView.current
-                        try {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                view.bitmapFormView(activity) {
-                                    viewModule.changeColor(it.getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt()))
-                                }
-                            } else {
-                                view.drawToBitmap().getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt()).let {
-                                    viewModule.changeColor(it)
-                                }
-                            }
-                        } catch (_: Exception) { }
+                        throttleLatest.invoke(view)
                     }
-
 
                     AsyncImage(
                         model = photoUri,
@@ -220,17 +245,17 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                         }
                     )
                 }
+                val colorState by viewModule.colorState.observeAsState()
 
-                val currentColor = color.value
                 AnimatedVisibility(
-                    visible = currentColor != null,
+                    visible = colorState != null,
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300))
                 ) {
-                    currentColor?.let {
+                    colorState?.let { colorState ->
                         ColorPickerRing(modifier = Modifier.onGloballyPositioned { coordinates ->
                             positionInRoot = coordinates.boundsInRoot().center
-                        }, color = it)
+                        }, color = colorState.color)
                         Box(
                             contentAlignment = Alignment.BottomCenter,
                             modifier = Modifier
@@ -241,31 +266,31 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                                     bottom = 90.dp
                                 )
                         ) {
-                            ColorPickerInfo(color = it) {
+                            ColorPickerInfo(state = colorState) {
                             view.vibrate(EVibrate.BUTTON)
-                                stateInfoColor = it
+                                stateInfoColor = colorState.color
                             }
                         }
 
+                        val context = LocalContext.current
                         Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier
                             .fillMaxSize()
                             .padding(start = 16.dp, end = 16.dp, bottom = 26.dp)) {
                             Menu {
                                 IconItem(painter = painterResource(id = R.drawable.ic_gallery)) {
-//                                this@apply.vibrate(EVibrate.BUTTON)
+                                    view.vibrate(EVibrate.BUTTON)
                                     launcher.launch(PickVisualMediaRequest(mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly))
                                 }
                                 IconItem(painter = painterResource(id = R.drawable.ic_copy)) {
-//                                this@apply.vibrate(EVibrate.BUTTON)
+                                    view.vibrate(EVibrate.BUTTON)
                                     analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
-//                                requireContext().clipboardCopy(color.toString())
-//                                requireContext().showToast(R.string.module_other_color_pick_color_copy)
+                                    context.clipboardCopy(colorState.typeValue)
+                                    context.showToast(R.string.module_other_color_pick_color_copy)
                                 }
                                 IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
-//                                this@apply.vibrate(EVibrate.BUTTON)
-                                    viewModule.pressPaletteAdd()
-//                                requireActivity().createReview()
-//                                requireContext().showToast(R.string.module_other_color_pick_color_add_to_pallete)
+                                    view.vibrate(EVibrate.BUTTON)
+                                    viewModule.pressPaletteAdd(colorState.color)
+                                    context.showToast(R.string.module_other_color_pick_color_add_to_pallete)
                                 }
                             }
                         }

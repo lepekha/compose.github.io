@@ -1,13 +1,9 @@
 package ua.com.compose.dialogs
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,11 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -121,7 +117,7 @@ fun DialogColorPick(color: Color = Color.Gray, onDone: (color: Color) -> Unit, o
                                     .padding(5.dp), contentAlignment = Alignment.TopEnd) {
                                     Image(
                                         alignment = Alignment.Center,
-                                        painter = painterResource(id = R.drawable.ic_info),
+                                        imageVector = Icons.Rounded.Info,
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(borderColor),
                                         modifier = Modifier
@@ -130,7 +126,8 @@ fun DialogColorPick(color: Color = Color.Gray, onDone: (color: Color) -> Unit, o
                                     )
                                     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                                         val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
-                                        Text(text = name, color = borderColor, fontSize = 16.sp, fontWeight = FontWeight(700))
+                                        Text(text = Settings.colorType.colorToString(color = color), color = borderColor, fontSize = 18.sp, lineHeight = 19.sp, fontWeight = FontWeight(700))
+                                        Text(text = name, color = borderColor, fontSize = 14.sp, lineHeight = 15.sp, fontWeight = FontWeight(600))
                                     }
                                 }
                             }
@@ -155,7 +152,7 @@ fun DialogColorPick(color: Color = Color.Gray, onDone: (color: Color) -> Unit, o
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(bottom = 20.dp, top = 40.dp)
                     ) {
-                        DialogButton(painter = painterResource(id = R.drawable.ic_close), modifier = Modifier
+                        DialogButton(icon = Icons.Rounded.Close, modifier = Modifier
                             .weight(1f)
                             .padding(start = 16.dp, end = 8.dp)
                             .height(50.dp)) {
@@ -166,7 +163,7 @@ fun DialogColorPick(color: Color = Color.Gray, onDone: (color: Color) -> Unit, o
                             }
                         }
 
-                        DialogAccentButton(painter = painterResource(id = R.drawable.ic_done), modifier = Modifier
+                        DialogAccentButton(icon = Icons.Rounded.Done, modifier = Modifier
                             .weight(1f)
                             .padding(start = 8.dp, end = 16.dp)
                             .height(50.dp)) {

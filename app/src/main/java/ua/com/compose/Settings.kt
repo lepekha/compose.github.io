@@ -2,6 +2,7 @@ package ua.com.compose
 
 import android.content.Context
 import android.graphics.Color
+import android.net.Uri
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.ETheme
@@ -12,6 +13,8 @@ import ua.com.compose.extension.put
 import ua.com.compose.screens.EPanel
 
 object Settings {
+
+    var lastUri: Uri? = null
 
     var vibration: Boolean
         get() {

@@ -14,13 +14,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ua.com.compose.R
 
 @Composable
-fun DialogAccentButton(painter: Painter, modifier: Modifier, onClick: () -> Unit) {
+fun DialogAccentButton(icon: ImageVector, modifier: Modifier, onClick: () -> Unit) {
     FilledTonalIconButton(
         onClick = onClick,
         shape = RoundedCornerShape(50.dp),
@@ -31,7 +32,7 @@ fun DialogAccentButton(painter: Painter, modifier: Modifier, onClick: () -> Unit
         )
     ) {
         Icon(
-            painter = painter,
+            imageVector = icon,
             modifier = Modifier.fillMaxHeight(0.6f).aspectRatio(1f, true),
             contentDescription = null
         )
@@ -39,7 +40,7 @@ fun DialogAccentButton(painter: Painter, modifier: Modifier, onClick: () -> Unit
 }
 
 @Composable
-fun DialogButton(painter: Painter, modifier: Modifier, onClick: () -> Unit) {
+fun DialogButton(icon: ImageVector, modifier: Modifier, onClick: () -> Unit) {
     FilledTonalIconButton(
         onClick = onClick,
         shape = RoundedCornerShape(50.dp),
@@ -50,7 +51,7 @@ fun DialogButton(painter: Painter, modifier: Modifier, onClick: () -> Unit) {
         )
     ) {
         Icon(
-            painter = painter,
+            imageVector = icon,
             modifier = Modifier.fillMaxHeight(0.6f).aspectRatio(1f, true),
             contentDescription = null
         )

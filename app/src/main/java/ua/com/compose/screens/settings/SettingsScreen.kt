@@ -159,6 +159,38 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
                 FilledTonalIconButton(
                     onClick = {
+                        stateTheme = true
+                        view.vibrate(EVibrate.BUTTON) },
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp)) {
+                        Text(text = stringResource(id = R.string.module_other_color_pick_theme),
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight(500))
+
+                        Text(text = stringResource(id = theme.strRes),
+                            textAlign = TextAlign.End,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight(700),
+                            modifier = Modifier
+                                .weight(1f))
+                    }
+                }
+
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FilledTonalIconButton(
+                    onClick = {
                         stateLanguage = true
                         view.vibrate(EVibrate.BUTTON) },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
@@ -178,38 +210,6 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                             fontWeight = FontWeight(500))
 
                         Text(text = appLocale?.title ?: currentLocale,
-                            textAlign = TextAlign.End,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight(700),
-                            modifier = Modifier
-                                .weight(1f))
-                    }
-                }
-
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                FilledTonalIconButton(
-                    onClick = {
-                        stateTheme = true
-                        view.vibrate(EVibrate.BUTTON) },
-                    colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp)) {
-                        Text(text = stringResource(id = R.string.module_other_color_pick_theme),
-                            textAlign = TextAlign.Start,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight(500))
-
-                        Text(text = stringResource(id = theme.strRes),
                             textAlign = TextAlign.End,
                             color = MaterialTheme.colorScheme.primary,
                             fontSize = 22.sp,
@@ -245,10 +245,10 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                             viewModel.changeVibration(it)
                                           }, colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
                         checkedTrackColor = MaterialTheme.colorScheme.primary,
-                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                        uncheckedBorderColor = MaterialTheme.colorScheme.surfaceVariant,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                        uncheckedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
                     ))
                 }
                 Spacer(modifier = Modifier.height(16.dp))

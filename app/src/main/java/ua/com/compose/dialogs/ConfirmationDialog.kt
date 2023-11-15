@@ -42,14 +42,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
 import ua.com.compose.R
-import ua.com.compose.composable.DialogAccentButton
 import ua.com.compose.composable.DialogBottomSheet
-import ua.com.compose.composable.DialogButton
 import ua.com.compose.composable.DialogConfirmButton
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogConfirmation(text: String, onDone: () -> Unit, onDismissRequest: () -> Unit) {
+fun DialogConfirmation(title: String, text: String, onDone: () -> Unit, onDismissRequest: () -> Unit) {
     DialogBottomSheet(
         onDismissRequest = onDismissRequest,
     ) {
@@ -61,14 +58,25 @@ fun DialogConfirmation(text: String, onDone: () -> Unit, onDismissRequest: () ->
                     .padding(top = 24.dp, bottom = 8.dp)
             ) {
                 Text(
-                    text = text,
-                    textAlign = TextAlign.Center,
+                    text = title,
+                    textAlign = TextAlign.Start,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 24.sp,
                     fontWeight = FontWeight(400),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 8.dp, end = 8.dp)
+                        .padding(start = 24.dp, end = 24.dp)
+                )
+
+                Text(
+                    text = text,
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight(400),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, start = 24.dp, end = 24.dp)
                 )
                 Row(
                     verticalAlignment = Alignment.Bottom,

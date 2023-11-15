@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
@@ -42,6 +44,7 @@ import androidx.core.graphics.toRect
 import androidx.core.graphics.withClip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import net.sf.javaml.core.kdtree.KDTree
 import ua.com.compose.data.ColorNames
 import java.util.Arrays
 import java.util.NavigableMap
@@ -56,12 +59,12 @@ import android.graphics.Color as AndroidColor
 @Composable
 fun HueBar(
     modifier: Modifier = Modifier,
-    color: Int,
+    hue: Float,
     setColor: (Float) -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val _color = remember {
-        mutableStateOf(color)
+    var _hue by remember {
+        mutableStateOf(hue)
     }
     val interactionSource = remember {
         MutableInteractionSource()
@@ -70,11 +73,18 @@ fun HueBar(
         mutableStateOf(Offset.Unspecified)
     }
 
+    if(_hue != hue) {
+        _hue = hue
+        pressOffset.value = Offset.Unspecified
+    }
+
+    val tree = KDTree(3)
+
     Canvas(
         modifier = modifier.emitDragGesture(interactionSource)
     ) {
         val drawScopeSize = size
-        val bitmap = Bitmap.createBitmap(size.width.toInt(), size.height.toInt(), Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(max(1, size.width.toInt()), max(1, size.height.toInt()), Bitmap.Config.ARGB_8888)
         val hueCanvas = Canvas(bitmap)
         val containerPath = Path()
         val huePanel = RectF(0f, 3.dp.toPx(), bitmap.width.toFloat(), bitmap.height.toFloat() - 3.dp.toPx())
@@ -83,7 +93,12 @@ fun HueBar(
         val hueColors = IntArray((huePanel.width()).toInt())
         var hueLine = 0f
         for (i in hueColors.indices) {
-            hueColors[i] = AndroidColor.HSVToColor(floatArrayOf(hueLine, 1f, 1f))
+            val _color = AndroidColor.HSVToColor(floatArrayOf(hueLine, 1f, 1f))
+            hueColors[i] = _color
+            val red = android.graphics.Color.red(_color).toDouble()
+            val green = android.graphics.Color.green(_color).toDouble()
+            val blue = android.graphics.Color.blue(_color).toDouble()
+            tree.insert(doubleArrayOf(red, green, blue), i)
             hueLine += 360f / hueColors.size
         }
 
@@ -101,6 +116,7 @@ fun HueBar(
             bitmap = bitmap,
             panel = huePanel
         )
+
         fun pointToHue(pointX: Float): Float {
             val width = huePanel.width()
             val x = when {
@@ -114,12 +130,20 @@ fun HueBar(
         scope.collectForPress(interactionSource) { pressPosition ->
             val pressPos = pressPosition.x.coerceIn(0f..drawScopeSize.width)
             pressOffset.value = Offset(pressPos, 0f)
-            val pointToHue = pointToHue(pressPos)
-            _color.value = AndroidColor.HSVToColor(floatArrayOf(pointToHue, 1f, 1f))
-            setColor(pointToHue)
+            _hue = pointToHue(pressPos)
+//            _color.value = AndroidColor.HSVToColor(floatArrayOf(pointToHue, 1f, 1f))
+            setColor(_hue)
         }
 
-        val center = pressOffset.value.takeIf { it.isSpecified }?.let { Offset(pressOffset.value.x, size.height/2) } ?: Offset(hueColors.findClosestIndexTo(color).toFloat(), size.height/2)
+        val center = pressOffset.value.takeIf { it.isSpecified }?.let { Offset(pressOffset.value.x, size.height/2) } ?: kotlin.run {
+            val _color = AndroidColor.HSVToColor(floatArrayOf(hue, 1f, 1f))
+            val red = android.graphics.Color.red(_color).toDouble()
+            val green = android.graphics.Color.green(_color).toDouble()
+            val blue = android.graphics.Color.blue(_color).toDouble()
+
+            val index = (tree.nearest(doubleArrayOf(red, green, blue)) as? Int) ?: 0
+            Offset(index.toFloat(), size.height/2)
+        }
 
         drawCircle(
             Color.White,
@@ -128,28 +152,11 @@ fun HueBar(
         )
 
         drawCircle(
-            color = Color(_color.value),
+            color = Color(AndroidColor.HSVToColor(floatArrayOf(_hue, 1f, 1f))),
             radius = size.height/2 - 5.dp.toPx(),
             center = center,
         )
     }
-}
-
-fun IntArray.findClosestIndexTo(target: Int): Int {
-    val sorted = this.sortedDescending()
-
-    var closestIndex = 0
-    var previousDiff = Int.MAX_VALUE
-
-    for (i in this.indices) {
-        val diff = abs(this[i] - target)
-        if (diff < previousDiff) {
-            previousDiff = diff
-            closestIndex = i
-        }
-    }
-
-    return closestIndex
 }
 
 fun CoroutineScope.collectForPress(

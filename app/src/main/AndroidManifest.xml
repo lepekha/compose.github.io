@@ -69,7 +69,7 @@
             android:launchMode="singleInstance"
             android:exported = "true"
             android:configChanges="locale|layoutDirection"
-            android:windowSoftInputMode="adjustPan|stateHidden|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
             <intent-filter
                 android:icon="@mipmap/ic_launcher"

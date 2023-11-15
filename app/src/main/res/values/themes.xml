@@ -6,5 +6,5 @@
         <item name="postSplashScreenTheme">@style/Theme.Compose</item>
     </style>
 
-    <style name="Theme.Compose" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+    <style name="Theme.Compose" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>

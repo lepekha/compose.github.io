@@ -40,26 +40,6 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomSheet(onDismiss: () -> Unit) {
-    val modalBottomSheetState = rememberModalBottomSheetState()
-
-        ModalBottomSheet(
-            onDismissRequest = { onDismiss() },
-            sheetState = modalBottomSheetState,
-            dragHandle = { BottomSheetDefaults.DragHandle() },
-            containerColor = Color.Transparent,
-            windowInsets = WindowInsets(0, 0, 0, 0)
-        ) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(30.dp)
-                .background(Color.White)
-                .height(400.dp))
-        }
-}
-
 @Composable
 fun IconButton(painter: Painter, shape: Shape? = null, modifier: Modifier, click: () -> Unit) {
     FilledTonalIconButton(

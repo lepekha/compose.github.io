@@ -3,6 +3,7 @@ package ua.com.compose.data
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
+import androidx.annotation.ColorInt
 import androidx.compose.ui.util.fastSumBy
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.luminance
@@ -11,6 +12,7 @@ import org.json.JSONObject
 import ua.com.compose.api.config.remoteConfig
 import java.io.IOException
 import java.util.Locale
+import java.util.regex.Pattern
 import kotlin.collections.set
 import kotlin.math.abs
 import kotlin.math.min
@@ -22,10 +24,15 @@ import kotlin.system.measureTimeMillis
 
 enum class EColorType(val key: Int) {
     HEX(key = 0) {
-        override fun stringToColor(value: String): Int {
-            var hex = value.replace("#", "")
-            repeat(6 - hex.count()) { hex = "0$hex" }
-            return Color.parseColor("#$hex")
+        override fun stringToColor(value: String): Int? {
+            val hex = value.replace("#", "").trim()
+            try {
+                return Color.parseColor("#$hex")
+            } catch (e: Exception) {
+                return null
+            }
+//            repeat(6 - hex.count()) { hex = "0$hex" }
+//            return Color.parseColor("#$hex")
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val colorHex = Integer.toHexString(color).substring(2).toUpperCase()
@@ -34,14 +41,18 @@ enum class EColorType(val key: Int) {
         override fun title() = "HEX"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHEX
     },
-
     RGB_DECIMAL(key = 1) {
-        override fun stringToColor(value: String): Int {
-            val args = value.split(" ")
-            val r = min((args.getOrNull(0) ?: "0").toIntOrNull() ?: 0, 255)
-            val g = min((args.getOrNull(1) ?: "0").toIntOrNull() ?: 0, 255)
-            val b = min((args.getOrNull(2) ?: "0").toIntOrNull() ?: 0, 255)
-            return Color.rgb(r,g,b)
+        override fun stringToColor(value: String): Int ?{
+            val args = value.split(",")
+
+            try {
+                val r = args.getOrNull(0)?.trim()?.toDouble()?.toInt() ?: return null
+                val g = args.getOrNull(1)?.trim()?.toDouble()?.toInt() ?: return null
+                val b = args.getOrNull(2)?.trim()?.toDouble()?.toInt() ?: return null
+                return Color.rgb(r,g,b)
+            } catch (e: Exception) {
+                return null
+            }
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
@@ -52,14 +63,18 @@ enum class EColorType(val key: Int) {
         override fun title() = "RGB Decimal"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeRGBDecimal
     },
-
     RGB_PERCENT(key = 3) {
-        override fun stringToColor(value: String): Int {
-            val args = value.split(" ")
-            val r = ((args.getOrNull(0) ?: "0").toIntOrNull() ?: 100) * 255 / 100
-            val g = ((args.getOrNull(1) ?: "0").toIntOrNull() ?: 100) * 255 / 100
-            val b = ((args.getOrNull(2) ?: "0").toIntOrNull() ?: 100) * 255 / 100
-            return Color.rgb(r,g,b)
+        override fun stringToColor(value: String): Int? {
+            try {
+            val args = value.replace("%", "").split(",")
+            val r = args.getOrNull(0)?.trim()?.toDouble()?.toInt()?.let { it * 255 / 100 } ?: return null
+            val g = args.getOrNull(1)?.trim()?.toDouble()?.toInt()?.let { it * 255 / 100 } ?: return null
+            val b = args.getOrNull(2)?.trim()?.toDouble()?.toInt()?.let { it * 255 / 100 } ?: return null
+
+                return Color.rgb(r,g,b)
+            } catch (e: Exception) {
+                return null
+            }
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color) * 100.0f / 255.0f
@@ -70,11 +85,16 @@ enum class EColorType(val key: Int) {
         override fun title() = "RGB Percent"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeRGBPercent
     },
-
     BINARY(key = 2) {
-        override fun stringToColor(value: String): Int {
-            val array = value.split(" ").toTypedArray()
-            return Color.rgb(array[0].toInt(2), array[1].toInt(2), array[2].toInt(2))
+        override fun stringToColor(value: String): Int? {
+            try {
+
+            val array = value.split(",").toTypedArray()
+                return Color.rgb(array[0].trim().toInt(2), array[1].trim().toInt(2), array[2].trim().toInt(2))
+            } catch (e: Exception) {
+                return null
+            }
+
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
@@ -85,25 +105,32 @@ enum class EColorType(val key: Int) {
         override fun title() = "BINARY"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeBINARY
     },
-
     HSV(key = 4) {
-        override fun stringToColor(value: String): Int {
-            val array = value.split(" ").map { it.toFloatOrNull() ?: 0f }.toFloatArray()
-            return Color.HSVToColor(array)
+        override fun stringToColor(value: String): Int? {
+            try {
+                val array = value.replace("°", "").replace("%", "").split(",").map { it.trim().toFloatOrNull() ?: 0f }.toFloatArray()
+                return Color.HSVToColor(array)
+            } catch (e: Exception) {
+                return null
+            }
         }
 
         override fun colorToString(color: Int, withSeparator: String): String {
             val array = FloatArray(3)
             Color.colorToHSV(color, array)
-            return "${String.format("%.1f", array[0])}°$withSeparator ${String.format("%.1f", (array[1] * 100))}%$withSeparator ${String.format("%.1f", (array[2] * 100))}%"
+            return "${array[0].roundToInt()}°$withSeparator ${(array[1] * 100).roundToInt()}%$withSeparator ${(array[2] * 100).roundToInt()}%"
         }
         override fun title() = "HSV"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHSV
     },
     HSL(key = 5) {
-        override fun stringToColor(value: String): Int {
-            val array = value.split(" ").map { it.toFloatOrNull() ?: 0f }.toFloatArray()
-            return ColorUtils.HSLToColor(array)
+        override fun stringToColor(value: String): Int? {
+            try {
+            val array = value.replace("°", "").replace("%", "").split(",").map { it.trim().toFloatOrNull() ?: 0f }.toFloatArray()
+                return ColorUtils.HSLToColor(array)
+            } catch (e: Exception) {
+                return null
+            }
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
@@ -112,14 +139,30 @@ enum class EColorType(val key: Int) {
 
             val array = FloatArray(3)
             ColorUtils.RGBToHSL(red, green, blue, array)
-            return "${String.format("%.1f", array[0])}°$withSeparator ${String.format("%.1f", (array[1] * 100))}%$withSeparator ${String.format("%.1f", (array[2] * 100))}%"
+            return "${array[0].roundToInt()}°$withSeparator ${(array[1] * 100).roundToInt()}%$withSeparator ${(array[2] * 100).roundToInt()}%"
         }
         override fun title() = "HSL"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHSL
     },
     CMYK(key = 6) {
-        override fun stringToColor(value: String): Int {
-            return Color.WHITE
+        override fun stringToColor(value: String): Int? {
+
+            val values = value.replace("%", "").split(",").mapNotNull { it.trim().toFloatOrNull() }
+
+            if (values.size == 4 && values.all { it in 0f..100f }) {
+                val (c, m, y, k) = values.map { it / 100f }
+                val r = (1 - minOf(1f, c * (1 - k) + k)) * 255
+                val g = (1 - minOf(1f, m * (1 - k) + k)) * 255
+                val b = (1 - minOf(1f, y * (1 - k) + k)) * 255
+
+                try {
+                    return Color.rgb(r.roundToInt(), g.roundToInt(), b.roundToInt())
+                } catch (e: Exception) {
+                    return null
+                }
+            } else {
+                return null
+            }
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val r = Color.red(color)
@@ -140,9 +183,14 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = remoteConfig.showColorTypeCMYK
     },
     CIE_LAB(key = 7) {
-        override fun stringToColor(value: String): Int {
-            val array = value.split(" ").map { it.toDoubleOrNull() ?: 0.0 }
-            return ColorUtils.LABToColor(array[0], array[1], array[2])
+        override fun stringToColor(value: String): Int? {
+            try {
+            val array = value.split(",").map { it.trim().toDouble() }
+
+                return ColorUtils.LABToColor(array[0], array[1], array[2])
+            } catch (e: Exception) {
+                return null
+            }
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val r = Color.red(color)
@@ -158,9 +206,13 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = remoteConfig.showColorTypeCIELAB
     },
     XYZ(key = 8) {
-        override fun stringToColor(value: String): Int {
-            val array = value.split(" ").map { it.toDoubleOrNull() ?: 0.0 }
-            return ColorUtils.XYZToColor(array[0], array[1], array[2])
+        override fun stringToColor(value: String): Int? {
+            try {
+            val array = value.replace("%", "").split(",").map { it.toDouble() }
+                return ColorUtils.XYZToColor(array[0], array[1], array[2])
+            } catch (e: Exception) {
+                return null
+            }
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val red = Color.red(color)
@@ -189,12 +241,13 @@ enum class EColorType(val key: Int) {
         override fun isVisible(): Boolean = true
     };
 
-    abstract fun colorToString(color: Int, withSeparator: String = ""): String
-    abstract fun stringToColor(value: String): Int
+    abstract fun colorToString(color: Int, withSeparator: String = ","): String
+    abstract fun stringToColor(value: String): Int?
     abstract fun title(): String
     abstract fun isVisible(): Boolean
 
     companion object {
+        fun valuesForInputText() = listOf(HEX, RGB_DECIMAL, RGB_PERCENT, HSV, HSL, CMYK, XYZ, CIE_LAB, BINARY)
         fun visibleValues() = values().filter { it.isVisible() }
         fun getByKey(key: Int) = values().firstOrNull { it.key == key } ?: HEX
     }

@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -54,9 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
 import kotlinx.coroutines.launch
 import ua.com.compose.R
-import ua.com.compose.composable.DialogAccentButton
 import ua.com.compose.composable.DialogBottomSheet
-import ua.com.compose.composable.DialogButton
 import ua.com.compose.composable.DialogConfirmButton
 
 @Composable
@@ -66,6 +65,7 @@ fun DialogInputText(text: String, hint: String, onDone: (text: String) -> Unit, 
     DialogBottomSheet(
         onDismissRequest = onDismissRequest,
     ) {
+        Surface {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -97,9 +97,6 @@ fun DialogInputText(text: String, hint: String, onDone: (text: String) -> Unit, 
                     ),
                     onValueChange = {
                         state.value = it
-                    },
-                    leadingIcon = {
-                        Icon(modifier = Modifier.size(36.dp), painter = painterResource(id = R.drawable.ic_edit_note), tint = MaterialTheme.colorScheme.onSurfaceVariant, contentDescription = null)
                     })
                 Row(
                     verticalAlignment = Alignment.Bottom,
@@ -117,5 +114,7 @@ fun DialogInputText(text: String, hint: String, onDone: (text: String) -> Unit, 
                     }
                 }
             }
+        }
+
     }
 }

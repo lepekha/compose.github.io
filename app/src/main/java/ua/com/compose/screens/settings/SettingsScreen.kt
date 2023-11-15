@@ -53,12 +53,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
-import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.Settings
 import ua.com.compose.composable.BottomSheet
-import ua.com.compose.composable.DialogAccentButton
 import ua.com.compose.data.ELanguage
 import ua.com.compose.data.ETheme
 import ua.com.compose.dialogs.ChipItem

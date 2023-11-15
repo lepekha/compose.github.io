@@ -12,6 +12,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
+//import androidx.compose.foundation.draganddrop.dragAndDropSource
+//import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,13 +40,16 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,6 +75,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,6 +94,7 @@ import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
 import ua.com.compose.composable.Menu
 import ua.com.compose.data.ColorNames
+import ua.com.compose.data.EColorType
 import ua.com.compose.dialogs.DialogColorPick
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
@@ -128,11 +135,12 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     }
 
     if(stateRemovePalette != null) {
-        stateRemovePalette?.id?.let { paletteId ->
+        stateRemovePalette?.let { palette ->
             DialogConfirmation(
+                title = palette.name,
                 text = stringResource(id = R.string.module_other_color_pick_remove_pallet),
                 onDone = {
-                    viewModule.pressRemovePallet(id = paletteId)
+                    viewModule.pressRemovePallet(id = palette.id)
                 }) {
                 stateRemovePalette = null
             }
@@ -140,21 +148,31 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     }
 
     stateTuneColor?.let { state ->
-        DialogColorPick(color = state.color, onDone = {
-            Settings.lastColor = it.toArgb()
-            viewModule.pressChangeColor(state.id, it.toArgb())
-        }) {
+        DialogColorPick(
+            color = state.color,
+            onDone = {
+                Settings.lastColor = it.toArgb()
+                viewModule.pressChangeColor(state.id, it.toArgb())
+            },
+            onInfo = {
+                stateInfoColor = it.toArgb()
+            }) {
             stateTuneColor = null
         }
     }
 
     stateCreateColor.takeIf { it }?.let {
-        DialogColorPick(color = Color(Settings.lastColor), onDone = {
-            Settings.lastColor = it.toArgb()
-            viewModule.pressAddColor(it.toArgb())
-        }) {
-            stateCreateColor = false
-        }
+        DialogColorPick(
+            color = Color(Settings.lastColor),
+            onDone = {
+                Settings.lastColor = it.toArgb()
+                viewModule.pressAddColor(it.toArgb())
+            },
+            onInfo = {
+                stateInfoColor = it.toArgb()
+            }) {
+                stateCreateColor = false
+            }
     }
 
     stateInfoColor?.let {

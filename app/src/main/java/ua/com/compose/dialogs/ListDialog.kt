@@ -34,8 +34,6 @@ data class ChipItem<T>(val title: String, val icon: Painter? = null, val isSelec
 
 @Composable
 fun <T> DialogChoise(items: List<ChipItem<T>>, onDone: (value: T) -> Unit, onDismissRequest: () -> Unit) {
-    val view = LocalView.current
-
     DialogBottomSheet(
         onDismissRequest = onDismissRequest,
     ) {

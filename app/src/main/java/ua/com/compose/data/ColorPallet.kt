@@ -17,4 +17,7 @@ class ColorPallet {
 
     @ColumnInfo(name = "name")
     var name: String = ""
+
+    @ColumnInfo(name = "isCurrent")
+    var isCurrent: Boolean = false
 }

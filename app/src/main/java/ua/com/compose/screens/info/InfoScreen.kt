@@ -114,7 +114,7 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .height(60.dp)
-                                .background(Color(it.color), RoundedCornerShape(16.dp))
+                                .background(Color(it.color), MaterialTheme.shapes.medium)
                                 .fillMaxWidth()
                                 .padding(top = 5.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
                         ) {

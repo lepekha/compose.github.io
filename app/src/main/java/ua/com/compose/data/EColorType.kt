@@ -39,6 +39,7 @@ enum class EColorType(val key: Int) {
             return "#$colorHex"
         }
         override fun title() = "HEX"
+        override fun shortTitle() = "HEX"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHEX
     },
     RGB_DECIMAL(key = 1) {
@@ -61,6 +62,7 @@ enum class EColorType(val key: Int) {
             return "$red$withSeparator $green$withSeparator $blue"
         }
         override fun title() = "RGB Decimal"
+        override fun shortTitle() = "RGB"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeRGBDecimal
     },
     RGB_PERCENT(key = 3) {
@@ -83,6 +85,7 @@ enum class EColorType(val key: Int) {
             return "${String.format("%.1f", red)}%$withSeparator ${String.format("%.1f", green)}%$withSeparator ${String.format("%.1f", blue)}%"
         }
         override fun title() = "RGB Percent"
+        override fun shortTitle() = "RGB %"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeRGBPercent
     },
     BINARY(key = 2) {
@@ -103,6 +106,7 @@ enum class EColorType(val key: Int) {
             return "${red.toString(2)}$withSeparator ${green.toString(2)}$withSeparator ${blue.toString(2)}"
         }
         override fun title() = "BINARY"
+        override fun shortTitle() = "BINARY"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeBINARY
     },
     HSV(key = 4) {
@@ -121,6 +125,7 @@ enum class EColorType(val key: Int) {
             return "${array[0].roundToInt()}°$withSeparator ${(array[1] * 100).roundToInt()}%$withSeparator ${(array[2] * 100).roundToInt()}%"
         }
         override fun title() = "HSV"
+        override fun shortTitle() = "HSV"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHSV
     },
     HSL(key = 5) {
@@ -142,6 +147,7 @@ enum class EColorType(val key: Int) {
             return "${array[0].roundToInt()}°$withSeparator ${(array[1] * 100).roundToInt()}%$withSeparator ${(array[2] * 100).roundToInt()}%"
         }
         override fun title() = "HSL"
+        override fun shortTitle() = "HSL"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeHSL
     },
     CMYK(key = 6) {
@@ -180,6 +186,7 @@ enum class EColorType(val key: Int) {
             return "${(c * 100).roundToInt()}%$withSeparator ${(m * 100).roundToInt()}%$withSeparator ${(y * 100).roundToInt()}%$withSeparator ${(k * 100).roundToInt()}%"
         }
         override fun title() = "CMYK"
+        override fun shortTitle() = "CMYK"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeCMYK
     },
     CIE_LAB(key = 7) {
@@ -203,6 +210,7 @@ enum class EColorType(val key: Int) {
             return "${String.format("%.3f", array[0])}$withSeparator ${String.format("%.3f", array[1])}$withSeparator ${String.format("%.3f", array[2])}"
         }
         override fun title() = "CIE LAB"
+        override fun shortTitle() = "CIE LAB"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeCIELAB
     },
     XYZ(key = 8) {
@@ -227,6 +235,7 @@ enum class EColorType(val key: Int) {
             return "$x%$withSeparator $y%$withSeparator $z%"
         }
         override fun title() = "XYZ"
+        override fun shortTitle() = "XYZ"
         override fun isVisible(): Boolean = remoteConfig.showColorTypeXYZ
     },
     LUMINANCE(key = 9) {
@@ -238,16 +247,18 @@ enum class EColorType(val key: Int) {
             return String.format("%.2f", value) + "%"
         }
         override fun title() = "Luminance"
+        override fun shortTitle() = "Luminance"
         override fun isVisible(): Boolean = true
     };
 
     abstract fun colorToString(color: Int, withSeparator: String = ","): String
     abstract fun stringToColor(value: String): Int?
     abstract fun title(): String
+    abstract fun shortTitle(): String
     abstract fun isVisible(): Boolean
 
     companion object {
-        fun valuesForInputText() = listOf(HEX, RGB_DECIMAL, RGB_PERCENT, HSV, HSL, CMYK, XYZ, CIE_LAB, BINARY)
+        fun valuesForInputText() = listOf(HEX, RGB_DECIMAL, HSV, HSL, CMYK, XYZ, CIE_LAB)
         fun visibleValues() = values().filter { it.isVisible() }
         fun getByKey(key: Int) = values().firstOrNull { it.key == key } ?: HEX
     }

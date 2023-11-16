@@ -50,7 +50,7 @@ fun BottomSheet(sheetState: SheetState, onDismissRequest: () -> Unit, content: @
                 .fillMaxWidth()
                 .background(
                     MaterialTheme.colorScheme.surfaceContainer,
-                    shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
+                    shape = MaterialTheme.shapes.extraLarge
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import ua.com.compose.Settings
 import java.util.Date
 import java.util.Locale
 
@@ -20,11 +21,18 @@ class ColorDatabase(context: Context) {
                 database.execSQL("DROP TABLE colorItem");
             }
         }
+        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                val currentPaletteId = Settings.paletteID
+//                database.execSQL("ALTER TABLE pallets ADD COLUMN isCurrent BIT NOT NULL")
+//                database.execSQL("UPDATE `pallets` SET `isCurrent` = CASE WHEN `id` = $currentPaletteId THEN 1 ELSE 0 END")
+            }
+        }
     }
 
-    private val db = Room
+    val db = Room
             .databaseBuilder(context, AppDatabase::class.java, "module_other_color_pick_database")
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     val colorItemDao = db.colorItemDao()
     val palletDao = db.colorPalletDao()

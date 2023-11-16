@@ -26,18 +26,3 @@ enum class EPanel(val id: Int, val titleResId: Int, val iconResId: Int, val icon
         fun valueOfKey(id: Int) = values().firstOrNull { id == it.id } ?: IMAGE
     }
 }
-
-class ColorPickViewModule: ViewModel()  {
-
-    sealed class State {
-        object NONE: State()
-        object UPDATE_SETTINGS: State()
-    }
-
-    private val _state: MutableLiveData<State> = MutableLiveData(State.NONE)
-    val state: LiveData<State> = _state
-
-    fun changeSettings() = viewModelScope.launch {
-        _state.postValue(State.UPDATE_SETTINGS)
-    }
-}

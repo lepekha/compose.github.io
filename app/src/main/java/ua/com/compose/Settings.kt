@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.net.Uri
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.data.EColorType
+import ua.com.compose.data.ECreateColorType
 import ua.com.compose.data.ETheme
 import ua.com.compose.data.SharedPreferencesKey
 import ua.com.compose.extension.get
@@ -30,6 +31,14 @@ object Settings {
         }
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = value.key)
+        }
+
+    var createColorType: ECreateColorType
+        get() {
+            return ECreateColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_CREATE_COLOR_TYPE, defaultValue = ECreateColorType.BOX.key))
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_CREATE_COLOR_TYPE, value = value.key)
         }
 
     var theme: ETheme

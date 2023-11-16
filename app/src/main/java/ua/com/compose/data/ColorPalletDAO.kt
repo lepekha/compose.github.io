@@ -1,16 +1,25 @@
 package ua.com.compose.data
 
-import androidx.lifecycle.LiveData
+import androidx.palette.graphics.Palette
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ColorPalletDAO {
     @Query("SELECT * FROM pallets ORDER BY id DESC")
-    fun getAll(): Flow<List<ColorPallet>>
+    fun getAllFlow(): Flow<List<ColorPallet>>
+
+    @Query("SELECT * FROM pallets ORDER BY id DESC")
+    fun getAll(): List<ColorPallet>
 
     @Query("SELECT * FROM pallets WHERE id = :id")
     fun getById(id: Long): ColorPallet?
+
+    @Query("SELECT * FROM pallets ORDER BY id DESC LIMIT 1")
+    fun getLastPallet(): ColorPallet?
+
+    @Query("SELECT * FROM pallets WHERE isCurrent = 1")
+    fun getCurrentPalette(): ColorPallet?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(color: ColorPallet): Long
@@ -24,6 +33,10 @@ interface ColorPalletDAO {
     @Query("DELETE FROM pallets WHERE id = :id")
     fun deleteById(id: Long)
 
+    @Query("UPDATE pallets SET isCurrent = CASE WHEN id = :id THEN 1 ELSE 0 END")
+    fun selectPalette(id: Long)
+
     @Query("DELETE FROM pallets")
     fun deleteAll()
+
 }

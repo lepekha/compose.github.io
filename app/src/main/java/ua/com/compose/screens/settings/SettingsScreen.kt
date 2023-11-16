@@ -3,6 +3,7 @@ package ua.com.compose.screens.settings
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -113,7 +114,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                 Column(modifier = Modifier
                     .background(
                         color = containerBackground,
-                        shape = RoundedCornerShape(16.dp)
+                        shape = MaterialTheme.shapes.medium
                     )
                     .fillMaxWidth()
                     .padding(16.dp)) {
@@ -126,7 +127,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
                     Spacer(modifier = Modifier.height(8.dp))
                     
-                    FlowRow {
+                    FlowRow(verticalArrangement = Arrangement.spacedBy((-8).dp, Alignment.Top)) {
                         colorTypes.forEach {
                             FilterChip(
                                 selected = it == colorType,
@@ -159,7 +160,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         stateTheme = true
                         view.vibrate(EVibrate.BUTTON) },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
@@ -191,7 +192,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         stateLanguage = true
                         view.vibrate(EVibrate.BUTTON) },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
@@ -222,7 +223,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                     .background(
                         color = containerBackground,
-                        shape = RoundedCornerShape(16.dp)
+                        shape = MaterialTheme.shapes.medium
                     )
                     .fillMaxWidth()
                     .height(60.dp)

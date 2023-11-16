@@ -12,6 +12,7 @@ import android.graphics.Shader
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -59,7 +60,7 @@ fun SatValPanel(
     Canvas(
         modifier = modifier
             .emitDragGesture(interactionSource)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(MaterialTheme.shapes.medium)
     ) {
         val cornerRadius = 16.dp.toPx()
         val satValSize = size

@@ -2,6 +2,7 @@ package ua.com.compose.data
 
 internal object SharedPreferencesKey {
     const val KEY_PANEL_ID = "KEY_PANEL_ID"
+    const val KEY_CREATE_COLOR_TYPE = "KEY_CREATE_COLOR_TYPE"
     const val KEY_COLOR_TYPE = "KEY_COLOR_TYPE"
     const val KEY_THEME = "KEY_THEME"
     const val KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE = "KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE"

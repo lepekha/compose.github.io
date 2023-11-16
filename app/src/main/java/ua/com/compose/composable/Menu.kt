@@ -52,7 +52,7 @@ fun Menu(content: @Composable RowScope.() -> Unit) {
     Card(colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.secondaryContainer
     ),
-        shape = RoundedCornerShape(16.dp),
+        shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 3.dp
         ),

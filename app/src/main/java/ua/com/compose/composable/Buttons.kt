@@ -49,7 +49,7 @@ fun IconButton(painter: Painter, shape: Shape? = null, modifier: Modifier, click
         ),
         modifier = modifier,
         onClick = click,
-        shape = shape ?: RoundedCornerShape(corner = CornerSize(6.dp))) {
+        shape = shape ?: MaterialTheme.shapes.extraSmall) {
 
         Icon(painter = painter, modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
     }

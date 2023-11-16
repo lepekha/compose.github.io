@@ -6,9 +6,7 @@ import ua.com.compose.data.ColorDatabase
 
 class RemoveAllColorsUseCase(private val database: ColorDatabase) {
 
-    suspend fun execute(palletId: Long) {
-        return withContext(Dispatchers.IO) {
-            database.colorItemDao?.deleteAll(palletId = palletId)
-        }
+    fun execute(palletId: Long) {
+        database.colorItemDao?.deleteAll(palletId = palletId)
     }
 }

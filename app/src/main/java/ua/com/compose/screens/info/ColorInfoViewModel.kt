@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ua.com.compose.R
 import ua.com.compose.api.analytics.Analytics
@@ -34,7 +35,7 @@ class ColorInfoViewModel(val context: Context,
     private val _items: MutableLiveData<List<ColorInfoItem>> = MutableLiveData(listOf())
     val items: LiveData<List<ColorInfoItem>> = _items
 
-    fun create(color: Int) = viewModelScope.launch {
+    fun create(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         val items = mutableListOf<ColorInfoItem>()
 
         val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
@@ -222,7 +223,7 @@ class ColorInfoViewModel(val context: Context,
          return shades
     }
 
-    fun pressPaletteAdd(color: Int) = viewModelScope.launch {
+    fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_FROM_INFO))
         addColorUseCase.execute(color)
     }

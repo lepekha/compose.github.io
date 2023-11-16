@@ -76,8 +76,8 @@ fun ColorPickerInfo(state: ColorState, click: () -> Unit) {
     FilledTonalIconButton(
         onClick = click,
         colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = Color(state.color)),
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.height(60.dp).fillMaxWidth().border(BorderStroke(width = 2.dp, MaterialTheme.colorScheme.secondaryContainer), RoundedCornerShape(16.dp))
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier.height(60.dp).fillMaxWidth().border(BorderStroke(width = 2.dp, MaterialTheme.colorScheme.secondaryContainer), MaterialTheme.shapes.medium)
     ) {
         Box(modifier = Modifier
             .fillMaxSize()

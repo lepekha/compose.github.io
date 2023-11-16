@@ -2,10 +2,10 @@ package ua.com.compose.screens.palette
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import ua.com.compose.Settings
@@ -23,102 +23,75 @@ import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase
 import ua.com.compose.domain.dbColorItem.RemoveAllColorsUseCase
 import ua.com.compose.domain.dbColorItem.RemoveColorUseCase
 import ua.com.compose.domain.dbColorItem.UpdateColorUseCase
-import ua.com.compose.domain.dbColorPallet.AddPalletUseCase
-import ua.com.compose.domain.dbColorPallet.GetAllPalletUseCase
+import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
-import java.io.File
+import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
 
-sealed class Card {
-    data class CardPallet(val isCurrent: Boolean, val item: ColorPallet, val colors: List<ColorItem>): Card()
-    data class CardButton(val iconResId: Int): Card()
-}
 data class Item(val id: Long, val name: String, val isCurrent: Boolean, val colors: List<ColorItem>)
 class PaletteViewModule(private val context: Context,
                         private val database: ColorDatabase,
-                        private val getAllPalletUseCase: GetAllPalletUseCase,
-                        private val addPalletUseCase: AddPalletUseCase,
-                        private val getPalletUseCase: GetPalletUseCase,
+                        private val selectPalletUseCase: SelectPalletUseCase,
+                        private val createPalletUseCase: CreatePalletUseCase,
                         private val removePalletUseCase: RemovePalletUseCase,
                         private val getAllColorsUseCase: GetAllColorsUseCase,
                         private val removeColorUseCase: RemoveColorUseCase,
                         private val updateColorUseCase: UpdateColorUseCase,
                         private val addColorUseCase: AddColorUseCase,
                         private val changeColorPalletUseCase: ChangeColorPalletUseCase,
-                        private val removeAllColorsUseCase: RemoveAllColorsUseCase
 ): ViewModel()  {
 
-    val palettes: LiveData<List<Item>> = database.palletDao!!.getAll().combine(database.colorItemDao!!.getAllColors()) { pallets, colors ->
+    private var dragAndDropColorID: Long? = null
+
+    val palettes: LiveData<List<Item>> = database.palletDao!!.getAllFlow().combine(database.colorItemDao!!.getAllColors()) { pallets, colors ->
         pallets.map { palette -> Item(
             id = palette.id,
             name = palette.name,
-            isCurrent = palette.id == Settings.paletteID,
+            isCurrent = palette.isCurrent,
             colors = colors.filter { it.palletId == palette.id }
         ) }
     }.asLiveData()
 
-    init {
-        viewModelScope.launch {
-            val pallets = getAllPalletUseCase.execute()
-            Settings.paletteID = Settings.paletteID.takeIf { paletteID -> pallets.any { it.id == paletteID } } ?: pallets.lastOrNull()?.id ?: Settings.paletteID
-        }
-    }
-
-    fun pressRemoveColor(id: Long) = viewModelScope.launch {
+    fun removeColor(id: Long) = viewModelScope.launch(Dispatchers.IO) {
         removeColorUseCase.execute(id = id)
     }
 
-    fun pressChangeColor(id: Long, color: Int) = viewModelScope.launch {
+    fun changeColor(id: Long, color: Int) = viewModelScope.launch(Dispatchers.IO) {
         updateColorUseCase.execute(id = id, color = color)
     }
 
-    fun pressAddColor(color: Int) = viewModelScope.launch {
+    fun addColor(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_PALETTE))
         addColorUseCase.execute(color)
     }
 
-    fun pressUpdatePalette() = viewModelScope.launch {
-    }
-
-    fun pressCreatePallet(name: String) = viewModelScope.launch {
-        val newPaletteId = addPalletUseCase.execute(name)
-        val colorId = movedColorId
+    fun createPallet(name: String) = viewModelScope.launch(Dispatchers.IO) {
+        val newPaletteId = createPalletUseCase.execute(name, withSelect = dragAndDropColorID == null)
+        val colorId = dragAndDropColorID
         if(colorId != null) {
             changeColorPalletUseCase.execute(colorId, newPaletteId)
-            movedColorId = null
-        } else {
-            Settings.paletteID = newPaletteId
+            dragAndDropColorID = null
         }
     }
 
-    fun pressCreatePalletDiscard() {
-        movedColorId = null
+    fun selectPallet(id: Long) = viewModelScope.launch(Dispatchers.IO) {
+        selectPalletUseCase.execute(id = id)
     }
 
-    fun pressPallet(id: Long) = viewModelScope.launch {
-        Settings.paletteID = id
-//        _currentPalette.postValue(_palettes.value?.firstOrNull { it.item.id == Settings.paletteID } ?: _palettes.value?.firstOrNull())
-    }
-
-    fun pressRemovePallet(id: Long) = viewModelScope.launch {
+    fun pressRemovePallet(id: Long) = viewModelScope.launch(Dispatchers.IO) {
         removePalletUseCase.execute(id = id)
-        removeAllColorsUseCase.execute(palletId = id)
-        if(id == Settings.paletteID) {
-            Settings.paletteID = getAllPalletUseCase.execute().firstOrNull()?.id ?: 0
-        }
     }
 
-    private var movedColorId: Long? = null
-    fun pressDropColorToPallet(colorId: Long, palletId: Long?) = viewModelScope.launch {
-        analytics.send(SimpleEvent(key = Analytics.Event.COLOR_DRAG_AND_DROP))
+    fun dropColorToPallet(colorId: Long, palletId: Long?) = viewModelScope.launch(Dispatchers.IO) {
         if(palletId == null) {
-            movedColorId = colorId
+            dragAndDropColorID = colorId
         } else {
+            analytics.send(SimpleEvent(key = Analytics.Event.COLOR_DRAG_AND_DROP))
             changeColorPalletUseCase.execute(colorId, palletId)
         }
     }
 
-    fun pressExport(pallet: ColorPallet, ePaletteExportScheme: EPaletteExportScheme) = viewModelScope.launch {
+    fun pressExport(pallet: ColorPallet, ePaletteExportScheme: EPaletteExportScheme) = viewModelScope.launch(Dispatchers.IO) {
         val colorType = Settings.colorType
         val colors = getAllColorsUseCase.execute(pallet.id)
         analytics.send(Event(key = Analytics.Event.OPEN_PALETTE_EXPORT, params = arrayOf("type" to ePaletteExportScheme.title)))

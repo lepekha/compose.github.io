@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ColorItemDAO {
-    @Query("SELECT * FROM colors WHERE palletId = :palletId")
+    @Query("SELECT * FROM colors WHERE palletId = :palletId ORDER BY id DESC")
     fun getAll(palletId: Long): List<ColorItem>
 
     @Query("SELECT * FROM colors ORDER BY id DESC")
@@ -16,6 +16,12 @@ interface ColorItemDAO {
 
     @Query("SELECT * FROM colors WHERE id = :id")
     fun getById(id: Long): ColorItem?
+
+    @Query("UPDATE colors SET palletId = :paletteID WHERE id = :colorID")
+    fun changeColorPalette(colorID: Long, paletteID: Long)
+
+    @Query("UPDATE colors SET color = :color WHERE id = :colorID")
+    fun updateColor(colorID: Long, color: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(color: ColorItem)

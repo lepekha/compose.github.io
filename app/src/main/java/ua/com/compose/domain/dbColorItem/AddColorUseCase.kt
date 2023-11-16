@@ -1,30 +1,28 @@
 package ua.com.compose.domain.dbColorItem
 
+import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ua.com.compose.Settings
 import ua.com.compose.data.ColorDatabase
 import ua.com.compose.data.ColorItem
-import ua.com.compose.domain.dbColorPallet.AddPalletUseCase
+import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
 
-class AddColorUseCase(private val addPalletUseCase: AddPalletUseCase,
-                      private val getPalletUseCase: GetPalletUseCase,
-                      private val database: ColorDatabase) {
+class AddColorUseCase(
+    private val createPalletUseCase: CreatePalletUseCase,
+    private val database: ColorDatabase
+) {
 
-    suspend fun execute(color: Int) {
-        return withContext(Dispatchers.IO) {
-            var palletId = Settings.paletteID
-//            palletId = getPalletUseCase.execute(palletId)?.id ?: kotlin.run {
-//                val id = addPalletUseCase.execute()
-//                Settings.paletteID = id
-//                id
-//            }
-
-            database.colorItemDao?.insert(ColorItem().apply {
-                this.color = color
-                this.palletId = palletId
-            })
+    fun execute(color: Int) {
+        database.db.runInTransaction {
+                var currentPaletteId = database.palletDao?.getCurrentPalette()?.id
+                if (currentPaletteId == null) {
+                    currentPaletteId = createPalletUseCase.execute(name = null)
+                }
+                database.colorItemDao?.insert(ColorItem().apply {
+                    this.color = color
+                    this.palletId = currentPaletteId
+                })
         }
     }
 }

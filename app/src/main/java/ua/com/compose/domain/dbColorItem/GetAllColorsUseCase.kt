@@ -7,9 +7,7 @@ import ua.com.compose.data.ColorItem
 
 class GetAllColorsUseCase(private val database: ColorDatabase) {
 
-    suspend fun execute(palletId: Long): List<ColorItem> {
-        return withContext(Dispatchers.IO) {
-            database.colorItemDao?.getAll(palletId = palletId)?.sortedByDescending { it.id } ?: listOf()
-        }
+    fun execute(palletId: Long): List<ColorItem> {
+        return database.colorItemDao?.getAll(palletId = palletId) ?: listOf()
     }
 }

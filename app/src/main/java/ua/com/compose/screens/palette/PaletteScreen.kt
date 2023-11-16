@@ -12,8 +12,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
-//import androidx.compose.foundation.draganddrop.dragAndDropSource
-//import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,19 +34,15 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -62,6 +55,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransfer
+import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -72,15 +66,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.ColorUtils
@@ -94,12 +85,13 @@ import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
 import ua.com.compose.composable.Menu
 import ua.com.compose.data.ColorNames
-import ua.com.compose.data.EColorType
 import ua.com.compose.dialogs.DialogColorPick
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.nonScaledSp
+import ua.com.compose.extension.showToast
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
 import kotlin.math.ceil
@@ -128,7 +120,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                 if(defaultName == it) {
                     Settings.defaultPaletteName(context, withIncrement = true)
                 }
-                viewModule.pressCreatePallet(name = it)
+                viewModule.createPallet(name = it)
             }) {
             stateCreatePalette = false
         }
@@ -152,7 +144,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
             color = state.color,
             onDone = {
                 Settings.lastColor = it.toArgb()
-                viewModule.pressChangeColor(state.id, it.toArgb())
+                viewModule.changeColor(state.id, it.toArgb())
             },
             onInfo = {
                 stateInfoColor = it.toArgb()
@@ -166,7 +158,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
             color = Color(Settings.lastColor),
             onDone = {
                 Settings.lastColor = it.toArgb()
-                viewModule.pressAddColor(it.toArgb())
+                viewModule.addColor(it.toArgb())
             },
             onInfo = {
                 stateInfoColor = it.toArgb()
@@ -209,27 +201,81 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                     .background(color = MaterialTheme.colorScheme.surfaceContainer)
                     .padding(top = 15.dp, bottom = 10.dp)) {
 
+                var draged by remember { mutableStateOf(false) }
+                var hoveredItem by remember { mutableStateOf(false) }
+
                 LazyRow(
                     Modifier
                         .wrapContentHeight()
                         .fillMaxWidth(),
-//                    state = lazyRowState,
                     contentPadding = PaddingValues(start = 4.dp, end = 4.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     item {
                         Box(
                             Modifier.width(100.dp), contentAlignment = Alignment.Center) {
                             val view = LocalView.current
-                            IconButton(
-                                shape = CircleShape,
-                                painter = painterResource(R.drawable.ic_palette_add),
-                                modifier = Modifier.size(48.dp)) {
-                                view.vibrate(EVibrate.BUTTON)
-                                stateCreatePalette = true
+
+                            val buttonContainer = when {
+                                hoveredItem -> MaterialTheme.colorScheme.primary
+                                draged -> MaterialTheme.colorScheme.tertiaryContainer
+                                else -> MaterialTheme.colorScheme.secondary
+                            }
+
+                            val buttonContent = when {
+                                hoveredItem -> MaterialTheme.colorScheme.onPrimaryContainer
+                                draged -> MaterialTheme.colorScheme.onTertiaryContainer
+                                else -> MaterialTheme.colorScheme.onSecondary
+                            }
+
+                            val buttonIcon = when {
+                                draged -> painterResource(R.drawable.ic_add_fill)
+                                else -> painterResource(R.drawable.ic_palette_add)
+                            }
+
+                            FilledTonalIconButton(
+                                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                    containerColor = buttonContainer,
+                                    contentColor = buttonContent
+                                ),
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .dragAndDropTarget(
+                                        onStarted = {
+                                            draged = true
+                                            true
+                                        },
+                                        onDropped = {
+                                            draged = false
+                                            hoveredItem = false
+                                            val colorId = it.toAndroidDragEvent().clipData.getItemAt(0).text.toString().toLong()
+                                            viewModule.dropColorToPallet(colorId = colorId, palletId = null)
+                                            stateCreatePalette = true
+                                            true
+                                        },
+                                        onEntered = {
+                                            view.vibrate(EVibrate.BUTTON)
+                                            hoveredItem = true
+                                        },
+                                        onExited = {
+                                            hoveredItem = false
+                                        },
+                                        onEnded = {
+                                            draged = false
+                                        }
+                                    ),
+                                onClick = {
+                                    view.vibrate(EVibrate.BUTTON)
+                                    stateCreatePalette = true
+                                },
+                                shape = MaterialTheme.shapes.small) {
+                                Icon(painter = buttonIcon, modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                             }
                         }
                     }
                     items(items = palettes, key = { it.id }) { pallet ->
+
+                        var hovered by remember { mutableStateOf(false) }
+
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
@@ -239,48 +285,49 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 .width(150.dp)
                         ) {
 
-                            var draged by remember { mutableStateOf(false) }
-                            var hovered by remember { mutableStateOf(false) }
-
                             val cardBorder = when {
-                                hovered -> BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-                                draged -> BorderStroke(2.dp, MaterialTheme.colorScheme.onTertiaryContainer)
-                                pallet.isCurrent -> BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-                                else -> null
+                                hovered -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                                draged -> BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiaryContainer)
+                                pallet.isCurrent -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                                else -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondary)
                             }
 
                             val view = LocalView.current
-                            FilledTonalIconButton(modifier = Modifier
-                                .width(140.dp)
-                                .shadow(4.dp)
-                                .weight(1f), shape = RoundedCornerShape(10.dp), onClick = {
-                                view.vibrate(EVibrate.BUTTON)
-                                scope.launch {
-                                    pagerState.animateScrollToPage(palettes.indexOfFirst { it.id == pallet.id })
+                            FilledTonalIconButton(
+                                modifier = Modifier.width(140.dp).weight(1f),
+                                shape = MaterialTheme.shapes.extraSmall,
+                                onClick = {
+                                    view.vibrate(EVibrate.BUTTON)
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(palettes.indexOfFirst { it.id == pallet.id })
+                                    }
+                                    viewModule.selectPallet(id = pallet.id)
                                 }
-                                viewModule.pressPallet(id = pallet.id)
-                            }) {
+                            ) {
 
                                 val containerBackground = if(draged) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.secondaryContainer
 
                                 Card(elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                                     border = cardBorder,
                                     colors = CardDefaults.cardColors(containerColor = containerBackground),
-                                    shape = RoundedCornerShape(10.dp),
+                                    shape = MaterialTheme.shapes.extraSmall,
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .dragAndDropTarget(
                                             onStarted = {
+                                                view.vibrate(EVibrate.BUTTON)
                                                 draged = true
                                                 true
                                             },
                                             onDropped = { event ->
                                                 draged = false
                                                 hovered = false
-
+                                                val colorId = event.toAndroidDragEvent().clipData.getItemAt(0).text.toString().toLong()
+                                                viewModule.dropColorToPallet(colorId = colorId, palletId = pallet.id)
                                                 true
                                             },
                                             onEntered = {
+                                                view.vibrate(EVibrate.BUTTON)
                                                 hovered = true
                                             },
                                             onExited = {
@@ -293,14 +340,16 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 ) {
                                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
 
-                                        val (icon, tint) = if(!draged) {
-                                            painterResource(id = R.drawable.ic_palette) to ColorFilter.tint(
-                                                MaterialTheme.colorScheme.onSecondaryContainer
-                                            )
-                                        } else {
-                                            painterResource(id = R.drawable.ic_add_fill) to ColorFilter.tint(
-                                                MaterialTheme.colorScheme.onTertiaryContainer
-                                            )
+                                        val (icon, tint) = when {
+                                            hovered -> {
+                                                painterResource(id = R.drawable.ic_add_fill) to ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                                            }
+                                            draged -> {
+                                                painterResource(id = R.drawable.ic_add_fill) to ColorFilter.tint(MaterialTheme.colorScheme.onTertiaryContainer)
+                                            }
+                                            else -> {
+                                                painterResource(id = R.drawable.ic_palette) to ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer)
+                                            }
                                         }
 
                                         Image(
@@ -325,26 +374,43 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                         }
 
                                         if(pallet.isCurrent && !draged) {
-                                            Row(modifier = Modifier.fillMaxHeight(), verticalAlignment = Alignment.Bottom) {
+                                            Row(modifier = Modifier
+                                                .fillMaxHeight()
+                                                .padding(4.dp), verticalAlignment = Alignment.Bottom) {
                                                 if(pallet.colors.isNotEmpty()) {
-                                                    IconButton(
-                                                        painter = painterResource(R.drawable.ic_share),
+                                                    FilledTonalIconButton(
+                                                        colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                                            containerColor = MaterialTheme.colorScheme.secondary,
+                                                            contentColor = MaterialTheme.colorScheme.onSecondary
+                                                        ),
                                                         modifier = Modifier
-                                                            .padding(4.dp)
                                                             .height(30.dp)
-                                                            .weight(1.0f)) {
-                                                        view.vibrate(EVibrate.BUTTON)
+                                                            .weight(1.0f),
+                                                        onClick = {
+                                                            view.vibrate(EVibrate.BUTTON)
+                                                        },
+                                                        shape = MaterialTheme.shapes.extraSmall.copy(CornerSize(5.dp))) {
+
+                                                        Icon(painter = painterResource(R.drawable.ic_share), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                     }
+                                                    Spacer(modifier = Modifier.width(3.dp))
                                                 }
 
-                                                IconButton(
-                                                    painter = painterResource(R.drawable.ic_delete),
+                                                FilledTonalIconButton(
+                                                    colors = IconButtonDefaults.filledTonalIconButtonColors(
+                                                        containerColor = MaterialTheme.colorScheme.secondary,
+                                                        contentColor = MaterialTheme.colorScheme.onSecondary
+                                                    ),
                                                     modifier = Modifier
-                                                        .padding(4.dp)
                                                         .height(30.dp)
-                                                        .weight(1.0f)) {
-                                                    view.vibrate(EVibrate.BUTTON)
-                                                    stateRemovePalette = pallet
+                                                        .weight(1.0f),
+                                                    onClick = {
+                                                        view.vibrate(EVibrate.BUTTON)
+                                                        stateRemovePalette = pallet
+                                                    },
+                                                    shape = MaterialTheme.shapes.extraSmall.copy(CornerSize(5.dp))) {
+
+                                                    Icon(painter = painterResource(R.drawable.ic_delete), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                 }
                                             }
                                         }
@@ -362,10 +428,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                         }
 
                     }
-
-//                    if(lazyRowState.firstVisibleItemIndex == 0 && lazyRowState.firstVisibleItemScrollOffset == 0) {
-//                        scope.launch { lazyRowState.animateScrollToItem(0) }
-//                    }
                 }
             }
 
@@ -377,12 +439,10 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                 ))
 
             LaunchedEffect(pagerState) {
-//                pagerState.scrollToPage(page = palettes.indexOfFirst { it.isCurrent } ?: 0)
                 snapshotFlow { pagerState.currentPage }.collect { page ->
-                    palettes.getOrNull(page)?.let {
-                        viewModule.pressPallet(id = it.id)
+                    palettes.getOrNull(page)?.takeIf { !it.isCurrent }?.let {
+                        viewModule.selectPallet(id = it.id)
                     }
-//                    lazyRowState.scrollToItem(page)
                 }
             }
 
@@ -430,8 +490,8 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         startTransfer(
                                                             DragAndDropTransfer(
                                                                 clipData = ClipData.newPlainText(
-                                                                    "",
-                                                                    ""
+                                                                    "COLOR_ID",
+                                                                    colorItem.id.toString()
                                                                 ),
                                                                 flags = View.DRAG_FLAG_GLOBAL,
                                                             )
@@ -509,7 +569,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         .padding(2.dp),
                                                     onClick = {
                                                         view.vibrate(EVibrate.BUTTON)
-                                                        viewModule.pressRemoveColor(id = colorItem.id)
+                                                        viewModule.removeColor(id = colorItem.id)
                                                     }) {
                                                     Icon(painter = painterResource(R.drawable.ic_delete), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                 }
@@ -538,6 +598,8 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                     onClick = {
                                                         view.vibrate(EVibrate.BUTTON)
                                                         analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_PALETTE))
+                                                        context.clipboardCopy(Settings.colorType.colorToString(color = colorItem.color))
+                                                        context.showToast(R.string.module_other_color_pick_color_copy)
                                                     }) {
                                                     Icon(painter = painterResource(R.drawable.module_other_text_style_fragment_text_style_ic_copy), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                 }

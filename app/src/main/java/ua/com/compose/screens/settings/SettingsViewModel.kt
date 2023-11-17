@@ -24,12 +24,6 @@ class SettingsViewModel: ViewModel() {
     private val _theme = MutableLiveData<ETheme>(Settings.theme)
     val theme: LiveData<ETheme> = _theme
 
-    private val _sharedColorType: MutableState<EColorType> = mutableStateOf(Settings.colorType)
-    val sharedColorType: MutableState<EColorType> = _sharedColorType
-
-//    private val _colorType: MutableState<EColorType> = mutableStateOf(Settings.colorType)
-//    val colorType: MutableState<EColorType> = _colorType
-
     private val _colorTypes: MutableState<List<EColorType>> = mutableStateOf(EColorType.visibleValues())
     val colorTypes: MutableState<List<EColorType>> = _colorTypes
 
@@ -41,14 +35,10 @@ class SettingsViewModel: ViewModel() {
     fun changeColorType(value: EColorType) {
         Settings.colorType = value
         _colorType.value = value
-        _sharedColorType.value = value
-
-//        _colorType.postValue(ColorTypeSetting(params = EColorType.visibleValues(), current = value))
-//        analytics.send(Event(key = Analytics.Event.APP_SETTINGS, params = arrayOf("color_type" to value.title())))
+        analytics.send(Event(key = Analytics.Event.APP_SETTINGS, params = arrayOf("color_type" to value.title())))
     }
 
     fun changeVibration(value: Boolean) {
         Settings.vibration = value
     }
-
 }

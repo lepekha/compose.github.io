@@ -60,26 +60,6 @@ fun Context.findActivity(): Activity {
     throw IllegalStateException("no activity")
 }
 
-fun Activity.statusBarHeight(): Int {
-    val rectangle = Rect()
-    val window = this.window
-    window.decorView.getWindowVisibleDisplayFrame(rectangle)
-    val statusBarHeight = rectangle.top
-    val resourceId = this.resources.getIdentifier("status_bar_height", "dimen", "android")
-    if (resourceId > 0) {
-        return this.resources.getDimensionPixelSize(resourceId)
-    }
-    return statusBarHeight
-}
-
-fun Context.navigationBarHeight(): Int {
-    val resources: Resources = this.getResources()
-    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    return if (resourceId > 0) {
-        resources.getDimensionPixelSize(resourceId) + 10.dp.toInt()
-    } else 0
-}
-
 fun Activity.createReview() {
     val key = "ReviewManagerFactory"
     var number = prefs.get(key = key, defaultValue = 1)
@@ -101,23 +81,6 @@ fun Activity.createReview() {
     }
 }
 
-fun Context.screenWidth(): Int {
-    return Resources.getSystem().displayMetrics.widthPixels
-}
-
-fun Context.screenHeight(): Int {
-    return Resources.getSystem().displayMetrics.heightPixels
-}
-
-suspend fun Context.loadImage(uri: Uri) = when {
-        Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
-        else -> ImageDecoder.decodeBitmap(ImageDecoder.createSource(this.contentResolver, uri))
-    }
-
-fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let {
-    Toast.makeText(it, text, duration).show()
-}
-
 fun Context.clipboardCopy(text: String){
     try {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -130,15 +93,6 @@ fun Context.clipboardCopy(text: String){
             clipboard.setPrimaryClip(clip)
         } catch (e: Exception) {}
     }
-}
-
-fun Context.getColorFromAttr(
-        @AttrRes attrColor: Int,
-        typedValue: TypedValue = TypedValue(),
-        resolveRefs: Boolean = true
-): Int {
-    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
-    return typedValue.data
 }
 
 suspend fun Context.createVideoCaptureUseCase(
@@ -225,9 +179,6 @@ fun Context.shareFile(file: File) {
 
     this.startActivity(Intent.createChooser(intent, "Share Color Palette"))
 }
-
-
-
 
 fun Context.createTempUri(bitmap: Bitmap, quality: Int = 90, sizePercent: Int = 100, name: String = "COMPOSE"): Uri {
     val root = this.cacheDir.path

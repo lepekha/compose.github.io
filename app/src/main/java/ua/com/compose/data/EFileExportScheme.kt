@@ -8,7 +8,7 @@ import ua.com.compose.extension.writeToFile
 import java.io.File
 
 
-enum class EPaletteExportScheme(val title: String) {
+enum class  EFileExportScheme(val title: String) {
 
     TXT(title = ".txt") {
         override fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File? {
@@ -48,7 +48,7 @@ enum class EPaletteExportScheme(val title: String) {
                 appendLine("<resources>")
                 colors.forEach {
                     val hex = "#${Integer.toHexString(it.color).substring(2).toLowerCase()}"
-                    appendLine("    <color name=\"${ColorNames.getColorName(hex)}\">${colorType.colorToString(it.color)}</color>")
+                    appendLine("    <color name=\"${ColorNames.getColorName(hex).replace(" ", "_").replace("-", "_")}\">${colorType.colorToString(it.color)}</color>")
                 }
                 appendLine("</resources>")
             }

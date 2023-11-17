@@ -31,7 +31,7 @@ class ColorDatabase(context: Context) {
     }
 
     val db = Room
-            .databaseBuilder(context, AppDatabase::class.java, "module_other_color_pick_database")
+            .databaseBuilder(context, AppDatabase::class.java, "color_pick_database")
             .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     val colorItemDao = db.colorItemDao()

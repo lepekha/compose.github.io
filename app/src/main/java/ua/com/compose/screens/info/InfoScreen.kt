@@ -73,6 +73,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
 import ua.com.compose.data.ColorNames
 import ua.com.compose.extension.EVibrate
@@ -91,12 +94,13 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(key1 = viewModule) {
+        analytics.send(SimpleEvent(key = Analytics.Event.OPEN_INFO))
         viewModule.create(color)
     }
 
     BottomSheet(sheetState = sheetState, onDismissRequest = onDismissRequest) {
 
-        val colorCopyText = stringResource(id = R.string.module_other_color_pick_color_add_to_pallete)
+        val colorCopyText = stringResource(id = R.string.color_pick_color_add_to_pallete)
 
         LazyColumn(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
@@ -146,7 +150,8 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
                                 .clickable {
                                     view.vibrate(type = EVibrate.BUTTON)
                                     context.clipboardCopy(it.value)
-                                    context.showToast(R.string.module_other_color_pick_color_copy)
+                                    analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_INFO))
+                                    context.showToast(R.string.color_pick_color_copy)
                                 },
                             verticalAlignment = Alignment.CenterVertically
                         ) {

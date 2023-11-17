@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -225,6 +226,7 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
 
                     AsyncImage(
                         model = photoUri,
+                        contentScale = ContentScale.Inside,
                         modifier = Modifier
                             .fillMaxSize()
                             .zIndex(0f)
@@ -283,14 +285,14 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                                 }
                                 IconItem(painter = painterResource(id = R.drawable.ic_copy)) {
                                     view.vibrate(EVibrate.BUTTON)
-                                    analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
+                                    analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_IMAGE))
                                     context.clipboardCopy(colorState.typeValue)
-                                    context.showToast(R.string.module_other_color_pick_color_copy)
+                                    context.showToast(R.string.color_pick_color_copy)
                                 }
                                 IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
                                     view.vibrate(EVibrate.BUTTON)
                                     viewModule.pressPaletteAdd(colorState.color)
-                                    context.showToast(R.string.module_other_color_pick_color_add_to_pallete)
+                                    context.showToast(R.string.color_pick_color_add_to_pallete)
                                 }
                             }
                         }

@@ -16,15 +16,13 @@ import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.ColorDatabase
 import ua.com.compose.data.ColorItem
 import ua.com.compose.data.ColorPallet
-import ua.com.compose.data.EPaletteExportScheme
+import ua.com.compose.data.EFileExportScheme
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.domain.dbColorItem.ChangeColorPalletUseCase
 import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase
-import ua.com.compose.domain.dbColorItem.RemoveAllColorsUseCase
 import ua.com.compose.domain.dbColorItem.RemoveColorUseCase
 import ua.com.compose.domain.dbColorItem.UpdateColorUseCase
 import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
-import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
 
@@ -90,13 +88,4 @@ class PaletteViewModule(private val context: Context,
             changeColorPalletUseCase.execute(colorId, palletId)
         }
     }
-
-    fun pressExport(pallet: ColorPallet, ePaletteExportScheme: EPaletteExportScheme) = viewModelScope.launch(Dispatchers.IO) {
-        val colorType = Settings.colorType
-        val colors = getAllColorsUseCase.execute(pallet.id)
-        analytics.send(Event(key = Analytics.Event.OPEN_PALETTE_EXPORT, params = arrayOf("type" to ePaletteExportScheme.title)))
-        ePaletteExportScheme.create(context = context, palette = pallet.name, colors = colors, colorType = colorType)?.let {
-        }
-    }
-
 }

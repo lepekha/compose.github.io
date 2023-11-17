@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Selector de colores</string>
-    <string name="module_other_color_pick_setting_vibration">Vibración</string>
-    <string name="module_other_color_pick_setting_language">Idioma</string>
-    <string name="module_other_color_pick_setting_color_type">Tipo de color</string>
-    <string name="module_other_color_pick_press_open_info">Haz clic para ver información del color</string>
-    <string name="module_other_color_pick_long_press_copy">Clic simple: agregar a la paleta; clic largo: copiar</string>
-    <string name="module_other_color_pick_remove_pallet">¿Eliminar paleta de colores?</string>
-    <string name="module_other_color_pick_pallet_name">Назва</string>
-    <string name="module_other_color_pick_pallet">Paleta</string>
-    <string name="module_other_color_pick_camera">Cámara</string>
-    <string name="module_other_color_pick_image">Imagen</string>
-    <string name="module_other_color_pick_palette">Paleta</string>
-    <string name="module_other_color_pick_color_copy">Color copiado</string>
-    <string name="module_other_color_pick_color_add_to_pallete">Color agregado a la paleta</string>
-    <string name="module_other_color_pick_shades">Sombras</string>
-    <string name="module_other_color_pick_tints">Matices</string>
-    <string name="module_other_color_pick_triadic_colors">Colores tríadicos</string>
-    <string name="module_other_color_pick_analogous_colors">Colores análogos</string>
-    <string name="module_other_color_pick_monochromatic_colors">Colores monocromáticos</string>
-    <string name="module_other_color_pick_complementary_color">Colores complementarios</string>
-    <string name="module_other_color_pick_tones">Tonos</string>
-    <string name="module_other_color_pick_tetradic_color">Colores tetradic</string>
-    <string name="module_other_color_pick_tooltip_drag_and_drop">Mantén presionado para mover el color a otra paleta de colores</string>
-
+    <string name="color_pick_setting_vibration">Vibración</string>
+    <string name="color_pick_setting_language">Idioma</string>
+    <string name="color_pick_setting_color_type">Tipo de color</string>
+    <string name="color_pick_pallet_name">Nombre</string>
+    <string name="color_pick_pallet">Paleta</string>
+    <string name="color_pick_camera">Cámara</string>
+    <string name="color_pick_image">Imagen</string>
+    <string name="color_pick_palette">Paleta</string>
+    <string name="color_pick_color_copy">Color copiado</string>
+    <string name="color_pick_color_add_to_pallete">Color agregado a la paleta</string>
+    <string name="color_pick_shades">Sombras</string>
+    <string name="color_pick_tints">Matices</string>
+    <string name="color_pick_triadic_colors">Colores tríadicos</string>
+    <string name="color_pick_analogous_colors">Colores análogos</string>
+    <string name="color_pick_monochromatic_colors">Colores monocromáticos</string>
+    <string name="color_pick_complementary_color">Colores complementarios</string>
+    <string name="color_pick_tones">Tonos</string>
+    <string name="color_pick_tetradic_color">Colores tetradic</string>
+    <string name="color_pick_remove_pallet">¿Quieres quitar la paleta de colores?</string>
+    <string name="color_pick_file">Archivo</string>
+    <string name="color_pick_theme">Tema</string>
+    <string name="color_pick_text">Texto</string>
+    <string name="color_pick_box">Paleta</string>
+    <string name="color_pick_day">Día</string>
+    <string name="color_pick_night">Noche</string>
+    <string name="color_pick_system">Sistema</string>
+    <string name="color_pick_dynamic">Dinámica</string>
+    <string name="color_pick_ok">Aceptar</string>
+    <string name="color_pick_add">Añadir</string>
+    <string name="color_pick_cancel">Cancelar</string>
 </resources>

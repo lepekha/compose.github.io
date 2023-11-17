@@ -65,7 +65,6 @@ fun DialogInputText(text: String, hint: String, onDone: (text: String) -> Unit, 
     DialogBottomSheet(
         onDismissRequest = onDismissRequest,
     ) {
-        Surface {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -105,16 +104,14 @@ fun DialogInputText(text: String, hint: String, onDone: (text: String) -> Unit, 
                         .padding(end = 8.dp, top = 30.dp)
                         .fillMaxWidth()
                 ) {
-                    DialogConfirmButton(text = stringResource(id = R.string.module_other_color_pick_cancel)) {
+                    DialogConfirmButton(text = stringResource(id = R.string.color_pick_cancel)) {
                         onDismissRequest.invoke()
                     }
-                    DialogConfirmButton(text = stringResource(id = R.string.module_other_color_pick_ok)) {
+                    DialogConfirmButton(text = stringResource(id = R.string.color_pick_ok)) {
                         onDone.invoke(state.value.text)
                         onDismissRequest.invoke()
                     }
                 }
             }
         }
-
-    }
 }

@@ -11,7 +11,7 @@ import ua.com.compose.data.SharedPreferencesKey
 import ua.com.compose.extension.get
 import ua.com.compose.extension.prefs
 import ua.com.compose.extension.put
-import ua.com.compose.screens.EPanel
+import ua.com.compose.data.EPanel
 
 object Settings {
 
@@ -78,7 +78,7 @@ object Settings {
         if(withIncrement) {
             prefs.put(key = SharedPreferencesKey.KEY_PALLET_NUMBER, value = (number + 1))
         }
-        return context.getString(R.string.module_other_color_pick_pallet) + "_" + number
+        return context.getString(R.string.color_pick_pallet) + "_" + number
     }
 
     var lastColor: Int = prefs.get(key = SharedPreferencesKey.KEY_LAST_COLOR, defaultValue = Color.parseColor("#2EAAB4"))

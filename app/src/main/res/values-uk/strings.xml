@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Color picker</string>
-    <string name="module_other_color_pick_setting_vibration">Вібрація</string>
-    <string name="module_other_color_pick_setting_language">Мова</string>
-    <string name="module_other_color_pick_setting_color_type">Тип кольору</string>
-    <string name="module_other_color_pick_press_open_info">Натисніть щоб відкрити інформацію про колір</string>
-    <string name="module_other_color_pick_long_press_copy">Одиночне натискання - додати до палітри, довге натискання - копіювати</string>
-    <string name="module_other_color_pick_camera">Камера</string>
-    <string name="module_other_color_pick_remove_pallet">Ви хочете видалити палітру кольорів?</string>
-    <string name="module_other_color_pick_pallet_name">Назва</string>
-    <string name="module_other_color_pick_pallet">Палітра</string>
-    <string name="module_other_color_pick_image">Зображення</string>
-    <string name="module_other_color_pick_palette">Палітра</string>
-    <string name="module_other_color_pick_color_copy">Колір скопійовано</string>
-    <string name="module_other_color_pick_color_add_to_pallete">Колір додано до палітри</string>
-    <string name="module_other_color_pick_shades">Негативні відтінки</string>
-    <string name="module_other_color_pick_tints">Позитивні відтінки</string>
-    <string name="module_other_color_pick_triadic_colors">Триадні кольори</string>
-    <string name="module_other_color_pick_analogous_colors">Аналогічні кольори</string>
-    <string name="module_other_color_pick_monochromatic_colors">Монохромні кольори</string>
-    <string name="module_other_color_pick_complementary_color">Комплементарні кольори</string>
-    <string name="module_other_color_pick_tones">Тон кольору</string>
-    <string name="module_other_color_pick_tetradic_color">Тетрадні кольори</string>
-    <string name="module_other_color_pick_tooltip_drag_and_drop">Натисніть і утримуйте, щоб перемістити колір до іншої палітри кольорів</string>
+    <string name="color_pick_setting_vibration">Вібрація</string>
+    <string name="color_pick_setting_language">Мова</string>
+    <string name="color_pick_setting_color_type">Тип кольору</string>
+    <string name="color_pick_camera">Камера</string>
+    <string name="color_pick_pallet_name">Назва</string>
+    <string name="color_pick_pallet">Палітра</string>
+    <string name="color_pick_image">Зображення</string>
+    <string name="color_pick_palette">Палітра</string>
+    <string name="color_pick_color_copy">Колір скопійовано</string>
+    <string name="color_pick_color_add_to_pallete">Колір додано до палітри</string>
+    <string name="color_pick_shades">Негативні відтінки</string>
+    <string name="color_pick_tints">Позитивні відтінки</string>
+    <string name="color_pick_triadic_colors">Триадні кольори</string>
+    <string name="color_pick_analogous_colors">Аналогічні кольори</string>
+    <string name="color_pick_monochromatic_colors">Монохромні кольори</string>
+    <string name="color_pick_complementary_color">Комплементарні кольори</string>
+    <string name="color_pick_tones">Тон кольору</string>
+    <string name="color_pick_tetradic_color">Тетрадні кольори</string>
+
+    <string name="color_pick_remove_pallet">Ви хочете видалити палітру кольорів?</string>
+    <string name="color_pick_file">Файл</string>
+    <string name="color_pick_theme">Тема</string>
+    <string name="color_pick_text">Текст</string>
+    <string name="color_pick_box">Палітра</string>
+    <string name="color_pick_day">День</string>
+    <string name="color_pick_night">Ніч</string>
+    <string name="color_pick_system">Системна</string>
+    <string name="color_pick_dynamic">Динамічна</string>
+    <string name="color_pick_ok">ОК</string>
+    <string name="color_pick_add">Додати</string>
+    <string name="color_pick_cancel">Відмінити</string>
 </resources>

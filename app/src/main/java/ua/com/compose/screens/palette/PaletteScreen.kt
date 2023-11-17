@@ -36,6 +36,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
@@ -76,6 +77,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.ColorUtils
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
@@ -94,6 +96,7 @@ import ua.com.compose.extension.nonScaledSp
 import ua.com.compose.extension.showToast
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
+import ua.com.compose.screens.share.ShareScreen
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -109,12 +112,13 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     var stateCreatePalette by remember { mutableStateOf(false) }
     var stateTuneColor: TuneColorState? by remember { mutableStateOf(null) }
     var stateCreateColor: Boolean by remember { mutableStateOf(false) }
+    var stateSharePalette: Long? by remember { mutableStateOf(null) }
     var stateInfoColor: Int? by remember { mutableStateOf(null) }
 
     if(stateCreatePalette) {
         val defaultName = Settings.defaultPaletteName(context, withIncrement = false)
         DialogInputText(
-            text = stringResource(id = R.string.module_other_color_pick_pallet_name),
+            text = stringResource(id = R.string.color_pick_pallet_name),
             hint = defaultName,
             onDone = {
                 if(defaultName == it) {
@@ -126,11 +130,17 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
         }
     }
 
+    stateSharePalette?.let {
+        ShareScreen(paletteId = it, viewModel = koinViewModel()) {
+            stateSharePalette = null
+        }
+    }
+
     if(stateRemovePalette != null) {
         stateRemovePalette?.let { palette ->
             DialogConfirmation(
                 title = palette.name,
-                text = stringResource(id = R.string.module_other_color_pick_remove_pallet),
+                text = stringResource(id = R.string.color_pick_remove_pallet),
                 onDone = {
                     viewModule.pressRemovePallet(id = palette.id)
                 }) {
@@ -178,10 +188,12 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
         ) {
+            val view = LocalView.current
             IconButton(
                 shape = RoundedCornerShape(25.dp),
                 painter = painterResource(R.drawable.ic_palette_add),
                 modifier = Modifier.size(100.dp)) {
+                    view.vibrate(EVibrate.BUTTON)
                     stateCreatePalette = true
             }
         }
@@ -190,7 +202,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
             palettes.count()
         }
 
-//        val lazyRowState = rememberLazyListState(palettes.indexOfFirst { it.isCurrent })
         Column {
             Box(
                 Modifier
@@ -247,8 +258,14 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                         onDropped = {
                                             draged = false
                                             hoveredItem = false
-                                            val colorId = it.toAndroidDragEvent().clipData.getItemAt(0).text.toString().toLong()
-                                            viewModule.dropColorToPallet(colorId = colorId, palletId = null)
+                                            val colorId =
+                                                it.toAndroidDragEvent().clipData.getItemAt(0).text
+                                                    .toString()
+                                                    .toLong()
+                                            viewModule.dropColorToPallet(
+                                                colorId = colorId,
+                                                palletId = null
+                                            )
                                             stateCreatePalette = true
                                             true
                                         },
@@ -294,7 +311,9 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
 
                             val view = LocalView.current
                             FilledTonalIconButton(
-                                modifier = Modifier.width(140.dp).weight(1f),
+                                modifier = Modifier
+                                    .width(140.dp)
+                                    .weight(1f),
                                 shape = MaterialTheme.shapes.extraSmall,
                                 onClick = {
                                     view.vibrate(EVibrate.BUTTON)
@@ -322,8 +341,14 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                             onDropped = { event ->
                                                 draged = false
                                                 hovered = false
-                                                val colorId = event.toAndroidDragEvent().clipData.getItemAt(0).text.toString().toLong()
-                                                viewModule.dropColorToPallet(colorId = colorId, palletId = pallet.id)
+                                                val colorId =
+                                                    event.toAndroidDragEvent().clipData.getItemAt(0).text
+                                                        .toString()
+                                                        .toLong()
+                                                viewModule.dropColorToPallet(
+                                                    colorId = colorId,
+                                                    palletId = pallet.id
+                                                )
                                                 true
                                             },
                                             onEntered = {
@@ -388,6 +413,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                             .weight(1.0f),
                                                         onClick = {
                                                             view.vibrate(EVibrate.BUTTON)
+                                                            stateSharePalette = pallet.id
                                                         },
                                                         shape = MaterialTheme.shapes.extraSmall.copy(CornerSize(5.dp))) {
 
@@ -599,9 +625,9 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         view.vibrate(EVibrate.BUTTON)
                                                         analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_PALETTE))
                                                         context.clipboardCopy(Settings.colorType.colorToString(color = colorItem.color))
-                                                        context.showToast(R.string.module_other_color_pick_color_copy)
+                                                        context.showToast(R.string.color_pick_color_copy)
                                                     }) {
-                                                    Icon(painter = painterResource(R.drawable.module_other_text_style_fragment_text_style_ic_copy), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
+                                                    Icon(painter = painterResource(R.drawable.ic_copy), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                 }
                                             }
                                         }

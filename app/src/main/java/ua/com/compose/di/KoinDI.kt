@@ -19,6 +19,7 @@ import ua.com.compose.screens.image.ImageViewModule
 import ua.com.compose.screens.info.ColorInfoViewModel
 import ua.com.compose.screens.palette.PaletteViewModule
 import ua.com.compose.screens.settings.SettingsViewModel
+import ua.com.compose.screens.share.ShareViewModel
 
 val appModule = module {
     single { ColorDatabase(context = androidContext()) }
@@ -34,6 +35,7 @@ val appModule = module {
     single { ChangeColorPalletUseCase(database = get()) }
     viewModel { SettingsViewModel() }
     viewModel { ColorInfoViewModel(context = androidContext(), addColorUseCase = get()) }
+    viewModel { ShareViewModel(getAllColorsUseCase = get(), getPalletUseCase = get()) }
     viewModel {
         PaletteViewModule(
             context = androidContext(),

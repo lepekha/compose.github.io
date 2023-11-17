@@ -45,33 +45,33 @@ class ColorInfoViewModel(val context: Context,
         items.addAll(colors)
 
         shadesOf(startColor = color, endColor = Color.BLACK).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_shades), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_shades), colors = it))
         }
 
         tintsOf(startColor = color, endColor = Color.WHITE).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_tints), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tints), colors = it))
         }
         toneOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_tones), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tones), colors = it))
         }
         tetradicOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_tetradic_color), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tetradic_color), colors = it))
         }
 
         triadicOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_triadic_colors), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_triadic_colors), colors = it))
         }
 
         analogousOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_analogous_colors), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_analogous_colors), colors = it))
         }
 
         monochromaticOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_monochromatic_colors), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_monochromatic_colors), colors = it))
         }
 
         complementaryOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.module_other_color_pick_complementary_color), colors = it))
+            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_complementary_color), colors = it))
         }
 
         _items.postValue(items)

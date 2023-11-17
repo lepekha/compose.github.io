@@ -17,8 +17,6 @@ interface Analytics {
         val OPEN_INFO = "OPEN_INFO"
         val OPEN_SETTINGS = "OPEN_SETTINGS"
         val OPEN_PALETTE_EXPORT = "OPEN_PALETTE_EXPORT"
-        val OPEN_NEW_GALLERY = "OPEN_NEW_GALLERY"
-        val OPEN_OLD_GALLERY = "OPEN_OLD_GALLERY"
 
         val CREATE_PALETTE = "CREATE_PALETTE"
 

@@ -35,6 +35,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +57,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import ua.com.compose.R
 import ua.com.compose.Settings
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
 import ua.com.compose.data.ELanguage
 import ua.com.compose.data.ETheme
@@ -78,6 +82,10 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
     var appLocale: ELanguage? by remember {
         val currentLocale = localConfiguration.locales.get(0).language
         mutableStateOf(ELanguage.values().firstOrNull { it.value == currentLocale })
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        analytics.send(SimpleEvent(key = Analytics.Event.OPEN_SETTINGS))
     }
 
     var stateLanguage: Boolean by remember { mutableStateOf(false) }
@@ -119,7 +127,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                     .fillMaxWidth()
                     .padding(16.dp)) {
 
-                    Text(text = stringResource(id = R.string.module_other_color_pick_setting_color_type),
+                    Text(text = stringResource(id = R.string.color_pick_setting_color_type),
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
@@ -168,7 +176,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp)) {
-                        Text(text = stringResource(id = R.string.module_other_color_pick_theme),
+                        Text(text = stringResource(id = R.string.color_pick_theme),
                             textAlign = TextAlign.Start,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp,
@@ -201,7 +209,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp)) {
                         val currentLocale = LocalConfiguration.current.locales.get(0).language
-                        Text(text = stringResource(id = R.string.module_other_color_pick_setting_language),
+                        Text(text = stringResource(id = R.string.color_pick_setting_language),
                             textAlign = TextAlign.Start,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp,
@@ -228,7 +236,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                     .fillMaxWidth()
                     .height(60.dp)
                     .padding(start = 16.dp, end = 16.dp)) {
-                    Text(text = stringResource(id = R.string.module_other_color_pick_setting_vibration),
+                    Text(text = stringResource(id = R.string.color_pick_setting_vibration),
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
@@ -241,7 +249,8 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                             view.vibrate(EVibrate.BUTTON)
                             state = it
                             viewModel.changeVibration(it)
-                                          }, colors = SwitchDefaults.colors(
+                        },
+                        colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
                         uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
                         checkedTrackColor = MaterialTheme.colorScheme.primary,

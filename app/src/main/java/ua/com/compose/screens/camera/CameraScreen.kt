@@ -153,12 +153,12 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
                             view.vibrate(EVibrate.BUTTON)
                             analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
                             context.clipboardCopy(state.typeValue)
-                            context.showToast(R.string.module_other_color_pick_color_copy)
+                            context.showToast(R.string.color_pick_color_copy)
                         }
                         IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
                             view.vibrate(EVibrate.BUTTON)
                             viewModule.pressPaletteAdd(state.color)
-                            context.showToast(R.string.module_other_color_pick_color_add_to_pallete)
+                            context.showToast(R.string.color_pick_color_add_to_pallete)
                         }
                     }
                 }

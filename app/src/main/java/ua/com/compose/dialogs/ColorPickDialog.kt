@@ -192,10 +192,11 @@ fun DialogColorPick(
                         colors = FilterChipDefaults.filterChipColors(
                             containerColor = Color.Transparent,
                             selectedContainerColor = MaterialTheme.colorScheme.secondary,
-                            labelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            labelColor = MaterialTheme.colorScheme.onSurface,
                             selectedLabelColor = MaterialTheme.colorScheme.onSecondary,
                         ),
                         onClick = {
+                            view.vibrate(EVibrate.BUTTON)
                             Settings.createColorType = it
                             createColorType = it
                         },
@@ -221,7 +222,7 @@ fun DialogColorPick(
                     SatValPanel(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(160.dp)
+                            .height(180.dp)
                             .padding(), hsv = hsv
                     ) { sat, value ->
                         hsv = Triple(hsv.first, sat, value)
@@ -272,10 +273,10 @@ fun DialogColorPick(
                         )
                         .wrapContentHeight()
                         .fillMaxWidth()
-                        .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 0.dp)
+                        .padding(start = 0.dp, end = 0.dp, top = 0.dp, bottom = 0.dp)
                 ) {
                     OutlinedTextField(
-                        modifier = Modifier,
+                        modifier = Modifier.fillMaxWidth(),
                         value = stateField,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -315,7 +316,7 @@ fun DialogColorPick(
                             errorInput = _color == null
                         })
                     Spacer(modifier = Modifier.height(4.dp))
-                    FlowRow(maxItemsInEachRow = 4, verticalArrangement = Arrangement.spacedBy((-12).dp, Alignment.Top)) {
+                    FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp), maxItemsInEachRow = 4, verticalArrangement = Arrangement.spacedBy((-12).dp, Alignment.Top)) {
                         EColorType.valuesForInputText().forEach {
                             FilterChip(
                                 selected = it == colorType,
@@ -366,10 +367,10 @@ fun DialogColorPick(
                     .padding(end = 0.dp, top = 0.dp)
                     .fillMaxWidth()
             ) {
-                DialogConfirmButton(text = stringResource(id = R.string.module_other_color_pick_cancel)) {
+                DialogConfirmButton(text = stringResource(id = R.string.color_pick_cancel)) {
                     onDismissRequest.invoke()
                 }
-                DialogConfirmButton(text = stringResource(id = R.string.module_other_color_pick_add)) {
+                DialogConfirmButton(text = stringResource(id = R.string.color_pick_add)) {
                     onDone.invoke(
                         Color(
                             AndroidColor.HSVToColor(

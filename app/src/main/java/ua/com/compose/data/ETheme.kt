@@ -5,10 +5,10 @@ import androidx.annotation.StringRes
 import ua.com.compose.R
 
 enum class ETheme(val key: Int, @StringRes val strRes: Int) {
-    DAY(key = 0, strRes = R.string.module_other_color_pick_day),
-    NIGHT(key = 1, strRes = R.string.module_other_color_pick_night),
-    SYSTEM(key = 2, strRes = R.string.module_other_color_pick_system),
-    DYNAMIC(key = 3, strRes = R.string.module_other_color_pick_dynamic);
+    DAY(key = 0, strRes = R.string.color_pick_day),
+    NIGHT(key = 1, strRes = R.string.color_pick_night),
+    SYSTEM(key = 2, strRes = R.string.color_pick_system),
+    DYNAMIC(key = 3, strRes = R.string.color_pick_dynamic);
 
     companion object {
 

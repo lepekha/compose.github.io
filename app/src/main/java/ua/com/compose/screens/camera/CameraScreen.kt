@@ -8,8 +8,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -138,30 +143,34 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
         ) {
             state?.let { state ->
                 ColorPickerRing(color = state.color)
-                Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 90.dp)) {
+
+                Column(verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp)
+                    .navigationBarsPadding()) {
                     val view = LocalView.current
                     ColorPickerInfo(state = state) {
                         view.vibrate(EVibrate.BUTTON)
                         stateInfoColor = state.color
                     }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                        Menu {
+                            IconItem(painter = painterResource(id = R.drawable.ic_copy)) {
+                                view.vibrate(EVibrate.BUTTON)
+                                analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
+                                context.clipboardCopy(state.typeValue)
+                                context.showToast(R.string.color_pick_color_copy)
+                            }
+                            IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
+                                view.vibrate(EVibrate.BUTTON)
+                                viewModule.pressPaletteAdd(state.color)
+                                context.showToast(R.string.color_pick_color_add_to_pallete)
+                            }
+                        }
                 }
 
-                Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 26.dp)) {
-                    Menu {
-                        val view = LocalView.current
-                        IconItem(painter = painterResource(id = R.drawable.ic_copy)) {
-                            view.vibrate(EVibrate.BUTTON)
-                            analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
-                            context.clipboardCopy(state.typeValue)
-                            context.showToast(R.string.color_pick_color_copy)
-                        }
-                        IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
-                            view.vibrate(EVibrate.BUTTON)
-                            viewModule.pressPaletteAdd(state.color)
-                            context.showToast(R.string.color_pick_color_add_to_pallete)
-                        }
-                    }
-                }
+
             }
         }
     }

@@ -34,17 +34,15 @@ val appModule = module {
     single { SelectPalletUseCase(database = get()) }
     single { ChangeColorPalletUseCase(database = get()) }
     viewModel { SettingsViewModel() }
-    viewModel { ColorInfoViewModel(context = androidContext(), addColorUseCase = get()) }
+    viewModel { ColorInfoViewModel(addColorUseCase = get()) }
     viewModel { ShareViewModel(getAllColorsUseCase = get(), getPalletUseCase = get()) }
     viewModel {
         PaletteViewModule(
-            context = androidContext(),
             database = get(),
             changeColorPalletUseCase = get(),
             selectPalletUseCase = get(),
             removePalletUseCase = get(),
             createPalletUseCase = get(),
-            getAllColorsUseCase = get(),
             removeColorUseCase = get(),
             updateColorUseCase = get(),
             addColorUseCase = get()

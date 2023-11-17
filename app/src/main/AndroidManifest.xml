@@ -68,7 +68,7 @@
             android:name=".MainActivity"
             android:launchMode="singleInstance"
             android:exported = "true"
-            android:configChanges="locale|layoutDirection"
+            android:configChanges="layoutDirection"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
             <intent-filter

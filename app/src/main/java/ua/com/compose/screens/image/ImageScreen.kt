@@ -23,8 +23,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -258,26 +263,18 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                         ColorPickerRing(modifier = Modifier.onGloballyPositioned { coordinates ->
                             positionInRoot = coordinates.boundsInRoot().center
                         }, color = colorState.color)
-                        Box(
-                            contentAlignment = Alignment.BottomCenter,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    start = 16.dp,
-                                    end = 16.dp,
-                                    bottom = 90.dp
-                                )
-                        ) {
+                        Column(verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp)
+                            .fillMaxSize()
+                            .navigationBarsPadding()) {
                             ColorPickerInfo(state = colorState) {
-                            view.vibrate(EVibrate.BUTTON)
+                                view.vibrate(EVibrate.BUTTON)
                                 stateInfoColor = colorState.color
                             }
-                        }
 
-                        val context = LocalContext.current
-                        Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier
-                            .fillMaxSize()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 26.dp)) {
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            val context = LocalContext.current
                             Menu {
                                 IconItem(painter = painterResource(id = R.drawable.ic_gallery)) {
                                     view.vibrate(EVibrate.BUTTON)
@@ -296,7 +293,6 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                                 }
                             }
                         }
-
                     }
                 }
             }

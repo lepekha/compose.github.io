@@ -3,6 +3,7 @@ package ua.com.compose.screens.info
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import androidx.annotation.StringRes
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.LiveData
@@ -24,13 +25,12 @@ import java.lang.Exception
 sealed interface ColorInfoItem {
 
     data class Text(val title: String, val value: String): ColorInfoItem
-    data class Colors(val title: String, val colors: List<Int>): ColorInfoItem
+    data class Colors(@StringRes val titleResId: Int, val colors: List<Int>): ColorInfoItem
     data class Color(val title: String, val color: Int): ColorInfoItem
 
 }
 
-class ColorInfoViewModel(val context: Context,
-                         private val addColorUseCase: AddColorUseCase): ViewModel() {
+class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewModel() {
 
     private val _items: MutableLiveData<List<ColorInfoItem>> = MutableLiveData(listOf())
     val items: LiveData<List<ColorInfoItem>> = _items
@@ -45,33 +45,33 @@ class ColorInfoViewModel(val context: Context,
         items.addAll(colors)
 
         shadesOf(startColor = color, endColor = Color.BLACK).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_shades), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_shades, colors = it))
         }
 
         tintsOf(startColor = color, endColor = Color.WHITE).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tints), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_tints, colors = it))
         }
         toneOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tones), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_tones, colors = it))
         }
         tetradicOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tetradic_color), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_tetradic_color, colors = it))
         }
 
         triadicOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_triadic_colors), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_triadic_colors, colors = it))
         }
 
         analogousOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_analogous_colors), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_analogous_colors, colors = it))
         }
 
         monochromaticOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_monochromatic_colors), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_monochromatic_colors, colors = it))
         }
 
         complementaryOf(baseColor = color).takeIf { it.isNotEmpty() }?.distinct()?.let {
-            items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_complementary_color), colors = it))
+            items.add(ColorInfoItem.Colors(titleResId = R.string.color_pick_complementary_color, colors = it))
         }
 
         _items.postValue(items)

@@ -98,15 +98,16 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
         viewModule.create(color)
     }
 
+    val bottomInset = WindowInsets.navigationBars
+
     BottomSheet(sheetState = sheetState, onDismissRequest = onDismissRequest) {
 
         val colorCopyText = stringResource(id = R.string.color_pick_color_add_to_pallete)
 
         LazyColumn(
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = bottomInset.asPaddingValues().calculateBottomPadding()),
             modifier = Modifier
                 .wrapContentHeight()
-                .windowInsetsPadding(WindowInsets.navigationBars)
                 .fillMaxWidth()
         ) {
             items(
@@ -181,7 +182,7 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
                                 .padding(top = 16.dp)
                         ) {
                             Text(
-                                text = it.title,
+                                text = stringResource(id = it.titleResId),
                                 textAlign = TextAlign.Start,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier

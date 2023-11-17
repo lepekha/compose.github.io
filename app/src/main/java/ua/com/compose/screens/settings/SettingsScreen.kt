@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -45,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalProvider
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
@@ -78,6 +81,8 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val localConfiguration = LocalConfiguration.current
+
+    val sdfsd = WindowInsets.navigationBars
 
     var appLocale: ELanguage? by remember {
         val currentLocale = localConfiguration.locales.get(0).language
@@ -258,7 +263,6 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         uncheckedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
                     ))
                 }
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 }

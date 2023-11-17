@@ -27,12 +27,10 @@ import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
 
 data class Item(val id: Long, val name: String, val isCurrent: Boolean, val colors: List<ColorItem>)
-class PaletteViewModule(private val context: Context,
-                        private val database: ColorDatabase,
+class PaletteViewModule(private val database: ColorDatabase,
                         private val selectPalletUseCase: SelectPalletUseCase,
                         private val createPalletUseCase: CreatePalletUseCase,
                         private val removePalletUseCase: RemovePalletUseCase,
-                        private val getAllColorsUseCase: GetAllColorsUseCase,
                         private val removeColorUseCase: RemoveColorUseCase,
                         private val updateColorUseCase: UpdateColorUseCase,
                         private val addColorUseCase: AddColorUseCase,

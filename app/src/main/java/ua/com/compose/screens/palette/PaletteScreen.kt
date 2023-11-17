@@ -19,11 +19,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -60,6 +64,7 @@ import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -494,7 +499,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                             val view = LocalView.current
                             LazyColumn(
                                 modifier = Modifier.matchParentSize(),
-                                contentPadding = PaddingValues(bottom = 98.dp)
+                                contentPadding = PaddingValues(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 60.dp)
                             ) {
                                 items(
                                     items = palettes.getOrNull(it)?.colors ?: listOf()
@@ -506,7 +511,9 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                             .height(68.dp)
                                             .padding(start = 4.dp, top = 6.dp, end = 4.dp)
                                             .fillMaxWidth()
-                                            .dragAndDropSource {
+                                            .dragAndDropSource ({
+                                                drawRoundRect(color = Color(colorItem.color), topLeft = Offset.Zero.copy(x = this.size.width / 4), size = this.size.copy(width = this.size.width / 2), cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx()))
+                                            }){
                                                 detectTapGestures(
                                                     onTap = {
                                                         view.vibrate(EVibrate.BUTTON)
@@ -645,7 +652,9 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                 ) {
                     Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier
                         .fillMaxSize()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 26.dp)) {
+                        .navigationBarsPadding()
+                        .padding(start = 16.dp, end = 16.dp)
+                    ) {
                         Menu {
                             val view = LocalView.current
                             IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {

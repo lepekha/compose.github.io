@@ -24,8 +24,8 @@
     <string name="color_pick_theme">테마</string>
     <string name="color_pick_text">텍스트</string>
     <string name="color_pick_box">팔레트</string>
-    <string name="color_pick_day">낮</string>
-    <string name="color_pick_night">밤</string>
+    <string name="color_pick_day">빛</string>
+    <string name="color_pick_night">어둠</string>
     <string name="color_pick_system">시스템</string>
     <string name="color_pick_dynamic">동적</string>
     <string name="color_pick_ok">확인</string>

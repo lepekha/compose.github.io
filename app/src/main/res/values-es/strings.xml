@@ -24,8 +24,8 @@
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Texto</string>
     <string name="color_pick_box">Paleta</string>
-    <string name="color_pick_day">Día</string>
-    <string name="color_pick_night">Noche</string>
+    <string name="color_pick_day">Claro</string>
+    <string name="color_pick_night">Oscuro</string>
     <string name="color_pick_system">Sistema</string>
     <string name="color_pick_dynamic">Dinámica</string>
     <string name="color_pick_ok">Aceptar</string>

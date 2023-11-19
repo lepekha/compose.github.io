@@ -24,8 +24,8 @@
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Metin</string>
     <string name="color_pick_box">Palet</string>
-    <string name="color_pick_day">Gün</string>
-    <string name="color_pick_night">Gece</string>
+    <string name="color_pick_day">Açık</string>
+    <string name="color_pick_night">Koyu</string>
     <string name="color_pick_system">Sistem</string>
     <string name="color_pick_dynamic">Dinamik</string>
     <string name="color_pick_ok">Tamam</string>

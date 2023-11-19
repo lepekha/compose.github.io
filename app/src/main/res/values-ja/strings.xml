@@ -24,8 +24,8 @@
     <string name="color_pick_theme">テーマ</string>
     <string name="color_pick_text">テキスト</string>
     <string name="color_pick_box">パレット</string>
-    <string name="color_pick_day">日</string>
-    <string name="color_pick_night">夜</string>
+    <string name="color_pick_day">明るい</string>
+    <string name="color_pick_night">暗い</string>
     <string name="color_pick_system">システム</string>
     <string name="color_pick_dynamic">ダイナミック</string>
     <string name="color_pick_ok">OK</string>

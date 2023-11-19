@@ -24,8 +24,8 @@
     <string name="color_pick_theme">विषय</string>
     <string name="color_pick_text">पाठ</string>
     <string name="color_pick_box">पैलेट</string>
-    <string name="color_pick_day">दिन</string>
-    <string name="color_pick_night">रात</string>
+    <string name="color_pick_day">स्वतंत्र</string>
+    <string name="color_pick_night">अंधेरा</string>
     <string name="color_pick_system">सिस्टम</string>
     <string name="color_pick_dynamic">गतिशील</string>
     <string name="color_pick_ok">ठीक है</string>

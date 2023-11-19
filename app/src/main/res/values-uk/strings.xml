@@ -25,8 +25,8 @@
     <string name="color_pick_theme">Тема</string>
     <string name="color_pick_text">Текст</string>
     <string name="color_pick_box">Палітра</string>
-    <string name="color_pick_day">День</string>
-    <string name="color_pick_night">Ніч</string>
+    <string name="color_pick_day">Світла</string>
+    <string name="color_pick_night">Темна</string>
     <string name="color_pick_system">Системна</string>
     <string name="color_pick_dynamic">Динамічна</string>
     <string name="color_pick_ok">ОК</string>

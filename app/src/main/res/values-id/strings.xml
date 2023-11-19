@@ -24,8 +24,8 @@
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Teks</string>
     <string name="color_pick_box">Palet</string>
-    <string name="color_pick_day">Hari</string>
-    <string name="color_pick_night">Malam</string>
+    <string name="color_pick_day">Terang</string>
+    <string name="color_pick_night">Gelap</string>
     <string name="color_pick_system">Sistem</string>
     <string name="color_pick_dynamic">Dinamis</string>
     <string name="color_pick_ok">Oke</string>

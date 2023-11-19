@@ -24,8 +24,8 @@ class ColorDatabase(context: Context) {
         val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 val currentPaletteId = Settings.paletteID
-//                database.execSQL("ALTER TABLE pallets ADD COLUMN isCurrent BIT NOT NULL")
-//                database.execSQL("UPDATE `pallets` SET `isCurrent` = CASE WHEN `id` = $currentPaletteId THEN 1 ELSE 0 END")
+                database.execSQL("ALTER TABLE pallets ADD COLUMN isCurrent INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("UPDATE `pallets` SET `isCurrent` = CASE WHEN `id` = $currentPaletteId THEN 1 ELSE 0 END")
             }
         }
     }

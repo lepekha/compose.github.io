@@ -203,10 +203,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
             }
         }
     } else {
-        val pagerState = rememberPagerState(initialPage = palettes.indexOfFirst { it.isCurrent }) {
-            palettes.count()
-        }
-
         Column {
             Box(
                 Modifier
@@ -310,7 +306,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                             val cardBorder = when {
                                 hovered -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                                 draged -> BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiaryContainer)
-                                pallet.isCurrent -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                                pallet.isCurrent -> BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
                                 else -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondary)
                             }
 
@@ -322,9 +318,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 shape = MaterialTheme.shapes.extraSmall,
                                 onClick = {
                                     view.vibrate(EVibrate.BUTTON)
-                                    scope.launch {
-                                        pagerState.animateScrollToPage(palettes.indexOfFirst { it.id == pallet.id })
-                                    }
                                     viewModule.selectPallet(id = pallet.id)
                                 }
                             ) {
@@ -469,23 +462,15 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                     color = MaterialTheme.colorScheme.outlineVariant
                 ))
 
-            LaunchedEffect(pagerState) {
-                snapshotFlow { pagerState.currentPage }.collect { page ->
-                    palettes.getOrNull(page)?.takeIf { !it.isCurrent }?.let {
-                        viewModule.selectPallet(id = it.id)
-                    }
-                }
-            }
-
             Box(modifier = Modifier.fillMaxSize()) {
-                HorizontalPager(state = pagerState, modifier = Modifier.matchParentSize()) {
-                    val align = Alignment.Center.takeIf { _ -> palettes.getOrNull(it)?.colors?.isEmpty() == true } ?: Alignment.TopCenter
+                palettes.firstOrNull { it.isCurrent }?.let { item ->
+                    val align = Alignment.Center.takeIf { _ -> item.colors.isEmpty() == true } ?: Alignment.TopCenter
                     Box(
                         contentAlignment = align,
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        if (palettes.getOrNull(it)?.colors?.isEmpty() != false) {
+                        if (item.colors.isEmpty()) {
                             val view = LocalView.current
                             IconButton(
                                 painter = painterResource(R.drawable.ic_add_circle),
@@ -502,7 +487,8 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 contentPadding = PaddingValues(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 60.dp)
                             ) {
                                 items(
-                                    items = palettes.getOrNull(it)?.colors ?: listOf()
+                                    items = item.colors,
+                                    key = { it.id }
                                 ) { colorItem ->
                                     val cardColor = MaterialTheme.colorScheme.surfaceContainer
                                     Card(elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),

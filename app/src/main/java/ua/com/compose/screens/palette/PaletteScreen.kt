@@ -10,6 +10,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -41,8 +42,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -119,6 +122,17 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     var stateCreateColor: Boolean by remember { mutableStateOf(false) }
     var stateSharePalette: Long? by remember { mutableStateOf(null) }
     var stateInfoColor: Int? by remember { mutableStateOf(null) }
+
+    val view = LocalView.current
+
+    fun touchedColor(value: Int) {
+        view.vibrate(EVibrate.BUTTON)
+        stateInfoColor = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.color ?: -1
+    }
+
+    fun touchedID(value: Int): String {
+        return palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.id?.toString() ?: ""
+    }
 
     if(stateCreatePalette) {
         val defaultName = Settings.defaultPaletteName(context, withIncrement = false)
@@ -487,9 +501,9 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 contentPadding = PaddingValues(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 60.dp)
                             ) {
                                 items(
-                                    items = item.colors,
-                                    key = { it.id }
-                                ) { colorItem ->
+                                    count = item.colors.size
+                                ) {
+                                    val colorItem  = item.colors[it]
                                     val cardColor = MaterialTheme.colorScheme.surfaceContainer
                                     Card(elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
                                         colors = CardDefaults.cardColors(containerColor = cardColor),
@@ -501,16 +515,15 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                 drawRoundRect(color = Color(colorItem.color), topLeft = Offset.Zero.copy(x = this.size.width / 4), size = this.size.copy(width = this.size.width / 2), cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx()))
                                             }){
                                                 detectTapGestures(
-                                                    onTap = {
-                                                        view.vibrate(EVibrate.BUTTON)
-                                                        stateInfoColor = colorItem.color
+                                                    onTap = { _ ->
+                                                        touchedColor(it)
                                                     },
-                                                    onLongPress = {
+                                                    onLongPress = { _ ->
                                                         startTransfer(
                                                             DragAndDropTransfer(
                                                                 clipData = ClipData.newPlainText(
                                                                     "COLOR_ID",
-                                                                    colorItem.id.toString()
+                                                                    touchedID(it)
                                                                 ),
                                                                 flags = View.DRAG_FLAG_GLOBAL,
                                                             )

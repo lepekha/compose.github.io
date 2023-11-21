@@ -27,7 +27,7 @@ object Settings {
 
     var colorType: EColorType
         get() {
-            return EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)).takeIf { it.isVisible() } ?: EColorType.HEX
+            return EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)) ?: EColorType.HEX
         }
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = value.key)
@@ -59,7 +59,7 @@ object Settings {
 
     var dialogColorInputType: EColorType
         get() {
-            return EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, defaultValue = EColorType.HEX.key)).takeIf { it.isVisible() } ?: EColorType.HEX
+            return EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, defaultValue = EColorType.HEX.key)) ?: EColorType.HEX
         }
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, value = value.key)

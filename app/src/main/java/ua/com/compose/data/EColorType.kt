@@ -9,7 +9,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.luminance
 import net.sf.javaml.core.kdtree.KDTree
 import org.json.JSONObject
-import ua.com.compose.api.config.remoteConfig
 import java.io.IOException
 import java.util.Locale
 import java.util.regex.Pattern
@@ -40,7 +39,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "HEX"
         override fun shortTitle() = "HEX"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeHEX
     },
     RGB_DECIMAL(key = 1) {
         override fun stringToColor(value: String): Int ?{
@@ -63,7 +61,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "RGB Decimal"
         override fun shortTitle() = "RGB"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeRGBDecimal
     },
     RGB_PERCENT(key = 3) {
         override fun stringToColor(value: String): Int? {
@@ -86,7 +83,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "RGB Percent"
         override fun shortTitle() = "RGB %"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeRGBPercent
     },
     BINARY(key = 2) {
         override fun stringToColor(value: String): Int? {
@@ -107,7 +103,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "BINARY"
         override fun shortTitle() = "BINARY"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeBINARY
     },
     HSV(key = 4) {
         override fun stringToColor(value: String): Int? {
@@ -126,7 +121,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "HSV"
         override fun shortTitle() = "HSV"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeHSV
     },
     HSL(key = 5) {
         override fun stringToColor(value: String): Int? {
@@ -148,7 +142,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "HSL"
         override fun shortTitle() = "HSL"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeHSL
     },
     CMYK(key = 6) {
         override fun stringToColor(value: String): Int? {
@@ -187,7 +180,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "CMYK"
         override fun shortTitle() = "CMYK"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeCMYK
     },
     CIE_LAB(key = 7) {
         override fun stringToColor(value: String): Int? {
@@ -211,7 +203,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "CIE LAB"
         override fun shortTitle() = "CIE LAB"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeCIELAB
     },
     XYZ(key = 8) {
         override fun stringToColor(value: String): Int? {
@@ -236,7 +227,6 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "XYZ"
         override fun shortTitle() = "XYZ"
-        override fun isVisible(): Boolean = remoteConfig.showColorTypeXYZ
     },
     LUMINANCE(key = 9) {
         override fun stringToColor(value: String): Int {
@@ -248,18 +238,16 @@ enum class EColorType(val key: Int) {
         }
         override fun title() = "Luminance"
         override fun shortTitle() = "Luminance"
-        override fun isVisible(): Boolean = true
     };
 
     abstract fun colorToString(color: Int, withSeparator: String = ","): String
     abstract fun stringToColor(value: String): Int?
     abstract fun title(): String
     abstract fun shortTitle(): String
-    abstract fun isVisible(): Boolean
 
     companion object {
         fun valuesForInputText() = listOf(HEX, RGB_DECIMAL, HSV, HSL, CMYK, XYZ, CIE_LAB)
-        fun visibleValues() = values().filter { it.isVisible() }
+        fun visibleValues() = values().toList()
         fun getByKey(key: Int) = values().firstOrNull { it.key == key } ?: HEX
     }
 }

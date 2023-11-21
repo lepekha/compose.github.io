@@ -24,14 +24,14 @@ class ColorDatabase(context: Context) {
         val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 val currentPaletteId = Settings.paletteID
-                database.execSQL("ALTER TABLE pallets ADD COLUMN isCurrent INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE `pallets` ADD COLUMN `isCurrent` INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("UPDATE `pallets` SET `isCurrent` = CASE WHEN `id` = $currentPaletteId THEN 1 ELSE 0 END")
             }
         }
     }
 
     val db = Room
-            .databaseBuilder(context, AppDatabase::class.java, "color_pick_database")
+            .databaseBuilder(context, AppDatabase::class.java, "module_other_color_pick_database")
             .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     val colorItemDao = db.colorItemDao()

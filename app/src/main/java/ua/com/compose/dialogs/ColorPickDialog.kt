@@ -70,7 +70,6 @@ import ua.com.compose.data.ColorNames
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.ECreateColorType
 import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.nonScaledSp
 import ua.com.compose.extension.vibrate
 import android.graphics.Color as AndroidColor
 
@@ -289,7 +288,7 @@ fun DialogColorPick(
                                 Icon(painter = painterResource(id = R.drawable.ic_error), contentDescription = null)
                             }
                         },
-                        textStyle = TextStyle.Default.copy(fontSize = 20.sp.nonScaledSp),
+                        textStyle = TextStyle.Default.copy(fontSize = 20.sp),
                         colors = OutlinedTextFieldDefaults.colors(
                             selectionColors = TextSelectionColors(
                                 handleColor = MaterialTheme.colorScheme.primary,
@@ -349,11 +348,10 @@ fun DialogColorPick(
                                     errorInput = false
                                 },
                                 label = {
-                                    Text(modifier = Modifier.fillMaxWidth(), text = it.shortTitle(), fontSize = 14.sp.nonScaledSp, textAlign = TextAlign.Center)
+                                    Text(modifier = Modifier.fillMaxWidth(), text = it.shortTitle(), fontSize = 14.sp, textAlign = TextAlign.Center)
                                 }
                             )
                         }
-
                     }
                 }
             }

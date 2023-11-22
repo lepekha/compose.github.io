@@ -27,10 +27,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-val TextUnit.nonScaledSp
-    @Composable
-    get() = (this.value / LocalDensity.current.fontScale).sp
-
 fun Context.hasPermission(permission: String): Boolean {
     val res: Int = this.checkCallingOrSelfPermission(permission)
     return res == PackageManager.PERMISSION_GRANTED

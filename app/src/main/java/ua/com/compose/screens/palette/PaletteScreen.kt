@@ -100,7 +100,6 @@ import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
-import ua.com.compose.extension.nonScaledSp
 import ua.com.compose.extension.showToast
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
@@ -568,16 +567,16 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                     Text(
                                                         text = Settings.colorType.colorToString(colorItem.color, withSeparator = ","),
                                                         color = MaterialTheme.colorScheme.onSurface,
-                                                        fontSize = 16.sp.nonScaledSp,
-                                                        lineHeight = 17.sp.nonScaledSp,
+                                                        fontSize = 16.sp,
+                                                        lineHeight = 17.sp,
                                                         maxLines = 2,
                                                         overflow = TextOverflow.Ellipsis,
                                                         fontWeight = FontWeight(700)
                                                     )
                                                     Text(
                                                         text = ColorNames.getColorName(hex),
-                                                        fontSize = 14.sp.nonScaledSp,
-                                                        lineHeight = 15.sp.nonScaledSp,
+                                                        fontSize = 14.sp,
+                                                        lineHeight = 15.sp,
                                                         maxLines = 1,
                                                         modifier = Modifier.padding(top = 4.dp),
                                                         color = MaterialTheme.colorScheme.onSurface

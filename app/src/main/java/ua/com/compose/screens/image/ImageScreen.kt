@@ -315,46 +315,46 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                     }
                 }
             }
-            val context = LocalContext.current
-            AnimatedVisibility(
-                visible = viewModule.domainColors.isNotEmpty(),
-                enter = fadeIn(animationSpec = tween(300)),
-                exit = fadeOut(animationSpec = tween(300))
-            ) {
-                Row(modifier = Modifier.fillMaxWidth().padding(top = 2.dp, start = 8.dp, end = 8.dp)) {
-                    viewModule.domainColors.forEach { color ->
-                        var visibleIcon by remember { mutableStateOf(false) }
-                        FilledIconButton(
-                            shape = MaterialTheme.shapes.extraSmall,
-                            colors = IconButtonDefaults.filledIconButtonColors(containerColor = color, contentColor = color.toArgb().visibleColor()),
-                            modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(1f)
-                            .padding(2.dp),
-                            onClick = {
-                                view.vibrate(EVibrate.BUTTON)
-                                context.showToast(R.string.color_pick_color_add_to_pallete)
-                                visibleIcon = true
-                                viewModule.pressPaletteAdd(color = color.toArgb())
-                            }) {
-
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = visibleIcon,
-                                enter = fadeIn(animationSpec = tween(500)),
-                                exit = fadeOut(animationSpec = tween(500))
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .fillMaxSize(0.50f)
-                                        .aspectRatio(1f, true),
-                                    painter = painterResource(id = R.drawable.ic_done),
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+//            val context = LocalContext.current
+//            AnimatedVisibility(
+//                visible = viewModule.domainColors.isNotEmpty(),
+//                enter = fadeIn(animationSpec = tween(300)),
+//                exit = fadeOut(animationSpec = tween(300))
+//            ) {
+//                Row(modifier = Modifier.fillMaxWidth().padding(top = 2.dp, start = 8.dp, end = 8.dp)) {
+//                    viewModule.domainColors.forEach { color ->
+//                        var visibleIcon by remember { mutableStateOf(false) }
+//                        FilledIconButton(
+//                            shape = MaterialTheme.shapes.extraSmall,
+//                            colors = IconButtonDefaults.filledIconButtonColors(containerColor = color, contentColor = color.toArgb().visibleColor()),
+//                            modifier = Modifier
+//                            .weight(1f)
+//                            .aspectRatio(1f)
+//                            .padding(2.dp),
+//                            onClick = {
+//                                view.vibrate(EVibrate.BUTTON)
+//                                context.showToast(R.string.color_pick_color_add_to_pallete)
+//                                visibleIcon = true
+//                                viewModule.pressPaletteAdd(color = color.toArgb())
+//                            }) {
+//
+//                            androidx.compose.animation.AnimatedVisibility(
+//                                visible = visibleIcon,
+//                                enter = fadeIn(animationSpec = tween(500)),
+//                                exit = fadeOut(animationSpec = tween(500))
+//                            ) {
+//                                Icon(
+//                                    modifier = Modifier
+//                                        .fillMaxSize(0.50f)
+//                                        .aspectRatio(1f, true),
+//                                    painter = painterResource(id = R.drawable.ic_done),
+//                                    contentDescription = null
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

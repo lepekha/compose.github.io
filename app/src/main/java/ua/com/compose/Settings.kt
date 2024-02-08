@@ -53,7 +53,7 @@ object Settings {
 
     var sortDirection: ESortDirection
         get() {
-            return ESortDirection.valueByKey(prefs.get(key = SharedPreferencesKey.KEY_SORT_DIRECTION, defaultValue = ESortDirection.ASC.key))
+            return ESortDirection.valueByKey(prefs.get(key = SharedPreferencesKey.KEY_SORT_DIRECTION, defaultValue = ESortDirection.DESC.key))
         }
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_SORT_DIRECTION, value = value.key)

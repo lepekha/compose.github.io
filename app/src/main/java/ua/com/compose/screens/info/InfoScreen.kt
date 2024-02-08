@@ -1,5 +1,6 @@
 package ua.com.compose.screens.info
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -71,12 +72,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.play.core.review.ReviewManagerFactory
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
+import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
+import ua.com.compose.composable.rememberReviewTask
 import ua.com.compose.data.ColorNames
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
@@ -92,6 +96,18 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
     val items by viewModule.items.observeAsState(listOf())
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    var openInfoCount = Settings.openInfoCount
+    if((openInfoCount % 25) == 0) {
+        val reviewManager = remember { ReviewManagerFactory.create(context) }
+        val reviewInfo = rememberReviewTask(reviewManager)
+        LaunchedEffect(key1 = reviewInfo) {
+            reviewInfo?.let {
+                reviewManager.launchReviewFlow(context as Activity, reviewInfo)
+            }
+        }
+    }
+    Settings.openInfoCount = ++openInfoCount
 
     LaunchedEffect(key1 = viewModule) {
         analytics.send(SimpleEvent(key = Analytics.Event.OPEN_INFO))

@@ -31,4 +31,16 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">Добавить</string>
     <string name="color_pick_cancel">Отменить</string>
+    <string name="color_pick_sort_order">Последовательный</string>
+    <string name="color_pick_sort_red_component">Красный</string>
+    <string name="color_pick_sort_green_component">Зеленый</string>
+    <string name="color_pick_sort_blue_component">Синий</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">Оттенок</string>
+    <string name="color_pick_sort_saturation_component">Насыщенность</string>
+    <string name="color_pick_sort_lightness_component">Яркость</string>
+    <string name="color_pick_sort_type">Тип сортировки</string>
+    <string name="color_pick_sort_direction">Направление</string>
+    <string name="color_pick_sort_direction_ascending">По возрастанию</string>
+    <string name="color_pick_sort_direction_descending">По убыванию</string>
 </resources>

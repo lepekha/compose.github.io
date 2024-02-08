@@ -31,4 +31,16 @@
     <string name="color_pick_ok">ठीक है</string>
     <string name="color_pick_add">जोड़ें</string>
     <string name="color_pick_cancel">रद्द करें</string>
+    <string name="color_pick_sort_order">क्रमिक</string>
+    <string name="color_pick_sort_red_component">लाल</string>
+    <string name="color_pick_sort_green_component">हरा</string>
+    <string name="color_pick_sort_blue_component">नीला</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">ह्यू</string>
+    <string name="color_pick_sort_saturation_component">उर्जस्वी</string>
+    <string name="color_pick_sort_lightness_component">चमक</string>
+    <string name="color_pick_sort_type">क्रम सौरच</string>
+    <string name="color_pick_sort_direction">दिशा</string>
+    <string name="color_pick_sort_direction_ascending">ऊपर</string>
+    <string name="color_pick_sort_direction_descending">नीचे</string>
 </resources>

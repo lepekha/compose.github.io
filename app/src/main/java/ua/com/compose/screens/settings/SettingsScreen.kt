@@ -82,8 +82,6 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
     val localConfiguration = LocalConfiguration.current
 
-    val sdfsd = WindowInsets.navigationBars
-
     var appLocale: ELanguage? by remember {
         val currentLocale = localConfiguration.locales.get(0).language
         mutableStateOf(ELanguage.values().firstOrNull { it.value == currentLocale })

@@ -2,6 +2,7 @@ package ua.com.compose.screens.palette
 
 import android.content.ClipData
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -10,7 +11,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -37,29 +37,22 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransfer
@@ -84,7 +77,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.ColorUtils
-import kotlinx.coroutines.launch
+import androidx.core.os.LocaleListCompat
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.Settings
@@ -95,14 +88,20 @@ import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
 import ua.com.compose.composable.Menu
 import ua.com.compose.data.ColorNames
+import ua.com.compose.data.ESortDirection
+import ua.com.compose.data.ESortType
+import ua.com.compose.dialogs.ChipItem
+import ua.com.compose.dialogs.DialogChoise
 import ua.com.compose.dialogs.DialogColorPick
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
+import ua.com.compose.dialogs.DialogSort
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.showToast
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
+import ua.com.compose.screens.palettes.PalettesScreen
 import ua.com.compose.screens.share.ShareScreen
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -117,8 +116,10 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     val scope = rememberCoroutineScope()
     var stateRemovePalette: Item? by remember { mutableStateOf(null) }
     var stateCreatePalette by remember { mutableStateOf(false) }
+    var stateSortDialog: Item? by remember { mutableStateOf(null) }
     var stateTuneColor: TuneColorState? by remember { mutableStateOf(null) }
     var stateCreateColor: Boolean by remember { mutableStateOf(false) }
+//    var statePalettes: Boolean by remember { mutableStateOf(false) }
     var stateSharePalette: Long? by remember { mutableStateOf(null) }
     var stateInfoColor: Int? by remember { mutableStateOf(null) }
 
@@ -148,6 +149,12 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
         }
     }
 
+//    if(statePalettes) {
+//        PalettesScreen {
+//            statePalettes = false
+//        }
+//    }
+
     stateSharePalette?.let {
         ShareScreen(paletteId = it, viewModel = koinViewModel()) {
             stateSharePalette = null
@@ -165,6 +172,17 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                 stateRemovePalette = null
             }
         }
+    }
+
+    if(stateSortDialog != null) {
+        DialogSort(
+            type = Settings.sortType,
+            direction = Settings.sortDirection,
+            onDone = { type, direction ->
+                viewModule.changeColorSort(paletteId = stateSortDialog?.id ?: -1L, sort = type ?: ESortType.ORDER, direction = direction ?: ESortDirection.DESC)
+            },
+            onDismissRequest = { stateSortDialog = null }
+        )
     }
 
     stateTuneColor?.let { state ->
@@ -476,7 +494,8 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                 ))
 
             Box(modifier = Modifier.fillMaxSize()) {
-                palettes.firstOrNull { it.isCurrent }?.let { item ->
+                val currentPallet = palettes.firstOrNull { it.isCurrent }
+                currentPallet?.let { item ->
                     val align = Alignment.Center.takeIf { _ -> item.colors.isEmpty() == true } ?: Alignment.TopCenter
                     Box(
                         contentAlignment = align,
@@ -510,9 +529,17 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                             .height(68.dp)
                                             .padding(start = 4.dp, top = 6.dp, end = 4.dp)
                                             .fillMaxWidth()
-                                            .dragAndDropSource ({
-                                                drawRoundRect(color = Color(colorItem.color), topLeft = Offset.Zero.copy(x = this.size.width / 4), size = this.size.copy(width = this.size.width / 2), cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx()))
-                                            }){
+                                            .dragAndDropSource({
+                                                drawRoundRect(
+                                                    color = Color(colorItem.color),
+                                                    topLeft = Offset.Zero.copy(x = this.size.width / 4),
+                                                    size = this.size.copy(width = this.size.width / 2),
+                                                    cornerRadius = CornerRadius(
+                                                        10.dp.toPx(),
+                                                        10.dp.toPx()
+                                                    )
+                                                )
+                                            }) {
                                                 detectTapGestures(
                                                     onTap = { _ ->
                                                         touchedColor(it)
@@ -655,9 +682,28 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                     ) {
                         Menu {
                             val view = LocalView.current
-                            IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
-                                view.vibrate(EVibrate.BUTTON)
-                                stateCreateColor = true
+//                        IconItem(painter = painterResource(id = R.drawable.ic_widgets)) {
+//                            view.vibrate(EVibrate.BUTTON)
+//                            statePalettes = true
+//                        }
+
+                            if(palettes.firstOrNull { it.isCurrent }?.colors?.isNotEmpty() == true) {
+                                IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
+                                    view.vibrate(EVibrate.BUTTON)
+                                    stateCreateColor = true
+                                }
+                            }
+
+                            if(palettes.firstOrNull { it.isCurrent }?.colors?.isNotEmpty() == true) {
+                                val icon = if(Settings.sortDirection == ESortDirection.ASC) {
+                                    painterResource(id = R.drawable.ic_sort_down)
+                                } else {
+                                    painterResource(id = R.drawable.ic_sort_up)
+                                }
+                                IconItem(painter = icon) {
+                                    stateSortDialog = currentPallet
+                                    view.vibrate(EVibrate.BUTTON)
+                                }
                             }
                         }
                     }

@@ -2,6 +2,7 @@ package ua.com.compose.screens.share
 
 import android.content.Context
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
@@ -26,6 +27,13 @@ class ShareViewModel(
     private val getAllColorsUseCase: GetAllColorsUseCase,
     private val getPalletUseCase: GetPalletUseCase
 ): ViewModel() {
+
+    val colors = mutableStateListOf<Int>()
+
+    fun create(paletteID: Long) = viewModelScope.launch(Dispatchers.IO) {
+        colors.clear()
+        colors.addAll(getAllColorsUseCase.execute(paletteID).map { it.color })
+    }
 
     fun createFile(context: Context, paletteID: Long, scheme: EFileExportScheme) = viewModelScope.launch(Dispatchers.IO) {
         val colorType = Settings.colorType

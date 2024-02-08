@@ -31,4 +31,16 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">Dodaj</string>
     <string name="color_pick_cancel">Anuluj</string>
+    <string name="color_pick_sort_order">Kolejność</string>
+    <string name="color_pick_sort_red_component">Czerwony</string>
+    <string name="color_pick_sort_green_component">Zielony</string>
+    <string name="color_pick_sort_blue_component">Niebieski</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">Barwa</string>
+    <string name="color_pick_sort_saturation_component">Nasycenie</string>
+    <string name="color_pick_sort_lightness_component">Jasność</string>
+    <string name="color_pick_sort_type">Typ sortowania</string>
+    <string name="color_pick_sort_direction">Kierunek</string>
+    <string name="color_pick_sort_direction_ascending">Rosnąco</string>
+    <string name="color_pick_sort_direction_descending">Malejąco</string>
 </resources>

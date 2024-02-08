@@ -32,4 +32,16 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">Hinzufügen</string>
     <string name="color_pick_cancel">Abbrechen</string>
+    <string name="color_pick_sort_order">Sequentiell</string>
+    <string name="color_pick_sort_red_component">Rot</string>
+    <string name="color_pick_sort_green_component">Grün</string>
+    <string name="color_pick_sort_blue_component">Blau</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">Farbton</string>
+    <string name="color_pick_sort_saturation_component">Sättigung</string>
+    <string name="color_pick_sort_lightness_component">Helligkeit</string>
+    <string name="color_pick_sort_type">Sortiertyp</string>
+    <string name="color_pick_sort_direction">Richtung</string>
+    <string name="color_pick_sort_direction_ascending">Aufsteigend</string>
+    <string name="color_pick_sort_direction_descending">Absteigend</string>
 </resources>

@@ -225,6 +225,6 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
 
     fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_FROM_INFO))
-        addColorUseCase.execute(color)
+        addColorUseCase.execute(listOf(color))
     }
 }

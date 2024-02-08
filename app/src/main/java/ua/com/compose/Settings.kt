@@ -12,10 +12,20 @@ import ua.com.compose.extension.get
 import ua.com.compose.extension.prefs
 import ua.com.compose.extension.put
 import ua.com.compose.data.EPanel
+import ua.com.compose.data.ESortDirection
+import ua.com.compose.data.ESortType
 
 object Settings {
 
     var lastUri: Uri? = null
+
+    var openInfoCount: Int
+        get() {
+            return prefs.get(key = SharedPreferencesKey.KEY_OPEN_INFO_COUNT, defaultValue = 1)
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_OPEN_INFO_COUNT, value = value)
+        }
 
     var vibration: Boolean
         get() {
@@ -31,6 +41,22 @@ object Settings {
         }
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = value.key)
+        }
+
+    var sortType: ESortType
+        get() {
+            return ESortType.valueByKey(prefs.get(key = SharedPreferencesKey.KEY_SORT_TYPE, defaultValue = ESortType.ORDER.key))
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_SORT_TYPE, value = value.key)
+        }
+
+    var sortDirection: ESortDirection
+        get() {
+            return ESortDirection.valueByKey(prefs.get(key = SharedPreferencesKey.KEY_SORT_DIRECTION, defaultValue = ESortDirection.ASC.key))
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_SORT_DIRECTION, value = value.key)
         }
 
     var createColorType: ECreateColorType

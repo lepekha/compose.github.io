@@ -282,7 +282,6 @@ fun DialogColorPick(
                         keyboardActions = KeyboardActions(onDone = { localFocusManager.clearFocus() }),
                         isError = errorInput,
                         shape = MaterialTheme.shapes.small,
-//                    label = { Text(text = colorType.title(), fontSize = 14.sp) },
                         trailingIcon = {
                             if(errorInput) {
                                 Icon(painter = painterResource(id = R.drawable.ic_error), contentDescription = null)

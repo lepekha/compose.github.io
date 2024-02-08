@@ -31,7 +31,7 @@ class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel(
 
     fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_CAMERA))
-        addColorUseCase.execute(color)
+        addColorUseCase.execute(listOf(color))
     }
 
 }

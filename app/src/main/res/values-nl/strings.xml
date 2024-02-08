@@ -31,4 +31,16 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">Toevoegen</string>
     <string name="color_pick_cancel">Annuleren</string>
+    <string name="color_pick_sort_order">Opeenvolgend</string>
+    <string name="color_pick_sort_red_component">Rood</string>
+    <string name="color_pick_sort_green_component">Groen</string>
+    <string name="color_pick_sort_blue_component">Blauw</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">Tint</string>
+    <string name="color_pick_sort_saturation_component">Verzadiging</string>
+    <string name="color_pick_sort_lightness_component">Helderheid</string>
+    <string name="color_pick_sort_type">Sorteer type</string>
+    <string name="color_pick_sort_direction">Richting</string>
+    <string name="color_pick_sort_direction_ascending">Oplopend</string>
+    <string name="color_pick_sort_direction_descending">Aflopend</string>
 </resources>

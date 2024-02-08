@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -17,24 +18,35 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Card
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -48,6 +60,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -57,6 +70,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -66,11 +80,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.minus
 import androidx.compose.ui.zIndex
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
+import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.request.ImageRequest
 import kotlinx.coroutines.GlobalScope
 import ua.com.compose.R
 import ua.com.compose.Settings
@@ -88,6 +105,7 @@ import ua.com.compose.extension.findActivity
 import ua.com.compose.extension.showToast
 import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
+import ua.com.compose.extension.visibleColor
 import ua.com.compose.screens.info.InfoScreen
 import java.lang.Float
 import kotlin.math.ceil
@@ -228,9 +246,9 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                     if(imageLoadState is AsyncImagePainter.State.Success) {
                         throttleLatest.invoke(view)
                     }
-
+                    val request = ImageRequest.Builder(LocalContext.current).data(photoUri).allowHardware(false).build()
                     AsyncImage(
-                        model = photoUri,
+                        model = request,
                         contentScale = ContentScale.Inside,
                         modifier = Modifier
                             .fillMaxSize()
@@ -248,6 +266,7 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
 
                             if(it is AsyncImagePainter.State.Success) {
                                 size = it.painter.intrinsicSize
+                                viewModule.generateDomainColors(it.result.drawable)
                             }
                         }
                     )
@@ -291,6 +310,46 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                                     viewModule.pressPaletteAdd(colorState.color)
                                     context.showToast(R.string.color_pick_color_add_to_pallete)
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+            val context = LocalContext.current
+            AnimatedVisibility(
+                visible = viewModule.domainColors.isNotEmpty(),
+                enter = fadeIn(animationSpec = tween(300)),
+                exit = fadeOut(animationSpec = tween(300))
+            ) {
+                Row(modifier = Modifier.fillMaxWidth().padding(top = 2.dp, start = 8.dp, end = 8.dp)) {
+                    viewModule.domainColors.forEach { color ->
+                        var visibleIcon by remember { mutableStateOf(false) }
+                        FilledIconButton(
+                            shape = MaterialTheme.shapes.extraSmall,
+                            colors = IconButtonDefaults.filledIconButtonColors(containerColor = color, contentColor = color.toArgb().visibleColor()),
+                            modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f)
+                            .padding(2.dp),
+                            onClick = {
+                                view.vibrate(EVibrate.BUTTON)
+                                context.showToast(R.string.color_pick_color_add_to_pallete)
+                                visibleIcon = true
+                                viewModule.pressPaletteAdd(color = color.toArgb())
+                            }) {
+
+                            androidx.compose.animation.AnimatedVisibility(
+                                visible = visibleIcon,
+                                enter = fadeIn(animationSpec = tween(500)),
+                                exit = fadeOut(animationSpec = tween(500))
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .fillMaxSize(0.50f)
+                                        .aspectRatio(1f, true),
+                                    painter = painterResource(id = R.drawable.ic_done),
+                                    contentDescription = null
+                                )
                             }
                         }
                     }

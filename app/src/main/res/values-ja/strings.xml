@@ -31,4 +31,16 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">追加</string>
     <string name="color_pick_cancel">キャンセル</string>
+    <string name="color_pick_sort_order">順次</string>
+    <string name="color_pick_sort_red_component">赤</string>
+    <string name="color_pick_sort_green_component">緑</string>
+    <string name="color_pick_sort_blue_component">青</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">色相</string>
+    <string name="color_pick_sort_saturation_component">彩度</string>
+    <string name="color_pick_sort_lightness_component">明度</string>
+    <string name="color_pick_sort_type">ソートの種類</string>
+    <string name="color_pick_sort_direction">方向</string>
+    <string name="color_pick_sort_direction_ascending">昇順</string>
+    <string name="color_pick_sort_direction_descending">降順</string>
 </resources>

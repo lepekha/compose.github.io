@@ -2,23 +2,16 @@ package ua.com.compose.data
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
-import androidx.annotation.ColorInt
-import androidx.compose.ui.util.fastSumBy
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.luminance
+import androidx.core.graphics.toColorInt
 import net.sf.javaml.core.kdtree.KDTree
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.util.Locale
-import java.util.regex.Pattern
 import kotlin.collections.set
-import kotlin.math.abs
-import kotlin.math.min
 import kotlin.math.roundToInt
-import kotlin.math.sqrt
-import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 
 enum class EColorType(val key: Int) {
@@ -30,8 +23,6 @@ enum class EColorType(val key: Int) {
             } catch (e: Exception) {
                 return null
             }
-//            repeat(6 - hex.count()) { hex = "0$hex" }
-//            return Color.parseColor("#$hex")
         }
         override fun colorToString(color: Int, withSeparator: String): String {
             val colorHex = Integer.toHexString(color).substring(2).toUpperCase()
@@ -293,11 +284,70 @@ object ColorNames {
         val pointsDouble = doubleArrayOf(r.toDouble(),g.toDouble(),b.toDouble())
     }
 
-    private fun hexToRGB(hex: String): RGB {
+    fun hexToRGB(hex: String): RGB {
         val color = Integer.parseInt(hex.substring(1), 16)
         val red = (color shr 16) and 0xFF
         val green = (color shr 8) and 0xFF
         val blue = color and 0xFF
         return RGB(red.toFloat(), green.toFloat(), blue.toFloat())
+    }
+}
+
+object Palettes {
+
+    data class Item(val colors: List<Int>)
+    private val tree = KDTree(3)
+    val items = mutableListOf<Item>()
+    val mapItems = mutableMapOf<ColorNames.RGB, MutableList<Item>>()
+    private val cache = mutableMapOf<Int, MutableList<Item>>()
+
+    fun init(context: Context) {
+        try {
+            val jsonArray = JSONArray(context.assets.open("palettes.json").bufferedReader().use { it.readText() })
+            for (i in 0 until jsonArray.length()) {
+                val jsonObject = jsonArray.getJSONObject(i)
+                val code = jsonObject.getString("code")
+//                val score = jsonObject.getString("score")
+                val colors = code.chunked(6).map { "#$it" }
+                val item = Item(colors = colors.map { it.toColorInt() })
+                items.add(item)
+
+                item.colors.forEach {
+                    val red = Color.red(it).toFloat()
+                    val green = Color.green(it).toFloat()
+                    val blue = Color.blue(it).toFloat()
+
+                    val rgb = ColorNames.RGB(red, green, blue)
+                    (mapItems[rgb] ?: mutableListOf()).apply {
+                        this.add(item)
+                        mapItems[rgb] = this
+                    }
+                }
+            }
+
+            mapItems.forEach { (key, value) ->
+                tree.insert(key.pointsDouble, value)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun palettesForColor(color: Int): List<Item> {
+        cache[color]?.let {
+            return it
+        }
+
+        val red = Color.red(color).toFloat()
+        val green = Color.green(color).toFloat()
+        val blue = Color.blue(color).toFloat()
+        val rgb = ColorNames.RGB(red, green, blue)
+
+        mapItems[rgb]?.let {
+            return it
+        }
+        val pallets = ((tree.nearest(rgb.pointsDouble, 70) as Array<Any>).filterIsInstance<List<*>>()).flatten().filterIsInstance<Item>().toSet().toMutableList()
+        cache[color] = pallets
+        return pallets
     }
 }

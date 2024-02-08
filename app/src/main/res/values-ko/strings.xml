@@ -31,4 +31,16 @@
     <string name="color_pick_ok">확인</string>
     <string name="color_pick_add">추가</string>
     <string name="color_pick_cancel">취소</string>
+    <string name="color_pick_sort_order">순차적</string>
+    <string name="color_pick_sort_red_component">빨강</string>
+    <string name="color_pick_sort_green_component">초록</string>
+    <string name="color_pick_sort_blue_component">파랑</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">색조</string>
+    <string name="color_pick_sort_saturation_component">채도</string>
+    <string name="color_pick_sort_lightness_component">명도</string>
+    <string name="color_pick_sort_type">정렬 유형</string>
+    <string name="color_pick_sort_direction">방향</string>
+    <string name="color_pick_sort_direction_ascending">오름차순</string>
+    <string name="color_pick_sort_direction_descending">내림차순</string>
 </resources>

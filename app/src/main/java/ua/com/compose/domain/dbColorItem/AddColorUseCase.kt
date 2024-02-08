@@ -13,16 +13,20 @@ class AddColorUseCase(
     private val database: ColorDatabase
 ) {
 
-    fun execute(color: Int) {
+    fun execute(colors: List<Int>) {
         database.db.runInTransaction {
                 var currentPaletteId = database.palletDao?.getCurrentPalette()?.id
                 if (currentPaletteId == null) {
                     currentPaletteId = createPalletUseCase.execute(name = null)
                 }
-                database.colorItemDao?.insert(ColorItem().apply {
-                    this.color = color
-                    this.palletId = currentPaletteId
-                })
+                database.colorItemDao?.insertAll(
+                    colors.map {
+                        ColorItem().apply {
+                            this.color = it
+                            this.palletId = currentPaletteId
+                        }
+                    }
+                )
         }
     }
 }

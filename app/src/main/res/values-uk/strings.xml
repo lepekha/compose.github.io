@@ -32,4 +32,16 @@
     <string name="color_pick_ok">ОК</string>
     <string name="color_pick_add">Додати</string>
     <string name="color_pick_cancel">Відмінити</string>
+    <string name="color_pick_sort_order">Послідовний</string>
+    <string name="color_pick_sort_red_component">Червоний</string>
+    <string name="color_pick_sort_green_component">Зелений</string>
+    <string name="color_pick_sort_blue_component">Синій</string>
+    <string name="color_pick_sort_sum_component">R+G+B</string>
+    <string name="color_pick_sort_hue_component">Відтінок</string>
+    <string name="color_pick_sort_saturation_component">Насиченість</string>
+    <string name="color_pick_sort_lightness_component">Яскравість</string>
+    <string name="color_pick_sort_type">Тип сортування</string>
+    <string name="color_pick_sort_direction">Напрямок</string>
+    <string name="color_pick_sort_direction_ascending">За зростанням</string>
+    <string name="color_pick_sort_direction_descending">За спаданням</string>
 </resources>

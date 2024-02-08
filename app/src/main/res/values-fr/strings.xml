@@ -31,4 +31,16 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">Ajouter</string>
     <string name="color_pick_cancel">Annuler</string>
+    <string name="color_pick_sort_order">Séquentielle</string>
+    <string name="color_pick_sort_red_component">Rouge</string>
+    <string name="color_pick_sort_green_component">Vert</string>
+    <string name="color_pick_sort_blue_component">Bleu</string>
+    <string name="color_pick_sort_sum_component">R+V+B</string>
+    <string name="color_pick_sort_hue_component">Teinte</string>
+    <string name="color_pick_sort_saturation_component">Saturation</string>
+    <string name="color_pick_sort_lightness_component">Luminosité</string>
+    <string name="color_pick_sort_type">Type de Tri</string>
+    <string name="color_pick_sort_direction">Direction</string>
+    <string name="color_pick_sort_direction_ascending">Croissant</string>
+    <string name="color_pick_sort_direction_descending">Décroissant</string>
 </resources>

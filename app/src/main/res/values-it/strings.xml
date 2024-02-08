@@ -31,4 +31,16 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">Aggiungi</string>
     <string name="color_pick_cancel">Annulla</string>
+    <string name="color_pick_sort_order">Sequenziale</string>
+    <string name="color_pick_sort_red_component">Rosso</string>
+    <string name="color_pick_sort_green_component">Verde</string>
+    <string name="color_pick_sort_blue_component">Blu</string>
+    <string name="color_pick_sort_sum_component">R+V+B</string>
+    <string name="color_pick_sort_hue_component">Tonalità</string>
+    <string name="color_pick_sort_saturation_component">Saturazione</string>
+    <string name="color_pick_sort_lightness_component">Luminosità</string>
+    <string name="color_pick_sort_type">Tipo di Ordinamento</string>
+    <string name="color_pick_sort_direction">Direzione</string>
+    <string name="color_pick_sort_direction_ascending">Crescente</string>
+    <string name="color_pick_sort_direction_descending">Decrescente</string>
 </resources>

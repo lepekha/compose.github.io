@@ -17,6 +17,8 @@ import ua.com.compose.data.ColorDatabase
 import ua.com.compose.data.ColorItem
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.data.EFileExportScheme
+import ua.com.compose.data.ESortDirection
+import ua.com.compose.data.ESortType
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.domain.dbColorItem.ChangeColorPalletUseCase
 import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase
@@ -25,6 +27,7 @@ import ua.com.compose.domain.dbColorItem.UpdateColorUseCase
 import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
+import ua.com.compose.domain.dbColorPallet.UpdatePalletUseCase
 
 data class Item(val id: Long, val name: String, val isCurrent: Boolean, val colors: List<ColorItem>)
 class PaletteViewModule(private val database: ColorDatabase,
@@ -44,7 +47,7 @@ class PaletteViewModule(private val database: ColorDatabase,
             id = palette.id,
             name = palette.name,
             isCurrent = palette.isCurrent,
-            colors = colors.filter { it.palletId == palette.id }
+            colors = colors.filter { it.palletId == palette.id }.sortedWith(Settings.sortType.sort(direction = Settings.sortDirection))
         ) }
     }.asLiveData()
 
@@ -58,7 +61,7 @@ class PaletteViewModule(private val database: ColorDatabase,
 
     fun addColor(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_PALETTE))
-        addColorUseCase.execute(color)
+        addColorUseCase.execute(listOf(color))
     }
 
     fun createPallet(name: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -68,6 +71,12 @@ class PaletteViewModule(private val database: ColorDatabase,
             changeColorPalletUseCase.execute(colorId, newPaletteId)
             dragAndDropColorID = null
         }
+    }
+
+    fun changeColorSort(paletteId: Long, sort: ESortType, direction: ESortDirection) = viewModelScope.launch(Dispatchers.IO) {
+        Settings.sortType = sort
+        Settings.sortDirection = direction
+        selectPalletUseCase.execute(id = paletteId)
     }
 
     fun selectPallet(id: Long) = viewModelScope.launch(Dispatchers.IO) {

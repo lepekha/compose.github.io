@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ua.com.compose.composable.DialogBottomSheet
 
-data class ChipItem<T>(val title: String, val icon: Painter? = null, val isSelect: Boolean = false, val obj: T)
+data class ChipItem<T>(val title: String, val icon: Painter? = null, val iconTint: Color? = null, val isSelect: Boolean = false, val obj: T)
 
 @Composable
 fun <T> DialogChoise(items: List<ChipItem<T>>, onDone: (value: T) -> Unit, onDismissRequest: () -> Unit) {
@@ -57,7 +58,8 @@ fun <T> DialogChoise(items: List<ChipItem<T>>, onDone: (value: T) -> Unit, onDis
                             .wrapContentHeight(), verticalAlignment = Alignment.CenterVertically) {
                             Spacer(modifier = Modifier.width(16.dp))
                             item.icon?.let {
-                                Image(painter = it, modifier = Modifier.size(23.dp), contentDescription = null)
+                                val colorFilter = item.iconTint?.let { ColorFilter.tint(color = it) }
+                                Image(painter = it, modifier = Modifier.size(23.dp), colorFilter = colorFilter, contentDescription = null)
                                 Spacer(modifier = Modifier.width(16.dp))
                             }
                             Text(text = item.title, color = color, fontSize = 16.sp, fontWeight = FontWeight(500), modifier = Modifier

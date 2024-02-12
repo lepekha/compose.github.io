@@ -32,13 +32,7 @@
     <string name="color_pick_add">Ekle</string>
     <string name="color_pick_cancel">İptal</string>
     <string name="color_pick_sort_order">Sıralı</string>
-    <string name="color_pick_sort_red_component">Kırmızı</string>
-    <string name="color_pick_sort_green_component">Yeşil</string>
-    <string name="color_pick_sort_blue_component">Mavi</string>
-    <string name="color_pick_sort_sum_component">R+Y+B</string>
-    <string name="color_pick_sort_hue_component">Renk Tonu</string>
-    <string name="color_pick_sort_saturation_component">Doygunluk</string>
-    <string name="color_pick_sort_lightness_component">Parlaklık</string>
+    <string name="color_pick_sort_luminance">Parlaklık</string>
     <string name="color_pick_sort_type">Sıralama Türü</string>
     <string name="color_pick_sort_direction">Yön</string>
     <string name="color_pick_sort_direction_ascending">Artan</string>

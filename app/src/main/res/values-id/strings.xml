@@ -32,13 +32,7 @@
     <string name="color_pick_add">Tambahkan</string>
     <string name="color_pick_cancel">Batal</string>
     <string name="color_pick_sort_order">Berurutan</string>
-    <string name="color_pick_sort_red_component">Merah</string>
-    <string name="color_pick_sort_green_component">Hijau</string>
-    <string name="color_pick_sort_blue_component">Biru</string>
-    <string name="color_pick_sort_sum_component">R+H+B</string>
-    <string name="color_pick_sort_hue_component">Tint</string>
-    <string name="color_pick_sort_saturation_component">Saturasi</string>
-    <string name="color_pick_sort_lightness_component">Kecerahan</string>
+    <string name="color_pick_sort_luminance">Luminansi</string>
     <string name="color_pick_sort_type">Jenis Pengurutan</string>
     <string name="color_pick_sort_direction">Arah</string>
     <string name="color_pick_sort_direction_ascending">Menaik</string>

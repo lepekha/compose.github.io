@@ -32,13 +32,7 @@
     <string name="color_pick_add">添加</string>
     <string name="color_pick_cancel">取消</string>
     <string name="color_pick_sort_order">顺序</string>
-    <string name="color_pick_sort_red_component">红色</string>
-    <string name="color_pick_sort_green_component">绿色</string>
-    <string name="color_pick_sort_blue_component">蓝色</string>
-    <string name="color_pick_sort_sum_component">红+绿+蓝</string>
-    <string name="color_pick_sort_hue_component">色调</string>
-    <string name="color_pick_sort_saturation_component">饱和度</string>
-    <string name="color_pick_sort_lightness_component">亮度</string>
+    <string name="color_pick_sort_luminance">亮度</string>
     <string name="color_pick_sort_type">排序类型</string>
     <string name="color_pick_sort_direction">方向</string>
     <string name="color_pick_sort_direction_ascending">升序</string>

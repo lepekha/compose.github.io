@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -24,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -83,16 +85,28 @@ fun DialogSort(type: ESortType?, direction: ESortDirection?, onDone: (type: ESor
 
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(10.dp))
+                    .height(4.dp))
 
-                FlowRow(verticalArrangement = Arrangement.spacedBy((-8).dp, Alignment.Top), modifier = Modifier.padding(start = 25.dp, end = 25.dp)) {
-                    ESortType.values().forEach { item ->
+                FlowRow(verticalArrangement = Arrangement.spacedBy((-8).dp, Alignment.Top), maxItemsInEachRow = 4, modifier = Modifier.padding(start = 25.dp, end = 25.dp)) {
+                    ESortType.values().forEachIndexed { inxed, item ->
+                        val roundBoth = listOf(0, 1)
+                        val roundLeft = listOf(2, 5, 8, 11)
+                        val roundRight = listOf(4, 7, 10, 13)
+
+                        val shape = when {
+                            roundBoth.contains(inxed) -> RoundedCornerShape(8.dp)
+                            roundLeft.contains(inxed) -> RoundedCornerShape(bottomStart = 8.dp, topStart = 8.dp, bottomEnd = 0.dp, topEnd = 0.dp)
+                            roundRight.contains(inxed) -> RoundedCornerShape(bottomStart = 0.dp, topStart = 0.dp, bottomEnd = 8.dp, topEnd = 8.dp)
+                            else -> RoundedCornerShape(0.dp)
+                        }
+
                         FilterChip(
                             selected = item == _type ,
                             border = null,
-                            shape = MaterialTheme.shapes.extraSmall,
+                            shape = shape,
                             modifier = Modifier
-                                .padding(start = 4.dp, end = 4.dp),
+                                .padding(start = 0.dp, end = 0.dp)
+                                .weight(weight = 1f),
                             colors = FilterChipDefaults.filterChipColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 selectedContainerColor = MaterialTheme.colorScheme.primary,
@@ -108,6 +122,10 @@ fun DialogSort(type: ESortType?, direction: ESortDirection?, onDone: (type: ESor
                                 Text(text = stringResource(id = item.stringResId), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(), fontSize = 16.sp)
                             }
                         )
+                        
+                        if(inxed == 0 || inxed == 1 || inxed == 4 || inxed == 7 || inxed == 10) {
+                            Spacer(modifier = Modifier.height(8.dp).fillMaxWidth(1f))
+                        }
                     }
 
                 }
@@ -122,6 +140,10 @@ fun DialogSort(type: ESortType?, direction: ESortDirection?, onDone: (type: ESor
                         .fillMaxWidth()
                         .padding(start = 24.dp, top = 24.dp, bottom = 5.dp, end = 24.dp)
                 )
+
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp))
 
                 FlowRow(verticalArrangement = Arrangement.spacedBy((-8).dp, Alignment.Top), modifier = Modifier.padding(start = 25.dp, end = 25.dp)) {
                     ESortDirection.values().forEach { item ->
@@ -138,7 +160,8 @@ fun DialogSort(type: ESortType?, direction: ESortDirection?, onDone: (type: ESor
                             },
                             shape = MaterialTheme.shapes.extraSmall,
                             modifier = Modifier
-                                .padding(start = 4.dp, end = 4.dp),
+                                .padding(start = 4.dp, end = 4.dp)
+                                .fillMaxWidth(1f),
                             colors = FilterChipDefaults.filterChipColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 selectedContainerColor = MaterialTheme.colorScheme.primary,

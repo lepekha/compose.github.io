@@ -103,6 +103,7 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
         val reviewInfo = rememberReviewTask(reviewManager)
         LaunchedEffect(key1 = reviewInfo) {
             reviewInfo?.let {
+                analytics.send(SimpleEvent(key = Analytics.Event.OPEN_IN_APP_REVIEW))
                 reviewManager.launchReviewFlow(context as Activity, reviewInfo)
             }
         }

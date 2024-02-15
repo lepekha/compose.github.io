@@ -25,6 +25,8 @@ interface Analytics {
         val CREATE_COLOR_IMAGE = "CREATE_COLOR_FROM_IMAGE"
         val CREATE_COLOR_PALETTE = "CREATE_COLOR_FROM_PALETTE"
         val CREATE_COLOR_FROM_INFO = "CREATE_COLOR_FROM_INFO"
+
+        val OPEN_PALETTE_SORT = "OPEN_PALETTE_SORT"
     }
 
     fun send(event: AnalyticsEvent)

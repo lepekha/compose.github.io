@@ -70,6 +70,7 @@ import ua.com.compose.data.ColorNames
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.ECreateColorType
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.toHex
 import ua.com.compose.extension.vibrate
 import android.graphics.Color as AndroidColor
 
@@ -163,7 +164,7 @@ fun DialogColorPick(
                         ) {
                             val name = "≈${
                                 ColorNames.getColorName(
-                                    "#" + Integer.toHexString(color).substring(2).toLowerCase()
+                                    "#" + color.toHex()
                                 )
                             }"
                             Text(

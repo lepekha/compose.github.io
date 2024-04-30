@@ -38,4 +38,12 @@
     <string name="color_pick_sort_direction">Напрямок</string>
     <string name="color_pick_sort_direction_ascending">За зростанням</string>
     <string name="color_pick_sort_direction_descending">За спаданням</string>
+    <string name="color_pick_premium">Преміум</string>
+    <string name="color_pick_attention">Увага</string>
+    <string name="color_pick_color_missing">Відсутні кольори</string>
+    <string name="color_pick_color_overview">Домінуючі кольори</string>
+    <string name="color_pick_generate_palettes">Генератор палітр</string>
+    <string name="color_pick_half_access">Тільки половина інформації доступна у відкритій панелі. Для доступу до повної версії, будь ласка, придбайте преміум-версію.</string>
+    <string name="color_pick_add_colors">Додати кольори до поточної палітри?</string>
+
 </resources>

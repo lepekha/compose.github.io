@@ -37,4 +37,12 @@
     <string name="color_pick_sort_direction">Arah</string>
     <string name="color_pick_sort_direction_ascending">Menaik</string>
     <string name="color_pick_sort_direction_descending">Menurun</string>
+    <string name="color_pick_premium">Premium</string>
+    <string name="color_pick_attention">Perhatian</string>
+    <string name="color_pick_color_missing">Warna hilang</string>
+    <string name="color_pick_color_overview">Warna dominan</string>
+    <string name="color_pick_generate_palettes">Pembangkit palet</string>
+    <string name="color_pick_half_access">Hanya setengah informasi yang tersedia di panel terbuka. Untuk mengakses versi penuh, silakan beli versi premium.</string>
+    <string name="color_pick_add_colors">Tambahkan warna ke palet saat ini?</string>
+
 </resources>

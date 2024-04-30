@@ -1,9 +1,7 @@
 package ua.com.compose.screens.share
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -11,64 +9,39 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.luminance
 import ua.com.compose.R
-import ua.com.compose.Settings
 import ua.com.compose.composable.BottomSheet
 import ua.com.compose.data.EFileExportScheme
+import ua.com.compose.dialogs.DialogBilling
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
-import ua.com.compose.extension.visibleColor
-import java.lang.Float.min
-
-fun findScaleFactor(firstW: Float, firstH: Float, secondW: Float, secondH: Float): Float {
-    // Отримати ширину і висоту кожного прямокутника
-    val widthRect1 = firstW.toFloat()
-    val heightRect1 = firstH.toFloat()
-    val widthRect2 = secondW.toFloat()
-    val heightRect2 = secondH.toFloat()
-
-    // Знайти масштабний коефіцієнт для ширини і висоти
-    val scaleX = widthRect2 / widthRect1
-    val scaleY = heightRect2 / heightRect1
-
-    // Вибрати менший масштабний коефіцієнт (щоб зберегти пропорції)
-    return if (scaleX < scaleY) scaleX else scaleY
-}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -76,8 +49,16 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
     val view = LocalView.current
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val isPremium by viewModel.isPremium.observeAsState(false)
 
     val containerBackground = MaterialTheme.colorScheme.surfaceContainerLow
+
+    var stateShowBilling by remember { mutableStateOf(false) }
+    if(stateShowBilling) {
+        DialogBilling(text = stringResource(id = R.string.color_pick_half_access)) {
+            stateShowBilling = false
+        }
+    }
 
     LaunchedEffect(key1 = Any()) {
         viewModel.create(paletteId)
@@ -113,13 +94,21 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
 
                 FlowRow(maxItemsInEachRow = 3, verticalArrangement = Arrangement.spacedBy((-8).dp, Alignment.Top)) {
                     EFileExportScheme.entries.forEach { scheme ->
+                        val onlyForPremium = !(isPremium || scheme.allowForAll)
+                        val alpha = if(onlyForPremium) 0.5f else 1f
+
                         FilledTonalButton(
                             onClick = {
                                 view.vibrate(EVibrate.BUTTON)
-                                viewModel.createFile(context = context, paletteID = paletteId, scheme = scheme)
+
+                                if(onlyForPremium) {
+                                    stateShowBilling = true
+                                } else {
+                                    viewModel.createFile(context = context, paletteID = paletteId, scheme = scheme)
+                                }
                             },
                             colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = MaterialTheme.colorScheme.secondary,
+                                containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = alpha),
                                 contentColor = MaterialTheme.colorScheme.onSecondary
                             ),
                             shape = MaterialTheme.shapes.medium,
@@ -127,6 +116,14 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
                                 .weight(1f)
                                 .padding(4.dp)
                         ) {
+                            if(onlyForPremium) {
+                                Icon(
+                                    modifier = Modifier.size(20.dp),
+                                    painter = painterResource(id = R.drawable.ic_lock),
+                                    contentDescription = null
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                            }
                             Text(text = scheme.title, fontSize = 16.sp)
                         }
                     }
@@ -172,26 +169,26 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
 //                            viewModel.colors.forEach { color ->
 //                                this.drawRect(color = Color(color), topLeft = topLeft, size = Size(this.size.width, itemH))
 //
-//                                val paint = Paint().asFrameworkPaint()
-//                                val text = Settings.colorType.colorToString(color = color)
-//                                val textSize = 7.sp
-//                                paint.textSize = textSize.value
-//
-//                                val textLayoutResult = textMeasurer.measure(
-//                                    AnnotatedString(text),
-//                                    style = TextStyle(fontSize = textSize)
-//                                )
-//
-//                                this.drawText(
-//                                    textMeasurer = textMeasurer,
-//                                    text = Settings.colorType.colorToString(color = color),
-//                                    style = TextStyle(color = color.visibleColor(), fontSize = TextUnit(textSize.value, TextUnitType.Sp)),
-//                                    size = Size(textLayoutResult.size.width.toFloat(), itemH),
-//                                    topLeft = Offset(
-//                                        x = (topLeft.x + (this.size.width - textLayoutResult.size.width) / 2),
-//                                        y = (topLeft.y + itemH / 6)
-//                                    )
-//                                )
+////                                val paint = Paint().asFrameworkPaint()
+////                                val text = Settings.colorType.colorToString(color = color)
+////                                val textSize = 7.sp
+////                                paint.textSize = textSize.value
+////
+////                                val textLayoutResult = textMeasurer.measure(
+////                                    AnnotatedString(text),
+////                                    style = TextStyle(fontSize = textSize)
+////                                )
+////
+////                                this.drawText(
+////                                    textMeasurer = textMeasurer,
+////                                    text = Settings.colorType.colorToString(color = color),
+////                                    style = TextStyle(color = color.visibleColor(), fontSize = TextUnit(textSize.value, TextUnitType.Sp)),
+////                                    size = Size(textLayoutResult.size.width.toFloat(), itemH),
+////                                    topLeft = Offset(
+////                                        x = (topLeft.x + (this.size.width - textLayoutResult.size.width) / 2),
+////                                        y = (topLeft.y + itemH / 6)
+////                                    )
+////                                )
 //                                topLeft = topLeft.copy(y = topLeft.y + itemH)
 //                            }
 //

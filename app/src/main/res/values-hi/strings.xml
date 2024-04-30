@@ -37,4 +37,12 @@
     <string name="color_pick_sort_direction">दिशा</string>
     <string name="color_pick_sort_direction_ascending">ऊपर</string>
     <string name="color_pick_sort_direction_descending">नीचे</string>
+    <string name="color_pick_premium">प्रीमियम</string>
+    <string name="color_pick_attention">ध्यान दें</string>
+    <string name="color_pick_color_missing">रंग गायब हैं</string>
+    <string name="color_pick_color_overview">प्रमुख रंग</string>
+    <string name="color_pick_generate_palettes">पैलेट जेनरेटर</string>
+    <string name="color_pick_half_access">खुले पैनल में केवल आधी जानकारी उपलब्ध है। पूर्ण जानकारी तक पहुंचने के लिए कृपया प्रीमियम संस्करण खरीदें।</string>
+    <string name="color_pick_add_colors">वर्तमान पैलेट में रंग जोड़ें?</string>
+
 </resources>

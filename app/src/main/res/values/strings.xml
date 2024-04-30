@@ -28,10 +28,15 @@
     <string name="color_pick_night">Dark</string>
     <string name="color_pick_system">System</string>
     <string name="color_pick_dynamic">Dynamic</string>
-    <string name="color_pick_ok">OK</string>
+    <string name="color_pick_ok">OK</string>17 - 30
     <string name="color_pick_add">Add</string>
     <string name="color_pick_cancel">Cancel</string>
-    <string name="color_pick_color_palettes">Color palettes</string>
+    <string name="color_pick_premium">Premium</string>
+    <string name="color_pick_attention">Attention</string>
+    <string name="color_pick_color_missing">Colors are missing</string>
+    <string name="color_pick_color_overview">Dominant colors</string>
+    <string name="color_pick_generate_palettes">Palette generator</string>
+    <string name="color_pick_half_access">Only half of the information is available in the open panel. To access the full, please purchase the premium version.</string>
     <string name="color_pick_add_colors">Add colors to current palette?</string>
     <string name="color_pick_sort_order">Sequential</string>
     <string name="color_pick_sort_rgb_r_component">R</string>

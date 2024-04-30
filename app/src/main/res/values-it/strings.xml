@@ -37,4 +37,12 @@
     <string name="color_pick_sort_direction">Direzione</string>
     <string name="color_pick_sort_direction_ascending">Crescente</string>
     <string name="color_pick_sort_direction_descending">Decrescente</string>
+    <string name="color_pick_premium">Premium</string>
+    <string name="color_pick_attention">Attenzione</string>
+    <string name="color_pick_color_missing">Mancano i colori</string>
+    <string name="color_pick_color_overview">Colori dominanti</string>
+    <string name="color_pick_generate_palettes">Generatore di palette</string>
+    <string name="color_pick_half_access">Solo la metà delle informazioni è disponibile nel pannello aperto. Per accedere alla versione completa, acquista la versione premium.</string>
+    <string name="color_pick_add_colors">Aggiungere colori alla palette attuale?</string>
+
 </resources>

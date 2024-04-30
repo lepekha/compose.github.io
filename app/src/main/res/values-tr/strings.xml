@@ -37,4 +37,12 @@
     <string name="color_pick_sort_direction">Yön</string>
     <string name="color_pick_sort_direction_ascending">Artan</string>
     <string name="color_pick_sort_direction_descending">Azalan</string>
+    <string name="color_pick_premium">Premium</string>
+    <string name="color_pick_attention">Dikkat</string>
+    <string name="color_pick_color_missing">Renkler eksik</string>
+    <string name="color_pick_color_overview">Baskın renkler</string>
+    <string name="color_pick_generate_palettes">Palet üreteci</string>
+    <string name="color_pick_half_access">Açık panelde bilgilerin yalnızca yarısı mevcut. Tam erişim için lütfen premium sürümü satın alın.</string>
+    <string name="color_pick_add_colors">Mevcut paletine renk eklemek ister misiniz?</string>
+
 </resources>

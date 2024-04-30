@@ -2,7 +2,6 @@ package ua.com.compose.screens.palette
 
 import android.content.ClipData
 import android.view.View
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -77,7 +76,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.ColorUtils
-import androidx.core.os.LocaleListCompat
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.Settings
@@ -90,8 +88,6 @@ import ua.com.compose.composable.Menu
 import ua.com.compose.data.ColorNames
 import ua.com.compose.data.ESortDirection
 import ua.com.compose.data.ESortType
-import ua.com.compose.dialogs.ChipItem
-import ua.com.compose.dialogs.DialogChoise
 import ua.com.compose.dialogs.DialogColorPick
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
@@ -99,9 +95,10 @@ import ua.com.compose.dialogs.DialogSort
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.showToast
+import ua.com.compose.extension.toHex
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
-import ua.com.compose.screens.palettes.PalettesScreen
+import ua.com.compose.screens.genPalette.PalettesScreen
 import ua.com.compose.screens.share.ShareScreen
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -119,7 +116,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     var stateSortDialog: Item? by remember { mutableStateOf(null) }
     var stateTuneColor: TuneColorState? by remember { mutableStateOf(null) }
     var stateCreateColor: Boolean by remember { mutableStateOf(false) }
-//    var statePalettes: Boolean by remember { mutableStateOf(false) }
+    var statePalettes: Boolean by remember { mutableStateOf(false) }
     var stateSharePalette: Long? by remember { mutableStateOf(null) }
     var stateInfoColor: Int? by remember { mutableStateOf(null) }
 
@@ -149,11 +146,11 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
         }
     }
 
-//    if(statePalettes) {
-//        PalettesScreen {
-//            statePalettes = false
-//        }
-//    }
+    if(statePalettes) {
+        PalettesScreen {
+            statePalettes = false
+        }
+    }
 
     stateSharePalette?.let {
         ShareScreen(paletteId = it, viewModel = koinViewModel()) {
@@ -590,7 +587,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         .weight(1f),
                                                     verticalArrangement = Arrangement.Center
                                                 ) {
-                                                    val hex = "#${Integer.toHexString(colorItem.color).substring(2).lowercase()}"
+                                                    val hex = "#${colorItem.color.toHex()}"
                                                     Text(
                                                         text = Settings.colorType.colorToString(colorItem.color, withSeparator = ","),
                                                         color = MaterialTheme.colorScheme.onSurface,
@@ -671,7 +668,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                 }
 
                 androidx.compose.animation.AnimatedVisibility(
-                    visible = palettes.firstOrNull { it.isCurrent }?.colors?.isNotEmpty() == true,
+                    visible = palettes.isNotEmpty(),
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300))
                 ) {
@@ -681,11 +678,10 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                         .padding(start = 16.dp, end = 16.dp)
                     ) {
                         Menu {
-                            val view = LocalView.current
-//                        IconItem(painter = painterResource(id = R.drawable.ic_widgets)) {
-//                            view.vibrate(EVibrate.BUTTON)
-//                            statePalettes = true
-//                        }
+                            IconItem(painter = painterResource(id = R.drawable.ic_stars)) {
+                                view.vibrate(EVibrate.BUTTON)
+                                statePalettes = true
+                            }
 
                             if(palettes.firstOrNull { it.isCurrent }?.colors?.isNotEmpty() == true) {
                                 IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {

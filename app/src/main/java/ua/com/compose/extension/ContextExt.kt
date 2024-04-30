@@ -25,8 +25,12 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.play.core.review.ReviewManagerFactory
+import ua.com.compose.AppBilling
 import ua.com.compose.Settings
 import java.io.File
 import java.io.FileOutputStream
@@ -36,6 +40,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 lateinit var prefs: SharedPreferences
+lateinit var dataStore: DataStore<Preferences>
+lateinit var appBilling: AppBilling
+
+val Context.createDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 fun Context.writeToFile(fileName: String, data: String): File? {
     try {

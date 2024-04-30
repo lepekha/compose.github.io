@@ -85,6 +85,7 @@ import ua.com.compose.data.ColorNames
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.showToast
+import ua.com.compose.extension.toHex
 import ua.com.compose.extension.vibrate
 import ua.com.compose.extension.visibleColor
 
@@ -142,7 +143,7 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
                         ) {
                             val name = "≈${
                                 ColorNames.getColorName(
-                                    "#" + Integer.toHexString(it.color).substring(2).toLowerCase()
+                                    "#" + it.color.toHex()
                                 )
                             }"
                             Text(

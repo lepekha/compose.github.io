@@ -1,5 +1,6 @@
 package ua.com.compose.screens.camera
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.View
 import androidx.camera.core.ImageAnalysis
@@ -9,12 +10,12 @@ import kotlinx.coroutines.CoroutineScope
 import ua.com.compose.extension.throttleLatest
 import java.nio.ByteBuffer
 
-class ColorAnalyzer(scope: CoroutineScope, val listener: (value: Int) -> Unit) : ImageAnalysis.Analyzer {
+class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: Int) -> Unit) : ImageAnalysis.Analyzer {
         private var lastTotalRed = 0
         private var lastTotalGreen = 0
         private var lastTotalBlue = 0
 
-    private val throttleLatest: ((ImageProxy) -> Unit) = throttleLatest(
+    private val throttleLatestColor: ((ImageProxy) -> Unit) = throttleLatest(
         withFirst = true,
         intervalMs = 100,
         coroutineScope = scope
@@ -64,7 +65,7 @@ class ColorAnalyzer(scope: CoroutineScope, val listener: (value: Int) -> Unit) :
         }
         // Створити колір із середніми значеннями каналів RGB
         val averageColor = Color.rgb(lastTotalRed, lastTotalGreen, lastTotalBlue)
-        listener(averageColor)
+        listenerColor(averageColor)
         image.close()
     }
 
@@ -76,6 +77,6 @@ class ColorAnalyzer(scope: CoroutineScope, val listener: (value: Int) -> Unit) :
         }
 
         override fun analyze(image: ImageProxy) {
-            throttleLatest.invoke(image)
+            throttleLatestColor.invoke(image)
         }
     }

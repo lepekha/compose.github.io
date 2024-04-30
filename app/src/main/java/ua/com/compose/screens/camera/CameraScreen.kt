@@ -1,10 +1,13 @@
 package ua.com.compose.screens.camera
 
 import android.Manifest
-import android.view.View
 import androidx.camera.core.CameraSelector
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -23,14 +26,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -40,7 +44,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import ua.com.compose.R
-import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
@@ -53,8 +56,8 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.createVideoCaptureUseCase
 import ua.com.compose.extension.showToast
-import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
+import ua.com.compose.screens.dominantColors.DomainColors
 import ua.com.compose.screens.info.InfoScreen
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -77,15 +80,26 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
 
     val scope = rememberCoroutineScope()
 
+    var icon by remember { mutableIntStateOf(R.drawable.ic_filter) }
+    viewModule.stateDomainColors.value.takeIf { it }?.let {
+        DomainColors(viewModule.domainColors) {
+            viewModule.stateDomainColors.value = false
+        }
+        icon = R.drawable.ic_filter
+    }
+
     LaunchedEffect(previewView) {
         context.createVideoCaptureUseCase(
             executors = cameraExecutor,
             lifecycleOwner = lifecycleOwner,
             cameraSelector = cameraSelector.value,
             previewView = previewView,
-            analyzed = ColorAnalyzer(scope = scope) {
-                viewModule.changeColor(it)
-            }
+            analyzed = ColorAnalyzer(
+                scope = scope,
+                listenerColor =  {
+                    viewModule.changeColor(it)
+                                 }
+            )
         )
     }
 
@@ -155,7 +169,31 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
 
                     Spacer(modifier = Modifier.height(8.dp))
 
+                    val infiniteTransition = rememberInfiniteTransition(label = "")
+                    val angle by infiniteTransition.animateFloat(
+                        initialValue = 0f,
+                        targetValue = 360f,
+                        animationSpec = infiniteRepeatable(
+                            animation = keyframes {
+                                durationMillis = 1500
+                            }
+                        ), label = ""
+                    )
+
                         Menu {
+                            val modifier = if(icon == R.drawable.ic_progress_bar) {
+                                Modifier.rotate(angle)
+                            } else {
+                                Modifier
+                            }
+
+                            IconItem(modifier = modifier, painter = painterResource(id = icon)) {
+                                previewView.bitmap?.let {
+                                    view.vibrate(EVibrate.BUTTON)
+                                    icon = R.drawable.ic_progress_bar
+                                    viewModule.generateDomainColors(it)
+                                }
+                            }
                             IconItem(painter = painterResource(id = R.drawable.ic_copy)) {
                                 view.vibrate(EVibrate.BUTTON)
                                 analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
@@ -169,8 +207,6 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
                             }
                         }
                 }
-
-
             }
         }
     }

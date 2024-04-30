@@ -1,16 +1,21 @@
-package ua.com.compose.screens.palettes
+package ua.com.compose.screens.genPalette
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ua.com.compose.Settings
 import ua.com.compose.data.ColorPallet
+import ua.com.compose.data.DataStoreKey
 import ua.com.compose.data.Palettes
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
-import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetCurrentPalletUseCase
+import ua.com.compose.extension.dataStore
 
 class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUseCase, private val addColorUseCase: AddColorUseCase): ViewModel() {
 
@@ -24,6 +29,10 @@ class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUse
             currentPalette = getCurrentPalletUseCase.execute()
         }
     }
+
+    val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
+        preferences[booleanPreferencesKey(DataStoreKey.KEY_PREMIUM)] ?: false
+    }.asLiveData()
 
     fun generatePalettesForColor(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         Settings.lastColor = color

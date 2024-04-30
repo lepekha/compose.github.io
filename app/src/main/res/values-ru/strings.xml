@@ -37,4 +37,12 @@
     <string name="color_pick_sort_direction">Направление</string>
     <string name="color_pick_sort_direction_ascending">По возрастанию</string>
     <string name="color_pick_sort_direction_descending">По убыванию</string>
+    <string name="color_pick_premium">Премиум</string>
+    <string name="color_pick_attention">Внимание</string>
+    <string name="color_pick_color_missing">Отсутствуют цвета</string>
+    <string name="color_pick_color_overview">Доминирующие цвета</string>
+    <string name="color_pick_generate_palettes">Генератор палитр</string>
+    <string name="color_pick_half_access">Только половина информации доступна в открытой панели. Чтобы получить доступ ко всему, приобретите премиальную версию.</string>
+    <string name="color_pick_add_colors">Добавить цвета в текущую палитру?</string>
+
 </resources>

@@ -37,4 +37,12 @@
     <string name="color_pick_sort_direction">方向</string>
     <string name="color_pick_sort_direction_ascending">升序</string>
     <string name="color_pick_sort_direction_descending">降序</string>
+    <string name="color_pick_premium">高级版</string>
+    <string name="color_pick_attention">注意</string>
+    <string name="color_pick_color_missing">颜色丢失</string>
+    <string name="color_pick_color_overview">主要颜色</string>
+    <string name="color_pick_generate_palettes">调色板生成器</string>
+    <string name="color_pick_half_access">在打开的面板中只有一半的信息可用。要访问完整信息，请购买高级版。</string>
+    <string name="color_pick_add_colors">将颜色添加到当前调色板？</string>
+
 </resources>

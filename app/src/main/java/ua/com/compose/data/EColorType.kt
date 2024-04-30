@@ -8,6 +8,7 @@ import androidx.core.graphics.toColorInt
 import net.sf.javaml.core.kdtree.KDTree
 import org.json.JSONArray
 import org.json.JSONObject
+import ua.com.compose.extension.toHex
 import java.io.IOException
 import java.util.Locale
 import kotlin.collections.set
@@ -25,7 +26,7 @@ enum class EColorType(val key: Int) {
             }
         }
         override fun colorToString(color: Int, withSeparator: String): String {
-            val colorHex = Integer.toHexString(color).substring(2).toUpperCase()
+            val colorHex = color.toHex().uppercase()
             return "#$colorHex"
         }
         override fun title() = "HEX"
@@ -243,7 +244,7 @@ enum class EColorType(val key: Int) {
     }
 }
 
-fun Int.colorName() = "≈${ColorNames.getColorName("#" + Integer.toHexString(this).substring(2).lowercase(Locale.getDefault()))}"
+fun Int.colorName() = "≈${ColorNames.getColorName("#" + this.toHex())}"
 
 object ColorNames {
     private val cacheColors = mutableMapOf<String, String>()
@@ -296,6 +297,7 @@ object ColorNames {
 object Palettes {
 
     data class Item(val colors: List<Int>)
+
     private val tree = KDTree(3)
     val items = mutableListOf<Item>()
     val mapItems = mutableMapOf<ColorNames.RGB, MutableList<Item>>()

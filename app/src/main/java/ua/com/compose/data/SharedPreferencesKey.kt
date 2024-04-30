@@ -15,3 +15,7 @@ internal object SharedPreferencesKey {
     const val KEY_SORT_TYPE = "KEY_SORT_TYPE"
     const val KEY_SORT_DIRECTION = "KEY_SORT_DIRECTION"
 }
+
+internal object DataStoreKey {
+    const val KEY_PREMIUM = "KEY_PREMIUM"
+}

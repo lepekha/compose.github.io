@@ -20,6 +20,7 @@ import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.ColorNames
 import ua.com.compose.data.EColorType
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
+import ua.com.compose.extension.toHex
 import java.lang.Exception
 
 sealed interface ColorInfoItem {
@@ -38,7 +39,7 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
     fun create(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         val items = mutableListOf<ColorInfoItem>()
 
-        val name = "≈${ColorNames.getColorName("#"+Integer.toHexString(color).substring(2).toLowerCase())}"
+        val name = "≈${ColorNames.getColorName("#"+color.toHex())}"
         items.add(ColorInfoItem.Color(title = name, color = color))
 
         val colors = EColorType.visibleValues().map { ColorInfoItem.Text(title = it.title(), value = it.colorToString(color, withSeparator = ",")) }

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import ua.com.compose.R
 
 @Composable
-fun RowScope.IconItem(painter: Painter, click: () -> Unit) {
+fun RowScope.IconItem(modifier: Modifier = Modifier, painter: Painter, click: () -> Unit) {
     FilledTonalIconButton(
         colors = IconButtonDefaults.filledTonalIconButtonColors(
             containerColor = Color.Transparent,
@@ -43,7 +43,7 @@ fun RowScope.IconItem(painter: Painter, click: () -> Unit) {
         modifier = Modifier.weight(1f, true).fillMaxHeight(),
         onClick = click,
         shape = RoundedCornerShape(corner = CornerSize(16.dp))) {
-        Icon(painter = painter, modifier = Modifier.size(25.dp), contentDescription = null)
+        Icon(painter = painter, modifier = modifier.size(25.dp), contentDescription = null)
     }
 }
 

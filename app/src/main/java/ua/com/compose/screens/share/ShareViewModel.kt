@@ -5,21 +5,26 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.Event
 import ua.com.compose.api.analytics.analytics
+import ua.com.compose.data.DataStoreKey
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.EFileExportScheme
 import ua.com.compose.data.ETheme
 import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase
 import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
+import ua.com.compose.extension.dataStore
 import ua.com.compose.extension.shareFile
 
 
@@ -29,6 +34,10 @@ class ShareViewModel(
 ): ViewModel() {
 
     val colors = mutableStateListOf<Int>()
+
+    val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
+        preferences[booleanPreferencesKey(DataStoreKey.KEY_PREMIUM)] ?: false
+    }.asLiveData()
 
     fun create(paletteID: Long) = viewModelScope.launch(Dispatchers.IO) {
         colors.clear()

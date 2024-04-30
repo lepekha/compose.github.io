@@ -1,12 +1,14 @@
 package ua.com.compose.screens.palette
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
@@ -16,6 +18,7 @@ import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.ColorDatabase
 import ua.com.compose.data.ColorItem
 import ua.com.compose.data.ColorPallet
+import ua.com.compose.data.DataStoreKey
 import ua.com.compose.data.EFileExportScheme
 import ua.com.compose.data.ESortDirection
 import ua.com.compose.data.ESortType
@@ -28,6 +31,7 @@ import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
 import ua.com.compose.domain.dbColorPallet.UpdatePalletUseCase
+import ua.com.compose.extension.dataStore
 
 data class Item(val id: Long, val name: String, val isCurrent: Boolean, val colors: List<ColorItem>)
 class PaletteViewModule(private val database: ColorDatabase,

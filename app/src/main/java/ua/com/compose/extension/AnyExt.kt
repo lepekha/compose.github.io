@@ -5,12 +5,16 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.TypedValue
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
@@ -30,6 +34,10 @@ import java.util.Locale
 fun Context.hasPermission(permission: String): Boolean {
     val res: Int = this.checkCallingOrSelfPermission(permission)
     return res == PackageManager.PERMISSION_GRANTED
+}
+
+fun Int.toHex(): String {
+    return Integer.toHexString(this).takeIf { it.length == 8 }?.substring(2)?.lowercase() ?: "000000"
 }
 
 fun Int.visibleColor(): Color {

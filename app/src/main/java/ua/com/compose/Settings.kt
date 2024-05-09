@@ -6,6 +6,7 @@ import android.net.Uri
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.ECreateColorType
+import ua.com.compose.data.EExportType
 import ua.com.compose.data.ETheme
 import ua.com.compose.data.SharedPreferencesKey
 import ua.com.compose.extension.get
@@ -14,17 +15,26 @@ import ua.com.compose.extension.put
 import ua.com.compose.data.EPanel
 import ua.com.compose.data.ESortDirection
 import ua.com.compose.data.ESortType
+import ua.com.compose.extension.has
 
 object Settings {
 
     var lastUri: Uri? = null
 
-    var openInfoCount: Int
+    var updateVersion: String
         get() {
-            return prefs.get(key = SharedPreferencesKey.KEY_OPEN_INFO_COUNT, defaultValue = 1)
+            return prefs.get(key = SharedPreferencesKey.KEY_UPDATE_VERSION, defaultValue = "")
         }
         set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_OPEN_INFO_COUNT, value = value)
+            prefs.put(key = SharedPreferencesKey.KEY_UPDATE_VERSION, value = value)
+        }
+
+    var openInfoCount: Int
+        get() {
+            return prefs.get(key = SharedPreferencesKey.KEY_OPEN_APP_COUNT, defaultValue = 1)
+        }
+        set(value) {
+            prefs.put(key = SharedPreferencesKey.KEY_OPEN_APP_COUNT, value = value)
         }
 
     var vibration: Boolean
@@ -74,6 +84,8 @@ object Settings {
         set(value) {
             prefs.put(key = SharedPreferencesKey.KEY_THEME, value = value.key)
         }
+
+    fun firstOpen() = !prefs.has(SharedPreferencesKey.KEY_START_SCREEN)
 
     var startScreen: EPanel
         get() {

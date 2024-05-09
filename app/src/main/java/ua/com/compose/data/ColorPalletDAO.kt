@@ -36,6 +36,9 @@ interface ColorPalletDAO {
     @Query("UPDATE pallets SET isCurrent = CASE WHEN id = :id THEN 1 ELSE 0 END")
     fun selectPalette(id: Long)
 
+    @Query("UPDATE pallets SET isCurrent = CASE WHEN isCurrent = 1 THEN 1 ELSE 0 END")
+    fun refreshPalettes()
+
     @Query("DELETE FROM pallets")
     fun deleteAll()
 

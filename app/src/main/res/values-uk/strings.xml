@@ -38,12 +38,20 @@
     <string name="color_pick_sort_direction">Напрямок</string>
     <string name="color_pick_sort_direction_ascending">За зростанням</string>
     <string name="color_pick_sort_direction_descending">За спаданням</string>
-    <string name="color_pick_premium">Преміум</string>
     <string name="color_pick_attention">Увага</string>
     <string name="color_pick_color_missing">Відсутні кольори</string>
     <string name="color_pick_color_overview">Домінуючі кольори</string>
     <string name="color_pick_generate_palettes">Генератор палітр</string>
-    <string name="color_pick_half_access">Тільки половина інформації доступна у відкритій панелі. Для доступу до повної версії, будь ласка, придбайте преміум-версію.</string>
     <string name="color_pick_add_colors">Додати кольори до поточної палітри?</string>
+
+    <string name="color_pick_change">Оновити</string>
+    <string name="color_pick_sort_name">Назва</string>
+
+    <string name="color_pick_palette_saved">Палітра збережена в "Завантаженнях"</string>
+    <string name="color_pick_buy">Купити</string>
+    <string name="color_pick_update_change">Зміни нової версії:</string>
+    <string name="color_pick_premium_version">Преміум версія</string>
+    <string name="color_pick_half_access">+ домінуючі кольори;\n+ генератор палітр;\n+ експорт палітри в форматах: css, svg, aco, ase, act;</string>
+    <string name="color_pick_update_version_text">- сортування кольорів перенесено до налаштувань додатку;\n- додано новий тип сортування;\n- додано можливість змінювати назву кольору в палітрі;\n- додано можливість завантажувати палітру кольорів;</string>
 
 </resources>

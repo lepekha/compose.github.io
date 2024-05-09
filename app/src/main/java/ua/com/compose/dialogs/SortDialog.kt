@@ -96,10 +96,10 @@ fun DialogSort(type: ESortType?, direction: ESortDirection?, onDone: (type: ESor
                     .height(4.dp))
 
                 FlowRow(verticalArrangement = Arrangement.spacedBy((-8).dp, Alignment.Top), maxItemsInEachRow = 4, modifier = Modifier.padding(start = 35.dp, end = 35.dp)) {
-                    ESortType.values().forEachIndexed { inxed, item ->
-                        val roundBoth = listOf(0, 1)
-                        val roundLeft = listOf(2, 5, 8, 11)
-                        val roundRight = listOf(4, 7, 10, 13)
+                    ESortType.valuesPriority().forEachIndexed { inxed, item ->
+                        val roundBoth = listOf(0, 1, 2)
+                        val roundLeft = listOf(3, 6, 9, 12)
+                        val roundRight = listOf(5, 8, 11, 14)
 
                         val shape = when {
                             roundBoth.contains(inxed) -> MaterialTheme.shapes.extraSmall
@@ -131,7 +131,7 @@ fun DialogSort(type: ESortType?, direction: ESortDirection?, onDone: (type: ESor
                             }
                         )
                         
-                        if(inxed == 0 || inxed == 1 || inxed == 4 || inxed == 7 || inxed == 10) {
+                        if(inxed == 0 || inxed == 1 || inxed == 2 || inxed == 5 || inxed == 8 || inxed == 11) {
                             Spacer(modifier = Modifier.height(8.dp).fillMaxWidth(1f))
                         }
                     }

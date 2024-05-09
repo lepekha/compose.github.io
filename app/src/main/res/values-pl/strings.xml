@@ -37,12 +37,19 @@
     <string name="color_pick_sort_direction">Kierunek</string>
     <string name="color_pick_sort_direction_ascending">Rosnąco</string>
     <string name="color_pick_sort_direction_descending">Malejąco</string>
-    <string name="color_pick_premium">Premium</string>
     <string name="color_pick_attention">Uwaga</string>
     <string name="color_pick_color_missing">Brakują kolory</string>
     <string name="color_pick_color_overview">Dominujące kolory</string>
     <string name="color_pick_generate_palettes">Generator palet</string>
-    <string name="color_pick_half_access">Tylko połowa informacji jest dostępna w otwartym panelu. Aby uzyskać pełny dostęp, proszę zakupić wersję premium.</string>
     <string name="color_pick_add_colors">Dodać kolory do bieżącej palety?</string>
+
+    <string name="color_pick_change">Aktualizuj</string>
+    <string name="color_pick_sort_name">Nazwa</string>
+    <string name="color_pick_palette_saved">Paleta zapisana w "Pobrane"</string>
+    <string name="color_pick_buy">Kup</string>
+    <string name="color_pick_update_change">Zmiany w nowej wersji:</string>
+    <string name="color_pick_premium_version">Wersja premium</string>
+    <string name="color_pick_half_access">+ Dominujące kolory;\n+ Generator palet;\n+ Eksport palety w formatach: css, svg, aco, ase, act;</string>
+    <string name="color_pick_update_version_text">- Sortowanie kolorów przeniesione do ustawień aplikacji;\n- Dodano nowy typ sortowania;\n- Dodano możliwość zmiany nazwy koloru w palecie;\n- Dodano możliwość pobierania palety kolorów;</string>
 
 </resources>

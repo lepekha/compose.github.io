@@ -37,12 +37,19 @@
     <string name="color_pick_sort_direction">Yön</string>
     <string name="color_pick_sort_direction_ascending">Artan</string>
     <string name="color_pick_sort_direction_descending">Azalan</string>
-    <string name="color_pick_premium">Premium</string>
     <string name="color_pick_attention">Dikkat</string>
     <string name="color_pick_color_missing">Renkler eksik</string>
     <string name="color_pick_color_overview">Baskın renkler</string>
     <string name="color_pick_generate_palettes">Palet üreteci</string>
-    <string name="color_pick_half_access">Açık panelde bilgilerin yalnızca yarısı mevcut. Tam erişim için lütfen premium sürümü satın alın.</string>
     <string name="color_pick_add_colors">Mevcut paletine renk eklemek ister misiniz?</string>
 
+    <string name="color_pick_change">Güncelle</string>
+    <string name="color_pick_sort_name">Ad</string>
+
+    <string name="color_pick_palette_saved">Palet "İndirmeler" bölümüne kaydedildi</string>
+    <string name="color_pick_buy">Satın Al</string>
+    <string name="color_pick_update_change">Yeni sürümde yapılan değişiklikler:</string>
+    <string name="color_pick_premium_version">Premium sürüm</string>
+    <string name="color_pick_half_access">+ Baskın renkler;\n+ Palet üretici;\n+ Paleti css, svg, aco, ase, act biçimlerinde dışa aktar;</string>
+    <string name="color_pick_update_version_text">- Renk sıralaması uygulama ayarlarına taşındı;\n- Yeni sıralama türü eklendi;\n- Palet içindeki rengin adını değiştirme imkanı eklendi;\n- Renk paletini indirme imkanı eklendi;</string>
 </resources>

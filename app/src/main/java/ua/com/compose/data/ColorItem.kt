@@ -14,6 +14,9 @@ class ColorItem {
     @ColumnInfo(name = "color")
     var color: Int = Color.WHITE
 
+    @ColumnInfo(name = "name")
+    var name: String? = null
+
     @ColumnInfo(name = "palletId")
     var palletId: Long = 0
 }

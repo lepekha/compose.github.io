@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ua.com.compose.Settings
+import ua.com.compose.data.InfoColor
 import ua.com.compose.data.ColorPallet
 import ua.com.compose.data.DataStoreKey
 import ua.com.compose.data.Palettes
@@ -44,6 +45,6 @@ class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUse
     }
 
     fun addColorsToCurrentPalette(colors: List<Int>) = viewModelScope.launch(Dispatchers.IO) {
-        addColorUseCase.execute(colors = colors)
+        addColorUseCase.execute(colors = colors.map { InfoColor(color = it) })
     }
 }

@@ -91,29 +91,16 @@ import ua.com.compose.extension.visibleColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
+fun InfoScreen(name: String?, color: Int, onDismissRequest: () -> Unit) {
     val viewModule: ColorInfoViewModel = koinViewModel()
     val context = LocalContext.current
     val items by viewModule.items.observeAsState(listOf())
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    var openInfoCount = Settings.openInfoCount
-    if((openInfoCount % 25) == 0) {
-        val reviewManager = remember { ReviewManagerFactory.create(context) }
-        val reviewInfo = rememberReviewTask(reviewManager)
-        LaunchedEffect(key1 = reviewInfo) {
-            reviewInfo?.let {
-                analytics.send(SimpleEvent(key = Analytics.Event.OPEN_IN_APP_REVIEW))
-                reviewManager.launchReviewFlow(context as Activity, reviewInfo)
-            }
-        }
-    }
-    Settings.openInfoCount = ++openInfoCount
-
     LaunchedEffect(key1 = viewModule) {
         analytics.send(SimpleEvent(key = Analytics.Event.OPEN_INFO))
-        viewModule.create(color)
+        viewModule.create(name, color)
     }
 
     val bottomInset = WindowInsets.navigationBars
@@ -141,13 +128,8 @@ fun InfoScreen(color: Int, onDismissRequest: () -> Unit) {
                                 .fillMaxWidth()
                                 .padding(top = 5.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
                         ) {
-                            val name = "≈${
-                                ColorNames.getColorName(
-                                    "#" + it.color.toHex()
-                                )
-                            }"
                             Text(
-                                text = name,
+                                text = it.title,
                                 color = it.color.visibleColor(),
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight(700)

@@ -2,7 +2,6 @@ package ua.com.compose.data
 
 import android.graphics.Color
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.luminance
 import ua.com.compose.R
 
 enum class ESortType(val key: Int, val stringResId: Int) {
@@ -19,11 +18,11 @@ enum class ESortType(val key: Int, val stringResId: Int) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    it.color.luminance
+                    Color.luminance(it.color)
                 }
             } else {
                 compareByDescending {
-                    it.color.luminance
+                    Color.luminance(it.color)
                 }
             }
         }
@@ -207,11 +206,25 @@ enum class ESortType(val key: Int, val stringResId: Int) {
                 }
             }
         }
+    },
+    NAME(key = 14, stringResId = R.string.color_pick_sort_name) {
+        override fun sort(direction: ESortDirection): Comparator<ColorItem> {
+            return if(direction == ESortDirection.ASC) {
+                compareBy {
+                    it.color.colorName()
+                }
+            } else {
+                compareByDescending {
+                    it.color.colorName()
+                }
+            }
+        }
     };
 
     abstract fun sort(direction: ESortDirection): Comparator<ColorItem>
 
     companion object {
+        fun valuesPriority() = listOf(ORDER, NAME, LUMINANCE, RGB_R, RGB_G, RGB_B, HSL_H, HSL_S, HSL_L, XYZ_X, XYZ_Y, XYZ_Z, LAB_L, LAB_A, LAB_B)
         fun valueByKey(key: Int) = values().firstOrNull { it.key == key } ?: ORDER
     }
 }

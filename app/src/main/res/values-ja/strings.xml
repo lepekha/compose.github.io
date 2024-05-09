@@ -37,12 +37,18 @@
     <string name="color_pick_sort_direction">方向</string>
     <string name="color_pick_sort_direction_ascending">昇順</string>
     <string name="color_pick_sort_direction_descending">降順</string>
-    <string name="color_pick_premium">プレミアム</string>
     <string name="color_pick_attention">ご注意</string>
     <string name="color_pick_color_missing">色がありません</string>
     <string name="color_pick_color_overview">主要な色</string>
     <string name="color_pick_generate_palettes">パレットジェネレーター</string>
-    <string name="color_pick_half_access">オープンパネルでは情報の半分しか利用できません。フルバージョンにアクセスするには、プレミアムバージョンを購入してください。</string>
     <string name="color_pick_add_colors">現在のパレットに色を追加しますか？</string>
 
+    <string name="color_pick_change">更新</string>
+    <string name="color_pick_sort_name">名前</string>
+    <string name="color_pick_palette_saved">パレットを「ダウンロード」に保存しました</string>
+    <string name="color_pick_buy">購入する</string>
+    <string name="color_pick_update_change">新しいバージョンの変更点：</string>
+    <string name="color_pick_premium_version">プレミアム版</string>
+    <string name="color_pick_half_access">+ 優勢色;\n+ パレット生成器;\n+ css、svg、aco、ase、act形式でパレットをエクスポート;</string>
+    <string name="color_pick_update_version_text">- 色の並べ替えをアプリの設定に移動しました;\n- 新しい並べ替えタイプが追加されました;\n- パレット内の色の名前を変更する機能が追加されました;\n- 色のパレットをダウンロードする機能が追加されました;</string>
 </resources>

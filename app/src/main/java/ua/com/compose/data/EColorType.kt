@@ -3,7 +3,6 @@ package ua.com.compose.data
 import android.content.Context
 import android.graphics.Color
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.luminance
 import androidx.core.graphics.toColorInt
 import net.sf.javaml.core.kdtree.KDTree
 import org.json.JSONArray
@@ -225,7 +224,7 @@ enum class EColorType(val key: Int) {
             return Color.WHITE
         }
         override fun colorToString(color: Int, withSeparator: String): String {
-            val value = color.luminance * 100
+            val value = Color.luminance(color) * 100
             return String.format("%.2f", value) + "%"
         }
         override fun title() = "Luminance"
@@ -244,7 +243,8 @@ enum class EColorType(val key: Int) {
     }
 }
 
-fun Int.colorName() = "≈${ColorNames.getColorName("#" + this.toHex())}"
+fun Int.colorName() = ColorNames.getColorName("#" + this.toHex())
+fun ColorItem.realColorName() = this.name ?: this.color.colorName()
 
 object ColorNames {
     private val cacheColors = mutableMapOf<String, String>()

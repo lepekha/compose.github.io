@@ -31,12 +31,10 @@
     <string name="color_pick_ok">OK</string>17 - 30
     <string name="color_pick_add">Add</string>
     <string name="color_pick_cancel">Cancel</string>
-    <string name="color_pick_premium">Premium</string>
     <string name="color_pick_attention">Attention</string>
     <string name="color_pick_color_missing">Colors are missing</string>
     <string name="color_pick_color_overview">Dominant colors</string>
     <string name="color_pick_generate_palettes">Palette generator</string>
-    <string name="color_pick_half_access">Only half of the information is available in the open panel. To access the full, please purchase the premium version.</string>
     <string name="color_pick_add_colors">Add colors to current palette?</string>
     <string name="color_pick_sort_order">Sequential</string>
     <string name="color_pick_sort_rgb_r_component">R</string>
@@ -56,5 +54,15 @@
     <string name="color_pick_sort_direction">Direction</string>
     <string name="color_pick_sort_direction_ascending">Ascending</string>
     <string name="color_pick_sort_direction_descending">Descending</string>
+
+    <string name="color_pick_change">Update</string>
+    <string name="color_pick_sort_name">Name</string>
+
+    <string name="color_pick_palette_saved">Palette saved in "Downloads"</string>
+    <string name="color_pick_buy">Buy</string>
+    <string name="color_pick_update_change">Changes in the new version:</string>
+    <string name="color_pick_premium_version">Premium version</string>
+    <string name="color_pick_half_access">+ dominant colors;\n+ palette generator;\n+ export palette in formats: css, svg, aco, ase, act;</string>
+    <string name="color_pick_update_version_text">- color sorting moved to app settings;\n- new sorting type added;\n- ability to change color name in palette added;\n- ability to download color palette added;</string>
 
 </resources>

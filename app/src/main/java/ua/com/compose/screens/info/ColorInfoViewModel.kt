@@ -1,6 +1,5 @@
 package ua.com.compose.screens.info
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.annotation.StringRes
@@ -17,10 +16,10 @@ import ua.com.compose.R
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
-import ua.com.compose.data.ColorNames
+import ua.com.compose.data.InfoColor
 import ua.com.compose.data.EColorType
+import ua.com.compose.data.colorName
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
-import ua.com.compose.extension.toHex
 import java.lang.Exception
 
 sealed interface ColorInfoItem {
@@ -36,11 +35,11 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
     private val _items: MutableLiveData<List<ColorInfoItem>> = MutableLiveData(listOf())
     val items: LiveData<List<ColorInfoItem>> = _items
 
-    fun create(color: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun create(name: String?, color: Int) = viewModelScope.launch(Dispatchers.IO) {
         val items = mutableListOf<ColorInfoItem>()
 
-        val name = "≈${ColorNames.getColorName("#"+color.toHex())}"
-        items.add(ColorInfoItem.Color(title = name, color = color))
+        val _name = name ?: color.colorName()
+        items.add(ColorInfoItem.Color(title = _name, color = color))
 
         val colors = EColorType.visibleValues().map { ColorInfoItem.Text(title = it.title(), value = it.colorToString(color, withSeparator = ",")) }
         items.addAll(colors)
@@ -226,6 +225,6 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
 
     fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_FROM_INFO))
-        addColorUseCase.execute(listOf(color))
+        addColorUseCase.execute(listOf(InfoColor(color = color)))
     }
 }

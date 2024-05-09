@@ -37,12 +37,18 @@
     <string name="color_pick_sort_direction">Richting</string>
     <string name="color_pick_sort_direction_ascending">Oplopend</string>
     <string name="color_pick_sort_direction_descending">Aflopend</string>
-    <string name="color_pick_premium">Premium</string>
     <string name="color_pick_attention">Aandacht</string>
     <string name="color_pick_color_missing">Kleuren ontbreken</string>
     <string name="color_pick_color_overview">Dominante kleuren</string>
     <string name="color_pick_generate_palettes">Paletgenerator</string>
-    <string name="color_pick_half_access">Slechts de helft van de informatie is beschikbaar in het open paneel. Koop de premiumversie om toegang te krijgen tot het volledige.</string>
     <string name="color_pick_add_colors">Kleuren toevoegen aan huidig palet?</string>
 
+    <string name="color_pick_change">Bijwerken</string>
+    <string name="color_pick_sort_name">Naam</string>
+    <string name="color_pick_palette_saved">Palet opgeslagen in "Downloads"</string>
+    <string name="color_pick_buy">Kopen</string>
+    <string name="color_pick_update_change">Wijzigingen in de nieuwe versie:</string>
+    <string name="color_pick_premium_version">Premium versie</string>
+    <string name="color_pick_half_access">+ Dominante kleuren;\n+ Paletgenerator;\n+ Exporteer palet in formaten: css, svg, aco, ase, act;</string>
+    <string name="color_pick_update_version_text">- Kleursortering is verplaatst naar de app-instellingen;\n- Nieuw type sortering toegevoegd;\n- Mogelijkheid om de naam van de kleur in het palet te wijzigen;\n- Mogelijkheid om het kleurenpalet te downloaden;</string>
 </resources>

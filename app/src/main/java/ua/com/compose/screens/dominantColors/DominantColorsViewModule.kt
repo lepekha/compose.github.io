@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
+import ua.com.compose.data.InfoColor
 import ua.com.compose.data.DataStoreKey
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.extension.dataStore
@@ -25,7 +26,7 @@ class DominantColorsViewModule(private val addColorUseCase: AddColorUseCase): Vi
     }.asLiveData()
     fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_DOMAIN_COLORS))
-        addColorUseCase.execute(listOf(color))
+        addColorUseCase.execute(listOf(InfoColor(color = color)))
     }
 
     fun init(colors: List<Color>) = viewModelScope.launch(Dispatchers.IO) {

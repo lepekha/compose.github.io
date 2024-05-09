@@ -50,7 +50,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,17 +84,15 @@ import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
 import ua.com.compose.composable.Menu
-import ua.com.compose.data.ColorNames
-import ua.com.compose.data.ESortDirection
-import ua.com.compose.data.ESortType
+import ua.com.compose.data.InfoColor
+import ua.com.compose.data.colorName
+import ua.com.compose.data.realColorName
 import ua.com.compose.dialogs.DialogColorPick
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
-import ua.com.compose.dialogs.DialogSort
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.showToast
-import ua.com.compose.extension.toHex
 import ua.com.compose.extension.vibrate
 import ua.com.compose.screens.info.InfoScreen
 import ua.com.compose.screens.genPalette.PalettesScreen
@@ -103,28 +100,28 @@ import ua.com.compose.screens.share.ShareScreen
 import kotlin.math.ceil
 import kotlin.math.floor
 
-data class TuneColorState(val id: Long, val color: Color)
+data class TuneColorState(val id: Long, val name: String?, val color: Color)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PaletteScreen(viewModule: PaletteViewModule) {
     val context = LocalContext.current
     val palettes by viewModule.palettes.observeAsState(listOf())
-    val scope = rememberCoroutineScope()
     var stateRemovePalette: Item? by remember { mutableStateOf(null) }
     var stateCreatePalette by remember { mutableStateOf(false) }
-    var stateSortDialog: Item? by remember { mutableStateOf(null) }
     var stateTuneColor: TuneColorState? by remember { mutableStateOf(null) }
     var stateCreateColor: Boolean by remember { mutableStateOf(false) }
     var statePalettes: Boolean by remember { mutableStateOf(false) }
-    var stateSharePalette: Long? by remember { mutableStateOf(null) }
-    var stateInfoColor: Int? by remember { mutableStateOf(null) }
+    var stateSharePalette: Pair<String, Long>? by remember { mutableStateOf(null) }
+    var stateInfoColor: InfoColor? by remember { mutableStateOf(null) }
 
     val view = LocalView.current
 
     fun touchedColor(value: Int) {
         view.vibrate(EVibrate.BUTTON)
-        stateInfoColor = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.color ?: -1
+        val color = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.color ?: -1
+        val name = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.name
+        stateInfoColor = InfoColor(name = name, color = color)
     }
 
     fun touchedID(value: Int): String {
@@ -153,7 +150,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     }
 
     stateSharePalette?.let {
-        ShareScreen(paletteId = it, viewModel = koinViewModel()) {
+        ShareScreen(name = it.first, paletteId = it.second, viewModel = koinViewModel()) {
             stateSharePalette = null
         }
     }
@@ -171,26 +168,15 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
         }
     }
 
-    if(stateSortDialog != null) {
-        DialogSort(
-            type = Settings.sortType,
-            direction = Settings.sortDirection,
-            onDone = { type, direction ->
-                viewModule.changeColorSort(paletteId = stateSortDialog?.id ?: -1L, sort = type ?: ESortType.ORDER, direction = direction ?: ESortDirection.DESC)
-            },
-            onDismissRequest = { stateSortDialog = null }
-        )
-    }
-
     stateTuneColor?.let { state ->
         DialogColorPick(
+            name = state.name,
             color = state.color,
-            onDone = {
-                Settings.lastColor = it.toArgb()
-                viewModule.changeColor(state.id, it.toArgb())
-            },
-            onInfo = {
-                stateInfoColor = it.toArgb()
+            cancelString = stringResource(id = R.string.color_pick_cancel),
+            doneString = stringResource(id = R.string.color_pick_change),
+            onDone = { name, color ->
+                Settings.lastColor = color.toArgb()
+                viewModule.changeColor(state.id, name, color.toArgb())
             }) {
             stateTuneColor = null
         }
@@ -198,20 +184,20 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
 
     stateCreateColor.takeIf { it }?.let {
         DialogColorPick(
+            name = null,
             color = Color(Settings.lastColor),
-            onDone = {
-                Settings.lastColor = it.toArgb()
-                viewModule.addColor(it.toArgb())
-            },
-            onInfo = {
-                stateInfoColor = it.toArgb()
+            cancelString = stringResource(id = R.string.color_pick_cancel),
+            doneString = stringResource(id = R.string.color_pick_add),
+            onDone = { name, color ->
+                Settings.lastColor = color.toArgb()
+                viewModule.addColor(name, color.toArgb())
             }) {
                 stateCreateColor = false
             }
     }
 
     stateInfoColor?.let {
-        InfoScreen(color = it) {
+        InfoScreen(name = it.name, color = it.color) {
             stateInfoColor = null
         }
     }
@@ -439,12 +425,13 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                             .weight(1.0f),
                                                         onClick = {
                                                             view.vibrate(EVibrate.BUTTON)
-                                                            stateSharePalette = pallet.id
+                                                            stateSharePalette = pallet.name to pallet.id
                                                         },
                                                         shape = MaterialTheme.shapes.extraSmall.copy(CornerSize(5.dp))) {
 
                                                         Icon(painter = painterResource(R.drawable.ic_share), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                     }
+
                                                     Spacer(modifier = Modifier.width(3.dp))
                                                 }
 
@@ -500,7 +487,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                             .fillMaxSize()
                     ) {
                         if (item.colors.isEmpty()) {
-                            val view = LocalView.current
                             IconButton(
                                 painter = painterResource(R.drawable.ic_add_circle),
                                 shape = RoundedCornerShape(25.dp),
@@ -510,7 +496,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 stateCreateColor = true
                             }
                         } else {
-                            val view = LocalView.current
                             LazyColumn(
                                 modifier = Modifier.matchParentSize(),
                                 contentPadding = PaddingValues(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 60.dp)
@@ -587,7 +572,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         .weight(1f),
                                                     verticalArrangement = Arrangement.Center
                                                 ) {
-                                                    val hex = "#${colorItem.color.toHex()}"
                                                     Text(
                                                         text = Settings.colorType.colorToString(colorItem.color, withSeparator = ","),
                                                         color = MaterialTheme.colorScheme.onSurface,
@@ -598,7 +582,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         fontWeight = FontWeight(700)
                                                     )
                                                     Text(
-                                                        text = ColorNames.getColorName(hex),
+                                                        text = colorItem.realColorName(),
                                                         fontSize = 14.sp,
                                                         lineHeight = 15.sp,
                                                         maxLines = 1,
@@ -638,7 +622,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         .padding(2.dp),
                                                     onClick = {
                                                         view.vibrate(EVibrate.BUTTON)
-                                                        stateTuneColor = TuneColorState(id = colorItem.id, Color(colorItem.color))
+                                                        stateTuneColor = TuneColorState(id = colorItem.id, name = colorItem.name, color = Color(colorItem.color))
                                                     }) {
                                                     Icon(painter = painterResource(R.drawable.ic_color_tune), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                 }
@@ -687,18 +671,6 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
                                     view.vibrate(EVibrate.BUTTON)
                                     stateCreateColor = true
-                                }
-                            }
-
-                            if(palettes.firstOrNull { it.isCurrent }?.colors?.isNotEmpty() == true) {
-                                val icon = if(Settings.sortDirection == ESortDirection.ASC) {
-                                    painterResource(id = R.drawable.ic_sort_down)
-                                } else {
-                                    painterResource(id = R.drawable.ic_sort_up)
-                                }
-                                IconItem(painter = icon) {
-                                    stateSortDialog = currentPallet
-                                    view.vibrate(EVibrate.BUTTON)
                                 }
                             }
                         }

@@ -37,7 +37,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ua.com.compose.R
+import ua.com.compose.composable.ActionIconButton
+import ua.com.compose.composable.BottomNotification
 import ua.com.compose.composable.BottomSheet
+import ua.com.compose.data.EExportType
 import ua.com.compose.data.EFileExportScheme
 import ua.com.compose.dialogs.DialogBilling
 import ua.com.compose.extension.EVibrate
@@ -45,7 +48,7 @@ import ua.com.compose.extension.vibrate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: () -> Unit) {
+fun ShareScreen(name: String, paletteId: Long, viewModel: ShareViewModel, onDismissRequest: () -> Unit) {
     val view = LocalView.current
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -60,6 +63,29 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
         }
     }
 
+    var stateShowShare: Pair<String, EFileExportScheme>? by remember { mutableStateOf(null) }
+    stateShowShare?.let {
+        BottomNotification(
+            text = it.first,
+            actions = listOf(
+                ActionIconButton(
+                    icon = painterResource(id = R.drawable.ic_download),
+                    action = {
+                        viewModel.createFile(context = context, paletteID = paletteId, exportType = EExportType.SAVE, scheme = it.second)
+                    }
+                ),
+                ActionIconButton(
+                    icon = painterResource(id = R.drawable.ic_send),
+                    action = {
+                        viewModel.createFile(context = context, paletteID = paletteId, exportType = EExportType.SHARE, scheme = it.second)
+                    }
+                )
+            )
+            ) {
+            stateShowShare = null
+        }
+    }
+
     LaunchedEffect(key1 = Any()) {
         viewModel.create(paletteId)
     }
@@ -71,7 +97,6 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
                 .fillMaxWidth()
                 .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
         ) {
-
             Column(
                 modifier = Modifier
                     .background(
@@ -104,14 +129,14 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
                                 if(onlyForPremium) {
                                     stateShowBilling = true
                                 } else {
-                                    viewModel.createFile(context = context, paletteID = paletteId, scheme = scheme)
+                                    stateShowShare = name to scheme
                                 }
                             },
                             colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = alpha),
-                                contentColor = MaterialTheme.colorScheme.onSecondary
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = alpha),
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                             ),
-                            shape = MaterialTheme.shapes.medium,
+                            shape = MaterialTheme.shapes.small,
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(4.dp)
@@ -130,6 +155,8 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
                 }
 
             }
+
+
 
 //            Spacer(modifier = Modifier.height(8.dp))
 //

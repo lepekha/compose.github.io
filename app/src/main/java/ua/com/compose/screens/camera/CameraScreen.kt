@@ -109,7 +109,7 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
 
     var stateInfoColor: Int? by remember { mutableStateOf(null) }
     stateInfoColor?.let {
-        InfoScreen(color = it) {
+        InfoScreen(name = null, color = it) {
             stateInfoColor = null
         }
     }

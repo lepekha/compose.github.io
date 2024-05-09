@@ -1,6 +1,5 @@
 package ua.com.compose.screens.camera
 
-import android.R.attr
 import android.graphics.Bitmap
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -16,10 +15,9 @@ import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.ColorState
-import ua.com.compose.data.ColorNames
+import ua.com.compose.data.InfoColor
+import ua.com.compose.data.colorName
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
-import ua.com.compose.extension.toHex
-import java.io.ByteArrayOutputStream
 
 
 class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel()  {
@@ -29,7 +27,7 @@ class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel(
     val colorState: LiveData<ColorState> = _colorState
 
     fun changeColor(color: Int) = viewModelScope.launch(Dispatchers.IO) {
-        val name = "≈${ColorNames.getColorName("#"+color.toHex())}"
+        val name = color.colorName()
         val value = Settings.colorType.colorToString(color = color)
         val colorState = ColorState(color = color, name = name, typeValue = value)
         _colorState.postValue(colorState)
@@ -37,7 +35,7 @@ class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel(
 
     fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_CAMERA))
-        addColorUseCase.execute(listOf(color))
+        addColorUseCase.execute(listOf(InfoColor(color = color)))
     }
 
     val domainColors = mutableListOf<Color>()

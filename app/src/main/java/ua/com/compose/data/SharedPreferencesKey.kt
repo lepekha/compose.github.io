@@ -11,9 +11,10 @@ internal object SharedPreferencesKey {
     const val KEY_VIBRATION = "KEY_VIBRATION"
     const val KEY_LAST_COLOR = "KEY_LAST_COLOR"
     const val KEY_START_SCREEN = "KEY_START_SCREEN"
-    const val KEY_OPEN_INFO_COUNT = "KEY_OPEN_INFO_COUNT"
     const val KEY_SORT_TYPE = "KEY_SORT_TYPE"
     const val KEY_SORT_DIRECTION = "KEY_SORT_DIRECTION"
+    const val KEY_OPEN_APP_COUNT = "KEY_OPEN_APP_COUNT"
+    const val KEY_UPDATE_VERSION = "KEY_UPDATE_VERSION"
 }
 
 internal object DataStoreKey {

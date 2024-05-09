@@ -37,12 +37,18 @@
     <string name="color_pick_sort_direction">Direção</string>
     <string name="color_pick_sort_direction_ascending">Ascendente</string>
     <string name="color_pick_sort_direction_descending">Descendente</string>
-    <string name="color_pick_premium">Premium</string>
     <string name="color_pick_attention">Atenção</string>
     <string name="color_pick_color_missing">Cores estão faltando</string>
     <string name="color_pick_color_overview">Cores dominantes</string>
     <string name="color_pick_generate_palettes">Gerador de paletas</string>
-    <string name="color_pick_half_access">Apenas metade das informações está disponível no painel aberto. Para acessar o conteúdo completo, adquira a versão premium.</string>
     <string name="color_pick_add_colors">Adicionar cores à paleta atual?</string>
 
+    <string name="color_pick_change">Atualizar</string>
+    <string name="color_pick_sort_name">Nome</string>
+    <string name="color_pick_palette_saved">Paleta salva em "Downloads"</string>
+    <string name="color_pick_buy">Comprar</string>
+    <string name="color_pick_update_change">Alterações na nova versão:</string>
+    <string name="color_pick_premium_version">Versão premium</string>
+    <string name="color_pick_half_access">+ Cores dominantes;\n+ Gerador de paletas;\n+ Exportar paleta em formatos: css, svg, aco, ase, act;</string>
+    <string name="color_pick_update_version_text">- A ordenação de cores foi movida para as configurações do aplicativo;\n- Novo tipo de ordenação adicionado;\n- Possibilidade de alterar o nome da cor na paleta;\n- Possibilidade de baixar a paleta de cores;</string>
 </resources>

@@ -33,6 +33,8 @@ fun <T> SharedPreferences.put(key: String, value: T) {
     editor.apply()
 }
 
+fun SharedPreferences.has(key: String) = this.contains(key)
+
 fun SharedPreferences.getListOfString(key: String, defaultValue: List<String>): List<String> {
     val s = this.getString(key, "")
     val favs = s?.takeIf { it.isNotEmpty() }?.split("\\|".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray() ?: arrayOf()

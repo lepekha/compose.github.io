@@ -13,6 +13,7 @@ import ua.com.compose.domain.dbColorItem.UpdateColorUseCase
 import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetCurrentPalletUseCase
 import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
+import ua.com.compose.domain.dbColorPallet.RefreshPalletsUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
 import ua.com.compose.domain.dbColorPallet.UpdatePalletUseCase
@@ -38,8 +39,9 @@ val appModule = module {
     single { GetPalletUseCase(database = get()) }
     single { UpdatePalletUseCase(database = get()) }
     single { SelectPalletUseCase(database = get()) }
+    single { RefreshPalletsUseCase(database = get()) }
     single { ChangeColorPalletUseCase(database = get()) }
-    viewModel { SettingsViewModel() }
+    viewModel { SettingsViewModel(refreshPalletsUseCase = get()) }
     viewModel { PalettesViewModel(getCurrentPalletUseCase = get(), addColorUseCase = get()) }
     viewModel { ColorInfoViewModel(addColorUseCase = get()) }
     viewModel { ShareViewModel(getAllColorsUseCase = get(), getPalletUseCase = get()) }

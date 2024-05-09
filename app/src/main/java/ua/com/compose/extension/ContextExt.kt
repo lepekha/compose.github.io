@@ -1,22 +1,21 @@
 package ua.com.compose.extension
 
 import android.app.Activity
-import android.content.*
-import android.content.res.Resources
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.graphics.Rect
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.provider.MediaStore
-import android.util.TypedValue
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -32,7 +31,11 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.play.core.review.ReviewManagerFactory
 import ua.com.compose.AppBilling
 import ua.com.compose.Settings
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.Executor
@@ -69,23 +72,20 @@ fun Context.findActivity(): Activity {
 }
 
 fun Activity.createReview() {
-    val key = "ReviewManagerFactory"
-    var number = prefs.get(key = key, defaultValue = 1)
-    prefs.put(key = key, value = ++number)
-
-    if(number % 20 == 0) {
+    if((Settings.openInfoCount % 5) == 0) {
         val manager = ReviewManagerFactory.create(this)
         val request = manager.requestReviewFlow()
         request.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                analytics.send(SimpleEvent(key = Analytics.Event.OPEN_IN_APP_REVIEW))
                 val flow = manager.launchReviewFlow(this, task.result)
                 flow.addOnCompleteListener { _ ->
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-                    // matter the result, we continue our app flow.
+                    Settings.openInfoCount = 1
                 }
             }
         }
+    } else {
+        Settings.openInfoCount += 1
     }
 }
 
@@ -186,6 +186,19 @@ fun Context.shareFile(file: File) {
     intent.putExtra(Intent.EXTRA_STREAM, uri)
 
     this.startActivity(Intent.createChooser(intent, "Share Color Palette"))
+}
+
+fun Context.saveFileToDownloads(file: File) {
+    val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+    try {
+        val name = file.path.substring(file.path.lastIndexOf("/")+1)
+        val newFile = File(root.path, name)
+        newFile.writeBytes(file.readBytes())
+        file.delete()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
 }
 
 fun Context.createTempUri(bitmap: Bitmap, quality: Int = 90, sizePercent: Int = 100, name: String = "COMPOSE"): Uri {

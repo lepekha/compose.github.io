@@ -20,10 +20,9 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
         override fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File? {
             val builder = buildString {
                 colors.forEach {
-                    val hex = "#${it.color.toHex()}"
                     append(colorType.colorToString(it.color))
                     append(" ")
-                    append(ColorNames.getColorName(hex))
+                    append(it.realColorName())
                     appendLine()
                 }
             }
@@ -38,7 +37,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
 
             colors.forEach {
                 val hex = "#${it.color.toHex()}"
-                val name = ColorNames.getColorName(hex)
+                val name = (it.realColorName())
                     .replace(" ", "_")
                     .replace("-", "_")
                     .replace("'", "")
@@ -58,7 +57,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 appendLine("<resources>")
                 colors.forEach {
                     val hex = "#${it.color.toHex()}"
-                    val name = ColorNames.getColorName(hex)
+                    val name = (it.realColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -78,7 +77,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 colors.forEach {
                     val hex = "#${it.color.toHex()}"
 
-                    val name = ColorNames.getColorName(hex)
+                    val name = (it.realColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -96,7 +95,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 appendLine("resources:")
                 colors.forEach {
                     val hex = "#${it.color.toHex()}"
-                    val name = ColorNames.getColorName(hex)
+                    val name = (it.realColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -115,7 +114,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 colors.forEach {
                     appendLine("[[resources]]")
                     val hex = "#${it.color.toHex()}"
-                    val name = ColorNames.getColorName(hex)
+                    val name = (it.realColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -136,8 +135,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 this.appendLine("Name: $palette")
                 this.appendLine("#")
                 colors.forEach {
-                    val hex = "#${it.color.toHex()}"
-                    val name = ColorNames.getColorName(hex)
+                    val name = (it.realColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -156,8 +154,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 appendLine(""":root {""")
                 colors.forEach {
-                    val hex = "#${it.color.toHex()}"
-                    val name = ColorNames.getColorName(hex)
+                    val name = (it.realColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -191,7 +188,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 var y = padding
                 colors.forEachIndexed { index, it ->
                     val hex = "#${it.color.toHex()}"
-                    val _name = ColorNames.getColorName(hex)
+                    val _name = it.realColorName()
                     val name = _name
                         .replace(" ", "_")
                         .replace("-", "_")
@@ -228,8 +225,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
     ACO(title = ".aco", allowForAll = false) {
         override fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File? {
             val data = colors.map {
-                val hex = "#${it.color.toHex()}"
-                val name = ColorNames.getColorName(hex)
+                val name = (it.realColorName())
                     .replace(" ", "_")
                     .replace("-", "_")
                     .replace("'", "")
@@ -249,8 +245,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
     ASE(title = ".ase", allowForAll = false) {
         override fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File? {
             val data = colors.map {
-                val hex = "#${it.color.toHex()}"
-                val name = ColorNames.getColorName(hex)
+                val name = (it.realColorName())
                     .replace(" ", "_")
                     .replace("-", "_")
                     .replace("'", "")

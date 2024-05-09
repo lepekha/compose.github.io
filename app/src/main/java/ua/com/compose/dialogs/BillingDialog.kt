@@ -69,7 +69,7 @@ fun DialogBilling(text: String, onDismissRequest: () -> Unit) {
                     .padding(top = 24.dp, bottom = 8.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.color_pick_attention),
+                    text = stringResource(id = R.string.color_pick_premium_version),
                     textAlign = TextAlign.Start,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 24.sp,
@@ -100,7 +100,7 @@ fun DialogBilling(text: String, onDismissRequest: () -> Unit) {
                         view.vibrate(EVibrate.BUTTON)
                         onDismissRequest.invoke()
                     }
-                    DialogConfirmButton(text = stringResource(id = R.string.color_pick_premium)) {
+                    DialogConfirmButton(text = stringResource(id = R.string.color_pick_buy)) {
                         view.vibrate(EVibrate.BUTTON)
                         appBilling.buyPremium(activity = context.findActivity())
                         onDismissRequest.invoke()

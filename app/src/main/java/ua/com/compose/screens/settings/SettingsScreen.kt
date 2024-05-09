@@ -2,25 +2,17 @@ package ua.com.compose.screens.settings
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,10 +20,8 @@ import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -42,15 +32,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalProvider
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -65,9 +51,13 @@ import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
 import ua.com.compose.data.ELanguage
+import ua.com.compose.data.ESortDirection
+import ua.com.compose.data.ESortType
 import ua.com.compose.data.ETheme
 import ua.com.compose.dialogs.ChipItem
+import ua.com.compose.dialogs.DialogBilling
 import ua.com.compose.dialogs.DialogChoise
+import ua.com.compose.dialogs.DialogSort
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 
@@ -77,18 +67,42 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
     val colorTypes by viewModel.colorTypes
     val colorType by viewModel.colorType
 
+    val isPremium by viewModel.isPremium.observeAsState(false)
+
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val localConfiguration = LocalConfiguration.current
+    val settingsRightTextSize = 18.sp
 
     var appLocale: ELanguage? by remember {
         val currentLocale = localConfiguration.locales.get(0).language
-        mutableStateOf(ELanguage.values().firstOrNull { it.value == currentLocale })
+        mutableStateOf(ELanguage.entries.firstOrNull { it.value == currentLocale })
+    }
+
+    var stateShowBilling by remember { mutableStateOf(false) }
+    if(stateShowBilling) {
+        DialogBilling(text = stringResource(id = R.string.color_pick_half_access)) {
+            stateShowBilling = false
+        }
     }
 
     LaunchedEffect(key1 = Unit) {
         analytics.send(SimpleEvent(key = Analytics.Event.OPEN_SETTINGS))
+    }
+
+    var sortType: ESortType by remember { mutableStateOf(Settings.sortType) }
+    var stateSortDialog: Boolean by remember { mutableStateOf(false) }
+    if(stateSortDialog) {
+        DialogSort(
+            type = Settings.sortType,
+            direction = Settings.sortDirection,
+            onDone = { type, direction ->
+                sortType = type ?: ESortType.ORDER
+                viewModel.changePaletteSort(type = type ?: ESortType.ORDER, direction = direction ?: ESortDirection.DESC)
+            },
+            onDismissRequest = { stateSortDialog = false }
+        )
     }
 
     var stateLanguage: Boolean by remember { mutableStateOf(false) }
@@ -168,6 +182,38 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
                 FilledTonalIconButton(
                     onClick = {
+                        stateSortDialog = true
+                        view.vibrate(EVibrate.BUTTON) },
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp)) {
+
+                        Text(text = stringResource(id = R.string.color_pick_sort_type),
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 20.sp,
+                            modifier = Modifier.weight(1f),
+                            fontWeight = FontWeight(500))
+
+                        Text(text = stringResource(id = sortType.stringResId),
+                            textAlign = TextAlign.End,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = settingsRightTextSize,
+                            fontWeight = FontWeight(700))
+                    }
+                }
+
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FilledTonalIconButton(
+                    onClick = {
                         stateTheme = true
                         view.vibrate(EVibrate.BUTTON) },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
@@ -188,13 +234,12 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         Text(text = stringResource(id = theme.strRes),
                             textAlign = TextAlign.End,
                             color = MaterialTheme.colorScheme.primary,
-                            fontSize = 22.sp,
+                            fontSize = settingsRightTextSize,
                             fontWeight = FontWeight(700),
                             modifier = Modifier
                                 .weight(1f))
                     }
                 }
-
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -221,7 +266,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         Text(text = appLocale?.title ?: currentLocale,
                             textAlign = TextAlign.End,
                             color = MaterialTheme.colorScheme.primary,
-                            fontSize = 22.sp,
+                            fontSize = settingsRightTextSize,
                             fontWeight = FontWeight(700),
                             modifier = Modifier
                                 .weight(1f))
@@ -230,7 +275,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
 
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                     .background(
                         color = containerBackground,
@@ -260,6 +305,32 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
                         uncheckedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
                     ))
+                }
+
+                if(true) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    FilledTonalIconButton(
+                        onClick = {
+                            stateShowBilling = true
+                            view.vibrate(EVibrate.BUTTON) },
+                        colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                        shape = MaterialTheme.shapes.small,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 16.dp, end = 16.dp)) {
+                            Text(text = stringResource(id = R.string.color_pick_premium_version),
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.onTertiary,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight(500),
+                                modifier = Modifier.weight(1f))
+                        }
+                    }
                 }
             }
         }

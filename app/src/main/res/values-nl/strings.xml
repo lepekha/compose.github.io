@@ -47,7 +47,7 @@
     <string name="color_pick_sort_name">Naam</string>
     <string name="color_pick_palette_saved">Palet opgeslagen in "Downloads"</string>
     <string name="color_pick_buy">Kopen</string>
-    <string name="color_pick_update_change">Wijzigingen in de nieuwe versie:</string>
+    <string name="color_pick_update_change">Nieuwe versie:</string>
     <string name="color_pick_premium_version">Premium versie</string>
     <string name="color_pick_half_access">+ Dominante kleuren;\n+ Paletgenerator;\n+ Exporteer palet in formaten: css, svg, aco, ase, act;</string>
     <string name="color_pick_update_version_text">- Kleursortering is verplaatst naar de app-instellingen;\n- Nieuw type sortering toegevoegd;\n- Mogelijkheid om de naam van de kleur in het palet te wijzigen;\n- Mogelijkheid om het kleurenpalet te downloaden;</string>

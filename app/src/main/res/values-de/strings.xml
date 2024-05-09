@@ -48,7 +48,7 @@
     <string name="color_pick_sort_name">Name</string>
     <string name="color_pick_palette_saved">Palette in "Downloads" gespeichert</string>
     <string name="color_pick_buy">Kaufen</string>
-    <string name="color_pick_update_change">Änderungen in der neuen Version:</string>
+    <string name="color_pick_update_change">Neue Version:</string>
     <string name="color_pick_premium_version">Premium-Version</string>
     <string name="color_pick_half_access">+ Dominante Farben;\n+ Palettengenerator;\n+ Palette exportieren in Formaten: css, svg, aco, ase, act;</string>
     <string name="color_pick_update_version_text">- Farbsortierung wurde in die App-Einstellungen verschoben;\n- Neuer Sortierungstyp hinzugefügt;\n- Möglichkeit, den Namen der Farbe in der Palette zu ändern;\n- Möglichkeit, die Farbpalette herunterzuladen;</string>

@@ -48,7 +48,7 @@
 
     <string name="color_pick_palette_saved">Палитра сохранена в разделе "Загрузки"</string>
     <string name="color_pick_buy">Купить</string>
-    <string name="color_pick_update_change">Изменения в новой версии:</string>
+    <string name="color_pick_update_change">Новая версия:</string>
     <string name="color_pick_premium_version">Премиум версия</string>
     <string name="color_pick_half_access">+ доминирующие цвета;\n+ генератор палитр;\n+ экспорт палитры в форматах: css, svg, aco, ase, act;</string>
     <string name="color_pick_update_version_text">- сортировка цветов перенесена в настройки приложения;\n- добавлен новый тип сортировки;\n- добавлена возможность изменения названия цвета в палитре;\n- добавлена возможность загрузки палитры цветов;</string>

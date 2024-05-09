@@ -49,7 +49,7 @@
 
     <string name="color_pick_palette_saved">Палітра збережена в "Завантаженнях"</string>
     <string name="color_pick_buy">Купити</string>
-    <string name="color_pick_update_change">Зміни нової версії:</string>
+    <string name="color_pick_update_change">Нова версія:</string>
     <string name="color_pick_premium_version">Преміум версія</string>
     <string name="color_pick_half_access">+ домінуючі кольори;\n+ генератор палітр;\n+ експорт палітри в форматах: css, svg, aco, ase, act;</string>
     <string name="color_pick_update_version_text">- сортування кольорів перенесено до налаштувань додатку;\n- додано новий тип сортування;\n- додано можливість змінювати назву кольору в палітрі;\n- додано можливість завантажувати палітру кольорів;</string>

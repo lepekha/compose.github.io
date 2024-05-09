@@ -307,7 +307,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                     ))
                 }
 
-                if(true) {
+                if(!isPremium) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     FilledTonalIconButton(

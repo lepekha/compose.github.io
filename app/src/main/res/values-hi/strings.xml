@@ -47,7 +47,7 @@
     <string name="color_pick_sort_name">नाम</string>
     <string name="color_pick_palette_saved">पैलेट डाउनलोड्स में सहेजी गई</string>
     <string name="color_pick_buy">खरीदें</string>
-    <string name="color_pick_update_change">नई संस्करण में परिवर्तन:</string>
+    <string name="color_pick_update_change">नया संस्करण:</string>
     <string name="color_pick_premium_version">प्रीमियम संस्करण</string>
     <string name="color_pick_half_access">+ प्रमुख रंग;\n+ पैलेट जेनरेटर;\n+ css, svg, aco, ase, act फ़ॉर्मेट में पैलेट निर्यात करें;</string>
     <string name="color_pick_update_version_text">- रंगों का क्रमबद्धीकरण एप्लिकेशन सेटिंग्स में स्थानांतरित किया गया है;\n- नई क्रमबद्धीकरण प्रकार जोड़ा गया है;\n- पैलेट में रंग का नाम बदलने की संभावना;\n- रंगों का पैलेट डाउनलोड करने की संभावना;</string>

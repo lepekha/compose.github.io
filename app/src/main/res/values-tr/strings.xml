@@ -48,7 +48,7 @@
 
     <string name="color_pick_palette_saved">Palet "İndirmeler" bölümüne kaydedildi</string>
     <string name="color_pick_buy">Satın Al</string>
-    <string name="color_pick_update_change">Yeni sürümde yapılan değişiklikler:</string>
+    <string name="color_pick_update_change">Yeni sürüm:</string>
     <string name="color_pick_premium_version">Premium sürüm</string>
     <string name="color_pick_half_access">+ Baskın renkler;\n+ Palet üretici;\n+ Paleti css, svg, aco, ase, act biçimlerinde dışa aktar;</string>
     <string name="color_pick_update_version_text">- Renk sıralaması uygulama ayarlarına taşındı;\n- Yeni sıralama türü eklendi;\n- Palet içindeki rengin adını değiştirme imkanı eklendi;\n- Renk paletini indirme imkanı eklendi;</string>

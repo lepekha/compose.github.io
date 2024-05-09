@@ -47,7 +47,7 @@
     <string name="color_pick_sort_name">Nome</string>
     <string name="color_pick_palette_saved">Palette salvata in "Download"</string>
     <string name="color_pick_buy">Acquista</string>
-    <string name="color_pick_update_change">Cambiamenti nella nuova versione:</string>
+    <string name="color_pick_update_change">Nuova versione:</string>
     <string name="color_pick_premium_version">Versione premium</string>
     <string name="color_pick_half_access">+ Colori dominanti;\n+ Generatore di palette;\n+ Esporta la palette nei formati: css, svg, aco, ase, act;</string>
     <string name="color_pick_update_version_text">- L\'ordinamento dei colori è stato spostato nelle impostazioni dell\'applicazione;\n- Nuovo tipo di ordinamento aggiunto;\n- Possibilità di cambiare il nome del colore nella palette;\n- Possibilità di scaricare la palette dei colori;</string>

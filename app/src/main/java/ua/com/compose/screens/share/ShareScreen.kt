@@ -75,7 +75,7 @@ fun ShareScreen(name: String, paletteId: Long, viewModel: ShareViewModel, onDism
                     }
                 ),
                 ActionIconButton(
-                    icon = painterResource(id = R.drawable.ic_send),
+                    icon = painterResource(id = R.drawable.ic_share),
                     action = {
                         viewModel.createFile(context = context, paletteID = paletteId, exportType = EExportType.SHARE, scheme = it.second)
                     }

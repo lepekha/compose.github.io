@@ -47,6 +47,9 @@ import androidx.compose.ui.unit.sp
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.Settings
+import ua.com.compose.api.analytics.Analytics
+import ua.com.compose.api.analytics.SimpleEvent
+import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
 import ua.com.compose.composable.HueBar
 import ua.com.compose.composable.SatValPanel

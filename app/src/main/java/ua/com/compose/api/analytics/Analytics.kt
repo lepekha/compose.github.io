@@ -28,6 +28,10 @@ interface Analytics {
         val CREATE_COLOR_FROM_INFO = "CREATE_COLOR_FROM_INFO"
 
         val OPEN_PALETTE_SORT = "OPEN_PALETTE_SORT"
+
+        val CLICK_SETTING_PREMIUM = "CLICK_SETTING_PREMIUM"
+        val CLICK_BUY_PREMIUM = "CLICK_BUY_PREMIUM"
+        val OPEN_PREMIUM_DIALOG = "OPEN_PREMIUM_DIALOG"
     }
 
     fun send(event: AnalyticsEvent)

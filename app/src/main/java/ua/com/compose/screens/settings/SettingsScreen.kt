@@ -82,6 +82,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
     var stateShowBilling by remember { mutableStateOf(false) }
     if(stateShowBilling) {
+        analytics.send(SimpleEvent(key = Analytics.Event.CLICK_SETTING_PREMIUM))
         DialogBilling(text = stringResource(id = R.string.color_pick_half_access)) {
             stateShowBilling = false
         }

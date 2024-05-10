@@ -32,6 +32,8 @@ interface Analytics {
         val CLICK_SETTING_PREMIUM = "CLICK_SETTING_PREMIUM"
         val CLICK_BUY_PREMIUM = "CLICK_BUY_PREMIUM"
         val OPEN_PREMIUM_DIALOG = "OPEN_PREMIUM_DIALOG"
+
+        val OPEN_UPDATE_DIALOG = "OPEN_UPDATE_DIALOG"
     }
 
     fun send(event: AnalyticsEvent)

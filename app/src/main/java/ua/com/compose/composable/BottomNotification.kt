@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -36,7 +38,7 @@ import ua.com.compose.extension.vibrate
 data class ActionIconButton(val icon: Painter, val action: () -> Unit)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNotification(text: String, actions: List<ActionIconButton>, onDismissRequest: () -> Unit) {
+fun BottomNotification(text: String, bottomInset:WindowInsets = WindowInsets.navigationBars, actions: List<ActionIconButton>, onDismissRequest: () -> Unit) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
@@ -94,6 +96,7 @@ fun BottomNotification(text: String, actions: List<ActionIconButton>, onDismissR
                     }
                 }
         }
+        Spacer(modifier = Modifier.height(bottomInset.asPaddingValues().calculateBottomPadding()))
     }
 
 }

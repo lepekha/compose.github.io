@@ -12,6 +12,7 @@ import java.io.DataOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import kotlin.math.ceil
 
 
 enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true) {
@@ -177,7 +178,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val sizeW = 240
             val padding = 30
             val width = padding + (4 * (padding + sizeW))
-            val height = padding + ((colors.count() / 4) * (sizeH + padding))
+            val height = padding + (ceil(colors.count() / 4f) * (sizeH + padding))
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="none" xmlns="http://www.w3.org/2000/svg">""")
@@ -203,9 +204,9 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                     appendLine("""<rect x="$x" y="$y" width="$sizeW" height="$sizeH" fill="white"/>""")
                     appendLine("""<rect x="$x" y="$y" width="$sizeW" height="140" fill="$hex"/>""")
 
-                    appendLine("""<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="14" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 162.785}">$_name</tspan></text>""")
-                    appendLine("""<text fill="#878787" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="12" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 184.102}">$hex</tspan></text>""")
-                    appendLine("""<text fill="#878787" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="12" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 204.102}">rgb($red, $green, $blue)</tspan></text>""")
+                    appendLine("""<text fill="black" xml:space="preserve" style="white-space: pre" font-family="sans-serif" font-size="14" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 162.785}">$_name</tspan></text>""")
+                    appendLine("""<text fill="#878787" xml:space="preserve" style="white-space: pre" font-family="sans-serif" font-size="12" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 184.102}">$hex</tspan></text>""")
+                    appendLine("""<text fill="#878787" xml:space="preserve" style="white-space: pre" font-family="sans-serif" font-size="12" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 204.102}">rgb($red, $green, $blue)</tspan></text>""")
 
                     appendLine("""</g>""")
 
@@ -289,6 +290,8 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             return null
         }
     };
+
+    fun fileFormat() = this.title
 
     abstract fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File?
 

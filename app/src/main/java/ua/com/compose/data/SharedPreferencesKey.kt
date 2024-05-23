@@ -1,5 +1,7 @@
 package ua.com.compose.data
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
+
 internal object SharedPreferencesKey {
     const val KEY_PANEL_ID = "KEY_PANEL_ID"
     const val KEY_CREATE_COLOR_TYPE = "KEY_CREATE_COLOR_TYPE"
@@ -17,6 +19,6 @@ internal object SharedPreferencesKey {
     const val KEY_UPDATE_VERSION = "KEY_UPDATE_VERSION"
 }
 
-internal object DataStoreKey {
-    const val KEY_PREMIUM = "KEY_PREMIUM"
+object DataStoreKey {
+    val KEY_PREMIUM = booleanPreferencesKey("KEY_PREMIUM")
 }

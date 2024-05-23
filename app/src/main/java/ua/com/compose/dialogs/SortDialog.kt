@@ -67,7 +67,7 @@ fun DialogSort(type: ESortType?, direction: ESortDirection?, onDone: (type: ESor
         onDismissRequest = onDismissRequest,
     ) {
 
-        LaunchedEffect(key1 = Any()) {
+        LaunchedEffect(key1 = Unit) {
             analytics.send(SimpleEvent(key = Analytics.Event.OPEN_PALETTE_SORT))
         }
 

@@ -32,7 +32,7 @@ class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUse
     }
 
     val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
-        preferences[booleanPreferencesKey(DataStoreKey.KEY_PREMIUM)] ?: false
+        preferences[DataStoreKey.KEY_PREMIUM] ?: false
     }.asLiveData()
 
     fun generatePalettesForColor(color: Int) = viewModelScope.launch(Dispatchers.IO) {

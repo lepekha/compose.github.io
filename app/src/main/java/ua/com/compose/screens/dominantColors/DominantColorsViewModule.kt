@@ -22,7 +22,7 @@ class DominantColorsViewModule(private val addColorUseCase: AddColorUseCase): Vi
 
     val domainColors = mutableStateListOf<Color>()
     val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
-        preferences[booleanPreferencesKey(DataStoreKey.KEY_PREMIUM)] ?: false
+        preferences[DataStoreKey.KEY_PREMIUM] ?: false
     }.asLiveData()
     fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_DOMAIN_COLORS))

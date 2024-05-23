@@ -49,7 +49,7 @@
     <string name="color_pick_buy">购买</string>
     <string name="color_pick_update_change">新版本:</string>
     <string name="color_pick_premium_version">高级版</string>
-    <string name="color_pick_half_access">+ 主导颜色;\n+ 调色板生成器;\n+ 在以下格式导出调色板：css, svg, aco, ase, act;</string>
+    <string name="color_pick_half_access">+ 主色调;\n+ 调色板生成器;\n+ 调色板导出格式：css、svg、aco、ase、act;\n+ 调色板导出的附加图片;</string>
     <string name="color_pick_update_version_text">- 调色功能移到应用设置中;\n- 新增排序方式;\n- 可更改调色板中颜色名称;\n- 可下载调色板;</string>
 
 </resources>

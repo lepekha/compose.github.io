@@ -37,7 +37,7 @@ class SettingsViewModel(
     val colorTypes: MutableState<List<EColorType>> = _colorTypes
 
     val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
-        preferences[booleanPreferencesKey(DataStoreKey.KEY_PREMIUM)] ?: false
+        preferences[DataStoreKey.KEY_PREMIUM] ?: false
     }.asLiveData()
 
     fun changeTheme(value: ETheme) {

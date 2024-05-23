@@ -65,7 +65,7 @@ fun DialogBilling(text: String, onDismissRequest: () -> Unit) {
         val context = LocalContext.current
         val view = LocalView.current
 
-        LaunchedEffect(key1 = Any()) {
+        LaunchedEffect(key1 = Unit) {
             analytics.send(SimpleEvent(key = Analytics.Event.OPEN_PREMIUM_DIALOG))
         }
 

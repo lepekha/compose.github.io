@@ -3,7 +3,9 @@ package ua.com.compose
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import ua.com.compose.data.ColorPallet
+import ua.com.compose.data.DataStoreKey
 import ua.com.compose.data.EColorType
 import ua.com.compose.data.ECreateColorType
 import ua.com.compose.data.EExportType
@@ -15,6 +17,7 @@ import ua.com.compose.extension.put
 import ua.com.compose.data.EPanel
 import ua.com.compose.data.ESortDirection
 import ua.com.compose.data.ESortType
+import ua.com.compose.extension.dataStore
 import ua.com.compose.extension.has
 
 object Settings {

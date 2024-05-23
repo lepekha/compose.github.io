@@ -8,6 +8,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -35,7 +36,6 @@ import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.concurrent.Executor
@@ -47,11 +47,31 @@ lateinit var dataStore: DataStore<Preferences>
 lateinit var appBilling: AppBilling
 
 val Context.createDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+fun Context.writeBitmap(fileName: String, bitmap: Bitmap): File {
+    val format: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG
+    val quality = 100
+    val outputFile = File(this.cacheDir.path, fileName)
+    outputFile.outputStream().use { out ->
+        bitmap.compress(format, quality, out)
+        out.flush()
+    }
+    return outputFile
+}
 
 fun Context.writeToFile(fileName: String, data: String): File? {
     try {
         val outputFile = File(this.cacheDir.path, fileName)
         outputFile.writeText(text = data, charset = Charsets.UTF_8)
+        return outputFile
+    } catch (e: IOException) {
+    }
+    return null
+}
+
+fun Context.writeToFile(fileName: String, data: ByteArray): File? {
+    try {
+        val outputFile = File(this.cacheDir.path, fileName)
+        outputFile.writeBytes(data)
         return outputFile
     } catch (e: IOException) {
     }
@@ -72,7 +92,7 @@ fun Context.findActivity(): Activity {
 }
 
 fun Activity.createReview() {
-    if((Settings.openInfoCount % 5) == 0) {
+    if((Settings.openInfoCount % 7) == 0) {
         val manager = ReviewManagerFactory.create(this)
         val request = manager.requestReviewFlow()
         request.addOnCompleteListener { task ->
@@ -80,6 +100,7 @@ fun Activity.createReview() {
                 analytics.send(SimpleEvent(key = Analytics.Event.OPEN_IN_APP_REVIEW))
                 val flow = manager.launchReviewFlow(this, task.result)
                 flow.addOnCompleteListener { _ ->
+                    analytics.send(SimpleEvent(key = Analytics.Event.DONE_IN_APP_REVIEW))
                     Settings.openInfoCount = 1
                 }
             }
@@ -191,11 +212,34 @@ fun Context.shareFile(file: File) {
 fun Context.saveFileToDownloads(file: File) {
     val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
+    fun getFileNameWithoutExtension(fileName: String): String {
+        val dotIndex = fileName.lastIndexOf('.')
+        return if (dotIndex == -1) fileName else fileName.substring(0, dotIndex)
+    }
+
+    fun getFileExtension(fileName: String): String {
+        val dotIndex = fileName.lastIndexOf('.')
+        return if (dotIndex == -1) "" else fileName.substring(dotIndex)
+    }
+
+    fun getUniqueFileName(directory: File, fileName: String): File {
+        var newFile = File(directory, fileName)
+        var count = 1
+        while (newFile.exists()) {
+            val newName = "${getFileNameWithoutExtension(fileName)}($count)${getFileExtension(fileName)}"
+            newFile = File(directory, newName)
+            count++
+        }
+        return newFile
+    }
+
     try {
         val name = file.path.substring(file.path.lastIndexOf("/")+1)
-        val newFile = File(root.path, name)
+        val newFile = getUniqueFileName(root, name)
         newFile.writeBytes(file.readBytes())
         file.delete()
+
+        MediaScannerConnection.scanFile(this, arrayOf(newFile.toString()), null, null)
     } catch (e: IOException) {
         e.printStackTrace()
     }

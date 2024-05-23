@@ -196,8 +196,7 @@ fun DialogColorPick(
             Spacer(modifier = Modifier.height(24.dp))
 
             Row(horizontalArrangement = Arrangement.Center, modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp)) {
+                .fillMaxWidth()) {
                 ECreateColorType.entries.forEach {
                     FilterChip(
                         modifier = Modifier

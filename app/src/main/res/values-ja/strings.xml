@@ -49,6 +49,6 @@
     <string name="color_pick_buy">購入する</string>
     <string name="color_pick_update_change">新しいバージョン:</string>
     <string name="color_pick_premium_version">プレミアム版</string>
-    <string name="color_pick_half_access">+ 優勢色;\n+ パレット生成器;\n+ css、svg、aco、ase、act形式でパレットをエクスポート;</string>
+    <string name="color_pick_half_access">+ 支配的な色;\n+ パレットジェネレーター;\n+ パレットのエクスポート形式：css、svg、aco、ase、act;\n+ パレットのエクスポート用の追加画像;</string>
     <string name="color_pick_update_version_text">- 色の並べ替えをアプリの設定に移動しました;\n- 新しい並べ替えタイプが追加されました;\n- パレット内の色の名前を変更する機能が追加されました;\n- 色のパレットをダウンロードする機能が追加されました;</string>
 </resources>

@@ -6,14 +6,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
@@ -71,7 +77,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
+    val bottomInset = WindowInsets.navigationBars
     val localConfiguration = LocalConfiguration.current
     val settingsRightTextSize = 18.sp
 
@@ -81,7 +87,7 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
     }
 
     var stateShowBilling by remember { mutableStateOf(false) }
-    if(stateShowBilling) {
+    if (stateShowBilling) {
         analytics.send(SimpleEvent(key = Analytics.Event.CLICK_SETTING_PREMIUM))
         DialogBilling(text = stringResource(id = R.string.color_pick_half_access)) {
             stateShowBilling = false
@@ -94,22 +100,32 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
     var sortType: ESortType by remember { mutableStateOf(Settings.sortType) }
     var stateSortDialog: Boolean by remember { mutableStateOf(false) }
-    if(stateSortDialog) {
+    if (stateSortDialog) {
         DialogSort(
             type = Settings.sortType,
             direction = Settings.sortDirection,
             onDone = { type, direction ->
                 sortType = type ?: ESortType.ORDER
-                viewModel.changePaletteSort(type = type ?: ESortType.ORDER, direction = direction ?: ESortDirection.DESC)
+                viewModel.changePaletteSort(
+                    type = type ?: ESortType.ORDER,
+                    direction = direction ?: ESortDirection.DESC
+                )
             },
             onDismissRequest = { stateSortDialog = false }
         )
     }
 
     var stateLanguage: Boolean by remember { mutableStateOf(false) }
-    if(stateLanguage) {
+    if (stateLanguage) {
         DialogChoise(
-            items = ELanguage.values().sortedBy { it.title }.map { ChipItem(title = it.title, obj = it, icon = painterResource(id = it.flagRes), isSelect = it == appLocale) },
+            items = ELanguage.entries.sortedBy { it.title }.map {
+                ChipItem(
+                    title = it.title,
+                    obj = it,
+                    icon = painterResource(id = it.flagRes),
+                    isSelect = it == appLocale
+                )
+            },
             onDone = {
                 appLocale = it
                 val locale: LocaleListCompat = LocaleListCompat.forLanguageTags(it.value)
@@ -120,9 +136,15 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
     }
 
     var stateTheme: Boolean by remember { mutableStateOf(false) }
-    if(stateTheme) {
+    if (stateTheme) {
         DialogChoise(
-            items = ETheme.visibleValues().map { ChipItem(title = stringResource(id = it.strRes), obj = it, isSelect = Settings.theme == it) },
+            items = ETheme.visibleValues().map {
+                ChipItem(
+                    title = stringResource(id = it.strRes),
+                    obj = it,
+                    isSelect = Settings.theme == it
+                )
+            },
             onDone = {
                 viewModel.changeTheme(it)
             },
@@ -132,27 +154,35 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
     val containerBackground = MaterialTheme.colorScheme.surfaceContainerLow
 
     BottomSheet(sheetState = sheetState, onDismissRequest = onDismissRequest) {
-            Column(modifier = Modifier
+        LazyColumn(
+            modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
-                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)) {
+                .padding(start = 16.dp, end = 16.dp)
+        ) {
 
-                Column(modifier = Modifier
-                    .background(
-                        color = containerBackground,
-                        shape = MaterialTheme.shapes.medium
-                    )
-                    .fillMaxWidth()
-                    .padding(16.dp)) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .background(
+                            color = containerBackground,
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+                {
 
-                    Text(text = stringResource(id = R.string.color_pick_setting_color_type),
+                    Text(
+                        text = stringResource(id = R.string.color_pick_setting_color_type),
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
-                        fontWeight = FontWeight(500))
+                        fontWeight = FontWeight(500)
+                    )
 
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
                     FlowRow(verticalArrangement = Arrangement.spacedBy((-8).dp, Alignment.Top)) {
                         colorTypes.forEach {
                             FilterChip(
@@ -178,161 +208,201 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
 
                     }
                 }
+                Spacer(modifier = Modifier.height(4.dp))
+            }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
+            item {
                 FilledTonalIconButton(
                     onClick = {
                         stateSortDialog = true
-                        view.vibrate(EVibrate.BUTTON) },
+                        view.vibrate(EVibrate.BUTTON)
+                    },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp)
+                    ) {
 
-                        Text(text = stringResource(id = R.string.color_pick_sort_type),
+                        Text(
+                            text = stringResource(id = R.string.color_pick_sort_type),
                             textAlign = TextAlign.Start,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp,
                             modifier = Modifier.weight(1f),
-                            fontWeight = FontWeight(500))
+                            fontWeight = FontWeight(500)
+                        )
 
-                        Text(text = stringResource(id = sortType.stringResId),
+                        Text(
+                            text = stringResource(id = sortType.stringResId),
                             textAlign = TextAlign.End,
                             color = MaterialTheme.colorScheme.primary,
                             fontSize = settingsRightTextSize,
-                            fontWeight = FontWeight(700))
+                            fontWeight = FontWeight(700)
+                        )
                     }
                 }
+                Spacer(modifier = Modifier.height(4.dp))
+            }
 
-
-                Spacer(modifier = Modifier.height(8.dp))
-
+            item {
                 FilledTonalIconButton(
                     onClick = {
                         stateTheme = true
-                        view.vibrate(EVibrate.BUTTON) },
+                        view.vibrate(EVibrate.BUTTON)
+                    },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp)) {
-                        Text(text = stringResource(id = R.string.color_pick_theme),
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.color_pick_theme),
                             textAlign = TextAlign.Start,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp,
-                            fontWeight = FontWeight(500))
+                            fontWeight = FontWeight(500)
+                        )
 
-                        Text(text = stringResource(id = theme.strRes),
+                        Text(
+                            text = stringResource(id = theme.strRes),
                             textAlign = TextAlign.End,
                             color = MaterialTheme.colorScheme.primary,
                             fontSize = settingsRightTextSize,
                             fontWeight = FontWeight(700),
                             modifier = Modifier
-                                .weight(1f))
+                                .weight(1f)
+                        )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
+            }
 
+            item {
                 FilledTonalIconButton(
                     onClick = {
                         stateLanguage = true
-                        view.vibrate(EVibrate.BUTTON) },
+                        view.vibrate(EVibrate.BUTTON)
+                    },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp)
+                    ) {
                         val currentLocale = LocalConfiguration.current.locales.get(0).language
-                        Text(text = stringResource(id = R.string.color_pick_setting_language),
+                        Text(
+                            text = stringResource(id = R.string.color_pick_setting_language),
                             textAlign = TextAlign.Start,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp,
-                            fontWeight = FontWeight(500))
+                            fontWeight = FontWeight(500)
+                        )
 
-                        Text(text = appLocale?.title ?: currentLocale,
+                        Text(
+                            text = appLocale?.title ?: currentLocale,
                             textAlign = TextAlign.End,
                             color = MaterialTheme.colorScheme.primary,
                             fontSize = settingsRightTextSize,
                             fontWeight = FontWeight(700),
                             modifier = Modifier
-                                .weight(1f))
+                                .weight(1f)
+                        )
                     }
                 }
 
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
+            }
 
-                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                    .background(
-                        color = containerBackground,
-                        shape = MaterialTheme.shapes.medium
-                    )
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(start = 16.dp, end = 16.dp)) {
-                    Text(text = stringResource(id = R.string.color_pick_setting_vibration),
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .background(
+                            color = containerBackground,
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(start = 16.dp, end = 16.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.color_pick_setting_vibration),
                         textAlign = TextAlign.Start,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
                         fontWeight = FontWeight(500),
-                        modifier = Modifier.weight(1f))
+                        modifier = Modifier.weight(1f)
+                    )
 
                     var state by remember { mutableStateOf(Settings.vibration) }
-                    Switch(checked = state,
+                    Switch(
+                        checked = state,
                         onCheckedChange = {
                             view.vibrate(EVibrate.BUTTON)
                             state = it
                             viewModel.changeVibration(it)
                         },
                         colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        checkedTrackColor = MaterialTheme.colorScheme.primary,
-                        uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-                        uncheckedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
-                    ))
+                            checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            checkedTrackColor = MaterialTheme.colorScheme.primary,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                            uncheckedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
+                        )
+                    )
                 }
+            }
 
-                if(!isPremium) {
-                    Spacer(modifier = Modifier.height(8.dp))
+            item {
+                if (!isPremium) {
+                    Spacer(modifier = Modifier.height(4.dp))
 
                     FilledTonalIconButton(
                         onClick = {
                             stateShowBilling = true
-                            view.vibrate(EVibrate.BUTTON) },
+                            view.vibrate(EVibrate.BUTTON)
+                        },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                         shape = MaterialTheme.shapes.small,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(40.dp)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                            .fillMaxSize()
-                            .padding(start = 16.dp, end = 16.dp)) {
-                            Text(text = stringResource(id = R.string.color_pick_premium_version),
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                                .fillMaxSize()
+                                .padding(start = 16.dp, end = 16.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.color_pick_premium_version),
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.onTertiary,
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight(500),
-                                modifier = Modifier.weight(1f))
+                                modifier = Modifier.weight(1f)
+                            )
                         }
                     }
                 }
             }
         }
+    }
 }

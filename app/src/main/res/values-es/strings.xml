@@ -49,6 +49,6 @@
     <string name="color_pick_buy">Comprar</string>
     <string name="color_pick_update_change">Nueva versión:</string>
     <string name="color_pick_premium_version">Versión premium</string>
-    <string name="color_pick_half_access">+ Colores dominantes;\n+ Generador de paletas;\n+ Exportar paleta en formatos: css, svg, aco, ase, act;</string>
+    <string name="color_pick_half_access">+ colores dominantes;\n+ generador de paletas;\n+ exportación de paletas en formatos: css, svg, aco, ase, act;\n+ imágenes adicionales para exportación de paletas;</string>
     <string name="color_pick_update_version_text">- La ordenación de colores se ha trasladado a la configuración de la aplicación;\n- Nuevo tipo de ordenación añadido;\n- Posibilidad de cambiar el nombre del color en la paleta;\n- Posibilidad de descargar la paleta de colores;</string>
 </resources>

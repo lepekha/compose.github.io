@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -485,6 +486,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                         contentAlignment = align,
                         modifier = Modifier
                             .fillMaxSize()
+                            .padding(bottom = (55.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()).takeIf { item.colors.isEmpty() } ?: 0.dp)
                     ) {
                         if (item.colors.isEmpty()) {
                             IconButton(

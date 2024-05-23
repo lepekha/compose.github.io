@@ -31,7 +31,7 @@
     <string name="color_pick_ok">OK</string>
     <string name="color_pick_add">Добавить</string>
     <string name="color_pick_cancel">Отменить</string>
-    <string name="color_pick_sort_order">Последовательный</string>
+    <string name="color_pick_sort_order">Добавление</string>
     <string name="color_pick_sort_luminance">Яркость</string>
     <string name="color_pick_sort_type">Тип сортировки</string>
     <string name="color_pick_sort_direction">Направление</string>
@@ -50,7 +50,7 @@
     <string name="color_pick_buy">Купить</string>
     <string name="color_pick_update_change">Новая версия:</string>
     <string name="color_pick_premium_version">Премиум версия</string>
-    <string name="color_pick_half_access">+ доминирующие цвета;\n+ генератор палитр;\n+ экспорт палитры в форматах: css, svg, aco, ase, act;</string>
+    <string name="color_pick_half_access">+ доминирующие цвета;\n+ генератор палитр;\n+ экспорт палитр в форматах: css, svg, aco, ase, act;\n+ дополнительные изображения для экспорта палитр;</string>
     <string name="color_pick_update_version_text">- сортировка цветов перенесена в настройки приложения;\n- добавлен новый тип сортировки;\n- добавлена возможность изменения названия цвета в палитре;\n- добавлена возможность загрузки палитры цветов;</string>
 
 </resources>

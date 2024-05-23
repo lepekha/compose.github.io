@@ -38,7 +38,7 @@ class AppBilling(context: Context) {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 GlobalScope.launch {
                     dataStore.edit { preferences ->
-                        preferences[booleanPreferencesKey(DataStoreKey.KEY_PREMIUM)] = purchases.filter { it.products.any { it == PREMIUM_PRODUCT_ID } }.any { it.purchaseState == Purchase.PurchaseState.PURCHASED && it.isAcknowledged }
+                        preferences[DataStoreKey.KEY_PREMIUM] = purchases.filter { it.products.any { it == PREMIUM_PRODUCT_ID } }.any { it.purchaseState == Purchase.PurchaseState.PURCHASED && it.isAcknowledged }
                     }
                 }
                 purchases.forEach { handlePurchase(it) }
@@ -50,7 +50,7 @@ class AppBilling(context: Context) {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 GlobalScope.launch {
                     dataStore.edit { preferences ->
-                        preferences[booleanPreferencesKey(DataStoreKey.KEY_PREMIUM)] = true
+                        preferences[DataStoreKey.KEY_PREMIUM] = true
                     }
                 }
             }

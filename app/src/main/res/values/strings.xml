@@ -62,7 +62,7 @@
     <string name="color_pick_buy">Buy</string>
     <string name="color_pick_update_change">New version:</string>
     <string name="color_pick_premium_version">Premium version</string>
-    <string name="color_pick_half_access">+ dominant colors;\n+ palette generator;\n+ export palette in formats: css, svg, aco, ase, act;</string>
+    <string name="color_pick_half_access">+ dominant colors;\n+ palette generator;\n+ palette export formats: css, svg, aco, ase, act;\n+ additional images for palette export;</string>
     <string name="color_pick_update_version_text">- color sorting moved to app settings;\n- new sorting type added;\n- ability to change color name in palette added;\n- ability to download color palette added;</string>
 
 </resources>

@@ -49,6 +49,6 @@
     <string name="color_pick_buy">Beli</string>
     <string name="color_pick_update_change">Versi baru:</string>
     <string name="color_pick_premium_version">Versi premium</string>
-    <string name="color_pick_half_access">+ Warna dominan;\n+ Pembuat palet;\n+ Ekspor palet dalam format: css, svg, aco, ase, act;</string>
+    <string name="color_pick_half_access">+ warna dominan;\n+ pembuat palet;\n+ ekspor palet dalam format: css, svg, aco, ase, act;\n+ gambar tambahan untuk ekspor palet;</string>
     <string name="color_pick_update_version_text">- Penyortiran warna dipindahkan ke pengaturan aplikasi;\n- Tipe penyortiran baru ditambahkan;\n- Kemampuan untuk mengubah nama warna dalam palet;\n- Kemampuan untuk mengunduh palet warna;</string>
 </resources>

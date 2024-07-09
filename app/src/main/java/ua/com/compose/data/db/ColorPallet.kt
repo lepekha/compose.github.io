@@ -1,4 +1,4 @@
-package ua.com.compose.data
+package ua.com.compose.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

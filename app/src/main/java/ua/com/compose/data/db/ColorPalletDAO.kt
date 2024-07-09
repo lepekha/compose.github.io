@@ -1,6 +1,5 @@
-package ua.com.compose.data
+package ua.com.compose.data.db
 
-import androidx.palette.graphics.Palette
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 

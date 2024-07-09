@@ -11,8 +11,8 @@ import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
-import ua.com.compose.data.ColorDatabase
-import ua.com.compose.data.ColorItem
+import ua.com.compose.data.db.ColorDatabase
+import ua.com.compose.data.db.ColorItem
 import ua.com.compose.data.InfoColor
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.domain.dbColorItem.ChangeColorPalletUseCase
@@ -21,6 +21,7 @@ import ua.com.compose.domain.dbColorItem.UpdateColorUseCase
 import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
+import ua.com.compose.colors.data.Color
 
 data class Item(val id: Long, val name: String, val isCurrent: Boolean, val colors: List<ColorItem>)
 class PaletteViewModule(private val database: ColorDatabase,
@@ -35,12 +36,17 @@ class PaletteViewModule(private val database: ColorDatabase,
 
     private var dragAndDropColorID: Long? = null
 
-    val palettes: LiveData<List<Item>> = database.palletDao!!.getAllFlow().combine(database.colorItemDao!!.getAllColors()) { pallets, colors ->
+    val paletteDAO = database.palletDao!!.getAllFlow()
+    val colorDAO = database.colorItemDao!!.getAllColors()
+    val sortDirection = Settings.sortDirection()
+    val sortType = Settings.sortType()
+
+    val palettes: LiveData<List<Item>> = combine(paletteDAO, colorDAO, sortDirection, sortType) { pallets, colors, sortDirection, sortType ->
         pallets.map { palette -> Item(
             id = palette.id,
             name = palette.name,
             isCurrent = palette.isCurrent,
-            colors = colors.filter { it.palletId == palette.id }.sortedWith(Settings.sortType.sort(direction = Settings.sortDirection))
+            colors = colors.filter { it.palletId == palette.id }.sortedWith(sortType.sort(direction = sortDirection))
         ) }
     }.asLiveData()
 
@@ -48,11 +54,11 @@ class PaletteViewModule(private val database: ColorDatabase,
         removeColorUseCase.execute(id = id)
     }
 
-    fun changeColor(id: Long, name: String?, color: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun changeColor(id: Long, name: String?, color: Color) = viewModelScope.launch(Dispatchers.IO) {
         updateColorUseCase.execute(id = id, name = name, color = color)
     }
 
-    fun addColor(name: String?, color: Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun addColor(name: String?, color: Color) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_PALETTE))
         addColorUseCase.execute(listOf(InfoColor(name = name, color = color)))
     }

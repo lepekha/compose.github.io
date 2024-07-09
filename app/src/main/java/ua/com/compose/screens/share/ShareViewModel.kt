@@ -4,36 +4,33 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ua.com.compose.R
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.Event
 import ua.com.compose.api.analytics.analytics
-import ua.com.compose.data.ColorItem
+import ua.com.compose.data.db.ColorItem
 import ua.com.compose.data.DataStoreKey
-import ua.com.compose.data.EExportType
-import ua.com.compose.data.EFileExportScheme
-import ua.com.compose.data.EImageExportScheme
+import ua.com.compose.data.enums.EExportType
+import ua.com.compose.data.enums.EFileExportScheme
+import ua.com.compose.data.enums.EImageExportScheme
+import ua.com.compose.extension.color
 import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase
 import ua.com.compose.domain.dbColorPallet.GetPalletUseCase
-import ua.com.compose.extension.averageColor
-import ua.com.compose.extension.darken
 import ua.com.compose.extension.dataStore
 import ua.com.compose.extension.saveFileToDownloads
 import ua.com.compose.extension.shareFile
-import ua.com.compose.extension.showToast
 import ua.com.compose.extension.writeBitmap
+import ua.com.compose.colors.average
+import ua.com.compose.colors.darken
 
 data class ImageByType(val type: EImageExportScheme, val image: ByteArray) {
     override fun equals(other: Any?): Boolean {
@@ -60,8 +57,17 @@ class ShareViewModel(
     private val getPalletUseCase: GetPalletUseCase
 ): ViewModel() {
 
+    data class SnackbarUIState(var state: SnackbarState = SnackbarState.NONE)
+
+    sealed class SnackbarState {
+        object NONE: SnackbarState()
+        object PALETTE_SAVED: SnackbarState()
+    }
+
     val images = mutableStateListOf<ImageByType>()
     var stateLoadItems = mutableStateListOf<EImageExportScheme>()
+
+    val snackbarUIState = mutableStateOf(SnackbarUIState(SnackbarState.NONE))
 
     val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
         preferences[DataStoreKey.KEY_PREMIUM] ?: false
@@ -69,15 +75,13 @@ class ShareViewModel(
 
     fun create(paletteID: Long) = viewModelScope.launch(Dispatchers.IO) {
         val colorItems = getAllColorsUseCase.execute(paletteID)
-//        colors.clear()
-//        colors.addAll(colorItems.map { it.color })
         createImages(colorItems)
     }
 
     private fun createImages(colorItems: List<ColorItem>) = viewModelScope.launch {
         images.clear()
-        val colorType = Settings.colorType
-        val background = colorItems.map { it.color }.averageColor().darken(.5f)
+        val colorType = Settings.colorTypeValue()
+        val background = colorItems.map { it.color() }.average().darken(.5f)
         EImageExportScheme.entries.forEachIndexed { index, scheme ->
             images.add(ImageByType(
                 type = scheme,
@@ -87,7 +91,7 @@ class ShareViewModel(
     }
 
     fun createFile(context: Context, paletteID: Long, exportType: EExportType, scheme: EFileExportScheme) = viewModelScope.launch(Dispatchers.IO) {
-        val colorType = Settings.colorType
+        val colorType = Settings.colorTypeValue()
         val palette = getPalletUseCase.execute(id = paletteID) ?: return@launch
         val colors = getAllColorsUseCase.execute(paletteID)
         analytics.send(Event(key = Analytics.Event.OPEN_PALETTE_EXPORT_FILE, params = arrayOf("type" to scheme.title)))
@@ -95,7 +99,7 @@ class ShareViewModel(
             if(exportType == EExportType.SAVE) {
                 context.saveFileToDownloads(it)
                 withContext(Dispatchers.Main) {
-                    context.showToast(R.string.color_pick_palette_saved)
+                    snackbarUIState.value = snackbarUIState.value.copy(state = SnackbarState.PALETTE_SAVED)
                 }
             } else {
                 context.shareFile(it)
@@ -116,7 +120,7 @@ class ShareViewModel(
                 if(exportType == EExportType.SAVE) {
                     context.saveFileToDownloads(file)
                     withContext(Dispatchers.Main) {
-                        context.showToast(R.string.color_pick_palette_saved)
+                        snackbarUIState.value = snackbarUIState.value.copy(state = SnackbarState.PALETTE_SAVED)
                     }
                 } else {
                     context.shareFile(file)

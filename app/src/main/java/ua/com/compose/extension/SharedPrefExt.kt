@@ -53,22 +53,3 @@ fun SharedPreferences.Editor.putListOfString(key: String, value: List<String>) {
     val s = array.joinToString("|")
     this.putString(key, s)
 }
-
-fun SharedPreferences.remove(key: String) {
-    val editor = this.edit()
-    editor.remove(key)
-    editor.apply()
-}
-
-fun SharedPreferences.copyTo(dest: SharedPreferences) = with(dest.edit()) {
-    for (entry in all.entries) {
-        val value = entry.value ?: continue
-        val key = entry.key
-        dest.put(key, value)
-    }
-    apply()
-}
-
-fun SharedPreferences.clearAll() {
-    this.edit().clear().apply()
-}

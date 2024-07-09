@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -37,6 +38,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
@@ -51,12 +53,14 @@ import ua.com.compose.composable.ColorPickerInfo
 import ua.com.compose.composable.ColorPickerRing
 import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
+import ua.com.compose.composable.LocalToastState
 import ua.com.compose.composable.Menu
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.createVideoCaptureUseCase
-import ua.com.compose.extension.showToast
 import ua.com.compose.extension.vibrate
+
+import ua.com.compose.colors.data.Color
 import ua.com.compose.screens.dominantColors.DomainColors
 import ua.com.compose.screens.info.InfoScreen
 import java.util.concurrent.ExecutorService
@@ -64,7 +68,13 @@ import java.util.concurrent.Executors
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
-fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
+fun CameraScreen(
+    viewModule: CameraViewModule,
+    lifecycleOwner: LifecycleOwner
+) {
+    var cameraStatus by remember {
+        mutableStateOf(false)
+    }
     val cameraExecutor: ExecutorService = remember { Executors.newSingleThreadExecutor() }
     val permissionState = rememberMultiplePermissionsState(
         permissions = listOf(
@@ -73,12 +83,15 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
     )
 
     val context = LocalContext.current
+    val toastState = LocalToastState.current
     val previewView: PreviewView = remember { PreviewView(context) }
     val cameraSelector: MutableState<CameraSelector> = remember {
         mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA)
     }
 
     val scope = rememberCoroutineScope()
+    val message_color_copy = stringResource(id = R.string.color_pick_color_copy)
+    val message_color_add_to_pallete = stringResource(id = R.string.color_pick_color_add_to_pallete)
 
     var icon by remember { mutableIntStateOf(R.drawable.ic_filter) }
     viewModule.stateDomainColors.value.takeIf { it }?.let {
@@ -89,7 +102,7 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
     }
 
     LaunchedEffect(previewView) {
-        context.createVideoCaptureUseCase(
+        cameraStatus = context.createVideoCaptureUseCase(
             executors = cameraExecutor,
             lifecycleOwner = lifecycleOwner,
             cameraSelector = cameraSelector.value,
@@ -98,7 +111,7 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
                 scope = scope,
                 listenerColor =  {
                     viewModule.changeColor(it)
-                                 }
+                }
             )
         )
     }
@@ -107,7 +120,7 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
         permissionState.launchMultiplePermissionRequest()
     }
 
-    var stateInfoColor: Int? by remember { mutableStateOf(null) }
+    var stateInfoColor: Color? by remember { mutableStateOf(null) }
     stateInfoColor?.let {
         InfoScreen(name = null, color = it) {
             stateInfoColor = null
@@ -141,44 +154,45 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
             }
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            AndroidView(
-                factory = { previewView },
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+        if(cameraStatus) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                AndroidView(
+                    factory = { previewView },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
-        val state by viewModule.colorState.observeAsState()
+            val state by viewModule.colorState.observeAsState()
 
-        AnimatedVisibility(
-            visible = state != null,
-            enter = fadeIn(animationSpec = tween(300)),
-            exit = fadeOut(animationSpec = tween(300))
-        ) {
-            state?.let { state ->
-                ColorPickerRing(color = state.color)
+            AnimatedVisibility(
+                visible = state != null,
+                enter = fadeIn(animationSpec = tween(300)),
+                exit = fadeOut(animationSpec = tween(300))
+            ) {
+                state?.let { state ->
+                    ColorPickerRing(color = state.color)
 
-                Column(verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp)
-                    .navigationBarsPadding()) {
-                    val view = LocalView.current
-                    ColorPickerInfo(state = state) {
-                        view.vibrate(EVibrate.BUTTON)
-                        stateInfoColor = state.color
-                    }
+                    Column(verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp)
+                        .navigationBarsPadding()) {
+                        val view = LocalView.current
+                        ColorPickerInfo(state = state) {
+                            view.vibrate(EVibrate.BUTTON)
+                            stateInfoColor = state.color
+                        }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    val infiniteTransition = rememberInfiniteTransition(label = "")
-                    val angle by infiniteTransition.animateFloat(
-                        initialValue = 0f,
-                        targetValue = 360f,
-                        animationSpec = infiniteRepeatable(
-                            animation = keyframes {
-                                durationMillis = 1500
-                            }
-                        ), label = ""
-                    )
+                        val infiniteTransition = rememberInfiniteTransition(label = "")
+                        val angle by infiniteTransition.animateFloat(
+                            initialValue = 0f,
+                            targetValue = 360f,
+                            animationSpec = infiniteRepeatable(
+                                animation = keyframes {
+                                    durationMillis = 1500
+                                }
+                            ), label = ""
+                        )
 
                         Menu {
                             val modifier = if(icon == R.drawable.ic_progress_bar) {
@@ -198,15 +212,23 @@ fun CameraScreen(viewModule: CameraViewModule, lifecycleOwner: LifecycleOwner) {
                                 view.vibrate(EVibrate.BUTTON)
                                 analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_CAMERA))
                                 context.clipboardCopy(state.typeValue)
-                                context.showToast(R.string.color_pick_color_copy)
+                                toastState.showMessage(message_color_copy)
                             }
                             IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
                                 view.vibrate(EVibrate.BUTTON)
                                 viewModule.pressPaletteAdd(state.color)
-                                context.showToast(R.string.color_pick_color_add_to_pallete)
+                                toastState.showMessage(message_color_add_to_pallete)
                             }
                         }
+                    }
                 }
+            }
+        } else {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(painter = painterResource(R.drawable.ic_camera), contentDescription = null, modifier = Modifier.size(100.dp))
             }
         }
     }

@@ -11,12 +11,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,47 +19,33 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.isSpecified
-import androidx.compose.ui.geometry.takeOrElse
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.DrawStyle
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.toColorInt
 import androidx.core.graphics.toRect
 import androidx.core.graphics.withClip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.sf.javaml.core.kdtree.KDTree
-import ua.com.compose.data.ColorNames
-import java.util.Arrays
-import java.util.NavigableMap
-import java.util.NavigableSet
-import java.util.TreeMap
-import java.util.TreeSet
-import kotlin.math.abs
+import ua.com.compose.extension.asComposeColor
+import ua.com.compose.colors.asRGBdecimal
+import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.HSVColor
 import kotlin.math.max
-import kotlin.math.min
-import android.graphics.Color as AndroidColor
 
 @Composable
 fun HueBar(
     modifier: Modifier = Modifier,
-    hue: Float,
-    setColor: (Float) -> Unit
+    hsv: HSVColor,
+    setColor: (HSVColor) -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    var _hue by remember {
-        mutableStateOf(hue)
+    var _hsv by remember {
+        mutableStateOf(hsv)
     }
     val interactionSource = remember {
         MutableInteractionSource()
@@ -73,8 +54,8 @@ fun HueBar(
         mutableStateOf(Offset.Unspecified)
     }
 
-    if(_hue != hue) {
-        _hue = hue
+    if(_hsv != hsv) {
+        _hsv = hsv
         pressOffset.value = Offset.Unspecified
     }
 
@@ -90,15 +71,13 @@ fun HueBar(
         val huePanel = RectF(0f, 3.dp.toPx(), bitmap.width.toFloat(), bitmap.height.toFloat() - 3.dp.toPx())
         val radius = 7.dp.toPx()
         containerPath.addRoundRect(huePanel, radius, radius, Path.Direction.CW)
-        val hueColors = IntArray((huePanel.width()).toInt())
+        val hueColors = arrayOfNulls<Color>(huePanel.width().toInt())
         var hueLine = 0f
         for (i in hueColors.indices) {
-            val _color = AndroidColor.HSVToColor(floatArrayOf(hueLine, 1f, 1f))
+            val _color = _hsv.copy(hue = hueLine, saturation = 1f, value = 1f)
             hueColors[i] = _color
-            val red = android.graphics.Color.red(_color).toDouble()
-            val green = android.graphics.Color.green(_color).toDouble()
-            val blue = android.graphics.Color.blue(_color).toDouble()
-            tree.insert(doubleArrayOf(red, green, blue), i)
+            val rgb = _color.asRGBdecimal()
+            tree.insert(doubleArrayOf(rgb.red.toDouble(), rgb.green.toDouble(), rgb.blue.toDouble()), i)
             hueLine += 360f / hueColors.size
         }
 
@@ -107,7 +86,7 @@ fun HueBar(
 
         hueCanvas.withClip(containerPath) {
             for (i in hueColors.indices) {
-                linePaint.color = hueColors[i]
+                linePaint.color = hueColors[i]?.intColor ?: 0
                 hueCanvas.drawLine(i.toFloat(), 0F, i.toFloat(), huePanel.bottom, linePaint)
             }
         }
@@ -130,29 +109,24 @@ fun HueBar(
         scope.collectForPress(interactionSource) { pressPosition ->
             val pressPos = pressPosition.x.coerceIn(0f..drawScopeSize.width)
             pressOffset.value = Offset(pressPos, 0f)
-            _hue = pointToHue(pressPos)
-//            _color.value = AndroidColor.HSVToColor(floatArrayOf(pointToHue, 1f, 1f))
-            setColor(_hue)
+            _hsv = _hsv.copy(hue = pointToHue(pressPos))
+            setColor(_hsv)
         }
 
         val center = pressOffset.value.takeIf { it.isSpecified }?.let { Offset(pressOffset.value.x, size.height/2) } ?: kotlin.run {
-            val _color = AndroidColor.HSVToColor(floatArrayOf(hue, 1f, 1f))
-            val red = android.graphics.Color.red(_color).toDouble()
-            val green = android.graphics.Color.green(_color).toDouble()
-            val blue = android.graphics.Color.blue(_color).toDouble()
-
-            val index = (tree.nearest(doubleArrayOf(red, green, blue)) as? Int) ?: 0
+            val _color = _hsv.copy(saturation = 1f, value = 1f).asRGBdecimal()
+            val index = (tree.nearest(doubleArrayOf(_color.red.toDouble(), _color.green.toDouble(), _color.blue.toDouble())) as? Int) ?: 0
             Offset(index.toFloat(), size.height/2)
         }
 
         drawCircle(
-            Color.White,
+            androidx.compose.ui.graphics.Color.White,
             radius = size.height/2 - 2.dp.toPx(),
             center = center,
         )
 
         drawCircle(
-            color = Color(AndroidColor.HSVToColor(floatArrayOf(_hue, 1f, 1f))),
+            color = _hsv.copy(saturation = 1f, value = 1f).asComposeColor(),
             radius = size.height/2 - 5.dp.toPx(),
             center = center,
         )

@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -44,24 +43,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.compose.koinViewModel
+import ua.com.compose.Palettes
 import ua.com.compose.R
 import ua.com.compose.Settings
-import ua.com.compose.api.analytics.Analytics
-import ua.com.compose.api.analytics.SimpleEvent
-import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
 import ua.com.compose.composable.HueBar
 import ua.com.compose.composable.SatValPanel
-import ua.com.compose.data.Palettes
 import ua.com.compose.dialogs.DialogBilling
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.dataStore
+import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
+
+import ua.com.compose.colors.asHsv
 import kotlin.math.ceil
-import android.graphics.Color as AndroidColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,16 +68,14 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
     val viewModel: PalettesViewModel = koinViewModel()
     val context = LocalContext.current
     val isPremium by viewModel.isPremium.observeAsState(false)
+    val lastColor = runBlocking { Settings.lastColor().first() }
+    val palettes by viewModel.palettes.observeAsState(initial = emptyList())
     val view = LocalView.current
     var stateCreatePalette by remember { mutableStateOf<Palettes.Item?>(null) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val bottomInset = WindowInsets.navigationBars
     var hsv by remember {
-        val hsv = floatArrayOf(0f, 0f, 0f)
-        android.graphics.Color.colorToHSV(Settings.lastColor, hsv)
-        mutableStateOf(
-            Triple(hsv[0], hsv[1], hsv[2])
-        )
+        mutableStateOf(lastColor.asHsv())
     }
 
     var stateShowBilling by remember { mutableStateOf(false) }
@@ -90,7 +87,7 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
 
     val scope = rememberCoroutineScope()
 
-    val throttleLatest: ((Int) -> Unit) = remember {
+    val throttleLatest: ((ua.com.compose.colors.data.Color) -> Unit) = remember {
         throttleLatest(
             withFirst = true,
             intervalMs = 200,
@@ -139,9 +136,9 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
                         .fillMaxWidth()
                         .height(100.dp)
                         .padding(start = 12.dp, end = 12.dp), hsv = hsv
-                ) { sat, value ->
-                    hsv = Triple(hsv.first, sat, value)
-                    throttleLatest.invoke(AndroidColor.HSVToColor(floatArrayOf(hsv.first, hsv.second, hsv.third)))
+                ) { color ->
+                    hsv = color.copy()
+                    throttleLatest.invoke(color)
                 }
                 Spacer(
                     modifier = Modifier.height(
@@ -153,10 +150,10 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
                         .fillMaxWidth()
                         .height(26.dp)
                         .padding(start = 12.dp, end = 12.dp),
-                    hue = hsv.first
-                ) { hue ->
-                    hsv = Triple(hue, hsv.second, hsv.third)
-                    throttleLatest.invoke(AndroidColor.HSVToColor(floatArrayOf(hsv.first, hsv.second, hsv.third)))
+                    hsv = hsv
+                ) { color ->
+                    hsv = color.asHsv()
+                    throttleLatest.invoke(color)
                 }
             }
         }
@@ -186,7 +183,7 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
                 .background(color = MaterialTheme.colorScheme.surface)
         ) {
 
-            itemsIndexed(viewModel.palettes) { index, item ->
+            itemsIndexed(palettes) { index, item ->
 
                 var alpha = 1f
                 var icon: Int? = null
@@ -216,7 +213,7 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
                             val numColors = item.colors.size
                             val squareSize = this.size.height / numColors // Розмір кожного квадратика
                             for (i in 0 until numColors) {
-                                val color = Color(item.colors[i])
+                                val color = item.colors[i].asComposeColor()
                                 val left = 0f
                                 val top = ceil(i * squareSize)
                                 val right = this.size.width

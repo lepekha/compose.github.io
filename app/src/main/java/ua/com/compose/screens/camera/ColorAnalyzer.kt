@@ -1,16 +1,14 @@
 package ua.com.compose.screens.camera
 
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.view.View
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineScope
 import ua.com.compose.extension.throttleLatest
+import ua.com.compose.colors.colorRGBdecimalOf
+import ua.com.compose.colors.data.Color
 import java.nio.ByteBuffer
 
-class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: Int) -> Unit) : ImageAnalysis.Analyzer {
+class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: Color) -> Unit) : ImageAnalysis.Analyzer {
         private var lastTotalRed = 0
         private var lastTotalGreen = 0
         private var lastTotalBlue = 0
@@ -64,8 +62,8 @@ class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: Int) -> Un
             lastTotalBlue = averageBlue
         }
         // Створити колір із середніми значеннями каналів RGB
-        val averageColor = Color.rgb(lastTotalRed, lastTotalGreen, lastTotalBlue)
-        listenerColor(averageColor)
+        val color = colorRGBdecimalOf(lastTotalRed, lastTotalGreen, lastTotalBlue)
+        listenerColor(color)
         image.close()
     }
 

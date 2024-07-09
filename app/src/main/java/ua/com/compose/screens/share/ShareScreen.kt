@@ -65,12 +65,14 @@ import ua.com.compose.R
 import ua.com.compose.composable.ActionIconButton
 import ua.com.compose.composable.BottomNotification
 import ua.com.compose.composable.BottomSheet
-import ua.com.compose.data.EExportType
-import ua.com.compose.data.EFileExportScheme
-import ua.com.compose.data.EImageExportScheme
+import ua.com.compose.composable.LocalToastState
+import ua.com.compose.data.enums.EExportType
+import ua.com.compose.data.enums.EFileExportScheme
+import ua.com.compose.data.enums.EImageExportScheme
 import ua.com.compose.dialogs.DialogBilling
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -81,8 +83,22 @@ fun ShareScreen(name: String, paletteId: Long, viewModel: ShareViewModel, onDism
     val isPremium by viewModel.isPremium.observeAsState(false)
 
     val scope = rememberCoroutineScope()
-
+    val toastState = LocalToastState.current
+    val string_palette_saved = stringResource(id = R.string.color_pick_palette_saved)
     val containerBackground = MaterialTheme.colorScheme.surfaceContainerLow
+
+    val state = viewModel.snackbarUIState.value.state
+    LaunchedEffect(key1 = state) {
+        when(state) {
+            is ShareViewModel.SnackbarState.PALETTE_SAVED -> {
+                toastState.showMessage(string_palette_saved)
+            }
+            else -> {
+
+            }
+        }
+    }
+
 
     var stateShowBilling by remember { mutableStateOf(false) }
     if(stateShowBilling) {
@@ -291,7 +307,8 @@ fun ShareScreen(name: String, paletteId: Long, viewModel: ShareViewModel, onDism
                                         when {
                                             it.type in viewModel.stateLoadItems -> return@clickable
                                             onlyForPremium -> stateShowBilling = true
-                                            else -> stateShowImageShare = Triple(name, it.image, it.type)
+                                            else -> stateShowImageShare =
+                                                Triple(name, it.image, it.type)
                                         }
                                     }) {
 

@@ -1,7 +1,4 @@
-package ua.com.compose.data
-
-import androidx.annotation.StringRes
-import ua.com.compose.R
+package ua.com.compose.data.enums
 
 enum class EExportType(val key: Int) {
     SAVE(key = 0),

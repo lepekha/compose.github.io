@@ -11,7 +11,6 @@ import android.graphics.RectF
 import android.graphics.Shader
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +28,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.toColor
+import ua.com.compose.colors.colorHSVOf
+import ua.com.compose.colors.data.HSVColor
 import android.graphics.Color as AndroidColor
 
 
@@ -37,21 +37,21 @@ import android.graphics.Color as AndroidColor
 @Composable
 fun SatValPanel(
     modifier: Modifier = Modifier,
-    hsv: Triple<Float, Float, Float>,
-    setSatVal: (Float, Float) -> Unit
+    hsv: HSVColor,
+    resultHSV: (HSVColor) -> Unit
 ) {
     val interactionSource = remember {
         MutableInteractionSource()
     }
     val scope = rememberCoroutineScope()
-    var sat: Float = hsv.second
-    var value: Float = hsv.third
-    var hue by remember { mutableFloatStateOf(hsv.first) }
+    var sat: Float = hsv.saturation
+    var value: Float = hsv.value
+    var hue by remember { mutableFloatStateOf(hsv.hue) }
     val pressOffset = remember {
         mutableStateOf(Offset.Unspecified)
     }
-    if(hue != hsv.first) {
-        hue = hsv.first
+    if(hue != hsv.hue) {
+        hue = hsv.hue
         pressOffset.value = Offset.Unspecified
     }
 
@@ -135,7 +135,7 @@ fun SatValPanel(
             sat = satPoint
             value = valuePoint
             isDark = value < 0.7 || sat > 0.3
-            setSatVal(sat, value)
+            resultHSV(colorHSVOf(hue = hue, saturation = satPoint, value = value))
         }
         val center = pressOffset.value.takeIf { it.isSpecified } ?: satValToPoint(sat, value).let { Offset(it.first, it.second) }
 

@@ -1,4 +1,4 @@
-package ua.com.compose.data
+package ua.com.compose.data.enums
 
 import ua.com.compose.R
 

@@ -1,8 +1,14 @@
-package ua.com.compose.data
+package ua.com.compose.data.enums
 
-import android.graphics.Color
-import androidx.core.graphics.ColorUtils
 import ua.com.compose.R
+import ua.com.compose.data.db.ColorItem
+import ua.com.compose.extension.color
+import ua.com.compose.extension.userColorName
+import ua.com.compose.colors.asHsl
+import ua.com.compose.colors.asLab
+import ua.com.compose.colors.asRGBdecimal
+import ua.com.compose.colors.asXyz
+import ua.com.compose.colors.luminance
 
 enum class ESortType(val key: Int, val stringResId: Int) {
     ORDER(key = 0, stringResId = R.string.color_pick_sort_order) {
@@ -18,11 +24,11 @@ enum class ESortType(val key: Int, val stringResId: Int) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    Color.luminance(it.color)
+                    it.color().luminance()
                 }
             } else {
                 compareByDescending {
-                    Color.luminance(it.color)
+                    it.color().luminance()
                 }
             }
         }
@@ -30,27 +36,27 @@ enum class ESortType(val key: Int, val stringResId: Int) {
     RGB_R(key = 2, stringResId = R.string.color_pick_sort_rgb_r_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
-                compareBy { Color.red(it.color) }
+                compareBy { it.color().asRGBdecimal().red }
             } else {
-                compareByDescending { Color.red(it.color) }
+                compareByDescending { it.color().asRGBdecimal().red }
             }
         }
     },
     RGB_G(key = 3, stringResId = R.string.color_pick_sort_rgb_g_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
-                compareBy { Color.green(it.color) }
+                compareBy { it.color().asRGBdecimal().green }
             } else {
-                compareByDescending { Color.green(it.color) }
+                compareByDescending { it.color().asRGBdecimal().green }
             }
         }
     },
     RGB_B(key = 4, stringResId = R.string.color_pick_sort_rgb_b_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
-                compareBy { Color.blue(it.color) }
+                compareBy { it.color().asRGBdecimal().blue }
             } else {
-                compareByDescending { Color.blue(it.color) }
+                compareByDescending { it.color().asRGBdecimal().blue }
             }
         }
     },
@@ -58,15 +64,11 @@ enum class ESortType(val key: Int, val stringResId: Int) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    val hsl = FloatArray(3)
-                    ColorUtils.colorToHSL(it.color, hsl)
-                    hsl[0]
+                    it.color().asHsl().hue
                 }
             } else {
                 compareByDescending {
-                    val hsl = FloatArray(3)
-                    ColorUtils.colorToHSL(it.color, hsl)
-                    hsl[0]
+                    it.color().asHsl().hue
                 }
             }
         }
@@ -75,15 +77,11 @@ enum class ESortType(val key: Int, val stringResId: Int) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    val hsl = FloatArray(3)
-                    ColorUtils.colorToHSL(it.color, hsl)
-                    hsl[1]
+                    it.color().asHsl().saturation
                 }
             } else {
                 compareByDescending {
-                    val hsl = FloatArray(3)
-                    ColorUtils.colorToHSL(it.color, hsl)
-                    hsl[1]
+                    it.color().asHsl().saturation
                 }
             }
         }
@@ -92,117 +90,89 @@ enum class ESortType(val key: Int, val stringResId: Int) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    val hsl = FloatArray(3)
-                    ColorUtils.colorToHSL(it.color, hsl)
-                    hsl[2]
+                    it.color().asHsl().lightness
                 }
             } else {
                 compareByDescending {
-                    val hsl = FloatArray(3)
-                    ColorUtils.colorToHSL(it.color, hsl)
-                    hsl[2]
+                    it.color().asHsl().lightness
                 }
             }
         }
     },
     XYZ_X(key = 8, stringResId = R.string.color_pick_sort_xyz_x_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
-            val xyz = DoubleArray(3)
-
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    ColorUtils.colorToXYZ(it.color, xyz)
-                    xyz[0]
+                    it.color().asXyz().x
                 }
             } else {
                 compareByDescending {
-                    ColorUtils.colorToXYZ(it.color, xyz)
-                    xyz[0]
+                    it.color().asXyz().x
                 }
             }
         }
     },
     XYZ_Y(key = 9, stringResId = R.string.color_pick_sort_xyz_y_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
-            val xyz = DoubleArray(3)
-
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    ColorUtils.colorToXYZ(it.color, xyz)
-                    xyz[1]
+                    it.color().asXyz().y
                 }
             } else {
                 compareByDescending {
-                    ColorUtils.colorToXYZ(it.color, xyz)
-                    xyz[1]
+                    it.color().asXyz().y
                 }
             }
         }
     },
     XYZ_Z(key = 10, stringResId = R.string.color_pick_sort_xyz_z_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
-            val xyz = DoubleArray(3)
-
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    ColorUtils.colorToXYZ(it.color, xyz)
-                    xyz[2]
+                    it.color().asXyz().z
                 }
             } else {
                 compareByDescending {
-                    ColorUtils.colorToXYZ(it.color, xyz)
-                    xyz[2]
+                    it.color().asXyz().z
                 }
             }
         }
     },
     LAB_L(key = 11, stringResId = R.string.color_pick_sort_lab_l_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
-            val lab = DoubleArray(3)
-
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    ColorUtils.colorToLAB(it.color, lab)
-                    lab[1]
+                    it.color().asLab().lightness
                 }
             } else {
                 compareByDescending {
-                    ColorUtils.colorToLAB(it.color, lab)
-                    lab[1]
+                    it.color().asLab().lightness
                 }
             }
         }
     },
     LAB_A(key = 12, stringResId = R.string.color_pick_sort_lab_a_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
-            val lab = DoubleArray(3)
-
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    ColorUtils.colorToLAB(it.color, lab)
-                    lab[1]
+                    it.color().asLab().a
                 }
             } else {
                 compareByDescending {
-                    ColorUtils.colorToLAB(it.color, lab)
-                    lab[1]
+                    it.color().asLab().a
                 }
             }
         }
     },
     LAB_B(key = 13, stringResId = R.string.color_pick_sort_lab_b_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
-            val lab = DoubleArray(3)
-
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    ColorUtils.colorToLAB(it.color, lab)
-                    lab[2]
+                    it.color().asLab().b
                 }
             } else {
                 compareByDescending {
-                    ColorUtils.colorToLAB(it.color, lab)
-                    lab[2]
+                    it.color().asLab().b
                 }
             }
         }
@@ -211,11 +181,11 @@ enum class ESortType(val key: Int, val stringResId: Int) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
                 compareBy {
-                    it.color.colorName()
+                    it.userColorName()
                 }
             } else {
                 compareByDescending {
-                    it.color.colorName()
+                    it.userColorName()
                 }
             }
         }

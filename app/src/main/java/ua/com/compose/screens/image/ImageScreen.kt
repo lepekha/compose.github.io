@@ -56,6 +56,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.drawable.toBitmap
@@ -73,17 +74,20 @@ import ua.com.compose.composable.ColorPickerInfo
 import ua.com.compose.composable.ColorPickerRing
 import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
+import ua.com.compose.composable.LocalToastState
 import ua.com.compose.composable.Menu
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.findActivity
-import ua.com.compose.extension.showToast
 import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
+
+import ua.com.compose.colors.colorINTOf
+import ua.com.compose.colors.data.Color
 import ua.com.compose.screens.dominantColors.DomainColors
 import ua.com.compose.screens.info.InfoScreen
-import java.lang.Float
 import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 
@@ -102,9 +106,12 @@ fun View.bitmapFormView(activity: Activity, result: (bmp: Bitmap) -> Unit) {
 }
 
 @Composable
-fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
+fun ImageScreen(viewModule: ImageViewModule,
+                uri: String? = null
+) {
     val activity = LocalContext.current.findActivity()
     val view = LocalView.current
+    val toastState = LocalToastState.current
     uri?.let { Settings.lastUri = Uri.decode(it).toUri() }
     var photoUri: Uri? by remember { mutableStateOf(Settings.lastUri) }
     var image: Bitmap? by remember { mutableStateOf(null) }
@@ -112,6 +119,9 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
     var positionInRoot by remember { mutableStateOf(Offset.Zero) }
 
     val scope = rememberCoroutineScope()
+
+    val string_color_copy = stringResource(id = R.string.color_pick_color_copy)
+    val string_add_to_pallete = stringResource(id = R.string.color_pick_color_add_to_pallete)
 
     var size by remember { mutableStateOf(Size.Zero) }
     var scale by remember { mutableFloatStateOf(1f) }
@@ -121,11 +131,11 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 view.bitmapFormView(activity) {
-                    viewModule.changeColor(it.getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt()))
+                    viewModule.changeColor(colorINTOf(it.getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt())))
                 }
             } else {
                 view.drawToBitmap().getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt()).let {
-                    viewModule.changeColor(it)
+                    viewModule.changeColor(colorINTOf(it))
                 }
             }
         } catch (_: Exception) { }
@@ -142,7 +152,7 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
     }
 
     val state = rememberTransformableState { zoomChange, offsetChange, _ ->
-        scale = Float.max(1f, scale * zoomChange)
+        scale = max(1f, scale * zoomChange)
         offset += offsetChange
 
         val centerX = (size.width * scale / 2f).roundToInt() - 1
@@ -173,7 +183,7 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
         }
     }
 
-    var stateInfoColor: Int? by remember { mutableStateOf(null) }
+    var stateInfoColor: Color? by remember { mutableStateOf(null) }
     stateInfoColor?.let {
         InfoScreen(name = null, color = it) {
             stateInfoColor = null
@@ -312,12 +322,12 @@ fun ImageScreen(viewModule: ImageViewModule, uri: String? = null) {
                                     view.vibrate(EVibrate.BUTTON)
                                     analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_IMAGE))
                                     context.clipboardCopy(colorState.typeValue)
-                                    context.showToast(R.string.color_pick_color_copy)
+                                    toastState.showMessage(string_color_copy)
                                 }
                                 IconItem(painter = painterResource(id = R.drawable.ic_add_circle)) {
                                     view.vibrate(EVibrate.BUTTON)
                                     viewModule.pressPaletteAdd(colorState.color)
-                                    context.showToast(R.string.color_pick_color_add_to_pallete)
+                                    toastState.showMessage(string_add_to_pallete)
                                 }
                             }
                         }

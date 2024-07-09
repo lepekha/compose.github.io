@@ -1,13 +1,16 @@
-package ua.com.compose.data
+package ua.com.compose.data.enums
 
 import android.content.Context
-import android.graphics.Color
 import org.json.JSONObject
 import ua.com.compose.data.adobecolor.core.toACOBytes
 import ua.com.compose.data.adobecolor.core.toASEBytes
 import ua.com.compose.data.adobecolor.model.AdobeColor
-import ua.com.compose.extension.toHex
+import ua.com.compose.data.db.ColorItem
+import ua.com.compose.extension.color
+import ua.com.compose.extension.userColorName
 import ua.com.compose.extension.writeToFile
+import ua.com.compose.colors.asHex
+import ua.com.compose.colors.asRGBdecimal
 import java.io.DataOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -21,9 +24,9 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
         override fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File? {
             val builder = buildString {
                 colors.forEach {
-                    append(colorType.colorToString(it.color))
+                    append(colorType.colorToString(it.color()))
                     append(" ")
-                    append(it.realColorName())
+                    append(it.userColorName())
                     appendLine()
                 }
             }
@@ -37,14 +40,14 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val redJson = JSONObject()
 
             colors.forEach {
-                val hex = "#${it.color.toHex()}"
-                val name = (it.realColorName())
+                val hex = it.color().asHex(withAlpha = false)
+                val name = (it.userColorName())
                     .replace(" ", "_")
                     .replace("-", "_")
                     .replace("'", "")
                     .lowercase()
 
-                redJson.put(name, hex)
+                redJson.put(name, hex.toString())
             }
 
             json.put(palette, redJson)
@@ -57,8 +60,8 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 appendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
                 appendLine("<resources>")
                 colors.forEach {
-                    val hex = "#${it.color.toHex()}"
-                    val name = (it.realColorName())
+                    val hex = it.color().asHex(withAlpha = false)
+                    val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -76,9 +79,9 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 appendLine("name,color")
                 colors.forEach {
-                    val hex = "#${it.color.toHex()}"
+                    val hex = it.color().asHex(withAlpha = false)
 
-                    val name = (it.realColorName())
+                    val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -95,8 +98,8 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 appendLine("resources:")
                 colors.forEach {
-                    val hex = "#${it.color.toHex()}"
-                    val name = (it.realColorName())
+                    val hex = it.color().asHex(withAlpha = false)
+                    val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -114,8 +117,8 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 colors.forEach {
                     appendLine("[[resources]]")
-                    val hex = "#${it.color.toHex()}"
-                    val name = (it.realColorName())
+                    val hex = it.color().asHex(withAlpha = false)
+                    val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
@@ -136,15 +139,15 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 this.appendLine("Name: $palette")
                 this.appendLine("#")
                 colors.forEach {
-                    val name = (it.realColorName())
+                    val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
                         .lowercase()
-                    val red = Color.red(it.color)
-                    val green = Color.green(it.color)
-                    val blue = Color.blue(it.color)
-                    this.appendLine("$red $green $blue $name")
+
+                    val rgb = it.color().asRGBdecimal()
+
+                    this.appendLine("${rgb.red} ${rgb.green} ${rgb.blue} $name")
                 }
             }
             return context.writeToFile("$palette.gpl", builder)
@@ -155,17 +158,14 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 appendLine(""":root {""")
                 colors.forEach {
-                    val name = (it.realColorName())
+                    val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
                         .lowercase()
 
-                    val red = Color.red(it.color)
-                    val green = Color.green(it.color)
-                    val blue = Color.blue(it.color)
-
-                    appendLine("""--$name: rgb($red, $green, $blue);""")
+                    val rgb = it.color().asRGBdecimal()
+                    appendLine("""--$name: rgb(${rgb.red}, ${rgb.green}, ${rgb.blue});""")
                 }
                 appendLine("}")
             }
@@ -188,17 +188,15 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 var x = padding
                 var y = padding
                 colors.forEachIndexed { index, it ->
-                    val hex = "#${it.color.toHex()}"
-                    val _name = it.realColorName()
+                    val hex = it.color().asHex(withAlpha = false)
+                    val _name = it.userColorName()
                     val name = _name
                         .replace(" ", "_")
                         .replace("-", "_")
                         .replace("'", "")
                         .lowercase()
 
-                    val red = Color.red(it.color)
-                    val green = Color.green(it.color)
-                    val blue = Color.blue(it.color)
+                    val rgb = hex.asRGBdecimal()
 
                     appendLine("""<g id="$name">""")
                     appendLine("""<rect x="$x" y="$y" width="$sizeW" height="$sizeH" fill="white"/>""")
@@ -206,7 +204,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
 
                     appendLine("""<text fill="black" xml:space="preserve" style="white-space: pre" font-family="sans-serif" font-size="14" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 162.785}">$_name</tspan></text>""")
                     appendLine("""<text fill="#878787" xml:space="preserve" style="white-space: pre" font-family="sans-serif" font-size="12" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 184.102}">$hex</tspan></text>""")
-                    appendLine("""<text fill="#878787" xml:space="preserve" style="white-space: pre" font-family="sans-serif" font-size="12" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 204.102}">rgb($red, $green, $blue)</tspan></text>""")
+                    appendLine("""<text fill="#878787" xml:space="preserve" style="white-space: pre" font-family="sans-serif" font-size="12" font-weight="600" letter-spacing="0em"><tspan x="${x + 8}" y="${y + 204.102}">rgb(${rgb.red}, ${rgb.green}, ${rgb.blue})</tspan></text>""")
 
                     appendLine("""</g>""")
 
@@ -226,12 +224,12 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
     ACO(title = ".aco", allowForAll = false) {
         override fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File? {
             val data = colors.map {
-                val name = (it.realColorName())
+                val name = (it.userColorName())
                     .replace(" ", "_")
                     .replace("-", "_")
                     .replace("'", "")
                     .lowercase()
-                AdobeColor(it.color, name)
+                AdobeColor(it.color().intColor, name)
             }.toACOBytes()
 
             try {
@@ -246,12 +244,12 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
     ASE(title = ".ase", allowForAll = false) {
         override fun create(context: Context, palette: String, colors: List<ColorItem>, colorType: EColorType): File? {
             val data = colors.map {
-                val name = (it.realColorName())
+                val name = (it.userColorName())
                     .replace(" ", "_")
                     .replace("-", "_")
                     .replace("'", "")
                     .lowercase()
-                AdobeColor(it.color, name)
+                AdobeColor(it.color().intColor, name)
             }.toASEBytes(palette)
 
             try {
@@ -269,9 +267,10 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             try {
                 DataOutputStream(FileOutputStream(outputFile)).use { outputStream ->
                     colors.forEach {
-                        outputStream.write(Color.red(it.color))
-                        outputStream.write(Color.green(it.color))
-                        outputStream.write(Color.blue(it.color))
+                        val rgb = it.color().asRGBdecimal()
+                        outputStream.write(rgb.red)
+                        outputStream.write(rgb.green)
+                        outputStream.write(rgb.blue)
                         outputStream.write(0)
                     }
 

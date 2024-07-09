@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import java.nio.file.WatchEvent
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(topInset:WindowInsets = WindowInsets.statusBars, bottomInset:WindowInsets = WindowInsets.navigationBars, sheetState: SheetState, onDismissRequest: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
 

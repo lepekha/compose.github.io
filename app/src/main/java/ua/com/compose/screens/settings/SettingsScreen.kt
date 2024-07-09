@@ -6,18 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -34,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -56,10 +50,11 @@ import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
-import ua.com.compose.data.ELanguage
-import ua.com.compose.data.ESortDirection
-import ua.com.compose.data.ESortType
-import ua.com.compose.data.ETheme
+import ua.com.compose.data.enums.EColorType
+import ua.com.compose.data.enums.ELanguage
+import ua.com.compose.data.enums.ESortDirection
+import ua.com.compose.data.enums.ESortType
+import ua.com.compose.data.enums.ETheme
 import ua.com.compose.dialogs.ChipItem
 import ua.com.compose.dialogs.DialogBilling
 import ua.com.compose.dialogs.DialogChoise
@@ -67,17 +62,17 @@ import ua.com.compose.dialogs.DialogSort
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.vibrate
 
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
+fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
     val colorTypes by viewModel.colorTypes
-    val colorType by viewModel.colorType
-
+    val colorType by Settings.colorType().collectAsState(initial = Settings.colorTypeValue())
+    val theme by Settings.theme().collectAsState(initial = ETheme.SYSTEM)
     val isPremium by viewModel.isPremium.observeAsState(false)
 
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val bottomInset = WindowInsets.navigationBars
     val localConfiguration = LocalConfiguration.current
     val settingsRightTextSize = 18.sp
 
@@ -98,18 +93,16 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
         analytics.send(SimpleEvent(key = Analytics.Event.OPEN_SETTINGS))
     }
 
-    var sortType: ESortType by remember { mutableStateOf(Settings.sortType) }
+    val sortDirection by Settings.sortDirection().collectAsState(initial = ESortDirection.DESC)
+    val sortType by Settings.sortType().collectAsState(initial = ESortType.ORDER)
     var stateSortDialog: Boolean by remember { mutableStateOf(false) }
     if (stateSortDialog) {
         DialogSort(
-            type = Settings.sortType,
-            direction = Settings.sortDirection,
+            type = sortType,
+            direction = sortDirection,
             onDone = { type, direction ->
-                sortType = type ?: ESortType.ORDER
-                viewModel.changePaletteSort(
-                    type = type ?: ESortType.ORDER,
-                    direction = direction ?: ESortDirection.DESC
-                )
+                Settings.updateSortType(type ?: ESortType.ORDER)
+                Settings.updateSortDirection(direction ?: ESortDirection.DESC)
             },
             onDismissRequest = { stateSortDialog = false }
         )
@@ -142,11 +135,11 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                 ChipItem(
                     title = stringResource(id = it.strRes),
                     obj = it,
-                    isSelect = Settings.theme == it
+                    isSelect = theme == it
                 )
             },
             onDone = {
-                viewModel.changeTheme(it)
+                Settings.updateTheme(it)
             },
             onDismissRequest = { stateTheme = false }
         )
@@ -352,13 +345,12 @@ fun SettingsScreen(theme: ETheme, viewModel: SettingsViewModel, onDismissRequest
                         modifier = Modifier.weight(1f)
                     )
 
-                    var state by remember { mutableStateOf(Settings.vibration) }
+                    val vibration by Settings.vibrationFlow().collectAsState(initial = Settings.vibrationValue())
                     Switch(
-                        checked = state,
+                        checked = vibration,
                         onCheckedChange = {
                             view.vibrate(EVibrate.BUTTON)
-                            state = it
-                            viewModel.changeVibration(it)
+                            Settings.updateVibration(it)
                         },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,

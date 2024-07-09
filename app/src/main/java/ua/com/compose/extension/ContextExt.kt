@@ -10,14 +10,9 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.HapticFeedbackConstants
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -30,6 +25,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import ua.com.compose.AppBilling
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
@@ -47,10 +44,11 @@ lateinit var dataStore: DataStore<Preferences>
 lateinit var appBilling: AppBilling
 
 val Context.createDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 fun Context.writeBitmap(fileName: String, bitmap: Bitmap): File {
     val format: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG
     val quality = 100
-    val outputFile = File(this.cacheDir.path, fileName)
+    val outputFile = File(this.cacheDir.path, fileName.sanitizeFileName())
     outputFile.outputStream().use { out ->
         bitmap.compress(format, quality, out)
         out.flush()
@@ -60,7 +58,7 @@ fun Context.writeBitmap(fileName: String, bitmap: Bitmap): File {
 
 fun Context.writeToFile(fileName: String, data: String): File? {
     try {
-        val outputFile = File(this.cacheDir.path, fileName)
+        val outputFile = File(this.cacheDir.path, fileName.sanitizeFileName())
         outputFile.writeText(text = data, charset = Charsets.UTF_8)
         return outputFile
     } catch (e: IOException) {
@@ -70,16 +68,12 @@ fun Context.writeToFile(fileName: String, data: String): File? {
 
 fun Context.writeToFile(fileName: String, data: ByteArray): File? {
     try {
-        val outputFile = File(this.cacheDir.path, fileName)
+        val outputFile = File(this.cacheDir.path, fileName.sanitizeFileName())
         outputFile.writeBytes(data)
         return outputFile
     } catch (e: IOException) {
     }
     return null
-}
-
-fun Context.showToast(@StringRes resId: Int) {
-    Toast.makeText(this, this.getString(resId), Toast.LENGTH_SHORT).show()
 }
 
 fun Context.findActivity(): Activity {
@@ -92,7 +86,8 @@ fun Context.findActivity(): Activity {
 }
 
 fun Activity.createReview() {
-    if((Settings.openInfoCount % 7) == 0) {
+    val openAppCount = runBlocking { Settings.openAppCount() }
+    if((openAppCount % 7) == 0) {
         val manager = ReviewManagerFactory.create(this)
         val request = manager.requestReviewFlow()
         request.addOnCompleteListener { task ->
@@ -101,12 +96,12 @@ fun Activity.createReview() {
                 val flow = manager.launchReviewFlow(this, task.result)
                 flow.addOnCompleteListener { _ ->
                     analytics.send(SimpleEvent(key = Analytics.Event.DONE_IN_APP_REVIEW))
-                    Settings.openInfoCount = 1
+                    Settings.updateOpenAppCount(1)
                 }
             }
         }
     } else {
-        Settings.openInfoCount += 1
+        Settings.updateOpenAppCount(openAppCount + 1)
     }
 }
 
@@ -130,29 +125,36 @@ suspend fun Context.createVideoCaptureUseCase(
     cameraSelector: CameraSelector,
     previewView: PreviewView,
     analyzed: ImageAnalysis.Analyzer
-){
-    val preview = Preview.Builder()
-        .build()
-        .apply { setSurfaceProvider(previewView.surfaceProvider) }
+): Boolean {
+    try {
+        val preview = Preview.Builder()
+            .build()
+            .apply { setSurfaceProvider(previewView.surfaceProvider) }
 
-    val imageAnalyzer = ImageAnalysis.Builder()
-        .setBackgroundExecutor(executors)
-        .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-        .setImageQueueDepth(0)
-        .build()
-        .also {
-            it.setAnalyzer(executors, analyzed)
-        }
+        val imageAnalyzer = ImageAnalysis.Builder()
+            .setBackgroundExecutor(executors)
+            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setImageQueueDepth(0)
+            .build()
+            .also {
+                it.setAnalyzer(executors, analyzed)
+            }
 
-    val cameraProvider = getCameraProvider(executors)
-    cameraProvider.unbindAll()
-    cameraProvider.bindToLifecycle(
-        lifecycleOwner,
-        cameraSelector,
-        preview,
-        imageAnalyzer
-    )
+        val cameraProvider = getCameraProvider(executors)
+        cameraProvider.unbindAll()
+        cameraProvider.bindToLifecycle(
+            lifecycleOwner,
+            cameraSelector,
+            preview,
+            imageAnalyzer
+        )
+
+        return true
+    } catch (e: Exception) {
+        return false
+    }
+
 }
 
 suspend fun Context.getCameraProvider(executors: Executor): ProcessCameraProvider = suspendCoroutine { continuation ->
@@ -166,24 +168,12 @@ suspend fun Context.getCameraProvider(executors: Executor): ProcessCameraProvide
     }
 }
 
-@Suppress("DEPRECATION")
-fun Context.vibrate(milliseconds: Long = 500){
-    val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
-    } else {
-        vibrator.vibrate(milliseconds)
-    }
-}
-
 enum class EVibrate(internal val constant: Int){
-    NONE(constant = -1),
     BUTTON(constant = HapticFeedbackConstants.VIRTUAL_KEY)
 }
 
 fun View.vibrate(type: EVibrate){
-    if(Settings.vibration) {
+    if(runBlocking { Settings.vibrationValue() }) {
         this.performHapticFeedback(type.constant)
     }
 }

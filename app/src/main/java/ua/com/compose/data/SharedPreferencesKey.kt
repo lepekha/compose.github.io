@@ -1,6 +1,8 @@
 package ua.com.compose.data
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 
 internal object SharedPreferencesKey {
     const val KEY_PANEL_ID = "KEY_PANEL_ID"
@@ -20,5 +22,17 @@ internal object SharedPreferencesKey {
 }
 
 object DataStoreKey {
+    val KEY_VIBRATION = booleanPreferencesKey("KEY_VIBRATION")
     val KEY_PREMIUM = booleanPreferencesKey("KEY_PREMIUM")
+    val KEY_START_SCREEN = intPreferencesKey("KEY_START_SCREEN")
+    val KEY_THEME = intPreferencesKey("KEY_THEME")
+    val KEY_CREATE_COLOR_TYPE = intPreferencesKey("KEY_CREATE_COLOR_TYPE")
+    val KEY_COLOR_TYPE = intPreferencesKey("KEY_COLOR_TYPE")
+    val KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE = intPreferencesKey("KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE")
+    val KEY_SORT_TYPE = intPreferencesKey("KEY_SORT_TYPE")
+    val KEY_SORT_DIRECTION = intPreferencesKey("KEY_SORT_DIRECTION")
+    val KEY_OPEN_APP_COUNT = intPreferencesKey("KEY_OPEN_APP_COUNT")
+    val KEY_UPDATE_VERSION = stringPreferencesKey("KEY_UPDATE_VERSION")
+    val KEY_LAST_COLOR = intPreferencesKey("KEY_LAST_COLOR")
+    val KEY_PALLET_NUMBER = intPreferencesKey("KEY_PALLET_NUMBER")
 }

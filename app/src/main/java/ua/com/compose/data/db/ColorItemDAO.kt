@@ -1,4 +1,4 @@
-package ua.com.compose.data
+package ua.com.compose.data.db
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +20,8 @@ interface ColorItemDAO {
     @Query("UPDATE colors SET palletId = :paletteID WHERE id = :colorID")
     fun changeColorPalette(colorID: Long, paletteID: Long)
 
-    @Query("UPDATE colors SET color = :color WHERE id = :colorID")
-    fun updateColor(colorID: Long, color: Int)
+    @Query("UPDATE colors SET color = :intColor WHERE id = :colorID")
+    fun updateColor(colorID: Long, intColor: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(color: ColorItem)

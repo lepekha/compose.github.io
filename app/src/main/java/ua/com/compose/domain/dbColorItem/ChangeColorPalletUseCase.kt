@@ -1,6 +1,6 @@
 package ua.com.compose.domain.dbColorItem
 
-import ua.com.compose.data.ColorDatabase
+import ua.com.compose.data.db.ColorDatabase
 
 class ChangeColorPalletUseCase(private val database: ColorDatabase) {
 

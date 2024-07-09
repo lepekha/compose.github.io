@@ -3,7 +3,7 @@ package ua.com.compose.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import ua.com.compose.data.ColorDatabase
+import ua.com.compose.data.db.ColorDatabase
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.domain.dbColorItem.ChangeColorPalletUseCase
 import ua.com.compose.domain.dbColorItem.GetAllColorsUseCase
@@ -41,7 +41,7 @@ val appModule = module {
     single { SelectPalletUseCase(database = get()) }
     single { RefreshPalletsUseCase(database = get()) }
     single { ChangeColorPalletUseCase(database = get()) }
-    viewModel { SettingsViewModel(refreshPalletsUseCase = get()) }
+    viewModel { SettingsViewModel() }
     viewModel { PalettesViewModel(getCurrentPalletUseCase = get(), addColorUseCase = get()) }
     viewModel { ColorInfoViewModel(addColorUseCase = get()) }
     viewModel { ShareViewModel(getAllColorsUseCase = get(), getPalletUseCase = get()) }

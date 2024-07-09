@@ -1,8 +1,6 @@
 package ua.com.compose.screens.dominantColors
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.graphics.Color
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -17,6 +15,7 @@ import ua.com.compose.data.InfoColor
 import ua.com.compose.data.DataStoreKey
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.extension.dataStore
+import ua.com.compose.colors.data.Color
 
 class DominantColorsViewModule(private val addColorUseCase: AddColorUseCase): ViewModel()  {
 
@@ -24,7 +23,8 @@ class DominantColorsViewModule(private val addColorUseCase: AddColorUseCase): Vi
     val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
         preferences[DataStoreKey.KEY_PREMIUM] ?: false
     }.asLiveData()
-    fun pressPaletteAdd(color: Int) = viewModelScope.launch(Dispatchers.IO) {
+
+    fun pressPaletteAdd(color: Color) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_DOMAIN_COLORS))
         addColorUseCase.execute(listOf(InfoColor(color = color)))
     }

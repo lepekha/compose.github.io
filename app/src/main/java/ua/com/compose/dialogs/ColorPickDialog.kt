@@ -27,8 +27,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,8 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -49,53 +47,50 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.ColorUtils
 import ua.com.compose.R
 import ua.com.compose.Settings
 import ua.com.compose.composable.DialogBottomSheet
 import ua.com.compose.composable.DialogConfirmButton
 import ua.com.compose.composable.HueBar
 import ua.com.compose.composable.SatValPanel
-import ua.com.compose.data.EColorType
-import ua.com.compose.data.ECreateColorType
-import ua.com.compose.data.colorName
+import ua.com.compose.data.enums.EColorType
+import ua.com.compose.data.enums.ECreateColorType
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.asComposeColor
+import ua.com.compose.extension.nearestColorName
 import ua.com.compose.extension.vibrate
-import android.graphics.Color as AndroidColor
+
+import ua.com.compose.colors.asHsv
+import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.textColor
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DialogColorPick(
     name: String?,
-    color: Color = Color.Gray,
+    color: Color,
     cancelString: String,
     doneString: String,
     onDone: (name: String?, color: Color) -> Unit,
     onDismissRequest: () -> Unit
 ) {
 
-    var colorType by remember { mutableStateOf(Settings.dialogColorInputType) }
-    var createColorType by remember { mutableStateOf(Settings.createColorType) }
+    val colorType by Settings.colorInputTypeFlow().collectAsState(initial = Settings.colorInputTypeValue())
+    val createColorType by Settings.dialogColorPickTypeFlow().collectAsState(initial = Settings.dialogColorPickTypeValue())
 
     var startColor by remember {
-        mutableIntStateOf(color.toArgb())
+        mutableStateOf(color)
     }
 
     var hsv by remember {
-        val hsv = floatArrayOf(0f, 0f, 0f)
-        AndroidColor.colorToHSV(startColor, hsv)
-        mutableStateOf(
-            Triple(hsv[0], hsv[1], hsv[2])
-        )
+        mutableStateOf(startColor.asHsv())
     }
 
     var errorInput by remember { mutableStateOf(false) }
     var stateField by remember {
         mutableStateOf(
             TextFieldValue(
-                text = colorType.colorToString(
-                    AndroidColor.HSVToColor(floatArrayOf(hsv.first, hsv.second, hsv.third))
-                )
+                text = colorType.colorToString(hsv)
             )
         )
     }
@@ -104,16 +99,15 @@ fun DialogColorPick(
         val localFocusManager = LocalFocusManager.current
 
         val view = LocalView.current
-        val color = AndroidColor.HSVToColor(floatArrayOf(hsv.first, hsv.second, hsv.third))
-        val borderColor = if (ColorUtils.calculateLuminance(color) < 0.5) Color.White else Color.Black
+        val borderColor = hsv.textColor().asComposeColor()
 
         val nameFieldFocus = remember { FocusRequester() }
         var allowChangeColorName by remember { mutableStateOf(name == null) }
-        var nameFieldPlaceholder by remember { mutableStateOf(color.colorName()) }
+        var nameFieldPlaceholder by remember { mutableStateOf(color.nearestColorName()) }
         var nameFieldText by remember {
             mutableStateOf(
                 TextFieldValue(
-                    text = name ?: color.colorName()
+                    text = name ?: color.nearestColorName()
                 )
             )
         }
@@ -129,7 +123,8 @@ fun DialogColorPick(
                 Box(
                     modifier = Modifier
                         .height(60.dp)
-                        .fillMaxWidth(), contentAlignment = Alignment.TopCenter
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.TopCenter
                 ) {
 
                     Column(modifier = Modifier.fillMaxSize()) {
@@ -158,10 +153,10 @@ fun DialogColorPick(
                                     handleColor = MaterialTheme.colorScheme.primary,
                                     backgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
                                 ),
-                                unfocusedBorderColor = Color.Transparent,
-                                focusedBorderColor = Color.Transparent,
-                                focusedContainerColor = Color(color),
-                                unfocusedContainerColor = Color(color),
+                                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Transparent,
+                                focusedBorderColor = androidx.compose.ui.graphics.Color.Transparent,
+                                focusedContainerColor = hsv.asComposeColor(),
+                                unfocusedContainerColor = hsv.asComposeColor(),
                                 focusedLabelColor = MaterialTheme.colorScheme.primary,
                                 unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
                                 focusedPlaceholderColor = borderColor.copy(alpha = 0.6f),
@@ -183,7 +178,7 @@ fun DialogColorPick(
                                     it.text.isEmpty() or it.text.isBlank() -> {
                                         allowChangeColorName = true
                                     }
-                                    (color.colorName() != it.text) -> {
+                                    (color.nearestColorName() != it.text) -> {
                                         allowChangeColorName = false
                                     }
                                 }
@@ -206,15 +201,14 @@ fun DialogColorPick(
                         border = null,
                         shape = MaterialTheme.shapes.extraLarge,
                         colors = FilterChipDefaults.filterChipColors(
-                            containerColor = Color.Transparent,
+                            containerColor = androidx.compose.ui.graphics.Color.Transparent,
                             selectedContainerColor = MaterialTheme.colorScheme.secondary,
                             labelColor = MaterialTheme.colorScheme.onSurface,
                             selectedLabelColor = MaterialTheme.colorScheme.onSecondary,
                         ),
                         onClick = {
                             view.vibrate(EVibrate.BUTTON)
-                            Settings.createColorType = it
-                            createColorType = it
+                            Settings.updateDialogColorPickType(it)
                         },
                         label = {
                             Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = it.titleResId()).uppercase(), fontSize = 14.sp, fontWeight = FontWeight(600), textAlign = TextAlign.Center)
@@ -239,26 +233,20 @@ fun DialogColorPick(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(180.dp)
-                            .padding(), hsv = hsv
-                    ) { sat, value ->
-                        hsv = Triple(hsv.first, sat, value)
+                            .padding(),
+                        hsv = hsv
+                    ) { color ->
+                        hsv = color.copy()
                         errorInput = false
                         localFocusManager.clearFocus()
-                        val newColor = AndroidColor.HSVToColor(
-                            floatArrayOf(
-                                hsv.first,
-                                hsv.second,
-                                hsv.third
-                            )
-                        )
-                        nameFieldPlaceholder = newColor.colorName()
+                        nameFieldPlaceholder = color.nearestColorName()
                         if(allowChangeColorName) {
                             nameFieldText = TextFieldValue(
-                                newColor.colorName()
+                                nameFieldPlaceholder
                             )
                         }
                         stateField = TextFieldValue(
-                            colorType.colorToString(newColor)
+                            colorType.colorToString(color = color)
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))
@@ -267,26 +255,19 @@ fun DialogColorPick(
                             .fillMaxWidth()
                             .height(30.dp)
                             .padding(start = 12.dp, end = 12.dp),
-                        hue = hsv.first
-                    ) { hue ->
-                        hsv = Triple(hue, hsv.second, hsv.third)
+                        hsv = hsv.copy()
+                    ) { color ->
+                        hsv = color.copy()
                         errorInput = false
                         localFocusManager.clearFocus()
-                        val newColor = AndroidColor.HSVToColor(
-                            floatArrayOf(
-                                hsv.first,
-                                hsv.second,
-                                hsv.third
-                            )
-                        )
-                        nameFieldPlaceholder = newColor.colorName()
+                        nameFieldPlaceholder = hsv.nearestColorName()
                         if(allowChangeColorName) {
                             nameFieldText = TextFieldValue(
-                                newColor.colorName()
+                                hsv.nearestColorName()
                             )
                         }
                         stateField = TextFieldValue(
-                            colorType.colorToString(newColor)
+                            colorType.colorToString(color = hsv)
                         )
                     }
                 }
@@ -309,10 +290,10 @@ fun DialogColorPick(
                         keyboardActions = KeyboardActions(onDone = { localFocusManager.clearFocus() }),
                         isError = errorInput,
                         shape = MaterialTheme.shapes.small,
-                        trailingIcon = {
-                            if(errorInput) {
-                                Icon(painter = painterResource(id = R.drawable.ic_error), contentDescription = null)
-                            }
+                        trailingIcon = if(errorInput) {
+                            { Icon(painter = painterResource(id = R.drawable.ic_error), contentDescription = null) }
+                        } else {
+                            null
                         },
                         textStyle = TextStyle.Default.copy(fontSize = 20.sp),
                         colors = OutlinedTextFieldDefaults.colors(
@@ -333,15 +314,13 @@ fun DialogColorPick(
                         onValueChange = {
                             val _color = colorType.stringToColor(it.text)?.apply {
                                 startColor = this
-                                nameFieldPlaceholder = this.colorName()
+                                nameFieldPlaceholder = this.nearestColorName()
                                 if(allowChangeColorName) {
                                     nameFieldText = TextFieldValue(
-                                        this.colorName()
+                                        this.nearestColorName()
                                     )
                                 }
-                                val _hsv = floatArrayOf(0f, 0f, 0f)
-                                AndroidColor.colorToHSV(startColor, _hsv)
-                                hsv = Triple(_hsv[0], _hsv[1], _hsv[2])
+                                hsv = startColor.asHsv()
                             }
                             stateField = it
                             errorInput = _color == null
@@ -364,19 +343,9 @@ fun DialogColorPick(
                                 ),
                                 onClick = {
                                     view.vibrate(EVibrate.BUTTON)
-                                    colorType = it
-                                    Settings.dialogColorInputType = it
-
-                                    val newColor = AndroidColor.HSVToColor(
-                                        floatArrayOf(
-                                            hsv.first,
-                                            hsv.second,
-                                            hsv.third
-                                        )
-                                    )
-
+                                    Settings.updateColorInputType(it)
                                     stateField = TextFieldValue(
-                                        colorType.colorToString(newColor)
+                                        it.colorToString(hsv)
                                     )
                                     errorInput = false
                                 },
@@ -404,15 +373,7 @@ fun DialogColorPick(
                 DialogConfirmButton(text = doneString) {
                     onDone.invoke(
                         nameFieldText.text.takeIf { !allowChangeColorName },
-                        Color(
-                            AndroidColor.HSVToColor(
-                                floatArrayOf(
-                                    hsv.first,
-                                    hsv.second,
-                                    hsv.third
-                                )
-                            )
-                        )
+                        hsv
                     )
                     onDismissRequest.invoke()
                 }

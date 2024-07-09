@@ -3,128 +3,171 @@ package ua.com.compose
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import ua.com.compose.data.ColorPallet
+import androidx.datastore.preferences.core.edit
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import ua.com.compose.data.DataStoreKey
-import ua.com.compose.data.EColorType
-import ua.com.compose.data.ECreateColorType
-import ua.com.compose.data.EExportType
-import ua.com.compose.data.ETheme
+import ua.com.compose.data.enums.EColorType
+import ua.com.compose.data.enums.ECreateColorType
+import ua.com.compose.data.enums.ETheme
 import ua.com.compose.data.SharedPreferencesKey
 import ua.com.compose.extension.get
 import ua.com.compose.extension.prefs
-import ua.com.compose.extension.put
-import ua.com.compose.data.EPanel
-import ua.com.compose.data.ESortDirection
-import ua.com.compose.data.ESortType
+import ua.com.compose.data.enums.EPanel
+import ua.com.compose.data.enums.ESortDirection
+import ua.com.compose.data.enums.ESortType
 import ua.com.compose.extension.dataStore
 import ua.com.compose.extension.has
+import ua.com.compose.colors.colorINTOf
 
 object Settings {
 
     var lastUri: Uri? = null
 
-    var updateVersion: String
-        get() {
-            return prefs.get(key = SharedPreferencesKey.KEY_UPDATE_VERSION, defaultValue = "")
-        }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_UPDATE_VERSION, value = value)
-        }
+    fun updateVersion() = runBlocking {
+        dataStore.data.map { preferences ->
+            preferences[DataStoreKey.KEY_UPDATE_VERSION] ?: prefs.get(key = SharedPreferencesKey.KEY_UPDATE_VERSION, defaultValue = "")
+        }.first()
+    }
 
-    var openInfoCount: Int
-        get() {
-            return prefs.get(key = SharedPreferencesKey.KEY_OPEN_APP_COUNT, defaultValue = 1)
+    fun updateVersion(value: String) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_UPDATE_VERSION] = value
         }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_OPEN_APP_COUNT, value = value)
-        }
+    }
 
-    var vibration: Boolean
-        get() {
-            return prefs.get(key = SharedPreferencesKey.KEY_VIBRATION, defaultValue = true)
-        }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_VIBRATION, value = value)
-        }
+    fun openAppCount() = runBlocking {
+        dataStore.data.map { preferences ->
+            preferences[DataStoreKey.KEY_OPEN_APP_COUNT] ?: prefs.get(key = SharedPreferencesKey.KEY_OPEN_APP_COUNT, defaultValue = 1)
+        }.first()
+    }
 
-    var colorType: EColorType
-        get() {
-            return EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key)) ?: EColorType.HEX
+    fun updateOpenAppCount(value: Int) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_OPEN_APP_COUNT] = value
         }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_COLOR_TYPE, value = value.key)
-        }
+    }
 
-    var sortType: ESortType
-        get() {
-            return ESortType.valueByKey(prefs.get(key = SharedPreferencesKey.KEY_SORT_TYPE, defaultValue = ESortType.ORDER.key))
-        }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_SORT_TYPE, value = value.key)
-        }
+    fun vibrationFlow(): Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[DataStoreKey.KEY_VIBRATION] ?: prefs.get(key = SharedPreferencesKey.KEY_VIBRATION, defaultValue = true)
+    }
 
-    var sortDirection: ESortDirection
-        get() {
-            return ESortDirection.valueByKey(prefs.get(key = SharedPreferencesKey.KEY_SORT_DIRECTION, defaultValue = ESortDirection.DESC.key))
-        }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_SORT_DIRECTION, value = value.key)
-        }
+    fun vibrationValue() = runBlocking {
+        vibrationFlow().first()
+    }
 
-    var createColorType: ECreateColorType
-        get() {
-            return ECreateColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_CREATE_COLOR_TYPE, defaultValue = ECreateColorType.BOX.key))
+    fun updateVibration(value: Boolean) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_VIBRATION] = value
         }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_CREATE_COLOR_TYPE, value = value.key)
-        }
+    }
 
-    var theme: ETheme
-        get() {
-            return ETheme.getByKey(prefs.get(key = SharedPreferencesKey.KEY_THEME, defaultValue = ETheme.NIGHT.key))
+    fun colorType(): Flow<EColorType> = dataStore.data.map { preferences ->
+        EColorType.getByKey(preferences[DataStoreKey.KEY_COLOR_TYPE] ?: prefs.get(key = SharedPreferencesKey.KEY_COLOR_TYPE, defaultValue = EColorType.HEX.key))
+    }
+
+    fun colorTypeValue() = runBlocking {
+        colorType().first()
+    }
+
+    fun updateColorType(value: EColorType) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_COLOR_TYPE] = value.key
         }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_THEME, value = value.key)
+    }
+
+    fun sortType(): Flow<ESortType> = dataStore.data.map { preferences ->
+        ESortType.valueByKey(preferences[DataStoreKey.KEY_SORT_TYPE] ?: prefs.get(key = SharedPreferencesKey.KEY_SORT_TYPE, defaultValue = ESortType.ORDER.key))
+    }
+
+    fun updateSortType(value: ESortType) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_SORT_TYPE] = value.key
         }
+    }
+
+    fun sortDirection(): Flow<ESortDirection> = dataStore.data.map { preferences ->
+        ESortDirection.valueByKey(preferences[DataStoreKey.KEY_SORT_DIRECTION] ?: prefs.get(key = SharedPreferencesKey.KEY_SORT_DIRECTION, defaultValue = ESortDirection.DESC.key))
+    }
+
+    fun updateSortDirection(value: ESortDirection) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_SORT_DIRECTION] = value.key
+        }
+    }
+
+    fun dialogColorPickTypeFlow(): Flow<ECreateColorType> = dataStore.data.map { preferences ->
+        ECreateColorType.getByKey(preferences[DataStoreKey.KEY_CREATE_COLOR_TYPE] ?: prefs.get(key = SharedPreferencesKey.KEY_CREATE_COLOR_TYPE, defaultValue = ECreateColorType.BOX.key))
+    }
+
+    fun dialogColorPickTypeValue() = runBlocking {
+        dialogColorPickTypeFlow().first()
+    }
+
+    fun updateDialogColorPickType(value: ECreateColorType) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_CREATE_COLOR_TYPE] = value.key
+        }
+    }
+
+    fun theme(): Flow<ETheme> = dataStore.data.map { preferences ->
+        ETheme.getByKey(preferences[DataStoreKey.KEY_THEME] ?: prefs.get(key = SharedPreferencesKey.KEY_THEME, defaultValue = ETheme.SYSTEM.key))
+    }
+
+    fun updateTheme(value: ETheme) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_THEME] = value.key
+        }
+    }
 
     fun firstOpen() = !prefs.has(SharedPreferencesKey.KEY_START_SCREEN)
 
-    var startScreen: EPanel
-        get() {
-            return EPanel.valueOfKey(prefs.get(key = SharedPreferencesKey.KEY_START_SCREEN, defaultValue = EPanel.PALLETS.id))
-        }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_START_SCREEN, value = value.id)
-        }
-
-    var dialogColorInputType: EColorType
-        get() {
-            return EColorType.getByKey(prefs.get(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, defaultValue = EColorType.HEX.key)) ?: EColorType.HEX
-        }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, value = value.key)
-        }
-
-    var paletteID: Long
-        get() {
-            return prefs.get(key = SharedPreferencesKey.KEY_PALLET_ID, defaultValue = ColorPallet.DEFAULT_ID)
-        }
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_PALLET_ID, value = value)
-        }
-
-    fun defaultPaletteName(context: Context, withIncrement: Boolean = true): String {
-        val number = prefs.get(key = SharedPreferencesKey.KEY_PALLET_NUMBER, defaultValue = 1)
-        if(withIncrement) {
-            prefs.put(key = SharedPreferencesKey.KEY_PALLET_NUMBER, value = (number + 1))
-        }
-        return context.getString(R.string.color_pick_pallet) + "_" + number
+    fun startScreen(): Flow<EPanel> = dataStore.data.map { preferences ->
+        EPanel.valueOfKey(preferences[DataStoreKey.KEY_START_SCREEN] ?: prefs.get(key = SharedPreferencesKey.KEY_START_SCREEN, defaultValue = EPanel.PALLETS.id))
     }
 
-    var lastColor: Int = prefs.get(key = SharedPreferencesKey.KEY_LAST_COLOR, defaultValue = Color.parseColor("#2EAAB4"))
-        set(value) {
-            prefs.put(key = SharedPreferencesKey.KEY_LAST_COLOR, value = value)
-            field = value
+    fun updateStartScreen(value: EPanel) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_START_SCREEN] = value.id
         }
+    }
+
+    fun colorInputTypeFlow(): Flow<EColorType> = dataStore.data.map { preferences ->
+        EColorType.getByKey(preferences[DataStoreKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE] ?: prefs.get(key = SharedPreferencesKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE, defaultValue = EColorType.HEX.key))
+    }
+
+    fun colorInputTypeValue() = runBlocking {
+        colorInputTypeFlow().first()
+    }
+
+    fun updateColorInputType(value: EColorType) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE] = value.key
+        }
+    }
+
+    fun defaultPaletteName(context: Context, withIncrement: Boolean = true): String = runBlocking {
+        val number = dataStore.data.map { preferences ->
+            preferences[DataStoreKey.KEY_PALLET_NUMBER] ?: prefs.get(key = SharedPreferencesKey.KEY_PALLET_NUMBER, defaultValue = 1)
+        }.first()
+
+        if(withIncrement) {
+            dataStore.edit { settings ->
+                settings[DataStoreKey.KEY_PALLET_NUMBER] = number + 1
+            }
+        }
+        context.getString(R.string.color_pick_pallet) + "_" + number
+    }
+
+    fun lastColor(): Flow<ua.com.compose.colors.data.Color> = dataStore.data.map { preferences ->
+        colorINTOf(preferences[DataStoreKey.KEY_LAST_COLOR] ?: prefs.get(key = SharedPreferencesKey.KEY_LAST_COLOR, defaultValue = Color.parseColor("#2EAAB4")))
+    }
+
+    fun updateLastColor(value: ua.com.compose.colors.data.Color) = runBlocking {
+        dataStore.edit { settings ->
+            settings[DataStoreKey.KEY_LAST_COLOR] = value.intColor
+        }
+    }
 }

@@ -1,13 +1,10 @@
 package ua.com.compose.screens.info
 
-import android.app.Activity
-import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,34 +13,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -55,13 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -76,21 +53,26 @@ import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
+import ua.com.compose.composable.LocalToastState
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.clipboardCopy
-import ua.com.compose.extension.showToast
-import ua.com.compose.extension.toHex
 import ua.com.compose.extension.vibrate
-import ua.com.compose.extension.visibleColor
+
+import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.textColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoScreen(name: String?, color: Int, onDismissRequest: () -> Unit) {
+fun InfoScreen(name: String?, color: Color, onDismissRequest: () -> Unit) {
     val viewModule: ColorInfoViewModel = koinViewModel()
     val context = LocalContext.current
     val items by viewModule.items.observeAsState(listOf())
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val toastState = LocalToastState.current
+    val stringCopy = stringResource(id = R.string.color_pick_color_copy)
 
     LaunchedEffect(key1 = viewModule) {
         analytics.send(SimpleEvent(key = Analytics.Event.OPEN_INFO))
@@ -118,13 +100,13 @@ fun InfoScreen(name: String?, color: Int, onDismissRequest: () -> Unit) {
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .height(60.dp)
-                                .background(Color(it.color), MaterialTheme.shapes.medium)
+                                .background(it.color.asComposeColor(), MaterialTheme.shapes.medium)
                                 .fillMaxWidth()
                                 .padding(top = 5.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
                         ) {
                             Text(
                                 text = it.title,
-                                color = it.color.visibleColor(),
+                                color = it.color.textColor().asComposeColor(),
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight(700)
                             )
@@ -146,7 +128,7 @@ fun InfoScreen(name: String?, color: Int, onDismissRequest: () -> Unit) {
                                     view.vibrate(type = EVibrate.BUTTON)
                                     context.clipboardCopy(it.value)
                                     analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_INFO))
-                                    context.showToast(R.string.color_pick_color_copy)
+                                    toastState.showMessage(stringCopy)
                                 },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -196,15 +178,11 @@ fun InfoScreen(name: String?, color: Int, onDismissRequest: () -> Unit) {
                                             .height(50.dp), onClick = {
                                             view.vibrate(type = EVibrate.BUTTON)
                                             viewModule.pressPaletteAdd(color)
-                                            Toast.makeText(
-                                                context,
-                                                colorCopyText,
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            toastState.showMessage(colorCopyText)
                                             visibleIcon = true
                                         },
                                         colors = IconButtonDefaults.filledTonalIconButtonColors(
-                                            containerColor = Color(color)
+                                            containerColor = color.asComposeColor()
                                         )
                                     ) {
                                         Box(
@@ -223,7 +201,7 @@ fun InfoScreen(name: String?, color: Int, onDismissRequest: () -> Unit) {
                                                         .fillMaxSize(0.50f)
                                                         .aspectRatio(1f, true),
                                                     painter = painterResource(id = R.drawable.ic_done),
-                                                    tint = color.visibleColor(),
+                                                    tint = color.textColor().asComposeColor(),
                                                     contentDescription = null
                                                 )
                                             }

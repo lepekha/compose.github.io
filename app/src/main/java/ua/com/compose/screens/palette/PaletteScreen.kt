@@ -1,6 +1,7 @@
 package ua.com.compose.screens.palette
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.view.View
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -35,7 +36,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,6 +47,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -54,7 +55,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draganddrop.DragAndDropTransfer
+import androidx.compose.ui.draganddrop.DragAndDropEvent
+import androidx.compose.ui.draganddrop.DragAndDropTarget
+import androidx.compose.ui.draganddrop.DragAndDropTransferData
+import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -62,9 +66,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -75,7 +77,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.core.graphics.ColorUtils
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.Settings
@@ -84,17 +85,23 @@ import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
+import ua.com.compose.composable.LocalToastState
 import ua.com.compose.composable.Menu
+import ua.com.compose.data.enums.EColorType
 import ua.com.compose.data.InfoColor
-import ua.com.compose.data.colorName
-import ua.com.compose.data.realColorName
 import ua.com.compose.dialogs.DialogColorPick
 import ua.com.compose.dialogs.DialogConfirmation
 import ua.com.compose.dialogs.DialogInputText
+import ua.com.compose.extension.color
+import ua.com.compose.extension.userColorName
 import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.clipboardCopy
-import ua.com.compose.extension.showToast
 import ua.com.compose.extension.vibrate
+
+import ua.com.compose.colors.colorHEXOf
+import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.textColor
 import ua.com.compose.screens.info.InfoScreen
 import ua.com.compose.screens.genPalette.PalettesScreen
 import ua.com.compose.screens.share.ShareScreen
@@ -108,6 +115,8 @@ data class TuneColorState(val id: Long, val name: String?, val color: Color)
 fun PaletteScreen(viewModule: PaletteViewModule) {
     val context = LocalContext.current
     val palettes by viewModule.palettes.observeAsState(listOf())
+    val colorType by Settings.colorType().collectAsState(initial = Settings.colorTypeValue())
+    val lastColor by Settings.lastColor().collectAsState(initial = colorHEXOf("#FFFFFF"))
     var stateRemovePalette: Item? by remember { mutableStateOf(null) }
     var stateCreatePalette by remember { mutableStateOf(false) }
     var stateTuneColor: TuneColorState? by remember { mutableStateOf(null) }
@@ -116,12 +125,15 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     var stateSharePalette: Pair<String, Long>? by remember { mutableStateOf(null) }
     var stateInfoColor: InfoColor? by remember { mutableStateOf(null) }
 
+    val toastState = LocalToastState.current
     val view = LocalView.current
+
+    val string_copy = stringResource(id = R.string.color_pick_color_copy)
 
     fun touchedColor(value: Int) {
         view.vibrate(EVibrate.BUTTON)
-        val color = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.color ?: -1
-        val name = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.name
+        val color = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.color() ?: return
+        val name = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.userColorName() ?: return
         stateInfoColor = InfoColor(name = name, color = color)
     }
 
@@ -176,8 +188,8 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
             cancelString = stringResource(id = R.string.color_pick_cancel),
             doneString = stringResource(id = R.string.color_pick_change),
             onDone = { name, color ->
-                Settings.lastColor = color.toArgb()
-                viewModule.changeColor(state.id, name, color.toArgb())
+                Settings.updateLastColor(color)
+                viewModule.changeColor(state.id, name, color)
             }) {
             stateTuneColor = null
         }
@@ -186,12 +198,12 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     stateCreateColor.takeIf { it }?.let {
         DialogColorPick(
             name = null,
-            color = Color(Settings.lastColor),
+            color = lastColor,
             cancelString = stringResource(id = R.string.color_pick_cancel),
             doneString = stringResource(id = R.string.color_pick_add),
             onDone = { name, color ->
-                Settings.lastColor = color.toArgb()
-                viewModule.addColor(name, color.toArgb())
+                Settings.updateLastColor(color)
+                viewModule.addColor(name, color)
             }) {
                 stateCreateColor = false
             }
@@ -243,13 +255,13 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                             val view = LocalView.current
 
                             val buttonContainer = when {
-                                hoveredItem -> MaterialTheme.colorScheme.primary
+                                hoveredItem -> MaterialTheme.colorScheme.onTertiaryContainer
                                 draged -> MaterialTheme.colorScheme.tertiaryContainer
                                 else -> MaterialTheme.colorScheme.secondary
                             }
 
                             val buttonContent = when {
-                                hoveredItem -> MaterialTheme.colorScheme.onPrimaryContainer
+                                hoveredItem -> MaterialTheme.colorScheme.tertiaryContainer
                                 draged -> MaterialTheme.colorScheme.onTertiaryContainer
                                 else -> MaterialTheme.colorScheme.onSecondary
                             }
@@ -257,6 +269,41 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                             val buttonIcon = when {
                                 draged -> painterResource(R.drawable.ic_add_fill)
                                 else -> painterResource(R.drawable.ic_palette_add)
+                            }
+
+                            val callback = remember {
+                                object : DragAndDropTarget {
+                                    override fun onEnded(event: DragAndDropEvent) {
+                                        draged = false
+                                    }
+
+                                    override fun onEntered(event: DragAndDropEvent) {
+                                        view.vibrate(EVibrate.BUTTON)
+                                        hoveredItem = true
+                                    }
+
+                                    override fun onExited(event: DragAndDropEvent) {
+                                        hoveredItem = false
+                                    }
+
+                                    override fun onStarted(event: DragAndDropEvent) {
+                                        draged = true
+                                    }
+
+                                    override fun onDrop(event: DragAndDropEvent): Boolean {
+                                        draged = false
+                                        hoveredItem = false
+                                        val colorId = event.toAndroidDragEvent().clipData.getItemAt(0).text
+                                                .toString()
+                                                .toLong()
+                                        viewModule.dropColorToPallet(
+                                            colorId = colorId,
+                                            palletId = null
+                                        )
+                                        stateCreatePalette = true
+                                        return true
+                                    }
+                                }
                             }
 
                             FilledTonalIconButton(
@@ -267,34 +314,12 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 modifier = Modifier
                                     .size(48.dp)
                                     .dragAndDropTarget(
-                                        onStarted = {
-                                            draged = true
-                                            true
+                                        shouldStartDragAndDrop = {
+                                            it
+                                                .mimeTypes()
+                                                .contains(ClipDescription.MIMETYPE_TEXT_PLAIN)
                                         },
-                                        onDropped = {
-                                            draged = false
-                                            hoveredItem = false
-                                            val colorId =
-                                                it.toAndroidDragEvent().clipData.getItemAt(0).text
-                                                    .toString()
-                                                    .toLong()
-                                            viewModule.dropColorToPallet(
-                                                colorId = colorId,
-                                                palletId = null
-                                            )
-                                            stateCreatePalette = true
-                                            true
-                                        },
-                                        onEntered = {
-                                            view.vibrate(EVibrate.BUTTON)
-                                            hoveredItem = true
-                                        },
-                                        onExited = {
-                                            hoveredItem = false
-                                        },
-                                        onEnded = {
-                                            draged = false
-                                        }
+                                        target = callback
                                     ),
                                 onClick = {
                                     view.vibrate(EVibrate.BUTTON)
@@ -319,7 +344,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                         ) {
 
                             val cardBorder = when {
-                                hovered -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                                hovered -> BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiaryContainer)
                                 draged -> BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiaryContainer)
                                 pallet.isCurrent -> BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
                                 else -> BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondary)
@@ -337,7 +362,47 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                 }
                             ) {
 
-                                val containerBackground = if(draged) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.secondaryContainer
+                                val containerBackground = when {
+                                    hovered -> MaterialTheme.colorScheme.onTertiaryContainer
+                                    draged -> MaterialTheme.colorScheme.tertiaryContainer
+                                    else -> MaterialTheme.colorScheme.secondaryContainer
+                                }
+
+                                val callback = remember {
+                                    object : DragAndDropTarget {
+                                        override fun onEnded(event: DragAndDropEvent) {
+                                            draged = false
+                                        }
+
+                                        override fun onEntered(event: DragAndDropEvent) {
+                                            view.vibrate(EVibrate.BUTTON)
+                                            hovered = true
+                                        }
+
+                                        override fun onExited(event: DragAndDropEvent) {
+                                            hovered = false
+                                        }
+
+                                        override fun onStarted(event: DragAndDropEvent) {
+                                            view.vibrate(EVibrate.BUTTON)
+                                            draged = true
+                                        }
+
+                                        override fun onDrop(event: DragAndDropEvent): Boolean {
+                                            draged = false
+                                            hovered = false
+                                            val colorId =
+                                                event.toAndroidDragEvent().clipData.getItemAt(0).text
+                                                    .toString()
+                                                    .toLong()
+                                            viewModule.dropColorToPallet(
+                                                colorId = colorId,
+                                                palletId = pallet.id
+                                            )
+                                            return true
+                                        }
+                                    }
+                                }
 
                                 Card(elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                                     border = cardBorder,
@@ -346,41 +411,19 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .dragAndDropTarget(
-                                            onStarted = {
-                                                view.vibrate(EVibrate.BUTTON)
-                                                draged = true
-                                                true
+                                            shouldStartDragAndDrop = {
+                                                it
+                                                    .mimeTypes()
+                                                    .contains(ClipDescription.MIMETYPE_TEXT_PLAIN)
                                             },
-                                            onDropped = { event ->
-                                                draged = false
-                                                hovered = false
-                                                val colorId =
-                                                    event.toAndroidDragEvent().clipData.getItemAt(0).text
-                                                        .toString()
-                                                        .toLong()
-                                                viewModule.dropColorToPallet(
-                                                    colorId = colorId,
-                                                    palletId = pallet.id
-                                                )
-                                                true
-                                            },
-                                            onEntered = {
-                                                view.vibrate(EVibrate.BUTTON)
-                                                hovered = true
-                                            },
-                                            onExited = {
-                                                hovered = false
-                                            },
-                                            onEnded = {
-                                                draged = false
-                                            }
+                                            target = callback
                                         )
                                 ) {
                                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
 
                                         val (icon, tint) = when {
                                             hovered -> {
-                                                painterResource(id = R.drawable.ic_add_fill) to ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                                                painterResource(id = R.drawable.ic_add_fill) to ColorFilter.tint(MaterialTheme.colorScheme.tertiaryContainer)
                                             }
                                             draged -> {
                                                 painterResource(id = R.drawable.ic_add_fill) to ColorFilter.tint(MaterialTheme.colorScheme.onTertiaryContainer)
@@ -401,7 +444,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                 val numColors = pallet.colors.size
                                                 val squareSize = this.size.width / numColors // Розмір кожного квадратика
                                                 for (i in 0 until numColors) {
-                                                    val color = Color(pallet.colors[i].color)
+                                                    val color = pallet.colors[i].color().asComposeColor()
                                                     val left = floor(i * squareSize)
                                                     val top = 0f
                                                     val right = ceil(left + squareSize)
@@ -486,7 +529,11 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                         contentAlignment = align,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(bottom = (55.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()).takeIf { item.colors.isEmpty() } ?: 0.dp)
+                            .padding(
+                                bottom = (55.dp + WindowInsets.navigationBars
+                                    .asPaddingValues()
+                                    .calculateBottomPadding()).takeIf { item.colors.isEmpty() }
+                                    ?: 0.dp)
                     ) {
                         if (item.colors.isEmpty()) {
                             IconButton(
@@ -515,7 +562,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                             .fillMaxWidth()
                                             .dragAndDropSource({
                                                 drawRoundRect(
-                                                    color = Color(colorItem.color),
+                                                    color = colorItem.color().asComposeColor(),
                                                     topLeft = Offset.Zero.copy(x = this.size.width / 4),
                                                     size = this.size.copy(width = this.size.width / 2),
                                                     cornerRadius = CornerRadius(
@@ -528,18 +575,17 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                     onTap = { _ ->
                                                         touchedColor(it)
                                                     },
-                                                    onLongPress = { _ ->
+                                                    onLongPress = { of ->
                                                         startTransfer(
-                                                            DragAndDropTransfer(
-                                                                clipData = ClipData.newPlainText(
+                                                            DragAndDropTransferData(
+                                                                ClipData.newPlainText(
                                                                     "COLOR_ID",
                                                                     touchedID(it)
                                                                 ),
-                                                                flags = View.DRAG_FLAG_GLOBAL,
+                                                                flags = View.DRAG_FLAG_GLOBAL
                                                             )
                                                         )
-                                                    }
-                                                )
+                                                    })
                                             }
                                             .animateItemPlacement(),
                                         shape = RoundedCornerShape(10.dp)) {
@@ -550,8 +596,8 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                     .padding(4.dp)
                                                     .fillMaxHeight()
                                                     .aspectRatio(1f, true)
-                                                    .clip(RoundedCornerShape(8.dp))
-                                                    .background(Color(colorItem.color)),
+                                                    .clip(RoundedCornerShape(6.dp))
+                                                    .background(colorItem.color().asComposeColor()),
                                                 contentAlignment = Alignment.TopEnd
                                             ) {
                                                 Image(
@@ -559,7 +605,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                     painter = painterResource(id = R.drawable.ic_info),
                                                     contentDescription = null,
                                                     colorFilter = ColorFilter.tint(
-                                                        color = if (ColorUtils.calculateLuminance(colorItem.color) < 0.5) Color.White else Color.Black
+                                                        color = colorItem.color().textColor().asComposeColor()
                                                     ),
                                                     modifier = Modifier
                                                         .size(18.dp)
@@ -575,7 +621,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                     verticalArrangement = Arrangement.Center
                                                 ) {
                                                     Text(
-                                                        text = Settings.colorType.colorToString(colorItem.color, withSeparator = ","),
+                                                        text = colorType.colorToString(colorItem.color()),
                                                         color = MaterialTheme.colorScheme.onSurface,
                                                         fontSize = 16.sp,
                                                         lineHeight = 17.sp,
@@ -584,7 +630,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         fontWeight = FontWeight(700)
                                                     )
                                                     Text(
-                                                        text = colorItem.realColorName(),
+                                                        text = colorItem.userColorName(),
                                                         fontSize = 14.sp,
                                                         lineHeight = 15.sp,
                                                         maxLines = 1,
@@ -624,7 +670,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         .padding(2.dp),
                                                     onClick = {
                                                         view.vibrate(EVibrate.BUTTON)
-                                                        stateTuneColor = TuneColorState(id = colorItem.id, name = colorItem.name, color = Color(colorItem.color))
+                                                        stateTuneColor = TuneColorState(id = colorItem.id, name = colorItem.name, color = colorItem.color())
                                                     }) {
                                                     Icon(painter = painterResource(R.drawable.ic_color_tune), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                 }
@@ -639,8 +685,8 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                     onClick = {
                                                         view.vibrate(EVibrate.BUTTON)
                                                         analytics.send(SimpleEvent(key = Analytics.Event.COLOR_COPY_PALETTE))
-                                                        context.clipboardCopy(Settings.colorType.colorToString(color = colorItem.color))
-                                                        context.showToast(R.string.color_pick_color_copy)
+                                                        context.clipboardCopy(colorType.colorToString(color = colorItem.color()))
+                                                        toastState.showMessage(string_copy)
                                                     }) {
                                                     Icon(painter = painterResource(R.drawable.ic_copy), modifier = Modifier.fillMaxSize(0.60f), contentDescription = null)
                                                 }

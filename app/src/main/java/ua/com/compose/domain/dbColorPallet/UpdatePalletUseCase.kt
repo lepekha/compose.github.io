@@ -1,9 +1,8 @@
 package ua.com.compose.domain.dbColorPallet
 
-import ua.com.compose.data.ColorDatabase
-import ua.com.compose.data.ColorPallet
-import ua.com.compose.data.ESortDirection
-import ua.com.compose.data.ESortType
+import ua.com.compose.data.db.ColorDatabase
+import ua.com.compose.data.enums.ESortDirection
+import ua.com.compose.data.enums.ESortType
 
 class UpdatePalletUseCase(private val database: ColorDatabase) {
 

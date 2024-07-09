@@ -1,8 +1,6 @@
 package ua.com.compose.domain.dbColorItem
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import ua.com.compose.data.ColorDatabase
+import ua.com.compose.data.db.ColorDatabase
 
 class RemoveAllColorsUseCase(private val database: ColorDatabase) {
 

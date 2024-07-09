@@ -15,8 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import ua.com.compose.Settings
-import ua.com.compose.data.ETheme
+import ua.com.compose.data.enums.ETheme
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,

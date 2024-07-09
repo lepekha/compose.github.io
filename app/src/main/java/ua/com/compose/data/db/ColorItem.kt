@@ -1,4 +1,4 @@
-package ua.com.compose.data
+package ua.com.compose.data.db
 
 import android.graphics.Color
 import androidx.room.ColumnInfo
@@ -12,7 +12,7 @@ class ColorItem {
     var id: Long = 0
 
     @ColumnInfo(name = "color")
-    var color: Int = Color.WHITE
+    var intColor: Int = Color.WHITE
 
     @ColumnInfo(name = "name")
     var name: String? = null

@@ -37,7 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ua.com.compose.R
 import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.vibrate
+
 
 
 @Composable

@@ -1,7 +1,7 @@
 package ua.com.compose.domain.dbColorItem
 
-import ua.com.compose.data.ColorDatabase
-import ua.com.compose.data.ColorItem
+import ua.com.compose.data.db.ColorDatabase
+import ua.com.compose.data.db.ColorItem
 import ua.com.compose.data.InfoColor
 import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 
@@ -20,7 +20,7 @@ class AddColorUseCase(
                     colors.map {
                         ColorItem().apply {
                             this.name = it.name
-                            this.color = it.color
+                            this.intColor = it.color.intColor
                             this.palletId = currentPaletteId
                         }
                     }

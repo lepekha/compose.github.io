@@ -31,8 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -44,11 +42,13 @@ import androidx.compose.ui.unit.sp
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.R
 import ua.com.compose.composable.BottomSheet
+import ua.com.compose.composable.LocalToastState
 import ua.com.compose.dialogs.DialogBilling
 import ua.com.compose.extension.EVibrate
-import ua.com.compose.extension.showToast
+import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.vibrate
-import ua.com.compose.extension.visibleColor
+
+import ua.com.compose.colors.data.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,6 +59,10 @@ fun DomainColors(colors: List<Color>, onDismissRequest: () -> Unit) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val isPremium by viewModule.isPremium.observeAsState(false)
 
+    val toastState = LocalToastState.current
+    val string_missing = stringResource(id = R.string.color_pick_color_missing)
+    val string_add_to_pallete = stringResource(id = R.string.color_pick_color_add_to_pallete)
+
     var stateShowBilling by remember { mutableStateOf(false) }
     if(stateShowBilling) {
         DialogBilling(text = stringResource(id = R.string.color_pick_half_access)) {
@@ -68,7 +72,7 @@ fun DomainColors(colors: List<Color>, onDismissRequest: () -> Unit) {
 
     LaunchedEffect(key1 = viewModule) {
         if(colors.isEmpty()) {
-            context.showToast(R.string.color_pick_color_missing)
+            toastState.showMessage(string_missing)
             onDismissRequest.invoke()
         } else {
             viewModule.init(colors)
@@ -118,7 +122,7 @@ fun DomainColors(colors: List<Color>, onDismissRequest: () -> Unit) {
 
                     FilledTonalIconButton(
                         shape = MaterialTheme.shapes.extraSmall,
-                        colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = item.copy(alpha = alpha)),
+                        colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = item.asComposeColor().copy(alpha = alpha)),
                         modifier = Modifier
                             .weight(1f)
                             .padding(5.dp)
@@ -126,9 +130,10 @@ fun DomainColors(colors: List<Color>, onDismissRequest: () -> Unit) {
                         onClick = {
                             view.vibrate(type = EVibrate.BUTTON)
                             if(isPremium or (index <= size / 2)) {
-                                viewModule.pressPaletteAdd(item.toArgb())
+                                viewModule.pressPaletteAdd(item)
                                 visibleIcon = true
-                                context.showToast(R.string.color_pick_color_add_to_pallete)
+                                toastState.showMessage(string_add_to_pallete)
+
                             } else {
                                 stateShowBilling = true
                             }
@@ -156,7 +161,7 @@ fun DomainColors(colors: List<Color>, onDismissRequest: () -> Unit) {
                                     .fillMaxSize(0.50f)
                                     .aspectRatio(1f, true),
                                 painter = painterResource(id = R.drawable.ic_done),
-                                tint = item.toArgb().visibleColor(),
+                                tint = item.asComposeColor(),
                                 contentDescription = null
                             )
                         }

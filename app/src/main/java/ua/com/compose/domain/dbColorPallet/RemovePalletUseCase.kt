@@ -1,9 +1,6 @@
 package ua.com.compose.domain.dbColorPallet
 
-import androidx.room.Transaction
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import ua.com.compose.data.ColorDatabase
+import ua.com.compose.data.db.ColorDatabase
 
 class RemovePalletUseCase(private val database: ColorDatabase) {
 

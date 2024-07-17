@@ -68,7 +68,7 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
     val viewModel: PalettesViewModel = koinViewModel()
     val context = LocalContext.current
     val isPremium by viewModel.isPremium.observeAsState(false)
-    val lastColor = runBlocking { Settings.lastColor().first() }
+    val lastColor = Settings.lastColor.value
     val palettes by viewModel.palettes.observeAsState(initial = emptyList())
     val view = LocalView.current
     var stateCreatePalette by remember { mutableStateOf<Palettes.Item?>(null) }
@@ -152,7 +152,7 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
                         .padding(start = 12.dp, end = 12.dp),
                     hsv = hsv
                 ) { color ->
-                    hsv = color.asHsv()
+                    hsv = color.copy()
                     throttleLatest.invoke(color)
                 }
             }

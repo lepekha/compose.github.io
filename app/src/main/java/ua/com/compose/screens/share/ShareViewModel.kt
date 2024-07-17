@@ -9,7 +9,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,6 +37,11 @@ import ua.com.compose.extension.shareFile
 import ua.com.compose.extension.writeBitmap
 import ua.com.compose.colors.average
 import ua.com.compose.colors.darken
+import ua.com.compose.data.db.ColorDatabase
+import ua.com.compose.data.db.ColorPallet
+import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
+import ua.com.compose.domain.dbColorPallet.UpdatePalletUseCase
+import ua.com.compose.screens.palette.Item
 
 data class ImageByType(val type: EImageExportScheme, val image: ByteArray) {
     override fun equals(other: Any?): Boolean {
@@ -53,8 +64,10 @@ data class ImageByType(val type: EImageExportScheme, val image: ByteArray) {
 }
 
 class ShareViewModel(
+    private val database: ColorDatabase,
     private val getAllColorsUseCase: GetAllColorsUseCase,
-    private val getPalletUseCase: GetPalletUseCase
+    private val updatePalletUseCase: UpdatePalletUseCase,
+    private val removePalletUseCase: RemovePalletUseCase
 ): ViewModel() {
 
     data class SnackbarUIState(var state: SnackbarState = SnackbarState.NONE)
@@ -73,14 +86,28 @@ class ShareViewModel(
         preferences[DataStoreKey.KEY_PREMIUM] ?: false
     }.asLiveData()
 
+    val paletteDAO = database.palletDao!!.getAllFlow()
+    val paletteID = MutableStateFlow(-1L)
+    val palette: LiveData<ColorPallet?> = combine(paletteDAO, paletteID) { palettes, id  ->
+        palettes.firstOrNull { it.id == id }
+    }.asLiveData()
+
+    fun resetSnackbarState() {
+        snackbarUIState.value = SnackbarUIState(SnackbarState.NONE)
+    }
+
     fun create(paletteID: Long) = viewModelScope.launch(Dispatchers.IO) {
+        this@ShareViewModel.paletteID.emit(paletteID)
+        images.clear()
         val colorItems = getAllColorsUseCase.execute(paletteID)
-        createImages(colorItems)
+        if(colorItems.isNotEmpty()) {
+            createImages(colorItems)
+        }
     }
 
     private fun createImages(colorItems: List<ColorItem>) = viewModelScope.launch {
         images.clear()
-        val colorType = Settings.colorTypeValue()
+        val colorType = Settings.colorType.value
         val background = colorItems.map { it.color() }.average().darken(.5f)
         EImageExportScheme.entries.forEachIndexed { index, scheme ->
             images.add(ImageByType(
@@ -91,8 +118,8 @@ class ShareViewModel(
     }
 
     fun createFile(context: Context, paletteID: Long, exportType: EExportType, scheme: EFileExportScheme) = viewModelScope.launch(Dispatchers.IO) {
-        val colorType = Settings.colorTypeValue()
-        val palette = getPalletUseCase.execute(id = paletteID) ?: return@launch
+        val colorType = Settings.colorType.value
+        val palette = palette.value ?: return@launch
         val colors = getAllColorsUseCase.execute(paletteID)
         analytics.send(Event(key = Analytics.Event.OPEN_PALETTE_EXPORT_FILE, params = arrayOf("type" to scheme.title)))
         scheme.create(context = context, palette = palette.name, colors = colors, colorType = colorType)?.let {
@@ -114,7 +141,7 @@ class ShareViewModel(
     }
 
     fun createImage(context: Context, paletteID: Long, exportType: EExportType, imageType: EImageExportScheme, image: Bitmap) = viewModelScope.launch(Dispatchers.IO) {
-        val palette = getPalletUseCase.execute(id = paletteID) ?: return@launch
+        val palette = palette.value ?: return@launch
         analytics.send(Event(key = Analytics.Event.OPEN_PALETTE_EXPORT_IMAGE, params = arrayOf("type" to imageType.name)))
             context.writeBitmap("${palette.name}.png", image).let { file ->
                 if(exportType == EExportType.SAVE) {
@@ -127,5 +154,15 @@ class ShareViewModel(
                 }
             }
         stateLoadItems.remove(imageType)
+    }
+
+    fun pressRemovePallet() = viewModelScope.launch(Dispatchers.IO) {
+        val id = palette.value?.id ?: return@launch
+        removePalletUseCase.execute(id = id)
+    }
+
+    fun renamePalette(name: String) = viewModelScope.launch(Dispatchers.IO) {
+        val id = palette.value?.id ?: return@launch
+        updatePalletUseCase.execute(paletteID = id, name = name)
     }
 }

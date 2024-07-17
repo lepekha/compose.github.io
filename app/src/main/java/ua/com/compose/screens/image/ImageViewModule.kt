@@ -29,7 +29,7 @@ class ImageViewModule(private val addColorUseCase: AddColorUseCase): ViewModel()
 
     fun changeColor(color: Color) = viewModelScope.launch(Dispatchers.IO) {
         val name = color.nearestColorName()
-        val value = Settings.colorTypeValue().colorToString(color = color)
+        val value = Settings.colorType.value.colorToString(color = color)
         val colorState = ColorState(color = color, name = name, typeValue = value)
         _colorState.postValue(colorState)
     }

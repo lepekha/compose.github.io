@@ -24,7 +24,7 @@ class SettingsViewModel: ViewModel() {
     }.asLiveData()
 
     fun changeColorType(value: EColorType) {
-        Settings.updateColorType(value)
+        Settings.colorType.update(value)
         analytics.send(Event(key = Analytics.Event.APP_SETTINGS, params = arrayOf("color_type" to value.title())))
     }
 }

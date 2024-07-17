@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Tonlar</string>
     <string name="color_pick_tetradic_color">Dört renkli</string>
     <string name="color_pick_remove_pallet">Renk paletini kaldırmak istiyor musunuz?</string>
-    <string name="color_pick_file">Dosya</string>
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Metin</string>
     <string name="color_pick_box">Palet</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Palet üreteci</string>
     <string name="color_pick_add_colors">Mevcut paletine renk eklemek ister misiniz?</string>
 
+    <string name="color_pick_luminance">Parlaklık</string>
+    <string name="color_pick_wavelength">Dalga boyu</string>
+    <string name="color_pick_out_of_range">Aralık dışında</string>
+    <string name="color_pick_file">Dosyalar</string>
+    <string name="color_pick_no_colors">Renk yok</string>
+
     <string name="color_pick_change">Güncelle</string>
     <string name="color_pick_sort_name">Ad</string>
 
@@ -51,5 +56,8 @@
     <string name="color_pick_update_change">Yeni sürüm:</string>
     <string name="color_pick_premium_version">Premium sürüm</string>
     <string name="color_pick_half_access">+ baskın renkler;\n+ palet oluşturucu;\n+ paletleri şu formatlarda dışa aktarma: css, svg, aco, ase, act;\n+ palet dışa aktarma için ek resimler;</string>
-    <string name="color_pick_update_version_text">- Renk sıralaması uygulama ayarlarına taşındı;\n- Yeni sıralama türü eklendi;\n- Palet içindeki rengin adını değiştirme imkanı eklendi;\n- Renk paletini indirme imkanı eklendi;</string>
+    <string name="color_pick_images">Görüntüler</string>
+    <string name="color_pick_frequency">Frekans</string>
+    <string name="color_pick_update_version_text">- palet için yeni bir menü düğmesi eklendi;\n- paletin adını değiştirme yeteneği eklendi;\n- renk için yaklaşık dalga boyu ve frekans parametresi eklendi;</string>
+
 </resources>

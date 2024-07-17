@@ -75,8 +75,8 @@ fun DialogColorPick(
     onDismissRequest: () -> Unit
 ) {
 
-    val colorType by Settings.colorInputTypeFlow().collectAsState(initial = Settings.colorInputTypeValue())
-    val createColorType by Settings.dialogColorPickTypeFlow().collectAsState(initial = Settings.dialogColorPickTypeValue())
+    val colorType by Settings.dialogColorPick.inputColorType.flow.collectAsState(initial = Settings.dialogColorPick.inputColorType.value)
+    val createColorType by Settings.dialogColorPick.createType.flow.collectAsState(initial = Settings.dialogColorPick.createType.value)
 
     var startColor by remember {
         mutableStateOf(color)
@@ -208,7 +208,7 @@ fun DialogColorPick(
                         ),
                         onClick = {
                             view.vibrate(EVibrate.BUTTON)
-                            Settings.updateDialogColorPickType(it)
+                            Settings.dialogColorPick.createType.update(it)
                         },
                         label = {
                             Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = it.titleResId()).uppercase(), fontSize = 14.sp, fontWeight = FontWeight(600), textAlign = TextAlign.Center)
@@ -343,7 +343,7 @@ fun DialogColorPick(
                                 ),
                                 onClick = {
                                     view.vibrate(EVibrate.BUTTON)
-                                    Settings.updateColorInputType(it)
+                                    Settings.dialogColorPick.inputColorType.update(it)
                                     stateField = TextFieldValue(
                                         it.colorToString(hsv)
                                     )

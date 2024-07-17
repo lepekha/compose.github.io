@@ -44,7 +44,7 @@ val appModule = module {
     viewModel { SettingsViewModel() }
     viewModel { PalettesViewModel(getCurrentPalletUseCase = get(), addColorUseCase = get()) }
     viewModel { ColorInfoViewModel(addColorUseCase = get()) }
-    viewModel { ShareViewModel(getAllColorsUseCase = get(), getPalletUseCase = get()) }
+    viewModel { ShareViewModel(database = get(), getAllColorsUseCase = get(), updatePalletUseCase = get(), removePalletUseCase = get()) }
     viewModel {
         PaletteViewModule(
             database = get(),

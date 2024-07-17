@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Tony</string>
     <string name="color_pick_tetradic_color">Kolory tetradyczne</string>
     <string name="color_pick_remove_pallet">Czy chcesz usunąć paletę kolorów?</string>
-    <string name="color_pick_file">Plik</string>
     <string name="color_pick_theme">Motyw</string>
     <string name="color_pick_text">Tekst</string>
     <string name="color_pick_box">Paleta</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Generator palet</string>
     <string name="color_pick_add_colors">Dodać kolory do bieżącej palety?</string>
 
+    <string name="color_pick_luminance">Jaskrawość</string>
+    <string name="color_pick_wavelength">Długość fali</string>
+    <string name="color_pick_out_of_range">Poza zakresem</string>
+    <string name="color_pick_file">Pliki</string>
+    <string name="color_pick_no_colors">Brak kolorów</string>
+
     <string name="color_pick_change">Aktualizuj</string>
     <string name="color_pick_sort_name">Nazwa</string>
     <string name="color_pick_palette_saved">Paleta zapisana w "Pobrane"</string>
@@ -50,6 +55,8 @@
     <string name="color_pick_update_change">Nowa wersja:</string>
     <string name="color_pick_premium_version">Wersja premium</string>
     <string name="color_pick_half_access">+ dominujące kolory;\n+ generator palet;\n+ eksport palet w formatach: css, svg, aco, ase, act;\n+ dodatkowe obrazy do eksportu palet;</string>
-    <string name="color_pick_update_version_text">- Sortowanie kolorów przeniesione do ustawień aplikacji;\n- Dodano nowy typ sortowania;\n- Dodano możliwość zmiany nazwy koloru w palecie;\n- Dodano możliwość pobierania palety kolorów;</string>
+    <string name="color_pick_images">Obrazy</string>
+    <string name="color_pick_frequency">Częstotliwość</string>
+    <string name="color_pick_update_version_text">- dodano nowy przycisk menu dla palety;\n- dodano możliwość zmiany nazwy palety;\n- dodano parametr przybliżonej długości fali i częstotliwości dla koloru;</string>
 
 </resources>

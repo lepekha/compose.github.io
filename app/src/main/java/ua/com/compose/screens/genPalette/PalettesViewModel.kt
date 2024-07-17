@@ -21,7 +21,7 @@ class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUse
 
     var currentPalette: ColorPallet? = null
 
-    val palettes: LiveData<List<Palettes.Item>> = Settings.lastColor().map {
+    val palettes: LiveData<List<Palettes.Item>> = Settings.lastColor.flow.map {
         Palettes.palettesForColor(it)
     }.asLiveData()
 
@@ -36,7 +36,7 @@ class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUse
     }.asLiveData()
 
     fun generatePalettesForColor(color: Color) = viewModelScope.launch(Dispatchers.IO) {
-        Settings.updateLastColor(color)
+        Settings.lastColor.update(color)
     }
 
     fun addColorsToCurrentPalette(colors: List<Color>) = viewModelScope.launch(Dispatchers.IO) {

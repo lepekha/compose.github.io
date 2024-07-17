@@ -86,8 +86,7 @@ fun Context.findActivity(): Activity {
 }
 
 fun Activity.createReview() {
-    val openAppCount = runBlocking { Settings.openAppCount() }
-    if((openAppCount % 7) == 0) {
+    if((Settings.openAppCount.value % 7) == 0) {
         val manager = ReviewManagerFactory.create(this)
         val request = manager.requestReviewFlow()
         request.addOnCompleteListener { task ->
@@ -96,12 +95,12 @@ fun Activity.createReview() {
                 val flow = manager.launchReviewFlow(this, task.result)
                 flow.addOnCompleteListener { _ ->
                     analytics.send(SimpleEvent(key = Analytics.Event.DONE_IN_APP_REVIEW))
-                    Settings.updateOpenAppCount(1)
+                    Settings.openAppCount.update(1)
                 }
             }
         }
     } else {
-        Settings.updateOpenAppCount(openAppCount + 1)
+        Settings.openAppCount.update(Settings.openAppCount.value + 1)
     }
 }
 
@@ -173,7 +172,7 @@ enum class EVibrate(internal val constant: Int){
 }
 
 fun View.vibrate(type: EVibrate){
-    if(runBlocking { Settings.vibrationValue() }) {
+    if(Settings.vibration.value) {
         this.performHapticFeedback(type.constant)
     }
 }

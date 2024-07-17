@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Tonos</string>
     <string name="color_pick_tetradic_color">Colores tetradic</string>
     <string name="color_pick_remove_pallet">¿Quieres quitar la paleta de colores?</string>
-    <string name="color_pick_file">Archivo</string>
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Texto</string>
     <string name="color_pick_box">Paleta</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Generador de paletas</string>
     <string name="color_pick_add_colors">¿Agregar colores a la paleta actual?</string>
 
+    <string name="color_pick_luminance">Luminancia</string>
+    <string name="color_pick_wavelength">Longitud de onda</string>
+    <string name="color_pick_out_of_range">Fuera de rango</string>
+    <string name="color_pick_file">Archivos</string>
+    <string name="color_pick_no_colors">Sin colores</string>
+
     <string name="color_pick_change">Actualizar</string>
     <string name="color_pick_sort_name">Nombre</string>
     <string name="color_pick_palette_saved">Paleta guardada en "Descargas"</string>
@@ -50,5 +55,7 @@
     <string name="color_pick_update_change">Nueva versión:</string>
     <string name="color_pick_premium_version">Versión premium</string>
     <string name="color_pick_half_access">+ colores dominantes;\n+ generador de paletas;\n+ exportación de paletas en formatos: css, svg, aco, ase, act;\n+ imágenes adicionales para exportación de paletas;</string>
-    <string name="color_pick_update_version_text">- La ordenación de colores se ha trasladado a la configuración de la aplicación;\n- Nuevo tipo de ordenación añadido;\n- Posibilidad de cambiar el nombre del color en la paleta;\n- Posibilidad de descargar la paleta de colores;</string>
+    <string name="color_pick_images">Imágenes</string>
+    <string name="color_pick_frequency">Frecuencia</string>
+    <string name="color_pick_update_version_text">- añadido un nuevo botón de menú para la paleta;\n- añadido la capacidad de cambiar el nombre de la paleta;\n- añadido el parámetro de longitud de onda y frecuencia aproximadas para el color;</string>
 </resources>

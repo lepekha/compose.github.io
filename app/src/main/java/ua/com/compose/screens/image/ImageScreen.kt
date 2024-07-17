@@ -1,18 +1,10 @@
 package ua.com.compose.screens.image
 
-import android.app.Activity
 import android.graphics.Bitmap
-import android.graphics.Rect
 import android.net.Uri
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.view.PixelCopy
-import android.view.View
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -49,6 +41,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInRoot
@@ -61,7 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
-import androidx.core.view.drawToBitmap
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
@@ -91,25 +83,10 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun View.bitmapFormView(activity: Activity, result: (bmp: Bitmap) -> Unit) {
-    val bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
-    val locations = IntArray(2)
-    this.getLocationInWindow(locations)
-    val rect =
-        Rect(locations[0], locations[1], locations[0] + this.width, locations[1] + this.height)
-    PixelCopy.request(activity.getWindow(), rect, bitmap, { copyResult ->
-        if (copyResult == PixelCopy.SUCCESS) {
-            result(bitmap)
-        }
-    }, Handler(Looper.getMainLooper()))
-}
-
 @Composable
 fun ImageScreen(viewModule: ImageViewModule,
                 uri: String? = null
 ) {
-    val activity = LocalContext.current.findActivity()
     val view = LocalView.current
     val toastState = LocalToastState.current
     uri?.let { Settings.lastUri = Uri.decode(it).toUri() }
@@ -127,27 +104,20 @@ fun ImageScreen(viewModule: ImageViewModule,
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
 
-    fun generatePixel(view: View) {
+    fun generatePixel(x: Float, y: Float) {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                view.bitmapFormView(activity) {
-                    viewModule.changeColor(colorINTOf(it.getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt())))
-                }
-            } else {
-                view.drawToBitmap().getPixel((positionInRoot.x).roundToInt(), (positionInRoot.y).roundToInt()).let {
-                    viewModule.changeColor(colorINTOf(it))
-                }
-            }
+            val color = image?.getPixel(x.roundToInt(), y.roundToInt()) ?: 0
+            viewModule.changeColor(colorINTOf(color))
         } catch (_: Exception) { }
     }
 
-    val throttleLatest: ((View) -> Unit) = remember {
+    val throttleLatest: ((offset: Offset) -> Unit) = remember {
         throttleLatest(
             withFirst = true,
             intervalMs = 100,
             coroutineScope = scope
         ) {
-            generatePixel(it)
+            generatePixel(it.x, it.y)
         }
     }
 
@@ -171,6 +141,11 @@ fun ImageScreen(viewModule: ImageViewModule,
         if (offset.y.roundToInt() <= -centerY) {
             offset = Offset(offset.x, -centerY.toFloat())
         }
+
+        val cX = (centerX - offset.x) / scale
+        val cY = (centerY - offset.y) / scale
+        val ofs = Offset(cX, cY)
+        throttleLatest.invoke(ofs)
     }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -237,9 +212,9 @@ fun ImageScreen(viewModule: ImageViewModule,
             ) {
                 if(photoUri != null) {
 
-                    if(imageLoadState is AsyncImagePainter.State.Success) {
-                        throttleLatest.invoke(view)
-                    }
+//                    if(imageLoadState is AsyncImagePainter.State.Success) {
+//
+//                    }
                     val request = ImageRequest.Builder(LocalContext.current).data(photoUri).allowHardware(false).build()
                     AsyncImage(
                         model = request,
@@ -261,6 +236,9 @@ fun ImageScreen(viewModule: ImageViewModule,
                             if(it is AsyncImagePainter.State.Success) {
                                 size = it.painter.intrinsicSize
                                 image = it.result.drawable.toBitmap()
+
+                                val ofs = imageLoadState.painter?.intrinsicSize?.center ?: Offset.Zero
+                                throttleLatest.invoke(ofs)
                             }
                         }
                     )

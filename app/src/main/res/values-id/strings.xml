@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Tona</string>
     <string name="color_pick_tetradic_color">Warna tetradik</string>
     <string name="color_pick_remove_pallet">Apakah Anda ingin menghapus palet warna?</string>
-    <string name="color_pick_file">Berkas</string>
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Teks</string>
     <string name="color_pick_box">Palet</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Pembangkit palet</string>
     <string name="color_pick_add_colors">Tambahkan warna ke palet saat ini?</string>
 
+    <string name="color_pick_luminance">Luminansi</string>
+    <string name="color_pick_wavelength">Panjang gelombang</string>
+    <string name="color_pick_out_of_range">Di luar jangkauan</string>
+    <string name="color_pick_file">Berkas</string>
+    <string name="color_pick_no_colors">Tidak ada warna</string>
+
     <string name="color_pick_change">Perbarui</string>
     <string name="color_pick_sort_name">Nama</string>
     <string name="color_pick_palette_saved">Palet disimpan di "Unduhan"</string>
@@ -50,5 +55,8 @@
     <string name="color_pick_update_change">Versi baru:</string>
     <string name="color_pick_premium_version">Versi premium</string>
     <string name="color_pick_half_access">+ warna dominan;\n+ pembuat palet;\n+ ekspor palet dalam format: css, svg, aco, ase, act;\n+ gambar tambahan untuk ekspor palet;</string>
-    <string name="color_pick_update_version_text">- Penyortiran warna dipindahkan ke pengaturan aplikasi;\n- Tipe penyortiran baru ditambahkan;\n- Kemampuan untuk mengubah nama warna dalam palet;\n- Kemampuan untuk mengunduh palet warna;</string>
+    <string name="color_pick_images">Gambar</string>
+    <string name="color_pick_frequency">Frekuensi</string>
+    <string name="color_pick_update_version_text">- ditambahkan tombol menu baru untuk palet;\n- ditambahkan kemampuan untuk mengubah nama palet;\n- ditambahkan parameter panjang gelombang dan frekuensi perkiraan untuk warna;</string>
+
 </resources>

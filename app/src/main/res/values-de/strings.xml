@@ -21,7 +21,6 @@
     <string name="color_pick_tones">Töne</string>
     <string name="color_pick_tetradic_color">Vierfarben</string>
     <string name="color_pick_remove_pallet">Möchten Sie die Farbpalette entfernen?</string>
-    <string name="color_pick_file">Datei</string>
     <string name="color_pick_theme">Thema</string>
     <string name="color_pick_text">Text</string>
     <string name="color_pick_box">Palette</string>
@@ -44,6 +43,12 @@
     <string name="color_pick_generate_palettes">Palettengenerator</string>
     <string name="color_pick_add_colors">Farben zur aktuellen Palette hinzufügen?</string>
 
+    <string name="color_pick_luminance">Leuchtdichte</string>
+    <string name="color_pick_wavelength">Wellenlänge</string>
+    <string name="color_pick_out_of_range">Außerhalb des Bereichs</string>
+    <string name="color_pick_file">Dateien</string>
+    <string name="color_pick_no_colors">Keine Farben</string>
+
     <string name="color_pick_change">Aktualisieren</string>
     <string name="color_pick_sort_name">Name</string>
     <string name="color_pick_palette_saved">Palette in "Downloads" gespeichert</string>
@@ -51,5 +56,7 @@
     <string name="color_pick_update_change">Neue Version:</string>
     <string name="color_pick_premium_version">Premium-Version</string>
     <string name="color_pick_half_access">+ dominante Farben;\n+ Palettengenerator;\n+ Export von Paletten in den Formaten: css, svg, aco, ase, act;\n+ zusätzliche Bilder für den Export von Paletten;</string>
-    <string name="color_pick_update_version_text">- Farbsortierung wurde in die App-Einstellungen verschoben;\n- Neuer Sortierungstyp hinzugefügt;\n- Möglichkeit, den Namen der Farbe in der Palette zu ändern;\n- Möglichkeit, die Farbpalette herunterzuladen;</string>
+    <string name="color_pick_images">Images</string>
+    <string name="color_pick_frequency">Fréquence</string>
+    <string name="color_pick_update_version_text">- neuer Menüknopf für die Palette hinzugefügt;\n- die Möglichkeit zum Ändern des Palettennamens hinzugefügt;\n- der Parameter für ungefähre Wellenlänge und Frequenz für Farbe hinzugefügt;</string>
 </resources>

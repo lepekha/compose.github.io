@@ -88,7 +88,7 @@ fun BottomNotification(
             Column(modifier = Modifier.fillMaxWidth()
                 .wrapContentHeight()
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainer,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     shape = MaterialTheme.shapes.medium
                 ),
                 horizontalAlignment = Alignment.CenterHorizontally

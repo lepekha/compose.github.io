@@ -234,7 +234,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="$background"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
                     val hex = it.color().asHex(withAlpha = false)
@@ -277,7 +277,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill=${background}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
                     val hex = it.color().asHex(withAlpha = false)

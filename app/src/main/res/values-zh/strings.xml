@@ -20,7 +20,6 @@
     <string name="color_pick_tones">色调</string>
     <string name="color_pick_tetradic_color">四色组合</string>
     <string name="color_pick_remove_pallet">您想要删除颜色板吗？</string>
-    <string name="color_pick_file">文件</string>
     <string name="color_pick_theme">主题</string>
     <string name="color_pick_text">文本</string>
     <string name="color_pick_box">调色盘</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">调色板生成器</string>
     <string name="color_pick_add_colors">将颜色添加到当前调色板？</string>
 
+    <string name="color_pick_luminance">亮度</string>
+    <string name="color_pick_wavelength">波长</string>
+    <string name="color_pick_out_of_range">超出范围</string>
+    <string name="color_pick_file">文件</string>
+    <string name="color_pick_no_colors">没有颜色</string>
+
     <string name="color_pick_change">更新</string>
     <string name="color_pick_sort_name">名称</string>
     <string name="color_pick_palette_saved">调色板已保存在“下载”中</string>
@@ -50,6 +55,8 @@
     <string name="color_pick_update_change">新版本:</string>
     <string name="color_pick_premium_version">高级版</string>
     <string name="color_pick_half_access">+ 主色调;\n+ 调色板生成器;\n+ 调色板导出格式：css、svg、aco、ase、act;\n+ 调色板导出的附加图片;</string>
-    <string name="color_pick_update_version_text">- 调色功能移到应用设置中;\n- 新增排序方式;\n- 可更改调色板中颜色名称;\n- 可下载调色板;</string>
+    <string name="color_pick_images">图片</string>
+    <string name="color_pick_frequency">频率</string>
+    <string name="color_pick_update_version_text">- 为调色板添加了一个新的菜单按钮;\n- 添加了更改调色板名称的功能;\n- 添加了颜色的近似波长和频率参数;</string>
 
 </resources>

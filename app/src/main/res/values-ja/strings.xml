@@ -20,7 +20,6 @@
     <string name="color_pick_tones">トーン</string>
     <string name="color_pick_tetradic_color">四つの色</string>
     <string name="color_pick_remove_pallet">パレットを削除しますか？</string>
-    <string name="color_pick_file">ファイル</string>
     <string name="color_pick_theme">テーマ</string>
     <string name="color_pick_text">テキスト</string>
     <string name="color_pick_box">パレット</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">パレットジェネレーター</string>
     <string name="color_pick_add_colors">現在のパレットに色を追加しますか？</string>
 
+    <string name="color_pick_luminance">輝度</string>
+    <string name="color_pick_wavelength">波長</string>
+    <string name="color_pick_out_of_range">範囲外</string>
+    <string name="color_pick_file">ファイル</string>
+    <string name="color_pick_no_colors">色がありません</string>
+
     <string name="color_pick_change">更新</string>
     <string name="color_pick_sort_name">名前</string>
     <string name="color_pick_palette_saved">パレットを「ダウンロード」に保存しました</string>
@@ -50,5 +55,8 @@
     <string name="color_pick_update_change">新しいバージョン:</string>
     <string name="color_pick_premium_version">プレミアム版</string>
     <string name="color_pick_half_access">+ 支配的な色;\n+ パレットジェネレーター;\n+ パレットのエクスポート形式：css、svg、aco、ase、act;\n+ パレットのエクスポート用の追加画像;</string>
-    <string name="color_pick_update_version_text">- 色の並べ替えをアプリの設定に移動しました;\n- 新しい並べ替えタイプが追加されました;\n- パレット内の色の名前を変更する機能が追加されました;\n- 色のパレットをダウンロードする機能が追加されました;</string>
+    <string name="color_pick_images">画像</string>
+    <string name="color_pick_frequency">周波数</string>
+    <string name="color_pick_update_version_text">- パレットの新しいメニューボタンを追加しました;\n- パレットの名前を変更する機能を追加しました;\n- 色の近似波長と周波数のパラメータを追加しました;</string>
+
 </resources>

@@ -50,7 +50,6 @@ import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
-import ua.com.compose.data.enums.EColorType
 import ua.com.compose.data.enums.ELanguage
 import ua.com.compose.data.enums.ESortDirection
 import ua.com.compose.data.enums.ESortType
@@ -67,8 +66,8 @@ import ua.com.compose.extension.vibrate
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
     val colorTypes by viewModel.colorTypes
-    val colorType by Settings.colorType().collectAsState(initial = Settings.colorTypeValue())
-    val theme by Settings.theme().collectAsState(initial = ETheme.SYSTEM)
+    val colorType by Settings.colorType.flow.collectAsState(initial = Settings.colorType.value)
+    val theme by Settings.theme.flow.collectAsState(initial = Settings.theme.value)
     val isPremium by viewModel.isPremium.observeAsState(false)
 
     val view = LocalView.current
@@ -93,16 +92,16 @@ fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
         analytics.send(SimpleEvent(key = Analytics.Event.OPEN_SETTINGS))
     }
 
-    val sortDirection by Settings.sortDirection().collectAsState(initial = ESortDirection.DESC)
-    val sortType by Settings.sortType().collectAsState(initial = ESortType.ORDER)
+    val sortDirection by Settings.sortDirection.flow.collectAsState(initial = Settings.sortDirection.value)
+    val sortType by Settings.sortType.flow.collectAsState(initial = Settings.sortType.value)
     var stateSortDialog: Boolean by remember { mutableStateOf(false) }
     if (stateSortDialog) {
         DialogSort(
             type = sortType,
             direction = sortDirection,
             onDone = { type, direction ->
-                Settings.updateSortType(type ?: ESortType.ORDER)
-                Settings.updateSortDirection(direction ?: ESortDirection.DESC)
+                Settings.sortType.update(type ?: ESortType.ORDER)
+                Settings.sortDirection.update(direction ?: ESortDirection.DESC)
             },
             onDismissRequest = { stateSortDialog = false }
         )
@@ -139,7 +138,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
                 )
             },
             onDone = {
-                Settings.updateTheme(it)
+                Settings.theme.update(it)
             },
             onDismissRequest = { stateTheme = false }
         )
@@ -345,12 +344,12 @@ fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
                         modifier = Modifier.weight(1f)
                     )
 
-                    val vibration by Settings.vibrationFlow().collectAsState(initial = Settings.vibrationValue())
+                    val vibration by Settings.vibration.flow.collectAsState(initial = Settings.vibration.value)
                     Switch(
                         checked = vibration,
                         onCheckedChange = {
                             view.vibrate(EVibrate.BUTTON)
-                            Settings.updateVibration(it)
+                            Settings.vibration.update(it)
                         },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,

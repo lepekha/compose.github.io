@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Tinten</string>
     <string name="color_pick_tetradic_color">Tetradische kleuren</string>
     <string name="color_pick_remove_pallet">Wilt u het kleurenpalet verwijderen?</string>
-    <string name="color_pick_file">Bestand</string>
     <string name="color_pick_theme">Thema</string>
     <string name="color_pick_text">Tekst</string>
     <string name="color_pick_box">Palet</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Paletgenerator</string>
     <string name="color_pick_add_colors">Kleuren toevoegen aan huidig palet?</string>
 
+    <string name="color_pick_luminance">Luminantie</string>
+    <string name="color_pick_wavelength">Golflengte</string>
+    <string name="color_pick_out_of_range">Buiten bereik</string>
+    <string name="color_pick_file">Bestanden</string>
+    <string name="color_pick_no_colors">Geen kleuren</string>
+
     <string name="color_pick_change">Bijwerken</string>
     <string name="color_pick_sort_name">Naam</string>
     <string name="color_pick_palette_saved">Palet opgeslagen in "Downloads"</string>
@@ -50,5 +55,8 @@
     <string name="color_pick_update_change">Nieuwe versie:</string>
     <string name="color_pick_premium_version">Premium versie</string>
     <string name="color_pick_half_access">+ dominante kleuren;\n+ palettengenerator;\n+ export van paletten in de formaten: css, svg, aco, ase, act;\n+ extra afbeeldingen voor paletexport;</string>
-    <string name="color_pick_update_version_text">- Kleursortering is verplaatst naar de app-instellingen;\n- Nieuw type sortering toegevoegd;\n- Mogelijkheid om de naam van de kleur in het palet te wijzigen;\n- Mogelijkheid om het kleurenpalet te downloaden;</string>
+    <string name="color_pick_images">Afbeeldingen</string>
+    <string name="color_pick_frequency">Frequentie</string>
+    <string name="color_pick_update_version_text">- nieuwe menuknop voor het palet toegevoegd;\n- de mogelijkheid om de naam van het palet te wijzigen toegevoegd;\n- de parameter voor de geschatte golflengte en frequentie voor kleur toegevoegd;</string>
+
 </resources>

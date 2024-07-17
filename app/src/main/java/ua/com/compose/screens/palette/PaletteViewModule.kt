@@ -36,10 +36,10 @@ class PaletteViewModule(private val database: ColorDatabase,
 
     private var dragAndDropColorID: Long? = null
 
-    val paletteDAO = database.palletDao!!.getAllFlow()
-    val colorDAO = database.colorItemDao!!.getAllColors()
-    val sortDirection = Settings.sortDirection()
-    val sortType = Settings.sortType()
+    private val paletteDAO = database.palletDao!!.getAllFlow()
+    private val colorDAO = database.colorItemDao!!.getAllColors()
+    private val sortDirection = Settings.sortDirection.flow
+    private val sortType = Settings.sortType.flow
 
     val palettes: LiveData<List<Item>> = combine(paletteDAO, colorDAO, sortDirection, sortType) { pallets, colors, sortDirection, sortType ->
         pallets.map { palette -> Item(

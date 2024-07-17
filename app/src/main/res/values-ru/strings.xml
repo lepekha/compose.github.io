@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Тон цвета</string>
     <string name="color_pick_tetradic_color">Тетрадные цвета</string>
     <string name="color_pick_remove_pallet">Хотите удалить палитру цветов?</string>
-    <string name="color_pick_file">Файл</string>
     <string name="color_pick_theme">Тема</string>
     <string name="color_pick_text">Текст</string>
     <string name="color_pick_box">Палитра</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Генератор палитр</string>
     <string name="color_pick_add_colors">Добавить цвета в текущую палитру?</string>
 
+    <string name="color_pick_luminance">Яркость</string>
+    <string name="color_pick_wavelength">Длина волны</string>
+    <string name="color_pick_out_of_range">Вне диапазона</string>
+    <string name="color_pick_file">Файлы</string>
+    <string name="color_pick_no_colors">Нет цветов</string>
+
     <string name="color_pick_change">Обновить</string>
     <string name="color_pick_sort_name">Имя</string>
 
@@ -51,6 +56,8 @@
     <string name="color_pick_update_change">Новая версия:</string>
     <string name="color_pick_premium_version">Премиум версия</string>
     <string name="color_pick_half_access">+ доминирующие цвета;\n+ генератор палитр;\n+ экспорт палитр в форматах: css, svg, aco, ase, act;\n+ дополнительные изображения для экспорта палитр;</string>
-    <string name="color_pick_update_version_text">- сортировка цветов перенесена в настройки приложения;\n- добавлен новый тип сортировки;\n- добавлена возможность изменения названия цвета в палитре;\n- добавлена возможность загрузки палитры цветов;</string>
+    <string name="color_pick_images">Изображения</string>
+    <string name="color_pick_frequency">Частота</string>
+    <string name="color_pick_update_version_text">- добавлена новая кнопка меню для палитры;\n- добавлена возможность изменять название палитры;\n- добавлен параметр приблизительной длины волны и частоты для цвета;</string>
 
 </resources>

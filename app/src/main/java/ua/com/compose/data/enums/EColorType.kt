@@ -64,18 +64,6 @@ enum class EColorType(val key: Int) {
         override fun colorToString(color: Color) = color.asXyz().toString()
         override fun title() = "XYZ"
         override fun shortTitle() = "XYZ"
-    },
-    LUMINANCE(key = 9) {
-        override fun stringToColor(value: String) = colorHEXOf("#FFFFFF")
-        override fun colorToString(color: Color) = color.luminance()
-        override fun title() = "Luminance"
-        override fun shortTitle() = "Luminance"
-    },
-    WAVELENGTH(key = 10) {
-        override fun stringToColor(value: String) = colorHEXOf("#FFFFFF")
-        override fun colorToString(color: Color) = color.wavelength()?.roundToInt()?.toString()?.let { "≈$it" } ?: "-"
-        override fun title() = "Wavelength"
-        override fun shortTitle() = "Wavelength"
     };
 
     abstract fun colorToString(color: Color): String

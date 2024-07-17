@@ -76,7 +76,7 @@ fun InfoScreen(name: String?, color: Color, onDismissRequest: () -> Unit) {
 
     LaunchedEffect(key1 = viewModule) {
         analytics.send(SimpleEvent(key = Analytics.Event.OPEN_INFO))
-        viewModule.create(name, color)
+        viewModule.create(context, name, color)
     }
 
     val bottomInset = WindowInsets.navigationBars
@@ -158,7 +158,7 @@ fun InfoScreen(name: String?, color: Color, onDismissRequest: () -> Unit) {
                                 .padding(top = 16.dp)
                         ) {
                             Text(
-                                text = stringResource(id = it.titleResId),
+                                text = it.title,
                                 textAlign = TextAlign.Start,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier

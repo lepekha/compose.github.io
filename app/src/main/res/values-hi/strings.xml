@@ -20,7 +20,6 @@
     <string name="color_pick_tones">टोन्स</string>
     <string name="color_pick_tetradic_color">चतुर्भुजीय रंग</string>
     <string name="color_pick_remove_pallet">क्या आप रंग पैलेट हटाना चाहते हैं?</string>
-    <string name="color_pick_file">फ़ाइल</string>
     <string name="color_pick_theme">विषय</string>
     <string name="color_pick_text">पाठ</string>
     <string name="color_pick_box">पैलेट</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">पैलेट जेनरेटर</string>
     <string name="color_pick_add_colors">वर्तमान पैलेट में रंग जोड़ें?</string>
 
+    <string name="color_pick_luminance">प्रकाश तीव्रता</string>
+    <string name="color_pick_wavelength">तरंग दैर्घ्य</string>
+    <string name="color_pick_out_of_range">सीमा से बाहर</string>
+    <string name="color_pick_file">फ़ाइलें</string>
+    <string name="color_pick_no_colors">कोई रंग नहीं</string>
+
     <string name="color_pick_change">अपडेट करें</string>
     <string name="color_pick_sort_name">नाम</string>
     <string name="color_pick_palette_saved">पैलेट डाउनलोड्स में सहेजी गई</string>
@@ -50,5 +55,8 @@
     <string name="color_pick_update_change">नया संस्करण:</string>
     <string name="color_pick_premium_version">प्रीमियम संस्करण</string>
     <string name="color_pick_half_access">+ प्रमुख रंग;\n+ पैलेट जेनरेटर;\n+ पैलेट निर्यात प्रारूप: css, svg, aco, ase, act;\n+ पैलेट निर्यात के लिए अतिरिक्त छवियाँ;</string>
-    <string name="color_pick_update_version_text">- रंगों का क्रमबद्धीकरण एप्लिकेशन सेटिंग्स में स्थानांतरित किया गया है;\n- नई क्रमबद्धीकरण प्रकार जोड़ा गया है;\n- पैलेट में रंग का नाम बदलने की संभावना;\n- रंगों का पैलेट डाउनलोड करने की संभावना;</string>
+    <string name="color_pick_images">छवियाँ</string>
+    <string name="color_pick_frequency">आवृत्ति</string>
+    <string name="color_pick_update_version_text">- पैलेट के लिए एक नया मेनू बटन जोड़ा गया;\n- पैलेट का नाम बदलने की क्षमता जोड़ी गई;\n- रंग के लिए अनुमानित तरंग दैर्ध्य और आवृत्ति पैरामीटर जोड़ा गया;</string>
+
 </resources>

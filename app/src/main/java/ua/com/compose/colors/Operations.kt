@@ -3,7 +3,9 @@ package ua.com.compose.colors
 import ua.com.compose.colors.data.Color
 import ua.com.compose.colors.data.HSVColor
 import java.util.Locale
+import kotlin.math.pow
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 fun Color.tints(count: Int): List<Color> {
     val white = -0x1
@@ -105,10 +107,7 @@ fun Color.complementary(): List<Color> {
     return complementaryColors
 }
 
-fun Color.luminance(): String {
-    val lum = calculateLuminance(intColor) * 100
-    return String.format(Locale.getDefault(), "%.2f", lum) + "%"
-}
+fun Color.luminance() = calculateLuminance(intColor)
 
 fun Color.textColor() = if (calculateLuminance(this.intColor) < 0.5) colorHEXOf("#FFFFFF") else colorHEXOf("#000000")
 
@@ -131,24 +130,37 @@ fun Collection<Color>.average(): Color {
     return colorRGBdecimalOf(red, green, blue)
 }
 
-fun Color.wavelength(): Float? {
+fun Color.wavelength(): Float {
     val hsv = this.asHsv()
 
     if (hsv.value == 0f || hsv.saturation == 0f) {
-        return null
+        return Float.NaN
     }
 
     fun interpolate(hue: Float, hueMin: Float, hueMax: Float, waveMin: Float, waveMax: Float): Float {
         return waveMin + (hue - hueMin) * (waveMax - waveMin) / (hueMax - hueMin)
     }
     return when {
-        hsv.hue < 0 || hsv.hue > 360 -> null
+        hsv.hue < 0 || hsv.hue > 360 -> Float.NaN
         hsv.hue < 60 -> interpolate(hsv.hue, 0f, 60f, 700f, 645f)   // Червоний до Жовтогарячий
         hsv.hue < 120 -> interpolate(hsv.hue, 60f, 120f, 645f, 580f)  // Жовтогарячий до Жовтий
         hsv.hue < 180 -> interpolate(hsv.hue, 120f, 180f, 580f, 550f) // Жовтий до Зелений
         hsv.hue < 240 -> interpolate(hsv.hue, 180f, 240f, 550f, 495f) // Зелений до Блакитний
         hsv.hue < 300 -> interpolate(hsv.hue, 240f, 300f, 495f, 450f) // Блакитний до Синій
         hsv.hue <= 360 -> interpolate(hsv.hue, 300f, 360f, 450f, 700f) // Синій до Червоний
-        else -> null
+        else -> Float.NaN
     }
+}
+
+fun Color.frequency(): Float {
+    // Швидкість світла в м/с
+    val speedOfLight = 3e8
+
+    val wavelengthNm = this.wavelength()
+
+    // Перетворення довжини хвилі з нанометрів у метри
+    val wavelengthM = wavelengthNm * 1e-9
+
+    // Обчислення частоти в герцах
+    return (speedOfLight / wavelengthM).toFloat()
 }

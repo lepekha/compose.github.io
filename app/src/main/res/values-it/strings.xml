@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Tonalità</string>
     <string name="color_pick_tetradic_color">Colori tetradici</string>
     <string name="color_pick_remove_pallet">Vuoi rimuovere la tavolozza dei colori?</string>
-    <string name="color_pick_file">File</string>
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Testo</string>
     <string name="color_pick_box">Palette</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Generatore di palette</string>
     <string name="color_pick_add_colors">Aggiungere colori alla palette attuale?</string>
 
+    <string name="color_pick_luminance">Luminanza</string>
+    <string name="color_pick_wavelength">Lunghezza d\'onda</string>
+    <string name="color_pick_out_of_range">Fuori gamma</string>
+    <string name="color_pick_file">File</string>
+    <string name="color_pick_no_colors">Nessun colore</string>
+
     <string name="color_pick_change">Aggiornare</string>
     <string name="color_pick_sort_name">Nome</string>
     <string name="color_pick_palette_saved">Palette salvata in "Download"</string>
@@ -50,5 +55,8 @@
     <string name="color_pick_update_change">Nuova versione:</string>
     <string name="color_pick_premium_version">Versione premium</string>
     <string name="color_pick_half_access">+ colori dominanti;\n+ generatore di palette;\n+ esportazione di palette nei formati: css, svg, aco, ase, act;\n+ immagini aggiuntive per l\'esportazione delle palette;</string>
-    <string name="color_pick_update_version_text">- L\'ordinamento dei colori è stato spostato nelle impostazioni dell\'applicazione;\n- Nuovo tipo di ordinamento aggiunto;\n- Possibilità di cambiare il nome del colore nella palette;\n- Possibilità di scaricare la palette dei colori;</string>
+    <string name="color_pick_images">Immagini</string>
+    <string name="color_pick_frequency">Frequenza</string>
+    <string name="color_pick_update_version_text">- aggiunto un nuovo pulsante di menu per la tavolozza;\n- aggiunta la possibilità di cambiare il nome della tavolozza;\n- aggiunto il parametro di lunghezza d'onda e frequenza approssimativa per il colore;</string>
+
 </resources>

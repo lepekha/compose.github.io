@@ -20,7 +20,6 @@
     <string name="color_pick_tones">Tons</string>
     <string name="color_pick_tetradic_color">Cores tetradicas</string>
     <string name="color_pick_remove_pallet">Deseja remover a paleta de cores?</string>
-    <string name="color_pick_file">Arquivo</string>
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Texto</string>
     <string name="color_pick_box">Paleta</string>
@@ -43,6 +42,12 @@
     <string name="color_pick_generate_palettes">Gerador de paletas</string>
     <string name="color_pick_add_colors">Adicionar cores à paleta atual?</string>
 
+    <string name="color_pick_luminance">Luminância</string>
+    <string name="color_pick_wavelength">Comprimento de onda</string>
+    <string name="color_pick_out_of_range">Fora de alcance</string>
+    <string name="color_pick_file">Arquivos</string>
+    <string name="color_pick_no_colors">Sem cores</string>
+
     <string name="color_pick_change">Atualizar</string>
     <string name="color_pick_sort_name">Nome</string>
     <string name="color_pick_palette_saved">Paleta salva em "Downloads"</string>
@@ -50,5 +55,8 @@
     <string name="color_pick_update_change">Nova versão:</string>
     <string name="color_pick_premium_version">Versão premium</string>
     <string name="color_pick_half_access">+ cores dominantes;\n+ gerador de paletas;\n+ exportação de paletas nos formatos: css, svg, aco, ase, act;\n+ imagens adicionais para exportação de paletas;</string>
-    <string name="color_pick_update_version_text">- A ordenação de cores foi movida para as configurações do aplicativo;\n- Novo tipo de ordenação adicionado;\n- Possibilidade de alterar o nome da cor na paleta;\n- Possibilidade de baixar a paleta de cores;</string>
+    <string name="color_pick_images">Imagens</string>
+    <string name="color_pick_frequency">Frequência</string>
+    <string name="color_pick_update_version_text">- adicionado um novo botão de menu para a paleta;\n- adicionada a capacidade de mudar o nome da paleta;\n- adicionado o parâmetro de comprimento de onda e frequência aproximados para a cor;</string>
+
 </resources>

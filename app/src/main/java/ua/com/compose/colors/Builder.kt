@@ -18,7 +18,9 @@ fun colorINTOf(int: Int) = INTColor(int)
 
 fun colorLABOf(lightness: Float, a: Float, b: Float) = LABColor(lightness, a, b)
 
-fun colorRGBdecimalOf(red: Int, green: Int, blue: Int) = RGBDecimalColor(red, green, blue)
+fun colorRYBOf(red: Int, yellow: Int, blue: Int) = RYBColor(red, yellow, blue)
+
+fun colorRGBdecimalOf(red: Int, green: Int, blue: Int) = RGBColor(red, green, blue)
 
 fun colorRGBpercentOf(red: Float, green: Float, blue: Float) = RGBPercentColor(red, green, blue)
 

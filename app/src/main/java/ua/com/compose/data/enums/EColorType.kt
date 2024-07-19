@@ -7,7 +7,6 @@ import ua.com.compose.colors.*
 import ua.com.compose.colors.data.*
 import java.io.IOException
 import kotlin.collections.set
-import kotlin.math.roundToInt
 
 
 enum class EColorType(val key: Int) {
@@ -18,8 +17,8 @@ enum class EColorType(val key: Int) {
         override fun shortTitle() = "HEX"
     },
     RGB_DECIMAL(key = 1) {
-        override fun stringToColor(value: String) = value.parseRGBDecimalColor()
-        override fun colorToString(color: Color) = color.asRGBdecimal().toString()
+        override fun stringToColor(value: String) = value.parseRGBColor()
+        override fun colorToString(color: Color) = color.asRGB().toString()
         override fun title() = "RGB Decimal"
         override fun shortTitle() = "RGB"
     },
@@ -64,6 +63,12 @@ enum class EColorType(val key: Int) {
         override fun colorToString(color: Color) = color.asXyz().toString()
         override fun title() = "XYZ"
         override fun shortTitle() = "XYZ"
+    },
+    RYB(key = 9) {
+        override fun stringToColor(value: String) = value.parseRYBColor()
+        override fun colorToString(color: Color) = color.asRyb().toString()
+        override fun title() = "RYB"
+        override fun shortTitle() = "RYB"
     };
 
     abstract fun colorToString(color: Color): String
@@ -72,7 +77,7 @@ enum class EColorType(val key: Int) {
     abstract fun shortTitle(): String
 
     companion object {
-        fun valuesForInputText() = listOf(HEX, RGB_DECIMAL, HSV, HSL, CMYK, XYZ, CIE_LAB)
+        fun valuesForInputText() = listOf(HEX, RGB_DECIMAL, HSV, HSL, CMYK, XYZ, CIE_LAB, RYB)
         fun visibleValues() = entries.toList()
         fun getByKey(key: Int) = entries.firstOrNull { it.key == key } ?: HEX
     }
@@ -80,7 +85,7 @@ enum class EColorType(val key: Int) {
 
 object ColorNames {
     private val cacheColors = mutableMapOf<Int, String>()
-    private val colors = mutableMapOf<RGBDecimalColor, String>()
+    private val colors = mutableMapOf<RGBColor, String>()
     private val tree = KDTree(3)
 
     fun init(context: Context) {
@@ -91,7 +96,7 @@ object ColorNames {
             while (keysItr.hasNext()) {
                 val key = keysItr.next()
                 val value = obj.get(key).toString()
-                val rgb = colorHEXOf(value).asRGBdecimal()
+                val rgb = colorHEXOf(value).asRGB()
                 colors[rgb] = key
                 tree.insert(doubleArrayOf(rgb.red.toDouble(), rgb.green.toDouble(), rgb.blue.toDouble()), key)
             }
@@ -104,7 +109,7 @@ object ColorNames {
         cacheColors[color.intColor]?.let {
             return it
         }
-        val targetColor = color.asRGBdecimal()
+        val targetColor = color.asRGB()
         colors[targetColor]?.let {
             return it
         }

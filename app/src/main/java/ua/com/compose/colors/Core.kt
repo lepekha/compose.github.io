@@ -414,3 +414,80 @@ private fun pivotXyzComponent(component: Double): Double {
         (XYZ_KAPPA * component + 16) / 116
     }
 }
+
+internal fun INTToRYB(color: Int): Triple<Int, Int, Int> {
+    var (r, g, b) = listOf(INTtoRED(color).toFloat(), INTtoGREEN(color).toFloat(), INTtoBLUE(color).toFloat())
+
+    val white = minOf(r, g, b)
+    r -= white
+    g -= white
+    b -= white
+
+    val maxRgb = maxOf(r, g, b)
+
+    var yellow = minOf(r, g)
+    r -= yellow
+    g -= yellow
+
+    if (b > 0 && g > 0) {
+        b /= 2.0f
+        g /= 2.0f
+    }
+
+    yellow += g
+    b += g
+
+    val maxRyb = maxOf(r, yellow, b)
+    if (maxRyb > 0) {
+        val n = maxRgb / maxRyb
+        r *= n
+        yellow *= n
+        b *= n
+    }
+
+    r += white
+    yellow += white
+    b += white
+
+    return Triple(r.roundToInt(), yellow.roundToInt(), b.roundToInt())
+}
+
+
+fun RYBtoINT(r: Int, y: Int, b: Int): Int {
+    var r = r.toFloat()
+    var y = y.toFloat()
+    var b = b.toFloat()
+
+    val white = minOf(r, y, b)
+    r -= white
+    y -= white
+    b -= white
+
+    val maxRyb = maxOf(r, y, b)
+
+    var green = minOf(y, b)
+    y -= green
+    b -= green
+
+    if (b > 0 && y > 0) {
+        b *= 2.0f
+        y *= 2.0f
+    }
+
+    green += y
+    b += y
+
+    val maxRgb = maxOf(r, green, b)
+    if (maxRgb > 0) {
+        val n = maxRyb / maxRgb
+        r *= n
+        green *= n
+        b *= n
+    }
+
+    r += white
+    green += white
+    b += white
+
+    return RGBtoINT(r.roundToInt(), green.roundToInt(), b.roundToInt())
+}

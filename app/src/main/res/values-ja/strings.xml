@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ 支配的な色;\n+ パレットジェネレーター;\n+ パレットのエクスポート形式：css、svg、aco、ase、act;\n+ パレットのエクスポート用の追加画像;</string>
     <string name="color_pick_images">画像</string>
     <string name="color_pick_frequency">周波数</string>
-    <string name="color_pick_update_version_text">- パレットの新しいメニューボタンを追加しました;\n- パレットの名前を変更する機能を追加しました;\n- 色の近似波長と周波数のパラメータを追加しました;</string>
-
+    <string name="color_pick_update_version_text">+ パレットの新しいメニューボタン;\n+ パレットの名前を変更する機能;\n+ 色の近似波長と周波数のパラメータ;\n+ 新しいRYBカラーモード;</string>
 </resources>

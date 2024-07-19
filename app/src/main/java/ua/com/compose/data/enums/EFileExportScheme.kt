@@ -10,7 +10,7 @@ import ua.com.compose.extension.color
 import ua.com.compose.extension.userColorName
 import ua.com.compose.extension.writeToFile
 import ua.com.compose.colors.asHex
-import ua.com.compose.colors.asRGBdecimal
+import ua.com.compose.colors.asRGB
 import java.io.DataOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -145,7 +145,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                         .replace("'", "")
                         .lowercase()
 
-                    val rgb = it.color().asRGBdecimal()
+                    val rgb = it.color().asRGB()
 
                     this.appendLine("${rgb.red} ${rgb.green} ${rgb.blue} $name")
                 }
@@ -164,7 +164,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                         .replace("'", "")
                         .lowercase()
 
-                    val rgb = it.color().asRGBdecimal()
+                    val rgb = it.color().asRGB()
                     appendLine("""--$name: rgb(${rgb.red}, ${rgb.green}, ${rgb.blue});""")
                 }
                 appendLine("}")
@@ -196,7 +196,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                         .replace("'", "")
                         .lowercase()
 
-                    val rgb = hex.asRGBdecimal()
+                    val rgb = hex.asRGB()
 
                     appendLine("""<g id="$name">""")
                     appendLine("""<rect x="$x" y="$y" width="$sizeW" height="$sizeH" fill="white"/>""")
@@ -267,7 +267,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             try {
                 DataOutputStream(FileOutputStream(outputFile)).use { outputStream ->
                     colors.forEach {
-                        val rgb = it.color().asRGBdecimal()
+                        val rgb = it.color().asRGB()
                         outputStream.write(rgb.red)
                         outputStream.write(rgb.green)
                         outputStream.write(rgb.blue)

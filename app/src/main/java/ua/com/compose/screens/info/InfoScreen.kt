@@ -146,7 +146,7 @@ fun InfoScreen(name: String?, color: Color, onDismissRequest: () -> Unit) {
                                 color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.fillMaxWidth(),
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight(600)
+                                fontWeight = FontWeight(550)
                             )
                         }
                     }

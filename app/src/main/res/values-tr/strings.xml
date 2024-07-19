@@ -58,6 +58,5 @@
     <string name="color_pick_half_access">+ baskın renkler;\n+ palet oluşturucu;\n+ paletleri şu formatlarda dışa aktarma: css, svg, aco, ase, act;\n+ palet dışa aktarma için ek resimler;</string>
     <string name="color_pick_images">Görüntüler</string>
     <string name="color_pick_frequency">Frekans</string>
-    <string name="color_pick_update_version_text">- palet için yeni bir menü düğmesi eklendi;\n- paletin adını değiştirme yeteneği eklendi;\n- renk için yaklaşık dalga boyu ve frekans parametresi eklendi;</string>
-
+    <string name="color_pick_update_version_text">+ palet için yeni menü düğmesi;\n+ paletin adını değiştirme yeteneği;\n+ renk için yaklaşık dalga boyu ve frekans parametresi;\n+ yeni RYB renk türü;</string>
 </resources>

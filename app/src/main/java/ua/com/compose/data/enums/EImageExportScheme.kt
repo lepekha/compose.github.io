@@ -11,7 +11,7 @@ import ua.com.compose.data.db.ColorItem
 import ua.com.compose.extension.color
 import ua.com.compose.extension.userColorName
 import ua.com.compose.colors.asHex
-import ua.com.compose.colors.asRGBdecimal
+import ua.com.compose.colors.asRGB
 import ua.com.compose.colors.average
 import ua.com.compose.colors.darken
 import ua.com.compose.colors.data.Color
@@ -336,7 +336,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
                     val hex = it.color().asHex(withAlpha = false)
                     val _name = it.userColorName()
 
-                    val rgb = hex.asRGBdecimal()
+                    val rgb = hex.asRGB()
 
                     appendLine("""<rect x="$x" y="$y" width="$sizeW" height="$sizeH" fill="white"/>""")
                     appendLine("""<rect x="$x" y="$y" width="$sizeW" height="${sizeH * 0.7}" fill="$hex"/>""")

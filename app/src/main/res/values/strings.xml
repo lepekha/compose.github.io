@@ -70,5 +70,5 @@
 
     <string name="color_pick_images">Images</string>
     <string name="color_pick_frequency">Frequency</string>
-    <string name="color_pick_update_version_text">- added a new menu button for the palette;\n- added the ability to change the name of the palette;\n- added the approximate wavelength and frequency parameter for color; </string>
+    <string name="color_pick_update_version_text">+ new menu button for the palette;\n+ ability to change name of the palette;\n+ approximate wavelength and frequency parameter for color;\n+ new RYB color type;</string>
 </resources>

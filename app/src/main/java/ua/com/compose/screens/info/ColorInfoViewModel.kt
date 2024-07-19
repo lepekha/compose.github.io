@@ -58,10 +58,10 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
         val lum = color.luminance() * 100
         items.add(ColorInfoItem.Text(title = context.getString(R.string.color_pick_luminance), value = String.format(Locale.ENGLISH, "%.2f", lum) + "%"))
 
-        val wavelength = color.wavelength().takeIf { it.isFinite() }?.roundToInt()?.toString()?.let { "≈${it} nm" } ?: context.getString(R.string.color_pick_out_of_range)
+        val wavelength = color.wavelength().takeIf { it.isFinite() }?.roundToInt()?.toString()?.let { "≈ ${it}nm" } ?: context.getString(R.string.color_pick_out_of_range)
         items.add(ColorInfoItem.Text(title = context.getString(R.string.color_pick_wavelength), value = wavelength))
 
-        val frequency = color.frequency().takeIf { it.isFinite() }?.formatBigNumber(digitsAfterPoint = 0)?.let { "≈${it.first} ${it.second}Hz" } ?: context.getString(R.string.color_pick_out_of_range)
+        val frequency = color.frequency().takeIf { it.isFinite() }?.formatBigNumber(digitsAfterPoint = 0)?.let { "≈ ${it.first}${it.second}Hz" } ?: context.getString(R.string.color_pick_out_of_range)
         items.add(ColorInfoItem.Text(title = context.getString(R.string.color_pick_frequency), value = frequency))
 
         items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_shades), colors = color.shades(count = 6)))

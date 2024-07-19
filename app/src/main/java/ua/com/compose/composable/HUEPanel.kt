@@ -32,7 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.sf.javaml.core.kdtree.KDTree
 import ua.com.compose.extension.asComposeColor
-import ua.com.compose.colors.asRGBdecimal
+import ua.com.compose.colors.asRGB
 import ua.com.compose.colors.data.Color
 import ua.com.compose.colors.data.HSVColor
 import kotlin.math.max
@@ -76,7 +76,7 @@ fun HueBar(
         for (i in hueColors.indices) {
             val _color = _hsv.copy(hue = hueLine, saturation = 1f, value = 1f)
             hueColors[i] = _color
-            val rgb = _color.asRGBdecimal()
+            val rgb = _color.asRGB()
             tree.insert(doubleArrayOf(rgb.red.toDouble(), rgb.green.toDouble(), rgb.blue.toDouble()), i)
             hueLine += 360f / hueColors.size
         }
@@ -114,7 +114,7 @@ fun HueBar(
         }
 
         val center = pressOffset.value.takeIf { it.isSpecified }?.let { Offset(pressOffset.value.x, size.height/2) } ?: kotlin.run {
-            val _color = _hsv.copy(saturation = 1f, value = 1f).asRGBdecimal()
+            val _color = _hsv.copy(saturation = 1f, value = 1f).asRGB()
             val index = (tree.nearest(doubleArrayOf(_color.red.toDouble(), _color.green.toDouble(), _color.blue.toDouble())) as? Int) ?: 0
             Offset(index.toFloat(), size.height/2)
         }

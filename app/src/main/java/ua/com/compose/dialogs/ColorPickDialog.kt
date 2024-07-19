@@ -326,7 +326,7 @@ fun DialogColorPick(
                             errorInput = _color == null
                         })
                     Spacer(modifier = Modifier.height(4.dp))
-                    FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp), maxItemsInEachRow = 4, verticalArrangement = Arrangement.spacedBy((-12).dp, Alignment.Top)) {
+                    FlowRow(modifier = Modifier.padding(start = 8.dp, end = 8.dp), maxItemsInEachRow = 3, verticalArrangement = Arrangement.spacedBy((-12).dp, Alignment.Top)) {
                         EColorType.valuesForInputText().forEach {
                             FilterChip(
                                 selected = it == colorType,

@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ warna dominan;\n+ pembuat palet;\n+ ekspor palet dalam format: css, svg, aco, ase, act;\n+ gambar tambahan untuk ekspor palet;</string>
     <string name="color_pick_images">Gambar</string>
     <string name="color_pick_frequency">Frekuensi</string>
-    <string name="color_pick_update_version_text">- ditambahkan tombol menu baru untuk palet;\n- ditambahkan kemampuan untuk mengubah nama palet;\n- ditambahkan parameter panjang gelombang dan frekuensi perkiraan untuk warna;</string>
-
+    <string name="color_pick_update_version_text">+ tombol menu baru untuk palet;\n+ kemampuan untuk mengubah nama palet;\n+ parameter panjang gelombang dan frekuensi perkiraan untuk warna;\n+ jenis warna RYB baru;</string>
 </resources>

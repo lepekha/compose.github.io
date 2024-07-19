@@ -3,9 +3,9 @@ package ua.com.compose
 import android.content.Context
 import net.sf.javaml.core.kdtree.KDTree
 import org.json.JSONArray
-import ua.com.compose.colors.asRGBdecimal
+import ua.com.compose.colors.asRGB
 import ua.com.compose.colors.data.Color
-import ua.com.compose.colors.data.RGBDecimalColor
+import ua.com.compose.colors.data.RGBColor
 import ua.com.compose.colors.parseHEXColor
 
 object Palettes {
@@ -14,7 +14,7 @@ object Palettes {
 
     private val tree = KDTree(3)
     private val items = mutableListOf<Item>()
-    private val mapItems = mutableMapOf<RGBDecimalColor, MutableList<Item>>()
+    private val mapItems = mutableMapOf<RGBColor, MutableList<Item>>()
     private val cache = mutableMapOf<Int, MutableList<Item>>()
 
     fun init(context: Context) {
@@ -28,7 +28,7 @@ object Palettes {
                 items.add(item)
 
                 item.colors.forEach {
-                    val rgb = it.asRGBdecimal()
+                    val rgb = it.asRGB()
                     (mapItems[rgb] ?: mutableListOf()).apply {
                         this.add(item)
                         mapItems[rgb] = this
@@ -49,7 +49,7 @@ object Palettes {
             return it
         }
 
-        val rgb = color.asRGBdecimal()
+        val rgb = color.asRGB()
         mapItems[rgb]?.let {
             return it
         }

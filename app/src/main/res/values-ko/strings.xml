@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ 지배적인 색상;\n+ 팔레트 생성기;\n+ 팔레트 내보내기 형식: css, svg, aco, ase, act;\n+ 팔레트 내보내기를 위한 추가 이미지;</string>
     <string name="color_pick_images">이미지</string>
     <string name="color_pick_frequency">주파수</string>
-    <string name="color_pick_update_version_text">- 팔레트에 대한 새 메뉴 버튼이 추가되었습니다;\n- 팔레트 이름을 변경하는 기능이 추가되었습니다;\n- 색상에 대한 대략적인 파장 및 주파수 매개변수가 추가되었습니다;</string>
-
+    <string name="color_pick_update_version_text">+ 팔레트에 대한 새로운 메뉴 버튼;\n+ 팔레트 이름을 변경하는 기능;\n+ 색상에 대한 대략적인 파장 및 주파수 매개변수;\n+ 새로운 RYB 색상 유형;</string>
 </resources>

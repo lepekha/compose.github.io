@@ -610,7 +610,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         lineHeight = 17.sp,
                                                         maxLines = 2,
                                                         overflow = TextOverflow.Ellipsis,
-                                                        fontWeight = FontWeight(700)
+                                                        fontWeight = FontWeight(600)
                                                     )
                                                     Text(
                                                         text = colorItem.userColorName(),

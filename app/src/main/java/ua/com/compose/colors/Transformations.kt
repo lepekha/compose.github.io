@@ -10,8 +10,9 @@ import ua.com.compose.colors.data.HSLColor
 import ua.com.compose.colors.data.HSVColor
 import ua.com.compose.colors.data.INTColor
 import ua.com.compose.colors.data.LABColor
-import ua.com.compose.colors.data.RGBDecimalColor
+import ua.com.compose.colors.data.RGBColor
 import ua.com.compose.colors.data.RGBPercentColor
+import ua.com.compose.colors.data.RYBColor
 import ua.com.compose.colors.data.XYZColor
 import kotlin.math.max
 
@@ -24,6 +25,11 @@ fun Color.asInt() = INTColor(intColor)
 fun Color.asBinary() = BINARYColor(bytes = INTtoBYTE(intColor))
 
 fun Color.asArgb() = ARGBColor(INTtoALPHA(intColor), INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor))
+
+fun Color.asRyb(): RYBColor {
+    val (r, y ,b) = INTToRYB(intColor)
+    return RYBColor(r, y ,b)
+}
 
 fun Color.asHex(withAlpha: Boolean = false): HEXColor {
     val substring = if(withAlpha) 0 else 2
@@ -48,7 +54,7 @@ fun Color.asCmyk(): CMYKColor {
     return CMYKColor(cyan, magenta, yellow, k)
 }
 
-fun Color.asRGBdecimal() = RGBDecimalColor(INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor))
+fun Color.asRGB() = RGBColor(INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor))
 
 fun Color.asRGBpercent(): RGBPercentColor {
     val r = INTtoRED(intColor) * 100f / 255f

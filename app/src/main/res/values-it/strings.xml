@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ colori dominanti;\n+ generatore di palette;\n+ esportazione di palette nei formati: css, svg, aco, ase, act;\n+ immagini aggiuntive per l\'esportazione delle palette;</string>
     <string name="color_pick_images">Immagini</string>
     <string name="color_pick_frequency">Frequenza</string>
-    <string name="color_pick_update_version_text">- aggiunto un nuovo pulsante di menu per la tavolozza;\n- aggiunta la possibilità di cambiare il nome della tavolozza;\n- aggiunto il parametro di lunghezza d'onda e frequenza approssimativa per il colore;</string>
-
+    <string name="color_pick_update_version_text">+ nuovo pulsante di menu per la tavolozza;\n+ possibilità di cambiare il nome della tavolozza;\n+ parametro di lunghezza d\'onda e frequenza approssimativa per il colore;\n+ nuovo tipo di colore RYB;</string>
 </resources>

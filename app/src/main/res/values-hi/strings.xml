@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ प्रमुख रंग;\n+ पैलेट जेनरेटर;\n+ पैलेट निर्यात प्रारूप: css, svg, aco, ase, act;\n+ पैलेट निर्यात के लिए अतिरिक्त छवियाँ;</string>
     <string name="color_pick_images">छवियाँ</string>
     <string name="color_pick_frequency">आवृत्ति</string>
-    <string name="color_pick_update_version_text">- पैलेट के लिए एक नया मेनू बटन जोड़ा गया;\n- पैलेट का नाम बदलने की क्षमता जोड़ी गई;\n- रंग के लिए अनुमानित तरंग दैर्ध्य और आवृत्ति पैरामीटर जोड़ा गया;</string>
-
+    <string name="color_pick_update_version_text">+ पैलेट के लिए नया मेनू बटन;\n+ पैलेट का नाम बदलने की क्षमता;\n+ रंग के लिए अनुमानित तरंग दैर्ध्य और आवृत्ति पैरामीटर;\n+ नया RYB रंग प्रकार;</string>
 </resources>

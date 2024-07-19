@@ -25,8 +25,8 @@ class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: Color) -> 
         val centerSize = 2
 
         // Знайти початкові координати області центру
-        val centerX = imageWidth / 2 - centerSize / 2
-        val centerY = imageHeight / 2 - centerSize / 2
+        val centerX = imageWidth / 2
+        val centerY = imageHeight / 2
 
         // Отримати пікселі зображення з ImageProxy
         val buffer = image.planes[0].buffer
@@ -38,8 +38,8 @@ class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: Color) -> 
         var totalBlue = 0
 
         // Перебрати всі пікселі у центральній області і додати значення каналів кольору до сум
-        for (y in centerY until centerY + centerSize) {
-            for (x in centerX until centerX + centerSize) {
+        for (y in (centerY - centerSize / 2) until (centerY + centerSize / 2)) {
+            for (x in (centerX - centerSize / 2) until (centerX + centerSize / 2)) {
                 val pixelOffset = (y * imageWidth + x) * 4
                 val red = pixels[pixelOffset].toInt() and 0xFF
                 val green = pixels[pixelOffset + 1].toInt() and 0xFF

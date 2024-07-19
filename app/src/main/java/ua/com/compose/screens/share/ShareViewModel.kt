@@ -70,17 +70,17 @@ class ShareViewModel(
     private val removePalletUseCase: RemovePalletUseCase
 ): ViewModel() {
 
-    data class SnackbarUIState(var state: SnackbarState = SnackbarState.NONE)
+    data class SnackbarUIState(var state: SnackbarState = SnackbarState.NONE())
 
     sealed class SnackbarState {
-        object NONE: SnackbarState()
-        object PALETTE_SAVED: SnackbarState()
+        class NONE: SnackbarState()
+        class PALETTE_SAVED: SnackbarState()
     }
 
     val images = mutableStateListOf<ImageByType>()
     var stateLoadItems = mutableStateListOf<EImageExportScheme>()
 
-    val snackbarUIState = mutableStateOf(SnackbarUIState(SnackbarState.NONE))
+    val snackbarUIState = mutableStateOf(SnackbarUIState(SnackbarState.NONE()))
 
     val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
         preferences[DataStoreKey.KEY_PREMIUM] ?: false
@@ -93,7 +93,7 @@ class ShareViewModel(
     }.asLiveData()
 
     fun resetSnackbarState() {
-        snackbarUIState.value = SnackbarUIState(SnackbarState.NONE)
+        snackbarUIState.value = SnackbarUIState(SnackbarState.NONE())
     }
 
     fun create(paletteID: Long) = viewModelScope.launch(Dispatchers.IO) {
@@ -126,7 +126,7 @@ class ShareViewModel(
             if(exportType == EExportType.SAVE) {
                 context.saveFileToDownloads(it)
                 withContext(Dispatchers.Main) {
-                    snackbarUIState.value = snackbarUIState.value.copy(state = SnackbarState.PALETTE_SAVED)
+                    snackbarUIState.value = snackbarUIState.value.copy(state = SnackbarState.PALETTE_SAVED())
                 }
             } else {
                 context.shareFile(it)
@@ -147,7 +147,7 @@ class ShareViewModel(
                 if(exportType == EExportType.SAVE) {
                     context.saveFileToDownloads(file)
                     withContext(Dispatchers.Main) {
-                        snackbarUIState.value = snackbarUIState.value.copy(state = SnackbarState.PALETTE_SAVED)
+                        snackbarUIState.value = snackbarUIState.value.copy(state = SnackbarState.PALETTE_SAVED())
                     }
                 } else {
                     context.shareFile(file)

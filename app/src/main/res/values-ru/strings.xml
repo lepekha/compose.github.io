@@ -58,6 +58,5 @@
     <string name="color_pick_half_access">+ доминирующие цвета;\n+ генератор палитр;\n+ экспорт палитр в форматах: css, svg, aco, ase, act;\n+ дополнительные изображения для экспорта палитр;</string>
     <string name="color_pick_images">Изображения</string>
     <string name="color_pick_frequency">Частота</string>
-    <string name="color_pick_update_version_text">- добавлена новая кнопка меню для палитры;\n- добавлена возможность изменять название палитры;\n- добавлен параметр приблизительной длины волны и частоты для цвета;</string>
-
+    <string name="color_pick_update_version_text">+ новая кнопка меню для палитры;\n+ возможность изменить название палитры;\n+ параметр приблизительной длины волны и частоты для цвета;\n+ новый тип цвета RYB;</string>
 </resources>

@@ -6,7 +6,7 @@ import ua.com.compose.extension.color
 import ua.com.compose.extension.userColorName
 import ua.com.compose.colors.asHsl
 import ua.com.compose.colors.asLab
-import ua.com.compose.colors.asRGBdecimal
+import ua.com.compose.colors.asRGB
 import ua.com.compose.colors.asXyz
 import ua.com.compose.colors.luminance
 
@@ -36,27 +36,27 @@ enum class ESortType(val key: Int, val stringResId: Int) {
     RGB_R(key = 2, stringResId = R.string.color_pick_sort_rgb_r_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
-                compareBy { it.color().asRGBdecimal().red }
+                compareBy { it.color().asRGB().red }
             } else {
-                compareByDescending { it.color().asRGBdecimal().red }
+                compareByDescending { it.color().asRGB().red }
             }
         }
     },
     RGB_G(key = 3, stringResId = R.string.color_pick_sort_rgb_g_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
-                compareBy { it.color().asRGBdecimal().green }
+                compareBy { it.color().asRGB().green }
             } else {
-                compareByDescending { it.color().asRGBdecimal().green }
+                compareByDescending { it.color().asRGB().green }
             }
         }
     },
     RGB_B(key = 4, stringResId = R.string.color_pick_sort_rgb_b_component) {
         override fun sort(direction: ESortDirection): Comparator<ColorItem> {
             return if(direction == ESortDirection.ASC) {
-                compareBy { it.color().asRGBdecimal().blue }
+                compareBy { it.color().asRGB().blue }
             } else {
-                compareByDescending { it.color().asRGBdecimal().blue }
+                compareByDescending { it.color().asRGB().blue }
             }
         }
     },

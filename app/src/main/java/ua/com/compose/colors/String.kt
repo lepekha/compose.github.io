@@ -56,14 +56,19 @@ fun String.parseLABColor() = runCatching {
     LABColor(lightness, a, b)
 }.getOrNull()
 
-fun String.parseRGBDecimalColor() = runCatching {
+fun String.parseRGBColor() = runCatching {
     val (r, g, b) = this.split(",").map { it.trim().toDouble().toInt() }
-    RGBDecimalColor(r, g, b)
+    RGBColor(r, g, b)
 }.getOrNull()
 
 fun String.parseRGBPercentColor() = runCatching {
-    val (r, g, b) = this.split(",").map { it.trim().toFloat() * 255 / 100 }
+    val (r, g, b) = this.replace("%", "").split(",").map { it.trim().toFloat() * 255 / 100 }
     RGBPercentColor(r, g, b)
+}.getOrNull()
+
+fun String.parseRYBColor() = runCatching {
+    val (r, y, b) = this.replace("%", "").split(",").map { it.trim().toIntOrNull() ?: 0 }
+    RYBColor(r, y, b)
 }.getOrNull()
 
 fun String.parseXYZColor() = runCatching {

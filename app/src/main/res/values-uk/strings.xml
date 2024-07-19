@@ -59,6 +59,5 @@
     <string name="color_pick_half_access">+ домінуючі кольори;\n+ генератор палітр;\n+ експорт палітри в форматах: css, svg, aco, ase, act;\n+ додаткові зображення для експорту палітри;</string>
     <string name="color_pick_images">Зображення</string>
     <string name="color_pick_frequency">Частота</string>
-    <string name="color_pick_update_version_text">- додано нову кнопку меню для палітри;\n- додано можливість змінювати назву палітри;\n- додано параметр приблизної довжини хвилі та частоти для кольору;</string>
-
+    <string name="color_pick_update_version_text">+ нова кнопка меню для палітри;\n+ можливість змінювати назву палітри;\n+ параметр приблизної довжини хвилі та частоти для кольору;\n+ новий тип кольору RYB;</string>
 </resources>

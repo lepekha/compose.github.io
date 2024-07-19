@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ dominante kleuren;\n+ palettengenerator;\n+ export van paletten in de formaten: css, svg, aco, ase, act;\n+ extra afbeeldingen voor paletexport;</string>
     <string name="color_pick_images">Afbeeldingen</string>
     <string name="color_pick_frequency">Frequentie</string>
-    <string name="color_pick_update_version_text">- nieuwe menuknop voor het palet toegevoegd;\n- de mogelijkheid om de naam van het palet te wijzigen toegevoegd;\n- de parameter voor de geschatte golflengte en frequentie voor kleur toegevoegd;</string>
-
+    <string name="color_pick_update_version_text">+ nieuwe menuknop voor het palet;\n+ mogelijkheid om de naam van het palet te wijzigen;\n+ parameter voor geschatte golflengte en frequentie voor kleur;\n+ nieuw RYB-kleurtype;</string>
 </resources>

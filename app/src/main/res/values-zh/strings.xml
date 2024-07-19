@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ 主色调;\n+ 调色板生成器;\n+ 调色板导出格式：css、svg、aco、ase、act;\n+ 调色板导出的附加图片;</string>
     <string name="color_pick_images">图片</string>
     <string name="color_pick_frequency">频率</string>
-    <string name="color_pick_update_version_text">- 为调色板添加了一个新的菜单按钮;\n- 添加了更改调色板名称的功能;\n- 添加了颜色的近似波长和频率参数;</string>
-
+    <string name="color_pick_update_version_text">+ 调色板的新菜单按钮;\n+ 更改调色板名称的功能;\n+ 颜色的近似波长和频率参数;\n+ 新的RYB颜色类型;</string>
 </resources>

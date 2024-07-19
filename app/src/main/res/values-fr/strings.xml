@@ -57,6 +57,5 @@
     <string name="color_pick_half_access">+ couleurs dominantes;\n+ générateur de palettes;\n+ exportation de palettes aux formats : css, svg, aco, ase, act;\n+ images supplémentaires pour l\'exportation de palettes;</string>
     <string name="color_pick_images">Images</string>
     <string name="color_pick_frequency">Fréquence</string>
-    <string name="color_pick_update_version_text">- ajout d\'un nouveau bouton de menu pour la palette;\n- ajout de la possibilité de changer le nom de la palette;\n- ajout du paramètre de longueur d'onde et de fréquence approximatives pour la couleur;</string>
-
+    <string name="color_pick_update_version_text">+ nouveau bouton de menu pour la palette;\n+ possibilité de changer le nom de la palette;\n+ paramètre de longueur d\'onde et de fréquence approximatives pour la couleur;\n+ nouveau type de couleur RYB;</string>
 </resources>

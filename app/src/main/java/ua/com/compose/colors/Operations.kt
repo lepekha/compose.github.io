@@ -2,10 +2,7 @@ package ua.com.compose.colors
 
 import ua.com.compose.colors.data.Color
 import ua.com.compose.colors.data.HSVColor
-import java.util.Locale
-import kotlin.math.pow
 import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 fun Color.tints(count: Int): List<Color> {
     val white = -0x1
@@ -115,7 +112,7 @@ fun Color.darken(factor: Float): Color {
     require(factor in 0f..1f) {
         "Factor must be between 0 and 1"
     }
-    val color = this.asRGBdecimal()
+    val color = this.asRGB()
     return color.copy(
         red = (color.red * factor).toInt().coerceAtLeast(0),
         green = (color.green * factor).toInt().coerceAtLeast(0),
@@ -124,9 +121,9 @@ fun Color.darken(factor: Float): Color {
 }
 
 fun Collection<Color>.average(): Color {
-    val red = this.map { it.asRGBdecimal().red }.average().roundToInt()
-    val green = this.map { it.asRGBdecimal().green }.average().roundToInt()
-    val blue = this.map { it.asRGBdecimal().blue }.average().roundToInt()
+    val red = this.map { it.asRGB().red }.average().roundToInt()
+    val green = this.map { it.asRGB().green }.average().roundToInt()
+    val blue = this.map { it.asRGB().blue }.average().roundToInt()
     return colorRGBdecimalOf(red, green, blue)
 }
 

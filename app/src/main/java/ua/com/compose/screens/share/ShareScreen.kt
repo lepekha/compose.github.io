@@ -366,7 +366,7 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
                                 .height(100.dp),
                                 contentAlignment = Alignment.Center) {
                                 Text(
-                                    text = "No colors",
+                                    text = stringResource(id = R.string.color_pick_no_colors),
                                     textAlign = TextAlign.Center,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                                     fontSize = 22.sp,
@@ -483,7 +483,7 @@ fun ShareScreen(paletteId: Long, viewModel: ShareViewModel, onDismissRequest: ()
                                 .height(100.dp),
                                 contentAlignment = Alignment.Center) {
                                 Text(
-                                    text = "No colors",
+                                    text = stringResource(id = R.string.color_pick_no_colors),
                                     textAlign = TextAlign.Center,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                                     fontSize = 22.sp,

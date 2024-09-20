@@ -8,11 +8,11 @@ import ua.com.compose.api.analytics.analytics
 import ua.com.compose.data.db.ColorDatabase
 import ua.com.compose.data.db.ColorItem
 import ua.com.compose.data.db.ColorPallet
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 
 class CreatePalletUseCase(private val database: ColorDatabase, private val context: Context) {
 
-    fun execute(name: String? = null, withSelect: Boolean = true, colors: List<Color> = emptyList()): Long {
+    fun execute(name: String? = null, withSelect: Boolean = true, colors: List<IColor> = emptyList()): Long {
         var palletId = ColorPallet.DEFAULT_ID
         database.db.runInTransaction {
             analytics.send(SimpleEvent(key = Analytics.Event.CREATE_PALETTE))

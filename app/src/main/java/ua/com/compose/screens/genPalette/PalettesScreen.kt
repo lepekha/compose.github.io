@@ -33,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
@@ -43,8 +44,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import org.koin.androidx.compose.koinViewModel
 import ua.com.compose.Palettes
 import ua.com.compose.R
@@ -59,7 +58,7 @@ import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
 
-import ua.com.compose.colors.asHsv
+import ua.com.compose.colors.asHSV
 import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,7 +74,7 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val bottomInset = WindowInsets.navigationBars
     var hsv by remember {
-        mutableStateOf(lastColor.asHsv())
+        mutableStateOf(lastColor.asHSV())
     }
 
     var stateShowBilling by remember { mutableStateOf(false) }
@@ -87,7 +86,7 @@ fun PalettesScreen(onDismissRequest: () -> Unit) {
 
     val scope = rememberCoroutineScope()
 
-    val throttleLatest: ((ua.com.compose.colors.data.Color) -> Unit) = remember {
+    val throttleLatest: ((ua.com.compose.colors.data.IColor) -> Unit) = remember {
         throttleLatest(
             withFirst = true,
             intervalMs = 200,

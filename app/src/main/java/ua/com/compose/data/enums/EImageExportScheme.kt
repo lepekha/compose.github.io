@@ -10,11 +10,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import ua.com.compose.data.db.ColorItem
 import ua.com.compose.extension.color
 import ua.com.compose.extension.userColorName
-import ua.com.compose.colors.asHex
+import ua.com.compose.colors.asHEX
 import ua.com.compose.colors.asRGB
 import ua.com.compose.colors.average
 import ua.com.compose.colors.darken
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.textColor
 import kotlin.math.ceil
 import kotlin.math.max
@@ -28,7 +28,7 @@ fun CanvasDrawScope.asBitmap(size: Size, onDraw: DrawScope.() -> Unit): ImageBit
 
 enum class EImageExportScheme(val allowForAll: Boolean = true) {
     IMAGE_0(allowForAll = true) {
-        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: Color): ByteArray {
+        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: IColor): ByteArray {
             val sizeH = max(200, (imageHeight.toInt() / colors.count()))
             val height = colors.count() * sizeH
             val width = (height / 1.778).roundToInt()
@@ -36,12 +36,12 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="none" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${colors.map { it.color() }.average().darken(0.5f).asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${colors.map { it.color() }.average().darken(0.5f).asHEX(withAlpha = false)}"/>""")
 
                 var y = 0
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
-                    val textColor = hex.textColor().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
+                    val textColor = hex.textColor().asHEX(withAlpha = false)
                     val colorString = colorType.colorToString(color = hex)
                     val colorName = it.userColorName()
 
@@ -57,7 +57,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
         }
     },
     IMAGE_1(allowForAll = true) {
-        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: Color): ByteArray {
+        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: IColor): ByteArray {
             val padding = 0
 
             val sizeH = max(400f, imageHeight / ceil( colors.count() / 2f))
@@ -72,11 +72,11 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHEX(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
-                    val textColor = hex.textColor().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
+                    val textColor = hex.textColor().asHEX(withAlpha = false)
                     val colorString = colorType.colorToString(color = hex)
                     val colorName = it.userColorName()
 
@@ -100,7 +100,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
         }
     },
     IMAGE_2(allowForAll = true) {
-        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: Color): ByteArray {
+        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: IColor): ByteArray {
             val sizeH = 200
             val padding = 50
             val heightItems = colors.count() * sizeH + colors.count() * padding + padding
@@ -116,16 +116,16 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHEX(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
-                    val textColor = hex.textColor().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
+                    val textColor = hex.textColor().asHEX(withAlpha = false)
                     val colorString = colorType.colorToString(color = hex)
                     val colorName = it.userColorName()
                     val textSize = 35
 
-                    appendLine("""<rect x="$x" y="$y" width="$sizeW" height="$sizeH" rx="50" ry="50" fill="$hex" stroke="${border.asHex(withAlpha = false)}" stroke-width="3"/>""")
+                    appendLine("""<rect x="$x" y="$y" width="$sizeW" height="$sizeH" rx="50" ry="50" fill="$hex" stroke="${border.asHEX(withAlpha = false)}" stroke-width="3"/>""")
 
                     appendLine("""<text x="${width / 2}" y="${y + sizeH / 2 }" text-anchor="middle" alignment-baseline="middle" font-size="$textSize" fill="$textColor" font-weight="600" font-family="sans-serif">$colorName</text>""")
                     appendLine("""<text x="${width / 2}" y="${y + sizeH / 2 + textSize }" text-anchor="middle" alignment-baseline="middle" font-size="$textSize" fill="$textColor" font-weight="500" font-family="sans-serif">$colorString</text>""")
@@ -136,7 +136,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
         }
     },
     IMAGE_3(allowForAll = true) {
-        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: Color): ByteArray {
+        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: IColor): ByteArray {
             val padding = 80
 
             val sizeH = 400
@@ -149,15 +149,15 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
             var x = padding
             var y = (height - (heightItems - padding * 2)) / 2
 
-            val border = background.textColor().asHex()
+            val border = background.textColor().asHEX()
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHEX(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
-                    val textColor = hex.textColor().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
+                    val textColor = hex.textColor().asHEX(withAlpha = false)
                     val colorString = colorType.colorToString(color = hex)
                     val colorName = it.userColorName()
 
@@ -181,7 +181,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
         }
     },
     IMAGE_4(allowForAll = true) {
-        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: Color): ByteArray {
+        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: IColor): ByteArray {
             val sizeH = 200
             val padding = 50
             val heightItems = (colors.count() * sizeH) * 0.75 + padding * 2
@@ -193,16 +193,16 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
             val x = (width - sizeW) / 2
             var y = (height - (heightItems - padding)) / 2
 
-            val border = background.textColor().asHex()
+            val border = background.textColor().asHEX()
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
 
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHEX(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
-                    val textColor = hex.textColor().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
+                    val textColor = hex.textColor().asHEX(withAlpha = false)
                     val colorString = colorType.colorToString(color = hex)
                     val textSize = 35
 
@@ -215,7 +215,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
         }
     },
     IMAGE_5(allowForAll = false) {
-        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: Color): ByteArray {
+        override fun create(palette: String, colors: List<ColorItem>, colorType: EColorType, background: IColor): ByteArray {
             val sizeH = 200
             val padding = 60
             val paddingRect = 50
@@ -230,21 +230,21 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
             val x = padding
             var y = (height - (heightItems - padding * 2)) / 2
 
-            val border = background.textColor().asHex(withAlpha = false)
+            val border = background.textColor().asHEX(withAlpha = false)
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHEX(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
                     val colorString = colorType.colorToString(color = hex)
                     val textSize = 40
 
                     appendLine("""<rect x="$x" y="$y" width="$roundSize" height="$roundSize" rx="${roundSize / 2}" ry="${roundSize / 2}" fill="$hex" stroke="$border" stroke-width="3"/>""")
-                    appendLine("""<rect x="${x + roundSize + paddingRect}" y="${y + 20}" width="$sizeW" height="${sizeH - 40}" rx="${160 / 2}" ry="${160 / 2}" fill="${border.darken(0.9f).asHex(withAlpha = false)}"/>""")
+                    appendLine("""<rect x="${x + roundSize + paddingRect}" y="${y + 20}" width="$sizeW" height="${sizeH - 40}" rx="${160 / 2}" ry="${160 / 2}" fill="${border.darken(0.9f).asHEX(withAlpha = false)}"/>""")
 
-                    appendLine("""<text x="${x + roundSize + paddingRect + sizeW / 2}" y="${y + sizeH / 2 + textSize / 2 }" text-anchor="middle" alignment-baseline="middle" font-size="$textSize" fill="${background.textColor().textColor().asHex(withAlpha = false)}" font-weight="600" font-family="sans-serif">$colorString</text>""")
+                    appendLine("""<text x="${x + roundSize + paddingRect + sizeW / 2}" y="${y + sizeH / 2 + textSize / 2 }" text-anchor="middle" alignment-baseline="middle" font-size="$textSize" fill="${background.textColor().textColor().asHEX(withAlpha = false)}" font-weight="600" font-family="sans-serif">$colorString</text>""")
                     y+= sizeH + padding
                 }
             }
@@ -256,7 +256,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
             palette: String,
             colors: List<ColorItem>,
             colorType: EColorType,
-            background: Color
+            background: IColor
         ): ByteArray {
 
             val padding = 80
@@ -273,15 +273,15 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
             var x = padding
             var y = (height - (heightItems - padding * 2)) / 2
 
-            val border = background.textColor().asHex(withAlpha = false)
+            val border = background.textColor().asHEX(withAlpha = false)
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHEX(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
-                    val textColor = background.textColor().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
+                    val textColor = background.textColor().asHEX(withAlpha = false)
                     val colorString = colorType.colorToString(color = hex)
                     val colorName = it.userColorName()
 
@@ -313,7 +313,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
             palette: String,
             colors: List<ColorItem>,
             colorType: EColorType,
-            background: Color
+            background: IColor
         ): ByteArray {
 
             val padding = 60
@@ -330,10 +330,10 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
 
             val builder = buildString {
                 appendLine("""<svg width="$width" height="$height" viewBox="0 0 $width $height" fill="none" xmlns="http://www.w3.org/2000/svg">""")
-                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHex(withAlpha = false)}"/>""")
+                appendLine("""<rect x="0" y="0" width="$width" height="$height" fill="${background.asHEX(withAlpha = false)}"/>""")
 
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
                     val _name = it.userColorName()
 
                     val rgb = hex.asRGB()
@@ -364,7 +364,7 @@ enum class EImageExportScheme(val allowForAll: Boolean = true) {
         palette: String,
         colors: List<ColorItem>,
         colorType: EColorType,
-        background: Color
+        background: IColor
     ): ByteArray
 
     fun fileFormat() = ".png"

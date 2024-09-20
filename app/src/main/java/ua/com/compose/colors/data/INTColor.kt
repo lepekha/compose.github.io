@@ -1,6 +1,6 @@
 package ua.com.compose.colors.data
 
-data class INTColor(val int: Int): Color() {
+data class INTColor internal constructor(val int: Int): IColor {
 
     override fun name() = "INTEGER"
 

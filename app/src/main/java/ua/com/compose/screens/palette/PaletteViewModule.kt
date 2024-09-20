@@ -21,7 +21,7 @@ import ua.com.compose.domain.dbColorItem.UpdateColorUseCase
 import ua.com.compose.domain.dbColorPallet.CreatePalletUseCase
 import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 
 data class Item(val id: Long, val name: String, val isCurrent: Boolean, val colors: List<ColorItem>)
 class PaletteViewModule(private val database: ColorDatabase,
@@ -54,11 +54,11 @@ class PaletteViewModule(private val database: ColorDatabase,
         removeColorUseCase.execute(id = id)
     }
 
-    fun changeColor(id: Long, name: String?, color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun changeColor(id: Long, name: String?, color: IColor) = viewModelScope.launch(Dispatchers.IO) {
         updateColorUseCase.execute(id = id, name = name, color = color)
     }
 
-    fun addColor(name: String?, color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun addColor(name: String?, color: IColor) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_PALETTE))
         addColorUseCase.execute(listOf(InfoColor(name = name, color = color)))
     }

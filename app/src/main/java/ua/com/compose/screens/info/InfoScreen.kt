@@ -59,12 +59,12 @@ import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.vibrate
 
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.textColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoScreen(name: String?, color: Color, onDismissRequest: () -> Unit) {
+fun InfoScreen(name: String?, color: IColor, onDismissRequest: () -> Unit) {
     val viewModule: ColorInfoViewModel = koinViewModel()
     val context = LocalContext.current
     val items by viewModule.items.observeAsState(listOf())

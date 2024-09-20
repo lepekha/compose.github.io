@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import net.sf.javaml.core.kdtree.KDTree
 import ua.com.compose.extension.asComposeColor
 import ua.com.compose.colors.asRGB
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.data.HSVColor
 import kotlin.math.max
 
@@ -71,7 +71,7 @@ fun HueBar(
         val huePanel = RectF(0f, 3.dp.toPx(), bitmap.width.toFloat(), bitmap.height.toFloat() - 3.dp.toPx())
         val radius = 7.dp.toPx()
         containerPath.addRoundRect(huePanel, radius, radius, Path.Direction.CW)
-        val hueColors = arrayOfNulls<Color>(huePanel.width().toInt())
+        val hueColors = arrayOfNulls<IColor>(huePanel.width().toInt())
         var hueLine = 0f
         for (i in hueColors.indices) {
             val _color = _hsv.copy(hue = hueLine, saturation = 1f, value = 1f)

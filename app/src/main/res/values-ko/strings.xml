@@ -41,6 +41,12 @@
     <string name="color_pick_color_overview">주요 색상</string>
     <string name="color_pick_generate_palettes">팔레트 생성기</string>
     <string name="color_pick_add_colors">현재 팔레트에 색상 추가?</string>
+    <string name="color_bar_hue">색조</string>
+    <string name="color_bar_saturation">채도</string>
+    <string name="color_bar_lightness">명도</string>
+    <string name="color_bar_red">빨강</string>
+    <string name="color_bar_green">초록</string>
+    <string name="color_bar_blue">파랑</string>
 
     <string name="color_pick_luminance">휘도</string>
     <string name="color_pick_wavelength">파장</string>

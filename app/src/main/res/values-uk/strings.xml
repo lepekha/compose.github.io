@@ -19,6 +19,12 @@
     <string name="color_pick_complementary_color">Комплементарні кольори</string>
     <string name="color_pick_tones">Тон кольору</string>
     <string name="color_pick_tetradic_color">Тетрадні кольори</string>
+    ʼ<string name="color_bar_hue">Відтінок</string>
+    <string name="color_bar_saturation">Насиченість</string>
+    <string name="color_bar_lightness">Яскравість</string>
+    <string name="color_bar_red">Червоний</string>
+    <string name="color_bar_green">Зелений</string>
+    <string name="color_bar_blue">Синій</string>
 
     <string name="color_pick_remove_pallet">Ви хочете видалити палітру кольорів?</string>
     <string name="color_pick_theme">Тема</string>

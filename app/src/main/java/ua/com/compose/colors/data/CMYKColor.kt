@@ -4,12 +4,12 @@ import ua.com.compose.colors.RGBtoINT
 import kotlin.math.roundToInt
 
 
-data class CMYKColor(
+data class CMYKColor internal constructor(
     val cyan: Float,
     val magenta: Float,
     val yellow: Float,
     val key: Float
-): Color() {
+): IColor {
 
     override fun name() = "CMYK"
 

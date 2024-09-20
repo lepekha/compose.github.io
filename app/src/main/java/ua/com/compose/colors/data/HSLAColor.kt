@@ -7,12 +7,12 @@ import ua.com.compose.colors.INTtoGREEN
 import ua.com.compose.colors.INTtoRED
 import kotlin.math.roundToInt
 
-data class HSLAColor(
+data class HSLAColor internal constructor(
     val hue: Float,
     val saturation: Float,
     val lightness: Float,
     val alpha: Float
-): Color() {
+): IColor {
 
     override fun name() = "HSLA"
 

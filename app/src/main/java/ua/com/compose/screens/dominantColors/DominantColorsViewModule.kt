@@ -15,21 +15,21 @@ import ua.com.compose.data.InfoColor
 import ua.com.compose.data.DataStoreKey
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.extension.dataStore
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 
 class DominantColorsViewModule(private val addColorUseCase: AddColorUseCase): ViewModel()  {
 
-    val domainColors = mutableStateListOf<Color>()
+    val domainColors = mutableStateListOf<IColor>()
     val isPremium: LiveData<Boolean> = dataStore.data.map { preferences ->
         preferences[DataStoreKey.KEY_PREMIUM] ?: false
     }.asLiveData()
 
-    fun pressPaletteAdd(color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun pressPaletteAdd(color: IColor) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_DOMAIN_COLORS))
         addColorUseCase.execute(listOf(InfoColor(color = color)))
     }
 
-    fun init(colors: List<Color>) = viewModelScope.launch(Dispatchers.IO) {
+    fun init(colors: List<IColor>) = viewModelScope.launch(Dispatchers.IO) {
         domainColors.clear()
         domainColors.addAll(colors)
     }

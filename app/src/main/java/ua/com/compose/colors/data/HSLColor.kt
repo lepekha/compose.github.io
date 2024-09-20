@@ -10,11 +10,11 @@ import kotlin.math.roundToInt
  * Saturation is a value from 0...1
  * Lightness is a value from 0...1
  */
-data class HSLColor(
+data class HSLColor internal constructor(
     val hue: Float,
     val saturation: Float,
     val lightness: Float
-): Color() {
+): IColor {
 
     override fun name() = "HSL"
 

@@ -1,24 +1,12 @@
 package ua.com.compose.extension
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.drag
-import androidx.compose.foundation.layout.offset
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.input.pointer.consumePositionChange
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
-import androidx.compose.ui.unit.IntOffset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ua.com.compose.colors.colorRGBdecimalOf
 import ua.com.compose.data.enums.ColorNames
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.pow
@@ -31,8 +19,11 @@ fun String.sanitizeFileName(): String {
     return this.filter { it !in forbiddenChars }
 }
 
-fun Color.asComposeColor() = androidx.compose.ui.graphics.Color(this.intColor)
-fun Color.nearestColorName() = ColorNames.getColorName(this)
+fun androidx.compose.ui.graphics.Color.asIColor(): IColor {
+    return colorRGBdecimalOf(red = (this.red * 255).toInt(), green = (this.green * 255).toInt(), blue = (this.blue * 255).toInt())
+}
+fun IColor.asComposeColor() = androidx.compose.ui.graphics.Color(this.intColor)
+fun IColor.nearestColorName() = ColorNames.getColorName(this)
 
 fun <T> throttleLatest(
     withFirst: Boolean = false,

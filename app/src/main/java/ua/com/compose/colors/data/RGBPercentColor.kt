@@ -3,11 +3,11 @@ package ua.com.compose.colors.data
 import ua.com.compose.colors.RGBtoINT
 import java.util.Locale
 
-data class RGBPercentColor(
+data class RGBPercentColor internal constructor(
     val red: Float,
     val green: Float,
     val blue: Float
-): Color() {
+): IColor {
 
     override fun name() = "RGB Percent"
 

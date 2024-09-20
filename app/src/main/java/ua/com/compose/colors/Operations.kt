@@ -1,10 +1,10 @@
 package ua.com.compose.colors
 
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.data.HSVColor
 import kotlin.math.roundToInt
 
-fun Color.tints(count: Int): List<Color> {
+fun IColor.tints(count: Int): List<IColor> {
     val white = -0x1
     val tints = mutableListOf<Int>()
 
@@ -15,7 +15,7 @@ fun Color.tints(count: Int): List<Color> {
     return tints.map { it.toIntColor() }
 }
 
-fun Color.shades(count: Int): List<Color> {
+fun IColor.shades(count: Int): List<IColor> {
     val black = -0x1000000
     val shades = mutableListOf<Int>()
     repeat(count) { i ->
@@ -25,10 +25,10 @@ fun Color.shades(count: Int): List<Color> {
     return shades.map { it.toIntColor() }
 }
 
-fun Color.tetradics(count: Int): List<Color> {
+fun IColor.tetradics(count: Int): List<IColor> {
     val angleStep = 90 // крок зміни кута (90 градусів)
     val tetradicColors = mutableListOf<HSVColor>()
-    val hsv = this.asHsv()
+    val hsv = this.asHSV()
     repeat(count) { i ->
         val angle = (i * angleStep) % 360
         val tetradicHsv =  hsv.copy(hue = (hsv.hue + angle) % 360)
@@ -37,10 +37,10 @@ fun Color.tetradics(count: Int): List<Color> {
     return tetradicColors
 }
 
-fun Color.triadics(count: Int): List<Color> {
-    val triadicColors = mutableListOf<Color>()
+fun IColor.triadics(count: Int): List<IColor> {
+    val triadicColors = mutableListOf<IColor>()
 
-    val hsv = this.asHsv()
+    val hsv = this.asHSV()
     repeat(count) { i ->
         val newHsv = hsv.copy(hue = (hsv.hue + i * 120) % 360) // Зміщення відтінку на 120 градусів
         triadicColors.add(newHsv)
@@ -49,21 +49,21 @@ fun Color.triadics(count: Int): List<Color> {
     return triadicColors
 }
 
-fun Color.tones(count: Int): List<Color> {
+fun IColor.tones(count: Int): List<IColor> {
     val toneColors = mutableListOf<HSVColor>()
     val targetSaturation = 1f/ 6f
     (1..count).forEach { i ->
-        val hsv = this.asHsv().copy(saturation = targetSaturation * i)
+        val hsv = this.asHSV().copy(saturation = targetSaturation * i)
         toneColors.add(hsv)
     }
 
     return toneColors
 }
 
-fun Color.analogous(count: Int): List<Color> {
+fun IColor.analogous(count: Int): List<IColor> {
     val analogousColors = mutableListOf<HSVColor>()
 
-    val hsv = this.asHsv()
+    val hsv = this.asHSV()
     (1..count).forEach { i ->
         var newHsv = hsv.copy(hue = (hsv.hue + (i + 1) * 30) % 360)
         if (newHsv.hue < 0) {
@@ -75,12 +75,12 @@ fun Color.analogous(count: Int): List<Color> {
     return analogousColors
 }
 
-fun Color.monochromatics(count: Int): List<Color> {
-    val monochromaticColors = mutableListOf<Color>()
+fun IColor.monochromatics(count: Int): List<IColor> {
+    val monochromaticColors = mutableListOf<IColor>()
 
     val lightnessStep = 1f / 7f // крок зміни яскравості (від 0 до 1)
 
-    val hsl = this.asHsl()
+    val hsl = this.asHSL()
     repeat(count) { i ->
         val lightness = hsl.lightness * (1 - (i + 1) * lightnessStep) // зменшення яскравості
         val newHSL = hsl.copy(lightness = lightness)
@@ -89,10 +89,10 @@ fun Color.monochromatics(count: Int): List<Color> {
     return monochromaticColors
 }
 
-fun Color.complementary(): List<Color> {
-    val complementaryColors = mutableListOf<Color>()
+fun IColor.complementary(): List<IColor> {
+    val complementaryColors = mutableListOf<IColor>()
 
-    val hsv = this.asHsv()
+    val hsv = this.asHSV()
 
     // Original color
     complementaryColors.add(hsv)
@@ -104,11 +104,11 @@ fun Color.complementary(): List<Color> {
     return complementaryColors
 }
 
-fun Color.luminance() = calculateLuminance(intColor)
+fun IColor.luminance() = calculateLuminance(intColor)
 
-fun Color.textColor() = if (calculateLuminance(this.intColor) < 0.5) colorHEXOf("#FFFFFF") else colorHEXOf("#000000")
+fun IColor.textColor() = if (calculateLuminance(this.intColor) < 0.5) colorHEXOf("#FFFFFF") else colorHEXOf("#000000")
 
-fun Color.darken(factor: Float): Color {
+fun IColor.darken(factor: Float): IColor {
     require(factor in 0f..1f) {
         "Factor must be between 0 and 1"
     }
@@ -120,15 +120,15 @@ fun Color.darken(factor: Float): Color {
     )
 }
 
-fun Collection<Color>.average(): Color {
+fun Collection<IColor>.average(): IColor {
     val red = this.map { it.asRGB().red }.average().roundToInt()
     val green = this.map { it.asRGB().green }.average().roundToInt()
     val blue = this.map { it.asRGB().blue }.average().roundToInt()
     return colorRGBdecimalOf(red, green, blue)
 }
 
-fun Color.wavelength(): Float {
-    val hsv = this.asHsv()
+fun IColor.wavelength(): Float {
+    val hsv = this.asHSV()
 
     if (hsv.value == 0f || hsv.saturation == 0f) {
         return Float.NaN
@@ -149,7 +149,7 @@ fun Color.wavelength(): Float {
     }
 }
 
-fun Color.frequency(): Float {
+fun IColor.frequency(): Float {
     // Швидкість світла в м/с
     val speedOfLight = 3e8
 

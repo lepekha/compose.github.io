@@ -3,7 +3,7 @@ package ua.com.compose.colors.data
 import ua.com.compose.colors.HEXtoINT
 
 
-data class HEXColor(val hex: String): Color() {
+data class HEXColor internal constructor(val hex: String): IColor {
 
     init {
         HEXtoINT(hex)

@@ -41,6 +41,12 @@
     <string name="color_pick_color_overview">Colori dominanti</string>
     <string name="color_pick_generate_palettes">Generatore di palette</string>
     <string name="color_pick_add_colors">Aggiungere colori alla palette attuale?</string>
+    <string name="color_bar_hue">Tinta</string>
+    <string name="color_bar_saturation">Saturazione</string>
+    <string name="color_bar_lightness">Luminosità</string>
+    <string name="color_bar_red">Rosso</string>
+    <string name="color_bar_green">Verde</string>
+    <string name="color_bar_blue">Blu</string>
 
     <string name="color_pick_luminance">Luminanza</string>
     <string name="color_pick_wavelength">Lunghezza d\'onda</string>

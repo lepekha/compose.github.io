@@ -48,11 +48,11 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.vibrate
 
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DomainColors(colors: List<Color>, onDismissRequest: () -> Unit) {
+fun DomainColors(colors: List<IColor>, onDismissRequest: () -> Unit) {
     val viewModule: DominantColorsViewModule = koinViewModel()
     val context = LocalContext.current
     val view = LocalView.current

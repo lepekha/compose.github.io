@@ -2,11 +2,11 @@ package ua.com.compose.colors.data
 
 import ua.com.compose.colors.RYBtoINT
 
-data class RYBColor(
+data class RYBColor internal constructor(
     val red: Int,
     val yellow: Int,
     val blue: Int
-): Color() {
+): IColor {
 
     override fun name() = "RYB"
 

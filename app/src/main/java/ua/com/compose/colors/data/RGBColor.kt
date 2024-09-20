@@ -2,11 +2,11 @@ package ua.com.compose.colors.data
 
 import ua.com.compose.colors.RGBtoINT
 
-data class RGBColor(
+data class RGBColor internal constructor(
     val red: Int,
     val green: Int,
     val blue: Int
-): Color() {
+): IColor {
 
     override fun name() = "RGB"
 

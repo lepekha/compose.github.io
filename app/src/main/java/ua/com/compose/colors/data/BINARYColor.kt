@@ -5,7 +5,7 @@ import ua.com.compose.colors.BYTEToINT
 import ua.com.compose.colors.asRGB
 
 
-data class BINARYColor(val bytes: ByteArray): Color() {
+data class BINARYColor internal constructor(val bytes: ByteArray): IColor {
 
     override val intColor: Int by lazy {
         BYTEToINT(bytes)

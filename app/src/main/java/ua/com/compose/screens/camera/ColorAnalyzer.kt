@@ -5,10 +5,10 @@ import androidx.camera.core.ImageProxy
 import kotlinx.coroutines.CoroutineScope
 import ua.com.compose.extension.throttleLatest
 import ua.com.compose.colors.colorRGBdecimalOf
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import java.nio.ByteBuffer
 
-class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: Color) -> Unit) : ImageAnalysis.Analyzer {
+class ColorAnalyzer(scope: CoroutineScope, val listenerColor: (value: IColor) -> Unit) : ImageAnalysis.Analyzer {
         private var lastTotalRed = 0
         private var lastTotalGreen = 0
         private var lastTotalBlue = 0

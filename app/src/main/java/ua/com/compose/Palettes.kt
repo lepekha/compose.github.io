@@ -4,13 +4,13 @@ import android.content.Context
 import net.sf.javaml.core.kdtree.KDTree
 import org.json.JSONArray
 import ua.com.compose.colors.asRGB
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.data.RGBColor
 import ua.com.compose.colors.parseHEXColor
 
 object Palettes {
 
-    data class Item(val colors: List<Color>)
+    data class Item(val colors: List<IColor>)
 
     private val tree = KDTree(3)
     private val items = mutableListOf<Item>()
@@ -44,7 +44,7 @@ object Palettes {
         }
     }
 
-    fun palettesForColor(color: Color): List<Item> {
+    fun palettesForColor(color: IColor): List<Item> {
         cache[color.intColor]?.let {
             return it
         }

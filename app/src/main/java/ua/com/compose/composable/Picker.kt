@@ -27,11 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ua.com.compose.R
 import ua.com.compose.extension.asComposeColor
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.textColor
 
 @Composable
-fun ColorPickerRing(modifier: Modifier = Modifier, color: Color) {
+fun ColorPickerRing(modifier: Modifier = Modifier, color: IColor) {
     val borderColor = color.textColor()
     Box(contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()) {
@@ -56,7 +56,7 @@ fun ColorPickerRing(modifier: Modifier = Modifier, color: Color) {
 }
 
 
-data class ColorState(val color: Color, val name: String, val typeValue: String)
+data class ColorState(val color: IColor, val name: String, val typeValue: String)
 
 @Composable
 fun ColorPickerInfo(state: ColorState, click: () -> Unit) {

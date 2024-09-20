@@ -15,7 +15,7 @@ import ua.com.compose.data.DataStoreKey
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.domain.dbColorPallet.GetCurrentPalletUseCase
 import ua.com.compose.extension.dataStore
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 
 class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUseCase, private val addColorUseCase: AddColorUseCase): ViewModel() {
 
@@ -35,11 +35,11 @@ class PalettesViewModel(private val getCurrentPalletUseCase: GetCurrentPalletUse
         preferences[DataStoreKey.KEY_PREMIUM] ?: false
     }.asLiveData()
 
-    fun generatePalettesForColor(color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun generatePalettesForColor(color: IColor) = viewModelScope.launch(Dispatchers.IO) {
         Settings.lastColor.update(color)
     }
 
-    fun addColorsToCurrentPalette(colors: List<Color>) = viewModelScope.launch(Dispatchers.IO) {
+    fun addColorsToCurrentPalette(colors: List<IColor>) = viewModelScope.launch(Dispatchers.IO) {
         addColorUseCase.execute(colors = colors.map { InfoColor(color = it) })
     }
 }

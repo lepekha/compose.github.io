@@ -3,11 +3,11 @@ package ua.com.compose.colors.data
 import ua.com.compose.colors.XYZtoINT
 import java.util.Locale
 
-data class XYZColor(
+data class XYZColor internal constructor(
     val x: Float,
     val y: Float,
     val z: Float
-): Color() {
+): IColor {
 
     override fun name() = "XYZ"
 

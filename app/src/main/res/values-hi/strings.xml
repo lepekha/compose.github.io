@@ -41,6 +41,12 @@
     <string name="color_pick_color_overview">प्रमुख रंग</string>
     <string name="color_pick_generate_palettes">पैलेट जेनरेटर</string>
     <string name="color_pick_add_colors">वर्तमान पैलेट में रंग जोड़ें?</string>
+    <string name="color_bar_hue">रंग</string>
+    <string name="color_bar_saturation">संतृप्ति</string>
+    <string name="color_bar_lightness">चमक</string>
+    <string name="color_bar_red">लाल</string>
+    <string name="color_bar_green">हरा</string>
+    <string name="color_bar_blue">नीला</string>
 
     <string name="color_pick_luminance">प्रकाश तीव्रता</string>
     <string name="color_pick_wavelength">तरंग दैर्घ्य</string>

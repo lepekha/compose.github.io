@@ -1,7 +1,6 @@
 package ua.com.compose.screens.info
 
 import android.content.Context
-import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,7 @@ import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.extension.nearestColorName
 import ua.com.compose.colors.analogous
 import ua.com.compose.colors.complementary
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.frequency
 import ua.com.compose.colors.luminance
 import ua.com.compose.colors.monochromatics
@@ -35,8 +34,8 @@ import kotlin.math.roundToInt
 sealed interface ColorInfoItem {
 
     data class Text(val title: String, val value: String): ColorInfoItem
-    data class Colors(val title: String, val colors: List<ua.com.compose.colors.data.Color>): ColorInfoItem
-    data class Color(val title: String, val color: ua.com.compose.colors.data.Color): ColorInfoItem
+    data class Colors(val title: String, val colors: List<ua.com.compose.colors.data.IColor>): ColorInfoItem
+    data class Color(val title: String, val color: ua.com.compose.colors.data.IColor): ColorInfoItem
 
 }
 
@@ -45,7 +44,7 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
     private val _items: MutableLiveData<List<ColorInfoItem>> = MutableLiveData(listOf())
     val items: LiveData<List<ColorInfoItem>> = _items
 
-    fun create(context: Context, name: String?, color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun create(context: Context, name: String?, color: IColor) = viewModelScope.launch(Dispatchers.IO) {
 
         val items = mutableListOf<ColorInfoItem>()
 
@@ -76,7 +75,7 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
         _items.postValue(items)
     }
 
-    fun pressPaletteAdd(color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun pressPaletteAdd(color: IColor) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_FROM_INFO))
         addColorUseCase.execute(listOf(InfoColor(color = color)))
     }

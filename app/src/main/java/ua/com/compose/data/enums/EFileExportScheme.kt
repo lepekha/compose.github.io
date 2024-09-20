@@ -9,7 +9,7 @@ import ua.com.compose.data.db.ColorItem
 import ua.com.compose.extension.color
 import ua.com.compose.extension.userColorName
 import ua.com.compose.extension.writeToFile
-import ua.com.compose.colors.asHex
+import ua.com.compose.colors.asHEX
 import ua.com.compose.colors.asRGB
 import java.io.DataOutputStream
 import java.io.File
@@ -40,7 +40,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val redJson = JSONObject()
 
             colors.forEach {
-                val hex = it.color().asHex(withAlpha = false)
+                val hex = it.color().asHEX(withAlpha = false)
                 val name = (it.userColorName())
                     .replace(" ", "_")
                     .replace("-", "_")
@@ -60,7 +60,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 appendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
                 appendLine("<resources>")
                 colors.forEach {
-                    val hex = it.color().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
                     val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
@@ -79,7 +79,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 appendLine("name,color")
                 colors.forEach {
-                    val hex = it.color().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
 
                     val name = (it.userColorName())
                         .replace(" ", "_")
@@ -98,7 +98,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 appendLine("resources:")
                 colors.forEach {
-                    val hex = it.color().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
                     val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
@@ -117,7 +117,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
             val builder = buildString {
                 colors.forEach {
                     appendLine("[[resources]]")
-                    val hex = it.color().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
                     val name = (it.userColorName())
                         .replace(" ", "_")
                         .replace("-", "_")
@@ -188,7 +188,7 @@ enum class  EFileExportScheme(val title: String, val allowForAll: Boolean = true
                 var x = padding
                 var y = padding
                 colors.forEachIndexed { index, it ->
-                    val hex = it.color().asHex(withAlpha = false)
+                    val hex = it.color().asHEX(withAlpha = false)
                     val _name = it.userColorName()
                     val name = _name
                         .replace(" ", "_")

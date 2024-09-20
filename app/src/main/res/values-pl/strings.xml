@@ -41,6 +41,12 @@
     <string name="color_pick_color_overview">Dominujące kolory</string>
     <string name="color_pick_generate_palettes">Generator palet</string>
     <string name="color_pick_add_colors">Dodać kolory do bieżącej palety?</string>
+    <string name="color_bar_hue">Odcień</string>
+    <string name="color_bar_saturation">Nasycenie</string>
+    <string name="color_bar_lightness">Jasność</string>
+    <string name="color_bar_red">Czerwony</string>
+    <string name="color_bar_green">Zielony</string>
+    <string name="color_bar_blue">Niebieski</string>
 
     <string name="color_pick_luminance">Jaskrawość</string>
     <string name="color_pick_wavelength">Długość fali</string>

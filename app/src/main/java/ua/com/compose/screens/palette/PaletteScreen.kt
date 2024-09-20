@@ -13,7 +13,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,12 +38,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
@@ -73,8 +67,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -95,10 +87,8 @@ import ua.com.compose.composable.IconButton
 import ua.com.compose.composable.IconItem
 import ua.com.compose.composable.LocalToastState
 import ua.com.compose.composable.Menu
-import ua.com.compose.data.enums.EColorType
 import ua.com.compose.data.InfoColor
-import ua.com.compose.dialogs.DialogColorPick
-import ua.com.compose.dialogs.DialogConfirmation
+import ua.com.compose.dialogs.colorPickDialog.DialogColorPick
 import ua.com.compose.dialogs.DialogInputText
 import ua.com.compose.extension.color
 import ua.com.compose.extension.userColorName
@@ -106,7 +96,7 @@ import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.vibrate
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.textColor
 import ua.com.compose.screens.info.InfoScreen
 import ua.com.compose.screens.genPalette.PalettesScreen
@@ -114,7 +104,7 @@ import ua.com.compose.screens.share.ShareScreen
 import kotlin.math.ceil
 import kotlin.math.floor
 
-data class TuneColorState(val id: Long, val name: String?, val color: Color)
+data class TuneColorState(val id: Long, val name: String?, val color: IColor)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -141,6 +131,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
         val name = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.userColorName() ?: return
         stateInfoColor = InfoColor(name = name, color = color)
     }
+
 
     fun touchedID(value: Int): String {
         return palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.id?.toString() ?: ""

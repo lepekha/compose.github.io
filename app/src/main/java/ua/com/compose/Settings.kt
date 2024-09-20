@@ -133,7 +133,7 @@ object Settings {
         object createType {
             val flow: Flow<ECreateColorType>
                 get() = dataStore.data.map { preferences ->
-                    ECreateColorType.getByKey(preferences[DataStoreKey.KEY_CREATE_COLOR_TYPE] ?: prefs.get(key = SharedPreferencesKey.KEY_CREATE_COLOR_TYPE, defaultValue = ECreateColorType.BOX.key))
+                    ECreateColorType.getByKey(preferences[DataStoreKey.KEY_CREATE_COLOR_TYPE] ?: prefs.get(key = SharedPreferencesKey.KEY_CREATE_COLOR_TYPE, defaultValue = ECreateColorType.HSV.key))
                 }
 
             val value: ECreateColorType
@@ -219,17 +219,17 @@ object Settings {
     }
 
     object lastColor {
-        val flow: Flow<ua.com.compose.colors.data.Color>
+        val flow: Flow<ua.com.compose.colors.data.IColor>
             get() = dataStore.data.map { preferences ->
                 colorINTOf(preferences[DataStoreKey.KEY_LAST_COLOR] ?: prefs.get(key = SharedPreferencesKey.KEY_LAST_COLOR, defaultValue = Color.parseColor("#2EAAB4")))
             }
 
-        val value: ua.com.compose.colors.data.Color
+        val value: ua.com.compose.colors.data.IColor
             get() = runBlocking {
                 flow.first()
             }
 
-        fun update(value: ua.com.compose.colors.data.Color) = runBlocking {
+        fun update(value: ua.com.compose.colors.data.IColor) = runBlocking {
             dataStore.edit { settings ->
                 settings[DataStoreKey.KEY_LAST_COLOR] = value.intColor
             }

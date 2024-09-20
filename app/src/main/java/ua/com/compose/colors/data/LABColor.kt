@@ -4,11 +4,11 @@ import ua.com.compose.colors.LABtoINT
 import java.util.Locale
 
 
-data class LABColor(
+data class LABColor internal constructor(
     val lightness: Float,
     val a: Float,
     val b: Float
-): Color() {
+): IColor {
 
     override fun name() = "CIE LAB"
 

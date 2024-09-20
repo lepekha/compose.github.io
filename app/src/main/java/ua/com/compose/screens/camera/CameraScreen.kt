@@ -15,15 +15,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -64,7 +60,7 @@ import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.createVideoCaptureUseCase
 import ua.com.compose.extension.vibrate
 
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.screens.dominantColors.DomainColors
 import ua.com.compose.screens.info.InfoScreen
 import java.util.concurrent.ExecutorService
@@ -124,7 +120,7 @@ fun CameraScreen(
         permissionState.launchMultiplePermissionRequest()
     }
 
-    var stateInfoColor: Color? by remember { mutableStateOf(null) }
+    var stateInfoColor: IColor? by remember { mutableStateOf(null) }
     stateInfoColor?.let {
         InfoScreen(name = null, color = it) {
             stateInfoColor = null

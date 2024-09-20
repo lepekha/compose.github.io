@@ -41,6 +41,12 @@
     <string name="color_pick_color_overview">Baskın renkler</string>
     <string name="color_pick_generate_palettes">Palet üreteci</string>
     <string name="color_pick_add_colors">Mevcut paletine renk eklemek ister misiniz?</string>
+    <string name="color_bar_hue">Renk Tonu</string>
+    <string name="color_bar_saturation">Doygunluk</string>
+    <string name="color_bar_lightness">Parlaklık</string>
+    <string name="color_bar_red">Kırmızı</string>
+    <string name="color_bar_green">Yeşil</string>
+    <string name="color_bar_blue">Mavi</string>
 
     <string name="color_pick_luminance">Parlaklık</string>
     <string name="color_pick_wavelength">Dalga boyu</string>

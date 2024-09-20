@@ -70,12 +70,11 @@ import ua.com.compose.composable.LocalToastState
 import ua.com.compose.composable.Menu
 import ua.com.compose.extension.EVibrate
 import ua.com.compose.extension.clipboardCopy
-import ua.com.compose.extension.findActivity
 import ua.com.compose.extension.throttleLatest
 import ua.com.compose.extension.vibrate
 
 import ua.com.compose.colors.colorINTOf
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.screens.dominantColors.DomainColors
 import ua.com.compose.screens.info.InfoScreen
 import kotlin.math.ceil
@@ -158,7 +157,7 @@ fun ImageScreen(viewModule: ImageViewModule,
         }
     }
 
-    var stateInfoColor: Color? by remember { mutableStateOf(null) }
+    var stateInfoColor: IColor? by remember { mutableStateOf(null) }
     stateInfoColor?.let {
         InfoScreen(name = null, color = it) {
             stateInfoColor = null

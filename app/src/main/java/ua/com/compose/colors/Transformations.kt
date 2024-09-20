@@ -3,7 +3,7 @@ package ua.com.compose.colors
 import ua.com.compose.colors.data.ARGBColor
 import ua.com.compose.colors.data.BINARYColor
 import ua.com.compose.colors.data.CMYKColor
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.data.HEXColor
 import ua.com.compose.colors.data.HSLAColor
 import ua.com.compose.colors.data.HSLColor
@@ -18,25 +18,25 @@ import kotlin.math.max
 
 fun Int.toIntColor() = INTColor(int = this)
 
-fun Color.asColor(): Color = this
+fun IColor.asColor(): IColor = this
 
-fun Color.asInt() = INTColor(intColor)
+fun IColor.asINT() = INTColor(intColor)
 
-fun Color.asBinary() = BINARYColor(bytes = INTtoBYTE(intColor))
+fun IColor.asBINARY() = BINARYColor(bytes = INTtoBYTE(intColor))
 
-fun Color.asArgb() = ARGBColor(INTtoALPHA(intColor), INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor))
+fun IColor.asARGB() = ARGBColor(INTtoALPHA(intColor), INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor))
 
-fun Color.asRyb(): RYBColor {
+fun IColor.asRYB(): RYBColor {
     val (r, y ,b) = INTToRYB(intColor)
     return RYBColor(r, y ,b)
 }
 
-fun Color.asHex(withAlpha: Boolean = false): HEXColor {
+fun IColor.asHEX(withAlpha: Boolean = false): HEXColor {
     val substring = if(withAlpha) 0 else 2
     return HEXColor("#" + (Integer.toHexString(intColor).takeIf { it.length == 8 }?.substring(substring)?.uppercase() ?: "000000"))
 }
 
-fun Color.asCmyk(): CMYKColor {
+fun IColor.asCMYK(): CMYKColor {
     val r = INTtoRED(intColor)
     val g = INTtoGREEN(intColor)
     val b = INTtoBLUE(intColor)
@@ -54,16 +54,16 @@ fun Color.asCmyk(): CMYKColor {
     return CMYKColor(cyan, magenta, yellow, k)
 }
 
-fun Color.asRGB() = RGBColor(INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor))
+fun IColor.asRGB() = RGBColor(INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor))
 
-fun Color.asRGBpercent(): RGBPercentColor {
+fun IColor.asRGBpercent(): RGBPercentColor {
     val r = INTtoRED(intColor) * 100f / 255f
     val g = INTtoGREEN(intColor) * 100f / 255f
     val b = INTtoBLUE(intColor) * 100f / 255f
     return RGBPercentColor(red = r, green = g, blue = b)
 }
 
-fun Color.asHsl(): HSLColor {
+fun IColor.asHSL(): HSLColor {
     return FloatArray(3).apply {
         RGBtoHSL(INTtoRED(intColor), INTtoGREEN(intColor), INTtoBLUE(intColor), this)
     }.let {
@@ -71,17 +71,17 @@ fun Color.asHsl(): HSLColor {
     }
 }
 
-fun Color.asHsla() = FloatArray(3).apply { INTtoHSL(intColor, this) }.let {
+fun IColor.asHSLA() = FloatArray(3).apply { INTtoHSL(intColor, this) }.let {
     HSLAColor(it[0], it[1], it[2], INTtoALPHA(intColor) / 255f)
 }
 
-fun Color.asHsv(): HSVColor {
+fun IColor.asHSV(): HSVColor {
     val hsvArray = FloatArray(3)
     INTtoHSV(intColor, hsvArray)
     return HSVColor(hsvArray[0], hsvArray[1], hsvArray[2])
 }
 
-fun Color.asXyz(): XYZColor {
+fun IColor.asXYZ(): XYZColor {
     val red = INTtoRED(intColor)
     val green = INTtoGREEN(intColor)
     val blue = INTtoBLUE(intColor)
@@ -91,7 +91,7 @@ fun Color.asXyz(): XYZColor {
     return XYZColor(array[0].toFloat(), array[1].toFloat(), array[2].toFloat())
 }
 
-fun Color.asLab(): LABColor {
+fun IColor.asLAB(): LABColor {
     val r = INTtoRED(intColor)
     val g = INTtoGREEN(intColor)
     val b = INTtoBLUE(intColor)

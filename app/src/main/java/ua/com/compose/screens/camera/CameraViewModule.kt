@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
@@ -19,7 +18,7 @@ import ua.com.compose.data.InfoColor
 import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.extension.nearestColorName
 import ua.com.compose.colors.colorINTOf
-import ua.com.compose.colors.data.Color
+import ua.com.compose.colors.data.IColor
 
 
 class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel()  {
@@ -28,19 +27,19 @@ class CameraViewModule(private val addColorUseCase: AddColorUseCase): ViewModel(
     private val _colorState: MutableLiveData<ColorState> = MutableLiveData(null)
     val colorState: LiveData<ColorState> = _colorState
 
-    fun changeColor(color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun changeColor(color: IColor) = viewModelScope.launch(Dispatchers.IO) {
         val name = color.nearestColorName()
         val value = Settings.colorType.value.colorToString(color = color)
         val colorState = ColorState(color = color, name = name, typeValue = value)
         _colorState.postValue(colorState)
     }
 
-    fun pressPaletteAdd(color: Color) = viewModelScope.launch(Dispatchers.IO) {
+    fun pressPaletteAdd(color: IColor) = viewModelScope.launch(Dispatchers.IO) {
         analytics.send(SimpleEvent(key = Analytics.Event.CREATE_COLOR_CAMERA))
         addColorUseCase.execute(listOf(InfoColor(color = color)))
     }
 
-    val domainColors = mutableListOf<Color>()
+    val domainColors = mutableListOf<IColor>()
     var stateDomainColors = mutableStateOf(false)
     fun generateDomainColors(bitmap: Bitmap) = viewModelScope.launch(Dispatchers.IO) {
         val bm = Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, true);

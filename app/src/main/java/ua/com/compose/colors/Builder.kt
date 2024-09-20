@@ -2,7 +2,23 @@ package ua.com.compose.colors
 
 import ua.com.compose.colors.data.*
 
-fun colorARGBOf(alpha: Int, red: Int, green: Int, blue: Int) = ARGBColor(alpha, red, green, blue)
+@Target(AnnotationTarget.VALUE_PARAMETER)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class IntRange(val from: Int, val to: Int)
+
+fun colorARGBOf(
+    @IntRange(from = 0, to = 255) alpha: Int,
+    @IntRange(from = 0, to = 255) red: Int,
+    @IntRange(from = 0, to = 255) green: Int,
+    @IntRange(from = 0, to = 255) blue: Int
+): ARGBColor {
+    require(alpha in 0..255)
+    require(red in 0..255)
+    require(green in 0..255)
+    require(blue in 0..255)
+
+    return ARGBColor(alpha, red, green, blue)
+}
 
 fun colorCMYKOf(cyan: Float, magenta: Float, yellow: Float, key: Float) = CMYKColor(cyan, magenta, yellow, key)
 

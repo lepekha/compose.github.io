@@ -220,9 +220,15 @@ object Settings {
                 settings[DataStoreKey.KEY_START_SCREEN] = value.id
             }
         }
+
+        fun isKeyStored(): Boolean = runBlocking {
+            dataStore.data.map { preferences ->
+                preferences.contains(DataStoreKey.KEY_START_SCREEN)
+            }.first()
+        }
     }
 
-    fun firstOpen() = !prefs.has(SharedPreferencesKey.KEY_START_SCREEN)
+    fun firstOpen() = startScreen.isKeyStored()
 
     fun defaultPaletteName(context: Context, withIncrement: Boolean = true): String = runBlocking {
         val number = dataStore.data.map { preferences ->

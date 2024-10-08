@@ -21,6 +21,7 @@ import ua.com.compose.data.enums.ESortType
 import ua.com.compose.extension.dataStore
 import ua.com.compose.extension.has
 import ua.com.compose.colors.colorINTOf
+import ua.com.compose.data.enums.EColorSchemeType
 
 object Settings {
 
@@ -89,6 +90,24 @@ object Settings {
         fun update(value: EColorType) = runBlocking {
             dataStore.edit { settings ->
                 settings[DataStoreKey.KEY_COLOR_TYPE] = value.key
+            }
+        }
+    }
+
+    object colorWheelScheme {
+        val flow: Flow<EColorSchemeType>
+            get() = dataStore.data.map { preferences ->
+                EColorSchemeType.valueByKey(preferences[DataStoreKey.KEY_COLOR_WHEEL_SCHEME] ?: EColorSchemeType.SCHEME_0.key)
+            }
+
+        val value: EColorSchemeType
+            get() = runBlocking {
+                flow.first()
+            }
+
+        fun update(value: EColorSchemeType) = runBlocking {
+            dataStore.edit { settings ->
+                settings[DataStoreKey.KEY_COLOR_WHEEL_SCHEME] = value.key
             }
         }
     }

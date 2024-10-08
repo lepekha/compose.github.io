@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">Dodano kolor do palety</string>
     <string name="color_pick_shades">Odcienie</string>
     <string name="color_pick_tints">Odcienie</string>
-    <string name="color_pick_triadic_colors">Kolory triadyczne</string>
-    <string name="color_pick_analogous_colors">Kolory analogiczne</string>
-    <string name="color_pick_monochromatic_colors">Kolory monochromatyczne</string>
-    <string name="color_pick_complementary_color">Kolory komplementarne</string>
     <string name="color_pick_tones">Tony</string>
-    <string name="color_pick_tetradic_color">Kolory tetradyczne</string>
     <string name="color_pick_remove_pallet">Czy chcesz usunąć paletę kolorów?</string>
     <string name="color_pick_theme">Motyw</string>
     <string name="color_pick_text">Tekst</string>
@@ -54,14 +49,26 @@
     <string name="color_pick_file">Pliki</string>
     <string name="color_pick_no_colors">Brak kolorów</string>
 
+    <string name="color_color_wheel">Koło barw</string>
+    <string name="color_color_scheme">Schemat kolorów</string>
+    <string name="color_settings">Ustawienia</string>
+    <string name="color_result">Wynik</string>
+    <string name="color_pick_triadic_colors">Triadyczne</string>
+    <string name="color_pick_analogous_colors">Analogiczne</string>
+    <string name="color_pick_monochromatic_colors">Monochromatyczne</string>
+    <string name="color_pick_complementary_color">Dopełniająчі</string>
+    <string name="color_pick_split_complementary_color">Podzielone dopełniająчі</string>
+    <string name="color_pick_tetradic_color">Tetradyczne</string>
+
     <string name="color_pick_change">Aktualizuj</string>
     <string name="color_pick_sort_name">Nazwa</string>
     <string name="color_pick_palette_saved">Paleta zapisana w "Pobrane"</string>
     <string name="color_pick_buy">Kup</string>
     <string name="color_pick_update_change">Nowa wersja:</string>
     <string name="color_pick_premium_version">Wersja premium</string>
-    <string name="color_pick_half_access">+ dominujące kolory;\n+ generator palet;\n+ eksport palet w formatach: css, svg, aco, ase, act;\n+ dodatkowe obrazy do eksportu palet;</string>
     <string name="color_pick_images">Obrazy</string>
     <string name="color_pick_frequency">Częstotliwość</string>
-    <string name="color_pick_update_version_text">+ nowy przycisk menu dla palety;\n+ możliwość zmiany nazwy palety;\n+ parametr przybliżonej długości fali i częstotliwości dla koloru;\n+ nowy typ koloru RYB;</string>
+    <string name="color_pick_half_access">+ dominujące kolory;\n+ generator palet;\n+ koło kolorów;\n+ eksportuj palety w formatach: css, svg, aco, ase, act;\n+ dodatkowe obrazy do eksportu palet;\n+ kawa dla programisty☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ koło kolorów;\n+ nowe funkcje tworzenia niestandardowych kolorów;</string>
+
 </resources>

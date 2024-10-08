@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">Couleur ajoutée à la palette</string>
     <string name="color_pick_shades">Teintes sombres</string>
     <string name="color_pick_tints">Teintes claires</string>
-    <string name="color_pick_triadic_colors">Couleurs triadiques</string>
-    <string name="color_pick_analogous_colors">Couleurs analogues</string>
-    <string name="color_pick_monochromatic_colors">Couleurs monochromatiques</string>
-    <string name="color_pick_complementary_color">Couleurs complémentaires</string>
     <string name="color_pick_tones">Tons</string>
-    <string name="color_pick_tetradic_color">Couleurs tétradiques</string>
     <string name="color_pick_remove_pallet">Voulez-vous supprimer la palette de couleurs ?</string>
     <string name="color_pick_theme">Thème</string>
     <string name="color_pick_text">Texte</string>
@@ -54,14 +49,25 @@
     <string name="color_pick_file">Fichiers</string>
     <string name="color_pick_no_colors">Pas de couleurs</string>
 
+    <string name="color_color_wheel">Roue chromatique</string>
+    <string name="color_color_scheme">Schéma de couleurs</string>
+    <string name="color_settings">Paramètres</string>
+    <string name="color_result">Résultat</string>
+    <string name="color_pick_triadic_colors">Triadiques</string>
+    <string name="color_pick_analogous_colors">Analogues</string>
+    <string name="color_pick_monochromatic_colors">Monochromatiques</string>
+    <string name="color_pick_complementary_color">Complémentaires</string>
+    <string name="color_pick_split_complementary_color">Complémentaires divisés</string>
+    <string name="color_pick_tetradic_color">Tétradiques</string>
+
     <string name="color_pick_change">Mettre à jour</string>
     <string name="color_pick_sort_name">Nom</string>
     <string name="color_pick_palette_saved">Palette enregistrée dans "Téléchargements"</string>
     <string name="color_pick_buy">Acheter</string>
     <string name="color_pick_update_change">Nouvelle version:</string>
     <string name="color_pick_premium_version">Version premium</string>
-    <string name="color_pick_half_access">+ couleurs dominantes;\n+ générateur de palettes;\n+ exportation de palettes aux formats : css, svg, aco, ase, act;\n+ images supplémentaires pour l\'exportation de palettes;</string>
     <string name="color_pick_images">Images</string>
     <string name="color_pick_frequency">Fréquence</string>
-    <string name="color_pick_update_version_text">+ nouveau bouton de menu pour la palette;\n+ possibilité de changer le nom de la palette;\n+ paramètre de longueur d\'onde et de fréquence approximatives pour la couleur;\n+ nouveau type de couleur RYB;</string>
+    <string name="color_pick_half_access">+ couleurs dominantes;\n+ générateur de palettes;\n+ roue chromatique;\n+ exporter les palettes aux formats : css, svg, aco, ase, act;\n+ images supplémentaires pour l\'exportation de palettes;\n+ café pour le développeur☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ roue chromatique;\n+ nouvelles fonctionnalités pour créer une couleur personnalisée;</string>
 </resources>

@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">रंग पैलेट में जोड़ा गया</string>
     <string name="color_pick_shades">तिनके</string>
     <string name="color_pick_tints">टिंट्स</string>
-    <string name="color_pick_triadic_colors">त्रिकोणी रंग</string>
-    <string name="color_pick_analogous_colors">अनुरूप रंग</string>
-    <string name="color_pick_monochromatic_colors">मोनोक्रोमैटिक रंग</string>
-    <string name="color_pick_complementary_color">पूरक रंग</string>
     <string name="color_pick_tones">टोन्स</string>
-    <string name="color_pick_tetradic_color">चतुर्भुजीय रंग</string>
     <string name="color_pick_remove_pallet">क्या आप रंग पैलेट हटाना चाहते हैं?</string>
     <string name="color_pick_theme">विषय</string>
     <string name="color_pick_text">पाठ</string>
@@ -48,6 +43,17 @@
     <string name="color_bar_green">हरा</string>
     <string name="color_bar_blue">नीला</string>
 
+    <string name="color_color_wheel">रंग पहिया</string>
+    <string name="color_color_scheme">रंग योजना</string>
+    <string name="color_settings">सेटिंग्स</string>
+    <string name="color_result">परिणाम</string>
+    <string name="color_pick_triadic_colors">त्रिद्वितीय</string>
+    <string name="color_pick_analogous_colors">समान</string>
+    <string name="color_pick_monochromatic_colors">एकरंगी</string>
+    <string name="color_pick_complementary_color">पूरक</string>
+    <string name="color_pick_split_complementary_color">विभाजित पूरक</string>
+    <string name="color_pick_tetradic_color">चतुष्कोणीय</string>
+
     <string name="color_pick_luminance">प्रकाश तीव्रता</string>
     <string name="color_pick_wavelength">तरंग दैर्घ्य</string>
     <string name="color_pick_out_of_range">सीमा से बाहर</string>
@@ -60,8 +66,9 @@
     <string name="color_pick_buy">खरीदें</string>
     <string name="color_pick_update_change">नया संस्करण:</string>
     <string name="color_pick_premium_version">प्रीमियम संस्करण</string>
-    <string name="color_pick_half_access">+ प्रमुख रंग;\n+ पैलेट जेनरेटर;\n+ पैलेट निर्यात प्रारूप: css, svg, aco, ase, act;\n+ पैलेट निर्यात के लिए अतिरिक्त छवियाँ;</string>
     <string name="color_pick_images">छवियाँ</string>
     <string name="color_pick_frequency">आवृत्ति</string>
-    <string name="color_pick_update_version_text">+ पैलेट के लिए नया मेनू बटन;\n+ पैलेट का नाम बदलने की क्षमता;\n+ रंग के लिए अनुमानित तरंग दैर्ध्य और आवृत्ति पैरामीटर;\n+ नया RYB रंग प्रकार;</string>
+    <string name="color_pick_half_access">+ प्रमुख रंग;\n+ पैलेट जनरेटर;\n+ रंग चक्र;\n+ पैलेट निर्यात करें: css, svg, aco, ase, act;\n+ पैलेट निर्यात के लिए अतिरिक्त छवियां;\n+ डेवलपर के लिए कॉफी☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ रंग चक्र;\n+ कस्टम रंग बनाने के लिए नई सुविधाएँ;</string>
+
 </resources>

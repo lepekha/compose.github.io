@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">Colore aggiunto alla tavolozza</string>
     <string name="color_pick_shades">Ombreggiature</string>
     <string name="color_pick_tints">Tonalità</string>
-    <string name="color_pick_triadic_colors">Colori triadici</string>
-    <string name="color_pick_analogous_colors">Colori analoghi</string>
-    <string name="color_pick_monochromatic_colors">Colori monocromatici</string>
-    <string name="color_pick_complementary_color">Colori complementari</string>
     <string name="color_pick_tones">Tonalità</string>
-    <string name="color_pick_tetradic_color">Colori tetradici</string>
     <string name="color_pick_remove_pallet">Vuoi rimuovere la tavolozza dei colori?</string>
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Testo</string>
@@ -54,14 +49,26 @@
     <string name="color_pick_file">File</string>
     <string name="color_pick_no_colors">Nessun colore</string>
 
+    <string name="color_color_wheel">Ruota dei colori</string>
+    <string name="color_color_scheme">Schema colori</string>
+    <string name="color_settings">Impostazioni</string>
+    <string name="color_result">Risultato</string>
+    <string name="color_pick_triadic_colors">Triadici</string>
+    <string name="color_pick_analogous_colors">Analogici</string>
+    <string name="color_pick_monochromatic_colors">Monocromatici</string>
+    <string name="color_pick_complementary_color">Complementari</string>
+    <string name="color_pick_split_complementary_color">Complementari divisi</string>
+    <string name="color_pick_tetradic_color">Tetradici</string>
+
     <string name="color_pick_change">Aggiornare</string>
     <string name="color_pick_sort_name">Nome</string>
     <string name="color_pick_palette_saved">Palette salvata in "Download"</string>
     <string name="color_pick_buy">Acquista</string>
     <string name="color_pick_update_change">Nuova versione:</string>
     <string name="color_pick_premium_version">Versione premium</string>
-    <string name="color_pick_half_access">+ colori dominanti;\n+ generatore di palette;\n+ esportazione di palette nei formati: css, svg, aco, ase, act;\n+ immagini aggiuntive per l\'esportazione delle palette;</string>
     <string name="color_pick_images">Immagini</string>
     <string name="color_pick_frequency">Frequenza</string>
-    <string name="color_pick_update_version_text">+ nuovo pulsante di menu per la tavolozza;\n+ possibilità di cambiare il nome della tavolozza;\n+ parametro di lunghezza d\'onda e frequenza approssimativa per il colore;\n+ nuovo tipo di colore RYB;</string>
+    <string name="color_pick_half_access">+ colori dominanti;\n+ generatore di palette;\n+ ruota dei colori;\n+ esportare palette nei formati: css, svg, aco, ase, act;\n+ immagini aggiuntive per l\'esportazione della palette;\n+ caffè per lo sviluppatore☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ ruota dei colori;\n+ nuove funzionalità per creare un colore personalizzato;</string>
+
 </resources>

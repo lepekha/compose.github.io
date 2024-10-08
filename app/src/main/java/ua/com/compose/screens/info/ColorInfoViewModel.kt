@@ -20,8 +20,8 @@ import ua.com.compose.colors.complementary
 import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.frequency
 import ua.com.compose.colors.luminance
-import ua.com.compose.colors.monochromatics
 import ua.com.compose.colors.shades
+import ua.com.compose.colors.splitComplementary
 import ua.com.compose.colors.tetradics
 import ua.com.compose.colors.tints
 import ua.com.compose.colors.tones
@@ -63,14 +63,14 @@ class ColorInfoViewModel(private val addColorUseCase: AddColorUseCase): ViewMode
         val frequency = color.frequency().takeIf { it.isFinite() }?.formatBigNumber(digitsAfterPoint = 0)?.let { "≈ ${it.first}${it.second}Hz" } ?: context.getString(R.string.color_pick_out_of_range)
         items.add(ColorInfoItem.Text(title = context.getString(R.string.color_pick_frequency), value = frequency))
 
-        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_shades), colors = color.shades(count = 6)))
-        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tints), colors = color.tints(count = 6)))
-        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tones), colors = color.tones(count = 6)))
-        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tetradic_color), colors = color.tetradics(count = 4)))
-        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_triadic_colors), colors = color.triadics(count = 3)))
-        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_analogous_colors), colors = color.analogous(count = 6)))
-        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_monochromatic_colors), colors = color.monochromatics(count = 6)))
         items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_complementary_color), colors = color.complementary()))
+        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_split_complementary_color), colors = color.splitComplementary()))
+        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_triadic_colors), colors = color.triadics(count = 3)))
+        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tetradic_color), colors = color.tetradics(count = 4)))
+        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_analogous_colors), colors = color.analogous()))
+        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tints), colors = color.tints(count = 6)))
+        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_shades), colors = color.shades(count = 6)))
+        items.add(ColorInfoItem.Colors(title = context.getString(R.string.color_pick_tones), colors = color.tones(count = 6)))
 
         _items.postValue(items)
     }

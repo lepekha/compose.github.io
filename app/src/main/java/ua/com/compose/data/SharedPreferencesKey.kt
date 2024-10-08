@@ -30,6 +30,7 @@ object DataStoreKey {
     val KEY_COLOR_TYPE = intPreferencesKey("KEY_COLOR_TYPE")
     val KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE = intPreferencesKey("KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE")
     val KEY_SORT_TYPE = intPreferencesKey("KEY_SORT_TYPE")
+    val KEY_COLOR_WHEEL_SCHEME = intPreferencesKey("KEY_COLOR_WHEEL_SCHEME")
     val KEY_SORT_DIRECTION = intPreferencesKey("KEY_SORT_DIRECTION")
     val KEY_OPEN_APP_COUNT = intPreferencesKey("KEY_OPEN_APP_COUNT")
     val KEY_UPDATE_VERSION = stringPreferencesKey("KEY_UPDATE_VERSION")

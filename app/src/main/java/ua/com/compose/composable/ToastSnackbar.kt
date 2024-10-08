@@ -82,7 +82,7 @@ fun ToastSnackbar(toastState: ToastState) {
             .padding(
                 bottom = WindowInsets.navigationBars
                     .asPaddingValues()
-                    .calculateBottomPadding() + 40.dp
+                    .calculateBottomPadding() + 60.dp
             ),
         contentAlignment = Alignment.BottomCenter
     ) {
@@ -104,7 +104,7 @@ fun ToastSnackbarMessage(message: ToastMessage, onDismiss: (ToastMessage) -> Uni
     var isVisible by remember { mutableStateOf(true) }
 
     LaunchedEffect(message.id) {
-        delay(3000)  // Час показу повідомлення
+        delay(2500)  // Час показу повідомлення
         isVisible = false
         delay(300)  // Додатковий час для завершення анімації зникнення
         onDismiss(message)

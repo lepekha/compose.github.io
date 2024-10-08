@@ -98,6 +98,7 @@ import ua.com.compose.extension.clipboardCopy
 import ua.com.compose.extension.vibrate
 import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.textColor
+import ua.com.compose.screens.colorWheel.ColorWheelScreen
 import ua.com.compose.screens.info.InfoScreen
 import ua.com.compose.screens.genPalette.PalettesScreen
 import ua.com.compose.screens.share.ShareScreen
@@ -117,6 +118,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     var stateTuneColor: TuneColorState? by remember { mutableStateOf(null) }
     var stateCreateColor: Boolean by remember { mutableStateOf(false) }
     var statePalettes: Boolean by remember { mutableStateOf(false) }
+    var stateColorWheel: Boolean by remember { mutableStateOf(false) }
     var stateSharePalette: Pair<String, Long>? by remember { mutableStateOf(null) }
     var stateInfoColor: InfoColor? by remember { mutableStateOf(null) }
 
@@ -155,6 +157,12 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     if(statePalettes) {
         PalettesScreen {
             statePalettes = false
+        }
+    }
+
+    if(stateColorWheel) {
+        ColorWheelScreen {
+            stateColorWheel = false
         }
     }
 
@@ -684,6 +692,11 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                         .padding(start = 16.dp, end = 16.dp)
                     ) {
                         Menu {
+                            IconItem(painter = painterResource(id = R.drawable.ic_color_wheel)) {
+                                view.vibrate(EVibrate.BUTTON)
+                                stateColorWheel = true
+                            }
+
                             IconItem(painter = painterResource(id = R.drawable.ic_stars)) {
                                 view.vibrate(EVibrate.BUTTON)
                                 statePalettes = true

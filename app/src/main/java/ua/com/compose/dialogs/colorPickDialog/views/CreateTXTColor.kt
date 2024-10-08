@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -115,8 +116,8 @@ fun CreateTXTColor(
                 stateField = it
                 errorInput = _color == null
             })
-        Spacer(modifier = Modifier.height(4.dp))
-        FlowRow(modifier = Modifier.padding(), maxItemsInEachRow = 3, verticalArrangement = Arrangement.spacedBy((-12).dp, Alignment.Top)) {
+        Spacer(modifier = Modifier.height(8.dp))
+        FlowRow(modifier = Modifier.padding(start = 4.dp, end = 4.dp), maxItemsInEachRow = 3, verticalArrangement = Arrangement.spacedBy((-12).dp, Alignment.Top)) {
             EColorType.valuesForInputText().forEach {
                 FilterChip(
                     selected = it == colorType,

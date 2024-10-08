@@ -149,6 +149,17 @@ fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
     val containerBackground = MaterialTheme.colorScheme.surfaceContainerLow
 
     BottomSheet(sheetState = sheetState, onDismissRequest = onDismissRequest) {
+        Text(
+            text = stringResource(id = R.string.color_settings),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, bottom = 16.dp),
+            textAlign = TextAlign.Start,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 32.sp,
+            fontWeight = FontWeight(700)
+        )
+
         LazyColumn(
             modifier = Modifier
                 .wrapContentHeight()

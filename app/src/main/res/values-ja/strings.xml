@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">色がパレットに追加されました</string>
     <string name="color_pick_shades">シェード</string>
     <string name="color_pick_tints">色調</string>
-    <string name="color_pick_triadic_colors">三つの色</string>
-    <string name="color_pick_analogous_colors">アナログカラー</string>
-    <string name="color_pick_monochromatic_colors">モノクロカラー</string>
-    <string name="color_pick_complementary_color">補色</string>
     <string name="color_pick_tones">トーン</string>
-    <string name="color_pick_tetradic_color">四つの色</string>
     <string name="color_pick_remove_pallet">パレットを削除しますか？</string>
     <string name="color_pick_theme">テーマ</string>
     <string name="color_pick_text">テキスト</string>
@@ -48,6 +43,17 @@
     <string name="color_bar_green">緑</string>
     <string name="color_bar_blue">青</string>
 
+    <string name="color_color_wheel">カラーホイール</string>
+    <string name="color_color_scheme">配色</string>
+    <string name="color_settings">設定</string>
+    <string name="color_result">結果</string>
+    <string name="color_pick_triadic_colors">三色配色</string>
+    <string name="color_pick_analogous_colors">類似色</string>
+    <string name="color_pick_monochromatic_colors">単色配色</string>
+    <string name="color_pick_complementary_color">補色</string>
+    <string name="color_pick_split_complementary_color">分割補色</string>
+    <string name="color_pick_tetradic_color">四色配色</string>
+
     <string name="color_pick_luminance">輝度</string>
     <string name="color_pick_wavelength">波長</string>
     <string name="color_pick_out_of_range">範囲外</string>
@@ -60,8 +66,9 @@
     <string name="color_pick_buy">購入する</string>
     <string name="color_pick_update_change">新しいバージョン:</string>
     <string name="color_pick_premium_version">プレミアム版</string>
-    <string name="color_pick_half_access">+ 支配的な色;\n+ パレットジェネレーター;\n+ パレットのエクスポート形式：css、svg、aco、ase、act;\n+ パレットのエクスポート用の追加画像;</string>
     <string name="color_pick_images">画像</string>
     <string name="color_pick_frequency">周波数</string>
-    <string name="color_pick_update_version_text">+ パレットの新しいメニューボタン;\n+ パレットの名前を変更する機能;\n+ 色の近似波長と周波数のパラメータ;\n+ 新しいRYBカラーモード;</string>
+    <string name="color_pick_half_access">+ 主要な色;\n+ パレットジェネレーター;\n+ カラーホイール;\n+ パレットのエクスポート形式: css, svg, aco, ase, act;\n+ パレットのエクスポート用の追加画像;\n+ 開発者へのコーヒー☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ カラーホイール;\n+ カスタムカラー作成のための新機能;</string>
+
 </resources>

@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">Колір додано до палітри</string>
     <string name="color_pick_shades">Негативні відтінки</string>
     <string name="color_pick_tints">Позитивні відтінки</string>
-    <string name="color_pick_triadic_colors">Триадні кольори</string>
-    <string name="color_pick_analogous_colors">Аналогічні кольори</string>
-    <string name="color_pick_monochromatic_colors">Монохромні кольори</string>
-    <string name="color_pick_complementary_color">Комплементарні кольори</string>
     <string name="color_pick_tones">Тон кольору</string>
-    <string name="color_pick_tetradic_color">Тетрадні кольори</string>
     ʼ<string name="color_bar_hue">Відтінок</string>
     <string name="color_bar_saturation">Насиченість</string>
     <string name="color_bar_lightness">Яскравість</string>
@@ -49,6 +44,17 @@
     <string name="color_pick_generate_palettes">Генератор палітр</string>
     <string name="color_pick_add_colors">Додати кольори до поточної палітри?</string>
 
+    <string name="color_color_wheel">Колесо кольорів</string>
+    <string name="color_color_scheme">Колірна схема</string>
+    <string name="color_settings">Налаштування</string>
+    <string name="color_result">Результат</string>
+    <string name="color_pick_triadic_colors">Тріадичні</string>
+    <string name="color_pick_analogous_colors">Аналогічні</string>
+    <string name="color_pick_monochromatic_colors">Монохроматичні</string>
+    <string name="color_pick_complementary_color">Доповнюючі</string>
+    <string name="color_pick_split_complementary_color">Розділені доповнюючі</string>
+    <string name="color_pick_tetradic_color">Тетрадичні</string>
+
     <string name="color_pick_luminance">Яскравість</string>
     <string name="color_pick_wavelength">Довжина хвилі</string>
     <string name="color_pick_out_of_range">Поза діапазоном</string>
@@ -62,8 +68,8 @@
     <string name="color_pick_buy">Купити</string>
     <string name="color_pick_update_change">Нова версія:</string>
     <string name="color_pick_premium_version">Преміум версія</string>
-    <string name="color_pick_half_access">+ домінуючі кольори;\n+ генератор палітр;\n+ експорт палітри в форматах: css, svg, aco, ase, act;\n+ додаткові зображення для експорту палітри;</string>
     <string name="color_pick_images">Зображення</string>
     <string name="color_pick_frequency">Частота</string>
-    <string name="color_pick_update_version_text">+ нова кнопка меню для палітри;\n+ можливість змінювати назву палітри;\n+ параметр приблизної довжини хвилі та частоти для кольору;\n+ новий тип кольору RYB;</string>
+    <string name="color_pick_half_access">+ домінуючі кольори;\n+ генератор палітр;\n+ колесо кольорів;\n+ експорт палітри в форматах: css, svg, aco, ase, act;\n+ додаткові зображення для експорту палітри;\n+ кава для розробника☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ колесо кольорів;\n+ нові можливості для створення кастомного кольору;</string>
 </resources>

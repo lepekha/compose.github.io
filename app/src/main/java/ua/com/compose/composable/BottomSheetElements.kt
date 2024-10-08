@@ -45,7 +45,7 @@ import java.nio.file.WatchEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheet(topInset:WindowInsets = WindowInsets.statusBars, bottomInset:WindowInsets = WindowInsets.navigationBars, sheetState: SheetState, onDismissRequest: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
+fun BottomSheet(withSpacer: Boolean = true, topInset:WindowInsets = WindowInsets.statusBars, bottomInset:WindowInsets = WindowInsets.navigationBars, sheetState: SheetState, onDismissRequest: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -69,18 +69,23 @@ fun BottomSheet(topInset:WindowInsets = WindowInsets.statusBars, bottomInset:Win
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier
-                        .width(40.dp)
-                        .height(4.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.outline,
-                            RoundedCornerShape(2.dp)
-                        )
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                content()
+                if(withSpacer) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Box(
+                        modifier = Modifier
+                            .width(40.dp)
+                            .height(4.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.outline,
+                                RoundedCornerShape(2.dp)
+                            )
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    content()
+                } else {
+                    content()
+                }
+
                 Spacer(modifier = Modifier.height(bottomInset.asPaddingValues().calculateBottomPadding()))
             }
         }

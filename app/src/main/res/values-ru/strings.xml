@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">Цвет добавлен в палитру</string>
     <string name="color_pick_shades">Негативные оттенки</string>
     <string name="color_pick_tints">Позитивные оттенки</string>
-    <string name="color_pick_triadic_colors">Триадные цвета</string>
-    <string name="color_pick_analogous_colors">Аналогичные цвета</string>
-    <string name="color_pick_monochromatic_colors">Монохромные цвета</string>
-    <string name="color_pick_complementary_color">Комплементарные цвета</string>
     <string name="color_pick_tones">Тон цвета</string>
-    <string name="color_pick_tetradic_color">Тетрадные цвета</string>
     <string name="color_pick_remove_pallet">Хотите удалить палитру цветов?</string>
     <string name="color_pick_theme">Тема</string>
     <string name="color_pick_text">Текст</string>
@@ -54,6 +49,17 @@
     <string name="color_pick_file">Файлы</string>
     <string name="color_pick_no_colors">Нет цветов</string>
 
+    <string name="color_color_wheel">Цветовой круг</string>
+    <string name="color_color_scheme">Цветовая схема</string>
+    <string name="color_settings">Настройки</string>
+    <string name="color_result">Результат</string>
+    <string name="color_pick_triadic_colors">Триадные</string>
+    <string name="color_pick_analogous_colors">Аналогичные</string>
+    <string name="color_pick_monochromatic_colors">Монохромные</string>
+    <string name="color_pick_complementary_color">Дополняющие</string>
+    <string name="color_pick_split_complementary_color">Разделенные дополняющие</string>
+    <string name="color_pick_tetradic_color">Тетрадные</string>
+
     <string name="color_pick_change">Обновить</string>
     <string name="color_pick_sort_name">Имя</string>
 
@@ -61,8 +67,9 @@
     <string name="color_pick_buy">Купить</string>
     <string name="color_pick_update_change">Новая версия:</string>
     <string name="color_pick_premium_version">Премиум версия</string>
-    <string name="color_pick_half_access">+ доминирующие цвета;\n+ генератор палитр;\n+ экспорт палитр в форматах: css, svg, aco, ase, act;\n+ дополнительные изображения для экспорта палитр;</string>
     <string name="color_pick_images">Изображения</string>
     <string name="color_pick_frequency">Частота</string>
-    <string name="color_pick_update_version_text">+ новая кнопка меню для палитры;\n+ возможность изменить название палитры;\n+ параметр приблизительной длины волны и частоты для цвета;\n+ новый тип цвета RYB;</string>
+    <string name="color_pick_half_access">+ доминирующие цвета;\n+ генератор палитр;\n+ цветовое колесо;\n+ экспорт палитр в форматах: css, svg, aco, ase, act;\n+ дополнительные изображения для экспорта палитры;\n+ кофе для разработчика☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ цветовое колесо;\n+ новые возможности для создания кастомного цвета;</string>
+
 </resources>

@@ -5,24 +5,37 @@ import ua.com.compose.colors.data.HSVColor
 import kotlin.math.roundToInt
 
 fun IColor.tints(count: Int): List<IColor> {
-    val white = -0x1
-    val tints = mutableListOf<Int>()
+    require(count > 1) { "Count must be greater than 1 to generate tints" }
+    val count = count + 1
+    val tints = mutableListOf<IColor>()
+    val hsl = this.asHSL()
 
-    repeat(count) { i ->
-        val tint = blendARGB(intColor, white, 1 - (i.toFloat() / (count - 1)))
-        tints.add(tint)
+    // Step between tints: evenly distribute the lightness between the original color and white
+    val step = 1f / (count - 1)
+
+    // Generate tints by varying the lightness towards white
+    for (i in 0 until count - 1) {
+        val lightness = hsl.lightness + (step * i * (1 - hsl.lightness))
+        tints.add(colorHSLOf(hsl.hue, hsl.saturation, lightness))
     }
-    return tints.map { it.toIntColor() }
+    return tints
 }
 
 fun IColor.shades(count: Int): List<IColor> {
-    val black = -0x1000000
-    val shades = mutableListOf<Int>()
-    repeat(count) { i ->
-        val shade = blendARGB(intColor, black, i.toFloat() / (count - 1))
-        shades.add(shade)
+    require(count > 1) { "Count must be greater than 1 to generate shades" }
+    val count = count + 1
+    val shades = mutableListOf<IColor>()
+    val hsl = this.asHSL()
+
+    // Step between shades: evenly distribute the lightness between the original color and black
+    val step = 1f / (count - 1)
+
+    // Generate shades by varying the lightness towards black
+    for (i in 0 until count - 1) {
+        val lightness = hsl.lightness * (1 - step * i)
+        shades.add(colorHSLOf(hsl.hue, hsl.saturation, lightness))
     }
-    return shades.map { it.toIntColor() }
+    return shades
 }
 
 fun IColor.tetradics(count: Int): List<IColor> {
@@ -50,43 +63,49 @@ fun IColor.triadics(count: Int): List<IColor> {
 }
 
 fun IColor.tones(count: Int): List<IColor> {
-    val toneColors = mutableListOf<HSVColor>()
-    val targetSaturation = 1f/ 6f
-    (1..count).forEach { i ->
-        val hsv = this.asHSV().copy(saturation = targetSaturation * i)
-        toneColors.add(hsv)
-    }
-
-    return toneColors
-}
-
-fun IColor.analogous(count: Int): List<IColor> {
-    val analogousColors = mutableListOf<HSVColor>()
-
-    val hsv = this.asHSV()
-    (1..count).forEach { i ->
-        var newHsv = hsv.copy(hue = (hsv.hue + (i + 1) * 30) % 360)
-        if (newHsv.hue < 0) {
-            newHsv = newHsv.copy(hue = newHsv.hue + 360)
-        }
-        analogousColors.add(newHsv)
-    }
-
-    return analogousColors
-}
-
-fun IColor.monochromatics(count: Int): List<IColor> {
-    val monochromaticColors = mutableListOf<IColor>()
-
-    val lightnessStep = 1f / 7f // крок зміни яскравості (від 0 до 1)
-
+    require(count > 1) { "Count must be greater than 1 to generate tones" }
+    val count = count + 1
+    val tones = mutableListOf<IColor>()
     val hsl = this.asHSL()
-    repeat(count) { i ->
-        val lightness = hsl.lightness * (1 - (i + 1) * lightnessStep) // зменшення яскравості
-        val newHSL = hsl.copy(lightness = lightness)
-        monochromaticColors.add(newHSL)
+
+    // Step between tones: evenly distribute the saturation between 0 and the original saturation
+    val step = hsl.saturation / (count - 1)
+
+    for (i in 0 until count - 1) {
+        val saturation = hsl.saturation - step * i
+        tones.add(colorHSLOf(hsl.hue, saturation.coerceIn(0f, 1f), hsl.lightness))
     }
-    return monochromaticColors
+    return tones
+}
+
+fun IColor.analogous(): List<IColor> {
+    val hsv = this.asHSL()
+
+    val secondHue = (hsv.hue + 30) % 360
+    val thirdHue = (hsv.hue - 30 + 360) % 360
+    return listOf(
+        hsv,
+        hsv.copy(hue = secondHue),
+        hsv.copy(hue = thirdHue)
+    )
+}
+
+fun IColor.splitComplementary(): List<IColor> {
+    val hsl = this.asHSL()
+    val baseHue = hsl.hue
+
+    // Complementary hue
+    val complementaryHue = (baseHue + 180) % 360
+
+    // Calculate split complementary hues
+    val splitHue1 = (complementaryHue + 30) % 360 // 30 degrees to the left
+    val splitHue2 = (complementaryHue - 30 + 360) % 360 // 30 degrees to the right
+
+    return listOf(
+        colorHSLOf(baseHue, hsl.saturation, hsl.lightness), // Base color
+        colorHSLOf(splitHue1, hsl.saturation, hsl.lightness), // First split complementary color
+        colorHSLOf(splitHue2, hsl.saturation, hsl.lightness)  // Second split complementary color
+    )
 }
 
 fun IColor.complementary(): List<IColor> {

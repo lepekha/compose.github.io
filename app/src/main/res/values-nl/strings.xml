@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">Kleur toegevoegd aan palet</string>
     <string name="color_pick_shades">Tinten</string>
     <string name="color_pick_tints">Tinten</string>
-    <string name="color_pick_triadic_colors">Driekleurige kleuren</string>
-    <string name="color_pick_analogous_colors">Analoge kleuren</string>
-    <string name="color_pick_monochromatic_colors">Monochrome kleuren</string>
-    <string name="color_pick_complementary_color">Complementaire kleuren</string>
     <string name="color_pick_tones">Tinten</string>
-    <string name="color_pick_tetradic_color">Tetradische kleuren</string>
     <string name="color_pick_remove_pallet">Wilt u het kleurenpalet verwijderen?</string>
     <string name="color_pick_theme">Thema</string>
     <string name="color_pick_text">Tekst</string>
@@ -54,14 +49,26 @@
     <string name="color_pick_file">Bestanden</string>
     <string name="color_pick_no_colors">Geen kleuren</string>
 
+    <string name="color_color_wheel">Kleurenwiel</string>
+    <string name="color_color_scheme">Kleurschema</string>
+    <string name="color_settings">Instellingen</string>
+    <string name="color_result">Resultaat</string>
+    <string name="color_pick_triadic_colors">Triadisch</string>
+    <string name="color_pick_analogous_colors">Analoog</string>
+    <string name="color_pick_monochromatic_colors">Monochromatisch</string>
+    <string name="color_pick_complementary_color">Complementair</string>
+    <string name="color_pick_split_complementary_color">Gesplitst complementair</string>
+    <string name="color_pick_tetradic_color">Tetradisch</string>
+
     <string name="color_pick_change">Bijwerken</string>
     <string name="color_pick_sort_name">Naam</string>
     <string name="color_pick_palette_saved">Palet opgeslagen in "Downloads"</string>
     <string name="color_pick_buy">Kopen</string>
     <string name="color_pick_update_change">Nieuwe versie:</string>
     <string name="color_pick_premium_version">Premium versie</string>
-    <string name="color_pick_half_access">+ dominante kleuren;\n+ palettengenerator;\n+ export van paletten in de formaten: css, svg, aco, ase, act;\n+ extra afbeeldingen voor paletexport;</string>
     <string name="color_pick_images">Afbeeldingen</string>
     <string name="color_pick_frequency">Frequentie</string>
-    <string name="color_pick_update_version_text">+ nieuwe menuknop voor het palet;\n+ mogelijkheid om de naam van het palet te wijzigen;\n+ parameter voor geschatte golflengte en frequentie voor kleur;\n+ nieuw RYB-kleurtype;</string>
+    <string name="color_pick_half_access">+ dominante kleuren;\n+ palettengenerator;\n+ kleurenwiel;\n+ paletten exporteren in formaten: css, svg, aco, ase, act;\n+ extra afbeeldingen voor paletexport;\n+ koffie voor de ontwikkelaar☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ kleurenwiel;\n+ nieuwe functies voor het maken van aangepaste kleuren;</string>
+
 </resources>

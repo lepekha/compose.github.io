@@ -94,8 +94,8 @@ fun DomainColors(colors: List<IColor>, onDismissRequest: () -> Unit) {
                     .padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 4.dp),
                 textAlign = TextAlign.Start,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 30.sp,
-                fontWeight = FontWeight(500)
+                fontSize = 32.sp,
+                fontWeight = FontWeight(700)
             )
 
             LazyVerticalGrid(

@@ -13,12 +13,7 @@
     <string name="color_pick_color_add_to_pallete">Color agregado a la paleta</string>
     <string name="color_pick_shades">Sombras</string>
     <string name="color_pick_tints">Matices</string>
-    <string name="color_pick_triadic_colors">Colores tríadicos</string>
-    <string name="color_pick_analogous_colors">Colores análogos</string>
-    <string name="color_pick_monochromatic_colors">Colores monocromáticos</string>
-    <string name="color_pick_complementary_color">Colores complementarios</string>
     <string name="color_pick_tones">Tonos</string>
-    <string name="color_pick_tetradic_color">Colores tetradic</string>
     <string name="color_pick_remove_pallet">¿Quieres quitar la paleta de colores?</string>
     <string name="color_pick_theme">Tema</string>
     <string name="color_pick_text">Texto</string>
@@ -54,14 +49,25 @@
     <string name="color_pick_file">Archivos</string>
     <string name="color_pick_no_colors">Sin colores</string>
 
+    <string name="color_color_wheel">Rueda de color</string>
+    <string name="color_color_scheme">Esquema de color</string>
+    <string name="color_settings">Configuraciones</string>
+    <string name="color_result">Resultado</string>
+    <string name="color_pick_triadic_colors">Triádicos</string>
+    <string name="color_pick_analogous_colors">Análogos</string>
+    <string name="color_pick_monochromatic_colors">Monocromáticos</string>
+    <string name="color_pick_complementary_color">Complementarios</string>
+    <string name="color_pick_split_complementary_color">Complementarios divididos</string>
+    <string name="color_pick_tetradic_color">Tetrádicos</string>
+
     <string name="color_pick_change">Actualizar</string>
     <string name="color_pick_sort_name">Nombre</string>
     <string name="color_pick_palette_saved">Paleta guardada en "Descargas"</string>
     <string name="color_pick_buy">Comprar</string>
     <string name="color_pick_update_change">Nueva versión:</string>
     <string name="color_pick_premium_version">Versión premium</string>
-    <string name="color_pick_half_access">+ colores dominantes;\n+ generador de paletas;\n+ exportación de paletas en formatos: css, svg, aco, ase, act;\n+ imágenes adicionales para exportación de paletas;</string>
     <string name="color_pick_images">Imágenes</string>
     <string name="color_pick_frequency">Frecuencia</string>
-    <string name="color_pick_update_version_text">+ nuevo botón de menú para la paleta;\n+ capacidad para cambiar el nombre de la paleta;\n+ parámetro de longitud de onda y frecuencia aproximada para el color;\n+ nuevo tipo de color RYB;</string>
+    <string name="color_pick_half_access">+ colores dominantes;\n+ generador de paletas;\n+ rueda de colores;\n+ exportar paletas en formatos: css, svg, aco, ase, act;\n+ imágenes adicionales para la exportación de paletas;\n+ café para el desarrollador☕️🥐;</string>
+    <string name="color_pick_update_version_text">+ rueda de colores;\n+ nuevas funciones para crear un color personalizado;</string>
 </resources>

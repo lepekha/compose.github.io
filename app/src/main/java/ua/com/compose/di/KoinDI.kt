@@ -18,6 +18,7 @@ import ua.com.compose.domain.dbColorPallet.RemovePalletUseCase
 import ua.com.compose.domain.dbColorPallet.SelectPalletUseCase
 import ua.com.compose.domain.dbColorPallet.UpdatePalletUseCase
 import ua.com.compose.screens.camera.CameraViewModule
+import ua.com.compose.screens.colorWheel.ColorWheelViewModel
 import ua.com.compose.screens.dominantColors.DominantColorsViewModule
 import ua.com.compose.screens.image.ImageViewModule
 import ua.com.compose.screens.info.ColorInfoViewModel
@@ -43,6 +44,7 @@ val appModule = module {
     single { ChangeColorPalletUseCase(database = get()) }
     viewModel { SettingsViewModel() }
     viewModel { PalettesViewModel(getCurrentPalletUseCase = get(), addColorUseCase = get()) }
+    viewModel { ColorWheelViewModel(getCurrentPalletUseCase = get(), addColorUseCase = get()) }
     viewModel { ColorInfoViewModel(addColorUseCase = get()) }
     viewModel { ShareViewModel(database = get(), getAllColorsUseCase = get(), updatePalletUseCase = get(), removePalletUseCase = get()) }
     viewModel {

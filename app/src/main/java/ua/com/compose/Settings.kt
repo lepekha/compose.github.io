@@ -228,7 +228,7 @@ object Settings {
         }
     }
 
-    fun firstOpen() = startScreen.isKeyStored()
+    fun firstOpen() = !startScreen.isKeyStored()
 
     fun defaultPaletteName(context: Context, withIncrement: Boolean = true): String = runBlocking {
         val number = dataStore.data.map { preferences ->

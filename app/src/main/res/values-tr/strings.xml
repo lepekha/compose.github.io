@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_tr.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_tr.json</string>
+
     <string name="app_name">Renk Seçici</string>
     <string name="color_pick_setting_vibration">Titreşim</string>
     <string name="color_pick_setting_language">Dil</string>
@@ -70,6 +74,10 @@
     <string name="color_pick_images">Görüntüler</string>
     <string name="color_pick_frequency">Frekans</string>
     <string name="color_pick_half_access">+ baskın renkler;\n+ palet oluşturucu;\n+ renk çarkı;\n+ paletleri şu formatlarda dışa aktar: css, svg, aco, ase, act;\n+ palet dışa aktarma için ek görüntüler;\n+ geliştirici için kahve☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ renk çarkı;\n+ özel renk oluşturma için yeni özellikler;</string>
+    <string name="color_pick_update_version_text">+ renk adları için seçim eklendi: standart, Google renkleri, özel;</string>
 
+    <string name="color_name">Renk İsimleri</string>
+    <string name="color_name_material">Google renkleri</string>
+    <string name="color_name_standard">Standart</string>
+    <string name="color_name_custom">Özel</string>
 </resources>

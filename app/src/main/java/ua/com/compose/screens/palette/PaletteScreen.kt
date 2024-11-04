@@ -130,7 +130,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
     fun touchedColor(value: Int) {
         view.vibrate(EVibrate.BUTTON)
         val color = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.color() ?: return
-        val name = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.userColorName() ?: return
+        val name = palettes.firstOrNull { it.isCurrent }?.colors?.getOrNull(value)?.name ?: return
         stateInfoColor = InfoColor(name = name, color = color)
     }
 
@@ -612,7 +612,7 @@ fun PaletteScreen(viewModule: PaletteViewModule) {
                                                         fontWeight = FontWeight(600)
                                                     )
                                                     Text(
-                                                        text = colorItem.userColorName(),
+                                                        text = colorItem.name,
                                                         fontSize = 14.sp,
                                                         lineHeight = 15.sp,
                                                         maxLines = 1,

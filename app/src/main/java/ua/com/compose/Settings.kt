@@ -19,8 +19,8 @@ import ua.com.compose.data.enums.EPanel
 import ua.com.compose.data.enums.ESortDirection
 import ua.com.compose.data.enums.ESortType
 import ua.com.compose.extension.dataStore
-import ua.com.compose.extension.has
 import ua.com.compose.colors.colorINTOf
+import ua.com.compose.data.enums.EColorName
 import ua.com.compose.data.enums.EColorSchemeType
 
 object Settings {
@@ -90,6 +90,32 @@ object Settings {
         fun update(value: EColorType) = runBlocking {
             dataStore.edit { settings ->
                 settings[DataStoreKey.KEY_COLOR_TYPE] = value.key
+            }
+        }
+    }
+
+    object colorName {
+        val flow: Flow<EColorName>
+            get() {
+                val default = if(firstOpen()) {
+                    EColorName.STANDARD
+                } else {
+                    EColorName.CUSTOM
+                }
+                return dataStore.data.map { preferences ->
+                    EColorName.getByKey(preferences[DataStoreKey.KEY_COLOR_NAME] ?: default.key)
+                }
+            }
+
+
+        val value: EColorName
+            get() = runBlocking {
+                flow.first()
+            }
+
+        fun update(value: EColorName) = runBlocking {
+            dataStore.edit { settings ->
+                settings[DataStoreKey.KEY_COLOR_NAME] = value.key
             }
         }
     }

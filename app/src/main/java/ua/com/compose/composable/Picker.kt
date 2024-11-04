@@ -29,6 +29,7 @@ import ua.com.compose.R
 import ua.com.compose.extension.asComposeColor
 import ua.com.compose.colors.data.IColor
 import ua.com.compose.colors.textColor
+import ua.com.compose.data.enums.EColorName
 
 @Composable
 fun ColorPickerRing(modifier: Modifier = Modifier, color: IColor) {
@@ -56,7 +57,7 @@ fun ColorPickerRing(modifier: Modifier = Modifier, color: IColor) {
 }
 
 
-data class ColorState(val color: IColor, val name: String, val typeValue: String)
+data class ColorState(val color: IColor, val name: String, val typeValue: String, val colorNames: EColorName)
 
 @Composable
 fun ColorPickerInfo(state: ColorState, click: () -> Unit) {

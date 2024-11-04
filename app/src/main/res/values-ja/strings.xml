@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_ja.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_ja.json</string>
+
     <string name="app_name">カラーピッカー</string>
     <string name="color_pick_setting_vibration">振動</string>
     <string name="color_pick_setting_language">言語</string>
@@ -69,6 +73,10 @@
     <string name="color_pick_images">画像</string>
     <string name="color_pick_frequency">周波数</string>
     <string name="color_pick_half_access">+ 主要な色;\n+ パレットジェネレーター;\n+ カラーホイール;\n+ パレットのエクスポート形式: css, svg, aco, ase, act;\n+ パレットのエクスポート用の追加画像;\n+ 開発者へのコーヒー☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ カラーホイール;\n+ カスタムカラー作成のための新機能;</string>
+    <string name="color_pick_update_version_text">+ カラーネームの選択を追加しました: 標準、Googleカラー、カスタム;</string>
 
+    <string name="color_name">色名</string>
+    <string name="color_name_material">Googleカラー</string>
+    <string name="color_name_standard">標準</string>
+    <string name="color_name_custom">カスタム</string>
 </resources>

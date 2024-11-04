@@ -49,6 +49,7 @@ import ua.com.compose.extension.asComposeColor
 import ua.com.compose.extension.vibrate
 
 import ua.com.compose.colors.data.IColor
+import ua.com.compose.colors.textColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -122,7 +123,9 @@ fun DomainColors(colors: List<IColor>, onDismissRequest: () -> Unit) {
 
                     FilledTonalIconButton(
                         shape = MaterialTheme.shapes.extraSmall,
-                        colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = item.asComposeColor().copy(alpha = alpha)),
+                        colors = IconButtonDefaults.filledTonalIconButtonColors(
+                            containerColor = item.asComposeColor().copy(alpha = alpha),
+                            contentColor = item.textColor().asComposeColor()),
                         modifier = Modifier
                             .weight(1f)
                             .padding(5.dp)
@@ -146,7 +149,6 @@ fun DomainColors(colors: List<IColor>, onDismissRequest: () -> Unit) {
                                     .fillMaxSize(0.50f)
                                     .aspectRatio(1f, true),
                                 painter = painterResource(id = R.drawable.ic_lock),
-                                tint = MaterialTheme.colorScheme.inverseSurface,
                                 contentDescription = null
                             )
                         }
@@ -161,7 +163,6 @@ fun DomainColors(colors: List<IColor>, onDismissRequest: () -> Unit) {
                                     .fillMaxSize(0.50f)
                                     .aspectRatio(1f, true),
                                 painter = painterResource(id = R.drawable.ic_done),
-                                tint = item.asComposeColor(),
                                 contentDescription = null
                             )
                         }

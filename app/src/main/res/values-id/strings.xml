@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_id.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_id.json</string>
+
     <string name="app_name">Pemilih Warna</string>
     <string name="color_pick_setting_vibration">Getaran</string>
     <string name="color_pick_setting_language">Bahasa</string>
@@ -69,5 +73,10 @@
     <string name="color_pick_images">Gambar</string>
     <string name="color_pick_frequency">Frekuensi</string>
     <string name="color_pick_half_access">+ warna dominan;\n+ pembuat palet;\n+ roda warna;\n+ ekspor palet dalam format: css, svg, aco, ase, act;\n+ gambar tambahan untuk ekspor palet;\n+ kopi untuk pengembang☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ roda warna;\n+ fitur baru untuk membuat warna kustom;</string>
+    <string name="color_pick_update_version_text">+ ditambahkan pilihan untuk nama warna: standar, warna Google, kustom;</string>
+
+    <string name="color_name">Nama Warna</string>
+    <string name="color_name_material">Warna Google</string>
+    <string name="color_name_standard">Standar</string>
+    <string name="color_name_custom">Kustom</string>
 </resources>

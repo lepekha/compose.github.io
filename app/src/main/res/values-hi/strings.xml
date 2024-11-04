@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_hi.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_hi.json</string>
+
     <string name="app_name">रंग चयनकर्ता</string>
     <string name="color_pick_setting_vibration">वाइब्रेशन</string>
     <string name="color_pick_setting_language">भाषा</string>
@@ -69,6 +73,10 @@
     <string name="color_pick_images">छवियाँ</string>
     <string name="color_pick_frequency">आवृत्ति</string>
     <string name="color_pick_half_access">+ प्रमुख रंग;\n+ पैलेट जनरेटर;\n+ रंग चक्र;\n+ पैलेट निर्यात करें: css, svg, aco, ase, act;\n+ पैलेट निर्यात के लिए अतिरिक्त छवियां;\n+ डेवलपर के लिए कॉफी☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ रंग चक्र;\n+ कस्टम रंग बनाने के लिए नई सुविधाएँ;</string>
+    <string name="color_pick_update_version_text">+ रंग नाम के लिए चयन जोड़ा गया: मानक, Google रंग, कस्टम;</string>
 
+    <string name="color_name">रंग के नाम</string>
+    <string name="color_name_material">गूगल रंग</string>
+    <string name="color_name_standard">मानक</string>
+    <string name="color_name_custom">कस्टम</string>
 </resources>

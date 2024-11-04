@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_it.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_it.json</string>
+
     <string name="app_name">Selettore di colori</string>
     <string name="color_pick_setting_vibration">Vibrazione</string>
     <string name="color_pick_setting_language">Lingua</string>
@@ -69,6 +73,11 @@
     <string name="color_pick_images">Immagini</string>
     <string name="color_pick_frequency">Frequenza</string>
     <string name="color_pick_half_access">+ colori dominanti;\n+ generatore di palette;\n+ ruota dei colori;\n+ esportare palette nei formati: css, svg, aco, ase, act;\n+ immagini aggiuntive per l\'esportazione della palette;\n+ caffè per lo sviluppatore☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ ruota dei colori;\n+ nuove funzionalità per creare un colore personalizzato;</string>
+    <string name="color_pick_update_version_text">+ aggiunta selezione per i nomi dei colori: standard, colori Google, personalizzati;</string>
+
+    <string name="color_name">Nomi dei colori</string>
+    <string name="color_name_material">Colori Google</string>
+    <string name="color_name_standard">Standard</string>
+    <string name="color_name_custom">Personalizzato</string>
 
 </resources>

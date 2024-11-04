@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_nl.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_nl.json</string>
+
     <string name="app_name">Kleurkiezer</string>
     <string name="color_pick_setting_vibration">Trilling</string>
     <string name="color_pick_setting_language">Taal</string>
@@ -69,6 +73,10 @@
     <string name="color_pick_images">Afbeeldingen</string>
     <string name="color_pick_frequency">Frequentie</string>
     <string name="color_pick_half_access">+ dominante kleuren;\n+ palettengenerator;\n+ kleurenwiel;\n+ paletten exporteren in formaten: css, svg, aco, ase, act;\n+ extra afbeeldingen voor paletexport;\n+ koffie voor de ontwikkelaar☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ kleurenwiel;\n+ nieuwe functies voor het maken van aangepaste kleuren;</string>
+    <string name="color_pick_update_version_text">+ keuze voor kleurnamen toegevoegd: standaard, Google-kleuren, aangepast;</string>
 
+    <string name="color_name">Kleurnamen</string>
+    <string name="color_name_material">Google-kleuren</string>
+    <string name="color_name_standard">Standaard</string>
+    <string name="color_name_custom">Aangepast</string>
 </resources>

@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -35,10 +32,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,12 +46,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import ua.com.compose.R
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
 import ua.com.compose.api.analytics.SimpleEvent
 import ua.com.compose.api.analytics.analytics
 import ua.com.compose.composable.BottomSheet
+import ua.com.compose.data.enums.ColorNames
+import ua.com.compose.data.enums.EColorName
 import ua.com.compose.data.enums.ELanguage
 import ua.com.compose.data.enums.ESortDirection
 import ua.com.compose.data.enums.ESortType
@@ -70,9 +74,10 @@ import ua.com.compose.extension.vibrate
 fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
     val colorTypes by viewModel.colorTypes
     val colorType by Settings.colorType.flow.collectAsState(initial = Settings.colorType.value)
+    val colorName by Settings.colorName.flow.collectAsState(initial = Settings.colorName.value)
     val theme by Settings.theme.flow.collectAsState(initial = Settings.theme.value)
     val isPremium by viewModel.isPremium.observeAsState(false)
-
+    val context = LocalContext.current
     val view = LocalView.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val localConfiguration = LocalConfiguration.current
@@ -110,6 +115,24 @@ fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
         )
     }
 
+    var stateColorsScheme: Boolean by remember { mutableStateOf(false) }
+    if (stateColorsScheme) {
+        DialogChoise(
+            items = EColorName.entries.map {
+                ChipItem(
+                    title = stringResource(id = it.titleResId),
+                    obj = it,
+                    isSelect = it == colorName
+                )
+            },
+            onDone = {
+                ColorNames.init(context = context, colorName = it)
+                Settings.colorName.update(it)
+            },
+            onDismissRequest = { stateColorsScheme = false }
+        )
+    }
+
     var stateLanguage: Boolean by remember { mutableStateOf(false) }
     if (stateLanguage) {
         DialogChoise(
@@ -125,6 +148,8 @@ fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
                 appLocale = it
                 val locale: LocaleListCompat = LocaleListCompat.forLanguageTags(it.value)
                 AppCompatDelegate.setApplicationLocales(locale)
+                ColorNames.init(context = context, colorName = Settings.colorName.value)
+                Settings.colorName.update(Settings.colorName.value)
             },
             onDismissRequest = { stateLanguage = false }
         )
@@ -212,6 +237,45 @@ fun SettingsScreen(viewModel: SettingsViewModel, onDismissRequest: () -> Unit) {
                             )
                         }
 
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+
+            item {
+                FilledTonalIconButton(
+                    onClick = {
+                        stateColorsScheme = true
+                        view.vibrate(EVibrate.BUTTON)
+                    },
+                    colors = IconButtonDefaults.filledTonalIconButtonColors(containerColor = containerBackground),
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp)
+                    ) {
+
+                        Text(
+                            text = stringResource(id = R.string.color_name),
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 20.sp,
+                            modifier = Modifier.weight(1f),
+                            fontWeight = FontWeight(500)
+                        )
+
+                        Text(
+                            text = stringResource(id = colorName.titleResId),
+                            textAlign = TextAlign.End,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = settingsRightTextSize,
+                            fontWeight = FontWeight(700)
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.height(4.dp))

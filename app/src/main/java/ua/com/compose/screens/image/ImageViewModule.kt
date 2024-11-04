@@ -1,13 +1,19 @@
 package ua.com.compose.screens.image
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.graphics.toColor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import ua.com.compose.Settings
 import ua.com.compose.api.analytics.Analytics
@@ -19,18 +25,23 @@ import ua.com.compose.domain.dbColorItem.AddColorUseCase
 import ua.com.compose.extension.nearestColorName
 import ua.com.compose.colors.colorINTOf
 import ua.com.compose.colors.data.IColor
+import ua.com.compose.colors.toIntColor
+import ua.com.compose.screens.palette.Item
+import ua.com.compose.screens.palette.ItemColor
 
 class ImageViewModule(private val addColorUseCase: AddColorUseCase): ViewModel()  {
 
+    private val _color = MutableStateFlow<IColor>(Color.WHITE.toIntColor())
+    private val colorName = Settings.colorName.flow
 
-    private val _colorState: MutableLiveData<ColorState> = MutableLiveData(null)
-    val colorState: LiveData<ColorState> = _colorState
-
-    fun changeColor(color: IColor) = viewModelScope.launch(Dispatchers.IO) {
+    val colorState: LiveData<ColorState> = combine(_color, colorName) { color, colorName ->
         val name = color.nearestColorName()
         val value = Settings.colorType.value.colorToString(color = color)
-        val colorState = ColorState(color = color, name = name, typeValue = value)
-        _colorState.postValue(colorState)
+        ColorState(color = color, name = name, typeValue = value, colorNames = colorName)
+    }.flowOn(Dispatchers.Default).asLiveData()
+
+    fun changeColor(color: IColor) = viewModelScope.launch(Dispatchers.IO) {
+        _color.value = color
     }
 
     fun pressPaletteAdd(color: IColor) = viewModelScope.launch(Dispatchers.IO) {

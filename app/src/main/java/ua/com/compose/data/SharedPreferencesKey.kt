@@ -28,6 +28,7 @@ object DataStoreKey {
     val KEY_THEME = intPreferencesKey("KEY_THEME")
     val KEY_CREATE_COLOR_TYPE = intPreferencesKey("KEY_CREATE_COLOR_TYPE")
     val KEY_COLOR_TYPE = intPreferencesKey("KEY_COLOR_TYPE")
+    val KEY_COLOR_NAME = intPreferencesKey("KEY_COLOR_NAME")
     val KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE = intPreferencesKey("KEY_DIALOG_COLOR_PICK_INPUT_COLOR_TYPE")
     val KEY_SORT_TYPE = intPreferencesKey("KEY_SORT_TYPE")
     val KEY_COLOR_WHEEL_SCHEME = intPreferencesKey("KEY_COLOR_WHEEL_SCHEME")

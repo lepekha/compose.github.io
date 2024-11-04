@@ -3,6 +3,7 @@ package ua.com.compose.data.enums
 import android.content.Context
 import net.sf.javaml.core.kdtree.KDTree
 import org.json.JSONObject
+import ua.com.compose.Settings
 import ua.com.compose.colors.*
 import ua.com.compose.colors.data.*
 import java.io.IOException
@@ -80,41 +81,5 @@ enum class EColorType(val key: Int) {
         fun valuesForInputText() = listOf(HEX, RGB_DECIMAL, HSV, HSL, CMYK, XYZ, CIE_LAB, RYB)
         fun visibleValues() = entries.toList()
         fun getByKey(key: Int) = entries.firstOrNull { it.key == key } ?: HEX
-    }
-}
-
-object ColorNames {
-    private val cacheColors = mutableMapOf<Int, String>()
-    private val colors = mutableMapOf<RGBColor, String>()
-    private val tree = KDTree(3)
-
-    fun init(context: Context) {
-        val obj: JSONObject?
-        try {
-            obj = JSONObject(context.assets.open("colors.json").bufferedReader().use { it.readText() })
-            val keysItr: Iterator<String> = obj.keys()
-            while (keysItr.hasNext()) {
-                val key = keysItr.next()
-                val value = obj.get(key).toString()
-                val rgb = colorHEXOf(value).asRGB()
-                colors[rgb] = key
-                tree.insert(doubleArrayOf(rgb.red.toDouble(), rgb.green.toDouble(), rgb.blue.toDouble()), key)
-            }
-        } catch (ioException: IOException) {
-            ioException.printStackTrace()
-        }
-    }
-
-    fun getColorName(color: IColor): String {
-        cacheColors[color.intColor]?.let {
-            return it
-        }
-        val targetColor = color.asRGB()
-        colors[targetColor]?.let {
-            return it
-        }
-        val nearest = tree.nearest(doubleArrayOf(targetColor.red.toDouble(), targetColor.green.toDouble(), targetColor.blue.toDouble())) as String
-        cacheColors[targetColor.intColor] = nearest
-        return nearest
     }
 }

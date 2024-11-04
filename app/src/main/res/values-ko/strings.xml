@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_ko.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_ko.json</string>
+
     <string name="app_name">색상 선택기</string>
     <string name="color_pick_setting_vibration">진동</string>
     <string name="color_pick_setting_language">언어</string>
@@ -69,6 +73,10 @@
     <string name="color_pick_images">이미지</string>
     <string name="color_pick_frequency">주파수</string>
     <string name="color_pick_half_access">+ 지배적인 색상;\n+ 팔레트 생성기;\n+ 색상 원;\n+ 팔레트를 다음 형식으로 내보내기: css, svg, aco, ase, act;\n+ 팔레트 내보내기용 추가 이미지;\n+ 개발자를 위한 커피☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ 색상 원;\n+ 사용자 정의 색상을 만드는 새로운 기능;</string>
+    <string name="color_pick_update_version_text">+ 색상 이름 선택 추가: 표준, Google 색상, 사용자 정의;</string>
 
+    <string name="color_name">색상 이름</string>
+    <string name="color_name_material">구글 색상</string>
+    <string name="color_name_standard">표준</string>
+    <string name="color_name_custom">사용자 지정</string>
 </resources>

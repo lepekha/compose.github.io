@@ -1,4 +1,8 @@
 <resources>
+    <string name="color_names_web_colors">webColors_en.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_en.json</string>
+
     <string name="app_name">Color picker</string>
 
     <string name="color_pick_setting_vibration">Vibration</string>
@@ -86,6 +90,11 @@
 
     <string name="color_pick_change">Update</string>
     <string name="color_pick_sort_name">Name</string>
+
+    <string name="color_name">Color names</string>
+    <string name="color_name_material">Google Colors</string>
+    <string name="color_name_standard">Standard</string>
+    <string name="color_name_custom">Custom</string>
 
     <string name="color_pick_palette_saved">Palette saved in "Downloads"</string>
     <string name="color_pick_buy">Buy</string>

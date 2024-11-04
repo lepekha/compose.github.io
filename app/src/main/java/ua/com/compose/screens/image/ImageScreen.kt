@@ -27,7 +27,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -210,10 +213,6 @@ fun ImageScreen(viewModule: ImageViewModule,
                     }
             ) {
                 if(photoUri != null) {
-
-//                    if(imageLoadState is AsyncImagePainter.State.Success) {
-//
-//                    }
                     val request = ImageRequest.Builder(LocalContext.current).data(photoUri).allowHardware(false).build()
                     AsyncImage(
                         model = request,
@@ -257,6 +256,7 @@ fun ImageScreen(viewModule: ImageViewModule,
                             .padding(start = 16.dp, end = 16.dp)
                             .fillMaxSize()
                             .navigationBarsPadding()) {
+
                             ColorPickerInfo(state = colorState) {
                                 view.vibrate(EVibrate.BUTTON)
                                 stateInfoColor = colorState.color

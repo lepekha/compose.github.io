@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ua.com.compose.composable.DialogBottomSheet
+import ua.com.compose.extension.EVibrate
+import ua.com.compose.extension.vibrate
 
 data class ChipItem<T>(val title: String, val icon: Painter? = null, val iconTint: Color? = null, val isSelect: Boolean = false, val obj: T)
 
@@ -38,6 +40,7 @@ fun <T> DialogChoise(items: List<ChipItem<T>>, onDone: (value: T) -> Unit, onDis
     DialogBottomSheet(
         onDismissRequest = onDismissRequest,
     ) {
+        val view = LocalView.current
             LazyColumn(
                 contentPadding = PaddingValues(start = 0.dp, end = 0.dp),
                 modifier = Modifier
@@ -53,6 +56,7 @@ fun <T> DialogChoise(items: List<ChipItem<T>>, onDone: (value: T) -> Unit, onDis
                             .background(background)
                             .clickable {
                                 onDone.invoke(item.obj)
+                                view.vibrate(EVibrate.BUTTON)
                                 onDismissRequest.invoke()
                             }
                             .wrapContentHeight(), verticalAlignment = Alignment.CenterVertically) {

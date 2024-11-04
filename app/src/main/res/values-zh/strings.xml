@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="color_names_web_colors">webColors_zh.json</string>
+    <string name="color_names_colors">colors.json</string>
+    <string name="color_names_material">googleColors_zh.json</string>
+
     <string name="app_name">色彩选择器</string>
     <string name="color_pick_setting_vibration">振动</string>
     <string name="color_pick_setting_language">语言</string>
@@ -69,5 +73,10 @@
     <string name="color_pick_images">图片</string>
     <string name="color_pick_frequency">频率</string>
     <string name="color_pick_half_access">+ 主色调;\n+ 调色板生成器;\n+ 色轮;\n+ 以以下格式导出调色板：css, svg, aco, ase, act;\n+ 用于导出调色板的附加图像;\n+ 为开发者提供咖啡☕️🥐;</string>
-    <string name="color_pick_update_version_text">+ 色轮;\n+ 创建自定义颜色的新功能;</string>
+    <string name="color_pick_update_version_text">+ 添加颜色名称选择：标准、谷歌颜色、自定义;</string>
+
+    <string name="color_name">颜色名称</string>
+    <string name="color_name_material">谷歌颜色</string>
+    <string name="color_name_standard">标准</string>
+    <string name="color_name_custom">自定义</string>
 </resources>
